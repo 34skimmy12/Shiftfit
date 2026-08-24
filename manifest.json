@@ -1,0 +1,10 @@
+{
+  "name": "ShiftFit",
+  "short_name": "ShiftFit",
+  "description": "Shift work and gym? We've got you.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0d1020",
+  "theme_color": "#0d1020",
+  "orientation": "portrait"
+}
