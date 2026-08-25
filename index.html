@@ -48,28 +48,15 @@ body{
   background-attachment:fixed;
 }
 
-/* FUTURISTIC GRID + ENERGY LINES */
+/* SUBTLE FUTURISTIC GRID */
 body::before{
   content:"";
   position:fixed;
   inset:0;
   pointer-events:none;
-  z-index:-3;
+  z-index:0;
 
   background:
-    linear-gradient(
-      115deg,
-      transparent 0%,
-      transparent 18%,
-      rgba(139,92,246,.09) 18.1%,
-      transparent 18.35%,
-      transparent 42%,
-      rgba(54,168,255,.06) 42.1%,
-      transparent 42.3%,
-      transparent 68%,
-      rgba(139,92,246,.08) 68.1%,
-      transparent 68.35%
-    ),
     repeating-linear-gradient(
       90deg,
       transparent 0,
@@ -86,84 +73,33 @@ body::before{
     );
 }
 
-/* SUBTLE WHITE LIGHTNING ENERGY STREAKS */
-body::after{
-  content:"";
+/* =========================
+   ACTUAL JAGGED LIGHTNING
+========================= */
+
+.lightning-bg{
   position:fixed;
   inset:0;
+  width:100%;
+  height:100%;
   pointer-events:none;
-  z-index:-2;
-
-  background:
-    linear-gradient(
-      118deg,
-      transparent 0%,
-      transparent 11%,
-      rgba(255,255,255,0) 11.15%,
-      rgba(255,255,255,.10) 11.3%,
-      rgba(255,255,255,.035) 11.55%,
-      transparent 11.8%,
-      transparent 100%
-    ),
-
-    linear-gradient(
-      116deg,
-      transparent 0%,
-      transparent 31%,
-      rgba(255,255,255,0) 31.1%,
-      rgba(255,255,255,.075) 31.25%,
-      rgba(220,225,255,.025) 31.5%,
-      transparent 31.8%,
-      transparent 100%
-    ),
-
-    linear-gradient(
-      119deg,
-      transparent 0%,
-      transparent 55%,
-      rgba(255,255,255,0) 55.1%,
-      rgba(255,255,255,.12) 55.25%,
-      rgba(225,230,255,.035) 55.5%,
-      transparent 55.8%,
-      transparent 100%
-    ),
-
-    linear-gradient(
-      117deg,
-      transparent 0%,
-      transparent 76%,
-      rgba(255,255,255,0) 76.1%,
-      rgba(255,255,255,.08) 76.25%,
-      rgba(220,225,255,.025) 76.5%,
-      transparent 76.8%,
-      transparent 100%
-    ),
-
-    linear-gradient(
-      62deg,
-      transparent 0%,
-      transparent 23%,
-      rgba(255,255,255,.055) 23.15%,
-      transparent 23.45%,
-      transparent 100%
-    ),
-
-    linear-gradient(
-      62deg,
-      transparent 0%,
-      transparent 67%,
-      rgba(255,255,255,.05) 67.15%,
-      transparent 67.4%,
-      transparent 100%
-    );
-
-  filter:drop-shadow(0 0 3px rgba(255,255,255,.08))
-         drop-shadow(0 0 12px rgba(180,170,255,.05));
+  z-index:0;
+  overflow:hidden;
 }
 
-/* APP */
+.lightning-bg svg{
+  width:100%;
+  height:100%;
+  display:block;
+}
+
+/* =========================
+   APP
+========================= */
+
 .app{
   position:relative;
+  z-index:1;
   width:100%;
   max-width:500px;
   min-height:100vh;
@@ -217,6 +153,11 @@ body::after{
     );
 
   filter:blur(12px);
+}
+
+button{
+  font-family:inherit;
+  cursor:pointer;
 }
 
 .screen{
@@ -910,8 +851,110 @@ body::after{
 
 <body>
 
+<!-- ACTUAL SUBTLE JAGGED LIGHTNING BACKGROUND -->
+<div class="lightning-bg" aria-hidden="true">
+
+  <svg viewBox="0 0 500 1100" preserveAspectRatio="none">
+
+    <defs>
+      <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="2.5" result="blur"/>
+        <feMerge>
+          <feMergeNode in="blur"/>
+          <feMergeNode in="SourceGraphic"/>
+        </feMerge>
+      </filter>
+
+      <filter id="faintGlow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="5" result="blur"/>
+      </filter>
+    </defs>
+
+    <!-- TOP LEFT JAGGED STREAK -->
+    <path
+      d="M-30 80 L45 150 L18 190 L105 275 L72 315"
+      fill="none"
+      stroke="white"
+      stroke-opacity=".055"
+      stroke-width="1.3"
+      filter="url(#softGlow)"
+    />
+
+    <!-- UPPER RIGHT JAGGED STREAK -->
+    <path
+      d="M490 110 L430 195 L458 235 L375 340 L400 385 L320 500"
+      fill="none"
+      stroke="white"
+      stroke-opacity=".065"
+      stroke-width="1.4"
+      filter="url(#softGlow)"
+    />
+
+    <!-- CENTRAL LIGHTNING STREAK -->
+    <path
+      d="M250 -20 L210 105 L245 145 L185 275 L220 310 L150 465 L180 510"
+      fill="none"
+      stroke="white"
+      stroke-opacity=".075"
+      stroke-width="1.5"
+      filter="url(#softGlow)"
+    />
+
+    <!-- LOWER LEFT LIGHTNING STREAK -->
+    <path
+      d="M-20 580 L60 650 L28 700 L115 780 L82 850 L165 930"
+      fill="none"
+      stroke="white"
+      stroke-opacity=".055"
+      stroke-width="1.3"
+      filter="url(#softGlow)"
+    />
+
+    <!-- LOWER RIGHT LIGHTNING STREAK -->
+    <path
+      d="M520 600 L445 690 L470 735 L385 845 L415 890 L335 1020"
+      fill="none"
+      stroke="white"
+      stroke-opacity=".06"
+      stroke-width="1.4"
+      filter="url(#softGlow)"
+    />
+
+    <!-- VERY FAINT BACK GLOW -->
+    <path
+      d="M250 -20 L210 105 L245 145 L185 275 L220 310 L150 465 L180 510"
+      fill="none"
+      stroke="white"
+      stroke-opacity=".035"
+      stroke-width="8"
+      filter="url(#faintGlow)"
+    />
+
+    <path
+      d="M490 110 L430 195 L458 235 L375 340 L400 385 L320 500"
+      fill="none"
+      stroke="white"
+      stroke-opacity=".025"
+      stroke-width="8"
+      filter="url(#faintGlow)"
+    />
+
+    <path
+      d="M520 600 L445 690 L470 735 L385 845 L415 890 L335 1020"
+      fill="none"
+      stroke="white"
+      stroke-opacity=".025"
+      stroke-width="8"
+      filter="url(#faintGlow)"
+    />
+
+  </svg>
+
+</div>
+
 <div class="app">
 
+  <!-- HOME SCREEN -->
   <section id="homeScreen" class="screen active">
 
     <header class="home-header">
@@ -1047,6 +1090,7 @@ body::after{
   </section>
 
 
+  <!-- WORKOUT SCREEN -->
   <section id="workoutScreen" class="screen">
 
     <button class="back-btn" onclick="showHome()">← Back to Home</button>
@@ -1143,6 +1187,7 @@ body::after{
 </div>
 
 
+<!-- BOTTOM NAVIGATION -->
 <nav class="bottom-nav">
 
   <button class="nav-item active" id="homeNav" onclick="showHome()">
