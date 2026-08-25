@@ -38,68 +38,145 @@ body{
   position:relative;
 
   background:
-    radial-gradient(ellipse at 50% -10%,rgba(123,58,255,.38) 0%,transparent 40%),
-    radial-gradient(circle at 5% 22%,rgba(0,174,255,.15) 0%,transparent 26%),
-    radial-gradient(circle at 100% 38%,rgba(154,48,255,.24) 0%,transparent 32%),
-    radial-gradient(circle at 18% 75%,rgba(0,255,183,.08) 0%,transparent 25%),
-    radial-gradient(circle at 85% 88%,rgba(105,44,255,.22) 0%,transparent 30%),
-    linear-gradient(145deg,#05030d 0%,#0c0820 30%,#070d20 58%,#110824 78%,#04050d 100%);
+    radial-gradient(ellipse at 50% -8%,rgba(122,58,255,.32) 0%,transparent 38%),
+    radial-gradient(circle at 0% 18%,rgba(38,92,255,.10) 0%,transparent 30%),
+    radial-gradient(circle at 100% 24%,rgba(154,48,255,.22) 0%,transparent 34%),
+    radial-gradient(circle at 15% 70%,rgba(54,168,255,.07) 0%,transparent 28%),
+    radial-gradient(circle at 88% 82%,rgba(110,44,255,.18) 0%,transparent 32%),
+    linear-gradient(145deg,#05030d 0%,#090719 28%,#070a1b 55%,#10071f 78%,#04050d 100%);
 
   background-attachment:fixed;
 }
 
-/* SUBTLE FUTURISTIC GRID */
+/* =====================================
+   FUTURISTIC GRID + SOFT ENERGY LINES
+===================================== */
+
 body::before{
   content:"";
   position:fixed;
   inset:0;
   pointer-events:none;
-  z-index:0;
+  z-index:-2;
 
   background:
+    /* SOFT WHITE ELECTRIC STREAKS */
+    linear-gradient(
+      38deg,
+      transparent 0%,
+      transparent 18.7%,
+      rgba(255,255,255,0) 18.8%,
+      rgba(255,255,255,.13) 18.95%,
+      rgba(255,255,255,.025) 19.12%,
+      transparent 19.3%,
+      transparent 100%
+    ),
+
+    linear-gradient(
+      118deg,
+      transparent 0%,
+      transparent 31.8%,
+      rgba(255,255,255,0) 31.9%,
+      rgba(255,255,255,.10) 32.05%,
+      rgba(255,255,255,.018) 32.2%,
+      transparent 32.4%,
+      transparent 100%
+    ),
+
+    linear-gradient(
+      64deg,
+      transparent 0%,
+      transparent 52.5%,
+      rgba(255,255,255,0) 52.6%,
+      rgba(255,255,255,.11) 52.75%,
+      rgba(255,255,255,.02) 52.92%,
+      transparent 53.1%,
+      transparent 100%
+    ),
+
+    linear-gradient(
+      126deg,
+      transparent 0%,
+      transparent 72.2%,
+      rgba(255,255,255,0) 72.3%,
+      rgba(255,255,255,.09) 72.45%,
+      rgba(255,255,255,.018) 72.62%,
+      transparent 72.8%,
+      transparent 100%
+    ),
+
+    /* PURPLE / BLUE FUTURISTIC ENERGY */
+    linear-gradient(
+      115deg,
+      transparent 0%,
+      transparent 21%,
+      rgba(139,92,246,.07) 21.1%,
+      transparent 21.3%,
+      transparent 45%,
+      rgba(54,168,255,.045) 45.1%,
+      transparent 45.3%,
+      transparent 70%,
+      rgba(139,92,246,.065) 70.1%,
+      transparent 70.3%
+    ),
+
+    /* SUBTLE GRID */
     repeating-linear-gradient(
       90deg,
       transparent 0,
-      transparent 79px,
-      rgba(139,92,246,.025) 80px,
-      transparent 81px
+      transparent 84px,
+      rgba(139,92,246,.022) 85px,
+      transparent 86px
     ),
+
     repeating-linear-gradient(
       0deg,
       transparent 0,
-      transparent 79px,
-      rgba(139,92,246,.018) 80px,
-      transparent 81px
+      transparent 84px,
+      rgba(139,92,246,.016) 85px,
+      transparent 86px
     );
 }
 
-/* =========================
-   ACTUAL JAGGED LIGHTNING
-========================= */
+/* =====================================
+   LARGE SOFT ELECTRIC GLOW
+   NO GIANT LIGHTNING SYMBOL
+===================================== */
 
-.lightning-bg{
+body::after{
+  content:"";
   position:fixed;
-  inset:0;
-  width:100%;
-  height:100%;
+  width:600px;
+  height:600px;
+  top:-180px;
+  right:-250px;
+  border-radius:50%;
   pointer-events:none;
-  z-index:0;
-  overflow:hidden;
+  z-index:-1;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(127,70,255,.15) 0%,
+      rgba(105,58,255,.08) 32%,
+      rgba(54,168,255,.035) 52%,
+      transparent 72%
+    );
+
+  filter:blur(22px);
 }
 
-.lightning-bg svg{
-  width:100%;
-  height:100%;
-  display:block;
-}
+/* =====================================
+   BUTTONS
+===================================== */
 
-/* =========================
-   APP
-========================= */
+button{
+  font-family:inherit;
+  cursor:pointer;
+}
 
 .app{
   position:relative;
-  z-index:1;
   width:100%;
   max-width:500px;
   min-height:100vh;
@@ -108,6 +185,7 @@ body::before{
 }
 
 /* LEFT NEON ENERGY */
+
 .app::before{
   content:"";
   position:absolute;
@@ -122,16 +200,17 @@ body::before{
   background:
     radial-gradient(
       circle,
-      rgba(121,63,255,.30) 0%,
-      rgba(100,52,255,.16) 28%,
-      rgba(49,140,255,.07) 50%,
+      rgba(121,63,255,.25) 0%,
+      rgba(100,52,255,.12) 28%,
+      rgba(49,140,255,.05) 50%,
       transparent 72%
     );
 
-  filter:blur(10px);
+  filter:blur(15px);
 }
 
 /* RIGHT NEON ENERGY */
+
 .app::after{
   content:"";
   position:absolute;
@@ -146,18 +225,13 @@ body::before{
   background:
     radial-gradient(
       circle,
-      rgba(149,59,255,.32) 0%,
-      rgba(93,53,255,.16) 30%,
-      rgba(30,133,255,.07) 52%,
+      rgba(149,59,255,.28) 0%,
+      rgba(93,53,255,.12) 30%,
+      rgba(30,133,255,.05) 52%,
       transparent 72%
     );
 
-  filter:blur(12px);
-}
-
-button{
-  font-family:inherit;
-  cursor:pointer;
+  filter:blur(16px);
 }
 
 .screen{
@@ -850,107 +924,6 @@ button{
 </head>
 
 <body>
-
-<!-- ACTUAL SUBTLE JAGGED LIGHTNING BACKGROUND -->
-<div class="lightning-bg" aria-hidden="true">
-
-  <svg viewBox="0 0 500 1100" preserveAspectRatio="none">
-
-    <defs>
-      <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
-        <feGaussianBlur stdDeviation="2.5" result="blur"/>
-        <feMerge>
-          <feMergeNode in="blur"/>
-          <feMergeNode in="SourceGraphic"/>
-        </feMerge>
-      </filter>
-
-      <filter id="faintGlow" x="-50%" y="-50%" width="200%" height="200%">
-        <feGaussianBlur stdDeviation="5" result="blur"/>
-      </filter>
-    </defs>
-
-    <!-- TOP LEFT JAGGED STREAK -->
-    <path
-      d="M-30 80 L45 150 L18 190 L105 275 L72 315"
-      fill="none"
-      stroke="white"
-      stroke-opacity=".055"
-      stroke-width="1.3"
-      filter="url(#softGlow)"
-    />
-
-    <!-- UPPER RIGHT JAGGED STREAK -->
-    <path
-      d="M490 110 L430 195 L458 235 L375 340 L400 385 L320 500"
-      fill="none"
-      stroke="white"
-      stroke-opacity=".065"
-      stroke-width="1.4"
-      filter="url(#softGlow)"
-    />
-
-    <!-- CENTRAL LIGHTNING STREAK -->
-    <path
-      d="M250 -20 L210 105 L245 145 L185 275 L220 310 L150 465 L180 510"
-      fill="none"
-      stroke="white"
-      stroke-opacity=".075"
-      stroke-width="1.5"
-      filter="url(#softGlow)"
-    />
-
-    <!-- LOWER LEFT LIGHTNING STREAK -->
-    <path
-      d="M-20 580 L60 650 L28 700 L115 780 L82 850 L165 930"
-      fill="none"
-      stroke="white"
-      stroke-opacity=".055"
-      stroke-width="1.3"
-      filter="url(#softGlow)"
-    />
-
-    <!-- LOWER RIGHT LIGHTNING STREAK -->
-    <path
-      d="M520 600 L445 690 L470 735 L385 845 L415 890 L335 1020"
-      fill="none"
-      stroke="white"
-      stroke-opacity=".06"
-      stroke-width="1.4"
-      filter="url(#softGlow)"
-    />
-
-    <!-- VERY FAINT BACK GLOW -->
-    <path
-      d="M250 -20 L210 105 L245 145 L185 275 L220 310 L150 465 L180 510"
-      fill="none"
-      stroke="white"
-      stroke-opacity=".035"
-      stroke-width="8"
-      filter="url(#faintGlow)"
-    />
-
-    <path
-      d="M490 110 L430 195 L458 235 L375 340 L400 385 L320 500"
-      fill="none"
-      stroke="white"
-      stroke-opacity=".025"
-      stroke-width="8"
-      filter="url(#faintGlow)"
-    />
-
-    <path
-      d="M520 600 L445 690 L470 735 L385 845 L415 890 L335 1020"
-      fill="none"
-      stroke="white"
-      stroke-opacity=".025"
-      stroke-width="8"
-      filter="url(#faintGlow)"
-    />
-
-  </svg>
-
-</div>
 
 <div class="app">
 
