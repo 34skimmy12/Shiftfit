@@ -37,175 +37,61 @@ body{
   overflow-x:hidden;
   position:relative;
   background:
-    radial-gradient(circle at 8% 28%,rgba(118,65,255,.25),transparent 25%),
-    radial-gradient(circle at 92% 18%,rgba(126,69,255,.30),transparent 27%),
-    radial-gradient(circle at 15% 72%,rgba(93,48,220,.20),transparent 30%),
-    radial-gradient(circle at 88% 78%,rgba(104,52,240,.24),transparent 32%),
-    radial-gradient(ellipse at 50% 50%,rgba(45,18,105,.18),transparent 65%),
-    linear-gradient(180deg,#070510 0%,#10091f 45%,#120a24 70%,#05040c 100%);
+    radial-gradient(ellipse at 50% -18%,rgba(111,45,255,.42) 0%,rgba(63,25,150,.18) 24%,transparent 52%),
+    radial-gradient(ellipse at -15% 28%,rgba(0,174,255,.13) 0%,transparent 34%),
+    radial-gradient(ellipse at 112% 42%,rgba(139,45,255,.22) 0%,transparent 38%),
+    radial-gradient(ellipse at 50% 105%,rgba(65,35,180,.18) 0%,transparent 45%),
+    linear-gradient(180deg,#070512 0%,#050611 38%,#08061a 68%,#03040a 100%);
   background-attachment:fixed;
 }
 
-/* DARK CYBER GRID */
+/* FUTURISTIC CYBER GRID */
 body::before{
   content:"";
   position:fixed;
   inset:0;
   pointer-events:none;
   z-index:-2;
-  opacity:.35;
   background:
     linear-gradient(rgba(124,92,255,.025) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(124,92,255,.025) 1px,transparent 1px);
-  background-size:52px 52px;
+    linear-gradient(90deg,rgba(124,92,255,.025) 1px,transparent 1px),
+    radial-gradient(circle at 50% 20%,rgba(120,65,255,.10),transparent 42%);
+  background-size:52px 52px,52px 52px,100% 100%;
+  -webkit-mask-image:linear-gradient(to bottom,rgba(0,0,0,.85),rgba(0,0,0,.25),transparent);
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,.85),rgba(0,0,0,.25),transparent);
 }
 
-/* REAL LIGHTNING EFFECT */
+/* TRANSPARENT BRANCHING WHITE LIGHTNING */
 body::after{
   content:"";
   position:fixed;
   inset:0;
   pointer-events:none;
   z-index:-1;
-  opacity:.9;
-
-  background:
-    /* TOP RIGHT LIGHTNING */
-    linear-gradient(155deg,
-      transparent 0%,
-      transparent 17%,
-      rgba(255,255,255,0) 17.3%,
-      rgba(255,255,255,.05) 17.5%,
-      rgba(255,255,255,.85) 17.7%,
-      rgba(255,255,255,.18) 17.95%,
-      transparent 18.2%),
-
-    linear-gradient(105deg,
-      transparent 0%,
-      transparent 24%,
-      rgba(255,255,255,.75) 24.3%,
-      rgba(255,255,255,.12) 24.6%,
-      transparent 25%),
-
-    linear-gradient(68deg,
-      transparent 0%,
-      transparent 21%,
-      rgba(255,255,255,.70) 21.25%,
-      rgba(255,255,255,.10) 21.55%,
-      transparent 21.9%),
-
-    /* LEFT SIDE LIGHTNING */
-    linear-gradient(125deg,
-      transparent 0%,
-      transparent 12%,
-      rgba(255,255,255,.06) 12.2%,
-      rgba(255,255,255,.90) 12.45%,
-      rgba(255,255,255,.18) 12.7%,
-      transparent 13%),
-
-    linear-gradient(48deg,
-      transparent 0%,
-      transparent 28%,
-      rgba(255,255,255,.75) 28.25%,
-      rgba(255,255,255,.12) 28.55%,
-      transparent 28.9%),
-
-    /* RIGHT SIDE LIGHTNING */
-    linear-gradient(142deg,
-      transparent 0%,
-      transparent 61%,
-      rgba(255,255,255,.06) 61.2%,
-      rgba(255,255,255,.85) 61.45%,
-      rgba(255,255,255,.16) 61.75%,
-      transparent 62.1%),
-
-    linear-gradient(60deg,
-      transparent 0%,
-      transparent 77%,
-      rgba(255,255,255,.75) 77.25%,
-      rgba(255,255,255,.12) 77.55%,
-      transparent 77.9%),
-
-    /* LOWER LIGHTNING */
-    linear-gradient(130deg,
-      transparent 0%,
-      transparent 82%,
-      rgba(255,255,255,.80) 82.25%,
-      rgba(255,255,255,.12) 82.55%,
-      transparent 82.9%),
-
-    linear-gradient(52deg,
-      transparent 0%,
-      transparent 86%,
-      rgba(255,255,255,.75) 86.25%,
-      rgba(255,255,255,.10) 86.55%,
-      transparent 86.9%),
-
-    /* PURPLE ELECTRIC GLOW */
-    radial-gradient(ellipse 180px 500px at 2% 35%,
-      rgba(139,92,246,.20) 0%,
-      rgba(111,55,255,.08) 45%,
-      transparent 75%),
-
-    radial-gradient(ellipse 200px 520px at 98% 40%,
-      rgba(139,92,246,.24) 0%,
-      rgba(111,55,255,.10) 45%,
-      transparent 75%),
-
-    radial-gradient(ellipse 220px 500px at 10% 88%,
-      rgba(123,65,255,.18) 0%,
-      transparent 72%),
-
-    radial-gradient(ellipse 220px 500px at 95% 88%,
-      rgba(123,65,255,.20) 0%,
-      transparent 72%);
+  opacity:.72;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='950' viewBox='0 0 500 950'%3E%3Cdefs%3E%3Cfilter id='g' x='-50%25' y='-50%25' width='200%25' height='200%25'%3E%3CfeGaussianBlur stdDeviation='3' result='b'/%3E%3CfeMerge%3E%3CfeMergeNode in='b'/%3E%3CfeMergeNode in='SourceGraphic'/%3E%3C/feMerge%3E%3C/filter%3E%3C/defs%3E%3Cg fill='none' stroke='white' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M80 -20 L115 80 L92 130 L150 215 L120 270 L178 355 L142 420 L205 510' stroke-opacity='.72' stroke-width='2.2' filter='url(%23g)'/%3E%3Cpath d='M150 215 L215 185 L248 125' stroke-opacity='.42' stroke-width='1.5'/%3E%3Cpath d='M178 355 L250 330 L290 280' stroke-opacity='.38' stroke-width='1.4'/%3E%3Cpath d='M205 510 L270 555 L305 625' stroke-opacity='.32' stroke-width='1.3'/%3E%3Cpath d='M430 80 L390 165 L425 225 L370 320 L405 385 L345 480 L380 560' stroke-opacity='.65' stroke-width='2' filter='url(%23g)'/%3E%3Cpath d='M390 165 L325 145 L292 95' stroke-opacity='.36' stroke-width='1.3'/%3E%3Cpath d='M370 320 L305 345 L275 410' stroke-opacity='.42' stroke-width='1.4'/%3E%3Cpath d='M345 480 L285 500 L250 570' stroke-opacity='.34' stroke-width='1.2'/%3E%3Cpath d='M55 690 L100 735 L75 790 L140 850 L112 925' stroke-opacity='.50' stroke-width='1.7' filter='url(%23g)'/%3E%3Cpath d='M100 735 L165 715 L200 665' stroke-opacity='.28' stroke-width='1.1'/%3E%3Cpath d='M450 650 L400 720 L435 780 L375 865 L405 940' stroke-opacity='.48' stroke-width='1.7' filter='url(%23g)'/%3E%3Cpath d='M400 720 L335 700 L300 640' stroke-opacity='.28' stroke-width='1.1'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-size:500px 950px;
+  background-position:center top;
 }
 
-/* LIGHTNING GLOW */
-.app{
-  position:relative;
-  width:100%;
-  max-width:500px;
-  min-height:100vh;
-  margin:auto;
-  padding:22px 18px 105px;
-  isolation:isolate;
-}
-
+/* LEFT NEON ENERGY */
 .app::before{
   content:"";
-  position:fixed;
-  inset:0;
+  position:absolute;
+  width:520px;
+  height:520px;
+  top:120px;
+  left:-400px;
+  border-radius:50%;
   pointer-events:none;
   z-index:-1;
-  opacity:.45;
-  background:
-    linear-gradient(155deg,
-      transparent 0%,
-      transparent 17.2%,
-      rgba(255,255,255,.25) 17.7%,
-      transparent 18.3%),
-
-    linear-gradient(125deg,
-      transparent 0%,
-      transparent 12%,
-      rgba(255,255,255,.25) 12.5%,
-      transparent 13.1%),
-
-    linear-gradient(142deg,
-      transparent 0%,
-      transparent 61%,
-      rgba(255,255,255,.22) 61.5%,
-      transparent 62.2%),
-
-    linear-gradient(130deg,
-      transparent 0%,
-      transparent 82%,
-      rgba(255,255,255,.20) 82.5%,
-      transparent 83.1%);
-  filter:blur(10px);
+  background:radial-gradient(circle,rgba(82,91,255,.22) 0%,rgba(89,55,255,.12) 30%,rgba(40,115,255,.045) 52%,transparent 72%);
+  filter:blur(22px);
 }
 
+/* RIGHT NEON ENERGY */
 .app::after{
   content:"";
   position:absolute;
@@ -216,13 +102,17 @@ body::after{
   border-radius:50%;
   pointer-events:none;
   z-index:-1;
-  background:radial-gradient(
-    circle,
-    rgba(137,48,255,.16) 0%,
-    rgba(91,54,255,.07) 32%,
-    transparent 73%
-  );
+  background:radial-gradient(circle,rgba(137,48,255,.24) 0%,rgba(91,54,255,.12) 32%,rgba(35,110,255,.045) 54%,transparent 73%);
   filter:blur(24px);
+}
+
+.app{
+  position:relative;
+  width:100%;
+  max-width:500px;
+  min-height:100vh;
+  margin:auto;
+  padding:22px 18px 105px;
 }
 
 button{
@@ -272,11 +162,9 @@ button{
 }
 
 .logo-bolt{
-  color:#ffd229;
+  color:#854cff;
   margin-right:4px;
-  text-shadow:
-    0 0 8px rgba(255,210,41,.9),
-    0 0 20px rgba(132,76,255,.6);
+  text-shadow:0 0 10px rgba(132,76,255,.8),0 0 25px rgba(132,76,255,.5);
 }
 
 .logo-shift{
@@ -285,9 +173,7 @@ button{
 
 .logo-fit{
   color:#8656ff;
-  text-shadow:
-    0 0 12px rgba(132,76,255,.8),
-    0 0 28px rgba(132,76,255,.4);
+  text-shadow:0 0 12px rgba(132,76,255,.8),0 0 28px rgba(132,76,255,.4);
 }
 
 .profile-btn{
@@ -311,9 +197,7 @@ button{
     radial-gradient(circle at 50% 90%,#293653 0 34%,transparent 35%),
     linear-gradient(135deg,#2a3454,#11182c);
   border:2px solid #6d49d7;
-  box-shadow:
-    0 0 12px rgba(109,40,217,.55),
-    0 0 28px rgba(109,40,217,.25);
+  box-shadow:0 0 12px rgba(109,40,217,.55),0 0 28px rgba(109,40,217,.25);
 }
 
 .user-name{
@@ -338,9 +222,7 @@ button{
     radial-gradient(circle at 100% 0%,rgba(88,70,255,.24),transparent 35%),
     radial-gradient(circle at 0% 100%,rgba(28,120,255,.06),transparent 32%),
     linear-gradient(145deg,#151b36,#0c1123);
-  box-shadow:
-    0 15px 40px rgba(0,0,0,.35),
-    0 0 30px rgba(104,66,255,.08);
+  box-shadow:0 15px 40px rgba(0,0,0,.35),0 0 30px rgba(104,66,255,.08);
 }
 
 .today-plan:after{
@@ -460,9 +342,7 @@ button{
 }
 
 .workout-card{
-  background:
-    radial-gradient(circle at 100% 0%,rgba(47,222,139,.13),transparent 38%),
-    linear-gradient(145deg,#102329,#0a1520);
+  background:radial-gradient(circle at 100% 0%,rgba(47,222,139,.13),transparent 38%),linear-gradient(145deg,#102329,#0a1520);
 }
 
 .workout-card:before{
@@ -470,9 +350,7 @@ button{
 }
 
 .meal-card{
-  background:
-    radial-gradient(circle at 100% 0%,rgba(109,91,255,.25),transparent 40%),
-    linear-gradient(145deg,#171e47,#0d1125);
+  background:radial-gradient(circle at 100% 0%,rgba(109,91,255,.25),transparent 40%),linear-gradient(145deg,#171e47,#0d1125);
 }
 
 .meal-card:before{
@@ -524,9 +402,7 @@ button{
   font-size:12px;
   font-weight:850;
   background:linear-gradient(135deg,#8b3cff,#5123c5);
-  box-shadow:
-    0 5px 18px rgba(109,40,217,.3),
-    inset 0 1px 0 rgba(255,255,255,.12);
+  box-shadow:0 5px 18px rgba(109,40,217,.3),inset 0 1px 0 rgba(255,255,255,.12);
 }
 
 /* WEEKLY PROGRESS */
@@ -535,9 +411,7 @@ button{
   padding:17px;
   border-radius:20px;
   border:1px solid #293253;
-  background:
-    radial-gradient(circle at 0% 50%,rgba(83,56,255,.08),transparent 30%),
-    linear-gradient(145deg,#11162a,#0a0e1d);
+  background:radial-gradient(circle at 0% 50%,rgba(83,56,255,.08),transparent 30%),linear-gradient(145deg,#11162a,#0a0e1d);
   box-shadow:0 12px 30px rgba(0,0,0,.18);
 }
 
@@ -558,10 +432,7 @@ button{
   height:94px;
   min-width:94px;
   border-radius:50%;
-  background:conic-gradient(
-    var(--green) 0deg 281deg,
-    #1b2740 281deg 360deg
-  );
+  background:conic-gradient(var(--green) 0deg 281deg,#1b2740 281deg 360deg);
   display:flex;
   align-items:center;
   justify-content:center;
@@ -646,9 +517,7 @@ button{
   justify-content:center;
   font-size:31px;
   background:radial-gradient(circle,#7455f4,#26135e);
-  box-shadow:
-    0 0 18px rgba(119,73,255,.55),
-    0 0 35px rgba(119,73,255,.2);
+  box-shadow:0 0 18px rgba(119,73,255,.55),0 0 35px rgba(119,73,255,.2);
 }
 
 .ai-content{
@@ -713,11 +582,7 @@ button{
 }
 
 .workout-stat{
-  background:linear-gradient(
-    145deg,
-    rgba(28,35,62,.96),
-    rgba(13,18,36,.96)
-  );
+  background:linear-gradient(145deg,rgba(28,35,62,.96),rgba(13,18,36,.96));
   border:1px solid #293253;
   border-radius:17px;
   padding:14px 6px;
@@ -772,11 +637,7 @@ button{
   margin-bottom:12px;
   border-radius:20px;
   border:1px solid #293253;
-  background:linear-gradient(
-    145deg,
-    rgba(21,27,49,.96),
-    rgba(12,17,34,.96)
-  );
+  background:linear-gradient(145deg,rgba(21,27,49,.96),rgba(12,17,34,.96));
 }
 
 .exercise-card.completed{
@@ -884,7 +745,6 @@ button{
 }
 
 @media(max-width:360px){
-
   .app{
     padding-left:14px;
     padding-right:14px;
@@ -897,7 +757,6 @@ button{
   .plan-stat-value{
     font-size:17px;
   }
-
 }
 </style>
 </head>
@@ -909,34 +768,26 @@ button{
   <section id="homeScreen" class="screen active">
 
     <header class="home-header">
-
       <button class="menu-btn">
         <span class="menu-icon">☰</span>
       </button>
 
       <div class="logo">
-        <span class="logo-bolt">⚡</span>
-        <span class="logo-shift">SHIFT</span>
-        <span class="logo-fit">FIT</span>
+        <span class="logo-bolt">⚡</span><span class="logo-shift">SHIFT</span><span class="logo-fit">FIT</span>
       </div>
 
       <button class="profile-btn">⚙</button>
-
     </header>
 
     <div class="user-row">
-
       <div class="avatar"></div>
-
       <div>
         <div class="user-name">Andrew</div>
         <div class="user-level">Level 1 • ShiftFit Member</div>
       </div>
-
     </div>
 
     <section class="today-plan">
-
       <div class="plan-top">
         <div class="plan-heading">Today's Plan</div>
         <div class="shift-badge">DAY SHIFT</div>
@@ -948,7 +799,6 @@ button{
       </div>
 
       <div class="plan-stats">
-
         <div class="plan-stat">
           <div class="stat-icon">🔥</div>
           <div class="plan-stat-label">Calories</div>
@@ -966,55 +816,36 @@ button{
           <div class="plan-stat-label">Water</div>
           <div class="plan-stat-value">2.5L</div>
         </div>
-
       </div>
-
     </section>
 
     <div class="action-grid">
-
       <section class="action-card workout-card">
-
         <div class="action-icon">🏋️</div>
         <div class="action-label">WORKOUT</div>
         <div class="action-title">Push Day</div>
         <div class="action-desc">5 exercises • 60 mins</div>
-
-        <button
-          class="action-button"
-          onclick="showWorkout()">
-          Start Workout
-        </button>
-
+        <button class="action-button" onclick="showWorkout()">Start Workout</button>
       </section>
 
       <section class="action-card meal-card">
-
         <div class="action-icon">🍽️</div>
         <div class="action-label">MEALS</div>
         <div class="action-title">High Protein</div>
         <div class="action-desc">4 meals • Shift adjusted</div>
-
-        <button class="action-button">
-          View Plan
-        </button>
-
+        <button class="action-button">View Plan</button>
       </section>
-
     </div>
 
     <section class="progress-card">
-
       <div class="progress-title">Weekly Progress</div>
 
       <div class="progress-content">
-
         <div class="progress-ring">
           <div class="progress-inner">78%</div>
         </div>
 
         <div class="progress-info">
-
           <div class="progress-row">
             <span class="progress-row-label">Workouts</span>
             <span class="progress-row-value">5/6</span>
@@ -1022,64 +853,39 @@ button{
 
           <div class="progress-row">
             <span class="progress-row-label">Calories</span>
-            <span class="progress-row-value on-track">
-              <span class="dot"></span>On Track
-            </span>
+            <span class="progress-row-value on-track"><span class="dot"></span>On Track</span>
           </div>
 
           <div class="progress-row">
             <span class="progress-row-label">Protein</span>
-            <span class="progress-row-value on-track">
-              <span class="dot"></span>On Track
-            </span>
+            <span class="progress-row-value on-track"><span class="dot"></span>On Track</span>
           </div>
-
         </div>
-
       </div>
-
     </section>
 
     <section class="ai-card">
-
       <div class="ai-bot">🤖</div>
-
       <div class="ai-content">
         <div class="ai-title">ShiftFit AI Coach</div>
-        <div class="ai-text">
-          Your personal fitness coach. Ask me anything.
-        </div>
+        <div class="ai-text">Your personal fitness coach. Ask me anything.</div>
       </div>
-
       <div class="ai-arrow">›</div>
-
     </section>
 
   </section>
 
-
   <section id="workoutScreen" class="screen">
 
-    <button
-      class="back-btn"
-      onclick="showHome()">
-      ← Back to Home
-    </button>
+    <button class="back-btn" onclick="showHome()">← Back to Home</button>
 
     <div class="workout-header">
-
       <div class="workout-day">TODAY'S WORKOUT</div>
-
       <h1>Push Day</h1>
-
-      <p>
-        Build strength and muscle with your personalised workout.
-      </p>
-
+      <p>Build strength and muscle with your personalised workout.</p>
     </div>
 
     <div class="workout-stats">
-
       <div class="workout-stat">
         <small>TIME</small>
         <strong>60 min</strong>
@@ -1094,128 +900,65 @@ button{
         <small>FOCUS</small>
         <strong>Push</strong>
       </div>
-
     </div>
 
     <div class="workout-progress">
-
       <div class="workout-progress-top">
         <span>WORKOUT PROGRESS</span>
         <span id="workoutProgressText">0 / 5</span>
       </div>
 
       <div class="progress-bar">
-        <div
-          class="progress-fill"
-          id="workoutProgressFill">
-        </div>
+        <div class="progress-fill" id="workoutProgressFill"></div>
       </div>
-
     </div>
 
-    <div
-      class="exercise-card"
-      onclick="toggleExercise(this)">
-
+    <div class="exercise-card" onclick="toggleExercise(this)">
       <div class="exercise-check"></div>
-
       <div class="exercise-content">
         <div class="exercise-name">1. Bench Press</div>
         <div class="exercise-sets">4 sets × 8–10 reps</div>
-        <div class="exercise-tip">
-          Control the weight and keep your shoulders stable.
-        </div>
+        <div class="exercise-tip">Control the weight and keep your shoulders stable.</div>
       </div>
-
     </div>
 
-    <div
-      class="exercise-card"
-      onclick="toggleExercise(this)">
-
+    <div class="exercise-card" onclick="toggleExercise(this)">
       <div class="exercise-check"></div>
-
       <div class="exercise-content">
-        <div class="exercise-name">
-          2. Incline Dumbbell Press
-        </div>
-
-        <div class="exercise-sets">
-          4 sets × 10–12 reps
-        </div>
-
-        <div class="exercise-tip">
-          Keep the movement controlled and avoid locking out harshly.
-        </div>
+        <div class="exercise-name">2. Incline Dumbbell Press</div>
+        <div class="exercise-sets">4 sets × 10–12 reps</div>
+        <div class="exercise-tip">Keep the movement controlled and avoid locking out harshly.</div>
       </div>
-
     </div>
 
-    <div
-      class="exercise-card"
-      onclick="toggleExercise(this)">
-
+    <div class="exercise-card" onclick="toggleExercise(this)">
       <div class="exercise-check"></div>
-
       <div class="exercise-content">
         <div class="exercise-name">3. Shoulder Press</div>
-
-        <div class="exercise-sets">
-          3 sets × 8–12 reps
-        </div>
-
-        <div class="exercise-tip">
-          Brace your core and press smoothly overhead.
-        </div>
+        <div class="exercise-sets">3 sets × 8–12 reps</div>
+        <div class="exercise-tip">Brace your core and press smoothly overhead.</div>
       </div>
-
     </div>
 
-    <div
-      class="exercise-card"
-      onclick="toggleExercise(this)">
-
+    <div class="exercise-card" onclick="toggleExercise(this)">
       <div class="exercise-check"></div>
-
       <div class="exercise-content">
         <div class="exercise-name">4. Tricep Dips</div>
-
-        <div class="exercise-sets">
-          3 sets × 12–15 reps
-        </div>
-
-        <div class="exercise-tip">
-          Keep control throughout the full range of motion.
-        </div>
+        <div class="exercise-sets">3 sets × 12–15 reps</div>
+        <div class="exercise-tip">Keep control throughout the full range of motion.</div>
       </div>
-
     </div>
 
-    <div
-      class="exercise-card"
-      onclick="toggleExercise(this)">
-
+    <div class="exercise-card" onclick="toggleExercise(this)">
       <div class="exercise-check"></div>
-
       <div class="exercise-content">
         <div class="exercise-name">5. Chest Flyes</div>
-
-        <div class="exercise-sets">
-          3 sets × 12–15 reps
-        </div>
-
-        <div class="exercise-tip">
-          Use a controlled stretch and squeeze your chest.
-        </div>
+        <div class="exercise-sets">3 sets × 12–15 reps</div>
+        <div class="exercise-tip">Use a controlled stretch and squeeze your chest.</div>
       </div>
-
     </div>
 
-    <button
-      id="finishButton"
-      class="finish-button"
-      disabled
-      onclick="finishWorkout()">
+    <button id="finishButton" class="finish-button" disabled onclick="finishWorkout()">
       COMPLETE ALL EXERCISES
     </button>
 
@@ -1223,17 +966,11 @@ button{
 
 </div>
 
-
 <nav class="bottom-nav">
 
-  <button
-    class="nav-item active"
-    id="homeNav"
-    onclick="showHome()">
-
+  <button class="nav-item active" id="homeNav" onclick="showHome()">
     <span class="nav-icon">⌂</span>
     <span>Home</span>
-
   </button>
 
   <button class="nav-item">
@@ -1241,14 +978,9 @@ button{
     <span>Calendar</span>
   </button>
 
-  <button
-    class="nav-item"
-    id="workoutNav"
-    onclick="showWorkout()">
-
+  <button class="nav-item" id="workoutNav" onclick="showWorkout()">
     <span class="nav-icon">🏋️</span>
     <span>Workouts</span>
-
   </button>
 
   <button class="nav-item">
@@ -1263,59 +995,31 @@ button{
 
 </nav>
 
-
 <script>
-
 function showHome(){
+  document.getElementById("homeScreen").classList.add("active");
+  document.getElementById("workoutScreen").classList.remove("active");
 
-  document
-    .getElementById("homeScreen")
-    .classList.add("active");
-
-  document
-    .getElementById("workoutScreen")
-    .classList.remove("active");
-
-  document
-    .getElementById("homeNav")
-    .classList.add("active");
-
-  document
-    .getElementById("workoutNav")
-    .classList.remove("active");
+  document.getElementById("homeNav").classList.add("active");
+  document.getElementById("workoutNav").classList.remove("active");
 
   window.scrollTo(0,0);
 }
-
 
 function showWorkout(){
+  document.getElementById("homeScreen").classList.remove("active");
+  document.getElementById("workoutScreen").classList.add("active");
 
-  document
-    .getElementById("homeScreen")
-    .classList.remove("active");
-
-  document
-    .getElementById("workoutScreen")
-    .classList.add("active");
-
-  document
-    .getElementById("homeNav")
-    .classList.remove("active");
-
-  document
-    .getElementById("workoutNav")
-    .classList.add("active");
+  document.getElementById("homeNav").classList.remove("active");
+  document.getElementById("workoutNav").classList.add("active");
 
   window.scrollTo(0,0);
 }
 
-
 function toggleExercise(card){
-
   card.classList.toggle("completed");
 
-  const check =
-    card.querySelector(".exercise-check");
+  const check=card.querySelector(".exercise-check");
 
   if(card.classList.contains("completed")){
     check.innerHTML="✓";
@@ -1326,59 +1030,34 @@ function toggleExercise(card){
   updateWorkoutProgress();
 }
 
-
 function updateWorkoutProgress(){
-
-  const exercises =
-    document.querySelectorAll(".exercise-card");
-
-  const completed =
-    document.querySelectorAll(
-      ".exercise-card.completed"
-    ).length;
-
+  const exercises=document.querySelectorAll(".exercise-card");
+  const completed=document.querySelectorAll(".exercise-card.completed").length;
   const total=exercises.length;
 
-  document
-    .getElementById("workoutProgressText")
-    .textContent=completed+" / "+total;
+  document.getElementById("workoutProgressText").textContent=
+    completed+" / "+total;
 
-  document
-    .getElementById("workoutProgressFill")
-    .style.width=(completed/total*100)+"%";
+  document.getElementById("workoutProgressFill").style.width=
+    (completed/total*100)+"%";
 
-  const button=
-    document.getElementById("finishButton");
+  const button=document.getElementById("finishButton");
 
   if(completed===total){
-
     button.disabled=false;
-
     button.classList.add("ready");
-
     button.textContent="FINISH WORKOUT 🏆";
-
   }else{
-
     button.disabled=true;
-
     button.classList.remove("ready");
-
     button.textContent="COMPLETE ALL EXERCISES";
-
   }
-
 }
-
 
 function finishWorkout(){
-
   alert("🏆 Workout complete! Great work, Andrew!");
-
   showHome();
-
 }
-
 </script>
 
 </body>
