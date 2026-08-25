@@ -61,12 +61,8 @@ body::before{
   padding:22px 18px 105px;
 }
 
-button,input,select{
-  font-family:inherit;
-}
-
+button,input,select{font-family:inherit}
 button{cursor:pointer}
-
 .screen{display:none}
 .screen.active{display:block}
 
@@ -730,9 +726,7 @@ button{cursor:pointer}
 
 /* SETUP SCREEN */
 
-.setup-header{
-  margin-bottom:22px;
-}
+.setup-header{margin-bottom:22px}
 
 .setup-card{
   padding:18px;
@@ -938,8 +932,6 @@ button{cursor:pointer}
 
 <div class="app">
 
-<!-- HOME -->
-
 <section id="homeScreen" class="screen active">
 
 <header class="home-header">
@@ -977,13 +969,11 @@ button{cursor:pointer}
       <div class="plan-stat-label">Calories</div>
       <div class="plan-stat-value" id="homeCalories">2,200</div>
     </div>
-
     <div class="plan-stat">
       <div class="stat-icon">🏋️</div>
       <div class="plan-stat-label">Protein</div>
       <div class="plan-stat-value" id="homeProtein">180g</div>
     </div>
-
     <div class="plan-stat">
       <div class="stat-icon">💧</div>
       <div class="plan-stat-label">Water</div>
@@ -993,7 +983,6 @@ button{cursor:pointer}
 </section>
 
 <div class="action-grid">
-
   <section class="action-card workout-card">
     <div class="action-icon">🏋️</div>
     <div class="action-label">WORKOUT</div>
@@ -1009,44 +998,28 @@ button{cursor:pointer}
     <div class="action-desc">Personalised for you</div>
     <button class="action-button" onclick="showMeals()">View Plan</button>
   </section>
-
 </div>
 
 <section class="progress-card">
   <div class="progress-title">Weekly Progress</div>
-
   <div class="progress-content">
     <div class="progress-ring">
       <div class="progress-inner">78%</div>
     </div>
-
     <div class="progress-info">
-      <div class="progress-row">
-        <span class="progress-row-label">Workouts</span>
-        <span class="progress-row-value">5/6</span>
-      </div>
-
-      <div class="progress-row">
-        <span class="progress-row-label">Calories</span>
-        <span class="progress-row-value on-track"><span class="dot"></span>On Track</span>
-      </div>
-
-      <div class="progress-row">
-        <span class="progress-row-label">Protein</span>
-        <span class="progress-row-value on-track"><span class="dot"></span>On Track</span>
-      </div>
+      <div class="progress-row"><span class="progress-row-label">Workouts</span><span class="progress-row-value">5/6</span></div>
+      <div class="progress-row"><span class="progress-row-label">Calories</span><span class="progress-row-value on-track"><span class="dot"></span>On Track</span></div>
+      <div class="progress-row"><span class="progress-row-label">Protein</span><span class="progress-row-value on-track"><span class="dot"></span>On Track</span></div>
     </div>
   </div>
 </section>
 
 <section class="ai-card">
   <div class="ai-bot">🤖</div>
-
   <div class="ai-content">
     <div class="ai-title">ShiftFit AI Coach</div>
     <div class="ai-text">Your personal fitness coach. Ask me anything.</div>
   </div>
-
   <div class="ai-arrow">›</div>
 </section>
 
@@ -1055,7 +1028,6 @@ button{cursor:pointer}
 <!-- WORKOUT -->
 
 <section id="workoutScreen" class="screen">
-
 <button class="back-btn" onclick="showHome()">← Back to Home</button>
 
 <div class="workout-header">
@@ -1075,61 +1047,16 @@ button{cursor:pointer}
     <span>WORKOUT PROGRESS</span>
     <span id="workoutProgressText">0 / 5</span>
   </div>
-
-  <div class="progress-bar">
-    <div class="progress-fill" id="workoutProgressFill"></div>
-  </div>
+  <div class="progress-bar"><div class="progress-fill" id="workoutProgressFill"></div></div>
 </div>
 
-<div class="exercise-card" onclick="toggleExercise(this)">
-  <div class="exercise-check"></div>
-  <div class="exercise-content">
-    <div class="exercise-name">1. Bench Press</div>
-    <div class="exercise-sets">4 sets × 8–10 reps</div>
-    <div class="exercise-tip">Control the weight and keep your shoulders stable.</div>
-  </div>
-</div>
+<div class="exercise-card" onclick="toggleExercise(this)"><div class="exercise-check"></div><div class="exercise-content"><div class="exercise-name">1. Bench Press</div><div class="exercise-sets">4 sets × 8–10 reps</div><div class="exercise-tip">Control the weight and keep your shoulders stable.</div></div></div>
+<div class="exercise-card" onclick="toggleExercise(this)"><div class="exercise-check"></div><div class="exercise-content"><div class="exercise-name">2. Incline Dumbbell Press</div><div class="exercise-sets">4 sets × 10–12 reps</div><div class="exercise-tip">Keep the movement controlled.</div></div></div>
+<div class="exercise-card" onclick="toggleExercise(this)"><div class="exercise-check"></div><div class="exercise-content"><div class="exercise-name">3. Shoulder Press</div><div class="exercise-sets">3 sets × 8–12 reps</div><div class="exercise-tip">Brace your core and press smoothly.</div></div></div>
+<div class="exercise-card" onclick="toggleExercise(this)"><div class="exercise-check"></div><div class="exercise-content"><div class="exercise-name">4. Tricep Dips</div><div class="exercise-sets">3 sets × 12–15 reps</div><div class="exercise-tip">Keep control throughout the movement.</div></div></div>
+<div class="exercise-card" onclick="toggleExercise(this)"><div class="exercise-check"></div><div class="exercise-content"><div class="exercise-name">5. Chest Flyes</div><div class="exercise-sets">3 sets × 12–15 reps</div><div class="exercise-tip">Use a controlled stretch and squeeze.</div></div></div>
 
-<div class="exercise-card" onclick="toggleExercise(this)">
-  <div class="exercise-check"></div>
-  <div class="exercise-content">
-    <div class="exercise-name">2. Incline Dumbbell Press</div>
-    <div class="exercise-sets">4 sets × 10–12 reps</div>
-    <div class="exercise-tip">Keep the movement controlled.</div>
-  </div>
-</div>
-
-<div class="exercise-card" onclick="toggleExercise(this)">
-  <div class="exercise-check"></div>
-  <div class="exercise-content">
-    <div class="exercise-name">3. Shoulder Press</div>
-    <div class="exercise-sets">3 sets × 8–12 reps</div>
-    <div class="exercise-tip">Brace your core and press smoothly.</div>
-  </div>
-</div>
-
-<div class="exercise-card" onclick="toggleExercise(this)">
-  <div class="exercise-check"></div>
-  <div class="exercise-content">
-    <div class="exercise-name">4. Tricep Dips</div>
-    <div class="exercise-sets">3 sets × 12–15 reps</div>
-    <div class="exercise-tip">Keep control throughout the movement.</div>
-  </div>
-</div>
-
-<div class="exercise-card" onclick="toggleExercise(this)">
-  <div class="exercise-check"></div>
-  <div class="exercise-content">
-    <div class="exercise-name">5. Chest Flyes</div>
-    <div class="exercise-sets">3 sets × 12–15 reps</div>
-    <div class="exercise-tip">Use a controlled stretch and squeeze.</div>
-  </div>
-</div>
-
-<button id="finishButton" class="finish-button" disabled onclick="finishWorkout()">
-  COMPLETE ALL EXERCISES
-</button>
-
+<button id="finishButton" class="finish-button" disabled onclick="finishWorkout()">COMPLETE ALL EXERCISES</button>
 </section>
 
 <!-- MEALS -->
@@ -1145,146 +1072,112 @@ button{cursor:pointer}
 </div>
 
 <div class="day-selector">
-  <button class="day-btn active">MON<strong>25</strong></button>
-  <button class="day-btn">TUE<strong>26</strong></button>
-  <button class="day-btn">WED<strong>27</strong></button>
-  <button class="day-btn">THU<strong>28</strong></button>
-  <button class="day-btn">FRI<strong>29</strong></button>
-  <button class="day-btn">SAT<strong>30</strong></button>
-  <button class="day-btn">SUN<strong>31</strong></button>
+  <button class="day-btn active" data-day="monday" onclick="selectDay('monday',this)">MON<strong>25</strong></button>
+  <button class="day-btn" data-day="tuesday" onclick="selectDay('tuesday',this)">TUE<strong>26</strong></button>
+  <button class="day-btn" data-day="wednesday" onclick="selectDay('wednesday',this)">WED<strong>27</strong></button>
+  <button class="day-btn" data-day="thursday" onclick="selectDay('thursday',this)">THU<strong>28</strong></button>
+  <button class="day-btn" data-day="friday" onclick="selectDay('friday',this)">FRI<strong>29</strong></button>
+  <button class="day-btn" data-day="saturday" onclick="selectDay('saturday',this)">SAT<strong>30</strong></button>
+  <button class="day-btn" data-day="sunday" onclick="selectDay('sunday',this)">SUN<strong>31</strong></button>
 </div>
 
 <section class="meal-summary">
-
   <div class="summary-top">
     <div>
       <div class="summary-label">DAILY TARGET</div>
-      <div class="summary-calories">
-        <span id="mealCalories">2,200</span> <span>kcal</span>
-      </div>
+      <div class="summary-calories"><span id="mealCalories">2,200</span> <span>kcal</span></div>
     </div>
-
     <div class="summary-badge" id="goalBadge">HIGH PROTEIN</div>
   </div>
 
   <div class="macro-grid">
-    <div class="macro-box">
-      <span>PROTEIN</span>
-      <strong id="mealProtein">180g</strong>
-    </div>
-
-    <div class="macro-box">
-      <span>CARBS</span>
-      <strong id="mealCarbs">220g</strong>
-    </div>
-
-    <div class="macro-box">
-      <span>FATS</span>
-      <strong id="mealFats">67g</strong>
-    </div>
+    <div class="macro-box"><span>PROTEIN</span><strong id="mealProtein">180g</strong></div>
+    <div class="macro-box"><span>CARBS</span><strong id="mealCarbs">220g</strong></div>
+    <div class="macro-box"><span>FATS</span><strong id="mealFats">67g</strong></div>
   </div>
 
   <button class="edit-plan-btn" onclick="showSetup()">⚙ EDIT MY PERSONAL PLAN</button>
-
 </section>
 
-<div class="meal-section-title">Today's Meals</div>
+<div class="meal-section-title" id="selectedDayTitle">Monday's Meals</div>
 
 <div class="meal-card-full">
   <div class="meal-calories" id="breakfastCalories">520 kcal</div>
-
   <div class="meal-top">
     <div class="meal-emoji" id="breakfastEmoji">🥣</div>
-
     <div class="meal-info">
       <div class="meal-type">BREAKFAST</div>
       <div class="meal-name" id="breakfastName">Protein Oats & Berries</div>
       <div class="meal-desc" id="breakfastDesc">Oats, whey protein, Greek yoghurt and mixed berries.</div>
     </div>
   </div>
-
   <div class="meal-macros">
     <span><strong id="breakfastP">45g</strong> Protein</span>
     <span><strong id="breakfastC">58g</strong> Carbs</span>
     <span><strong id="breakfastF">12g</strong> Fat</span>
   </div>
-
   <button class="swap-btn" onclick="swapMeal('breakfast')">↻ SWAP MEAL</button>
 </div>
 
 <div class="meal-card-full">
   <div class="meal-calories" id="lunchCalories">640 kcal</div>
-
   <div class="meal-top">
     <div class="meal-emoji" id="lunchEmoji">🍗</div>
-
     <div class="meal-info">
       <div class="meal-type">LUNCH</div>
       <div class="meal-name" id="lunchName">Chicken Rice Power Bowl</div>
       <div class="meal-desc" id="lunchDesc">Grilled chicken, rice, vegetables and a light sauce.</div>
     </div>
   </div>
-
   <div class="meal-macros">
     <span><strong id="lunchP">58g</strong> Protein</span>
     <span><strong id="lunchC">72g</strong> Carbs</span>
     <span><strong id="lunchF">14g</strong> Fat</span>
   </div>
-
   <button class="swap-btn" onclick="swapMeal('lunch')">↻ SWAP MEAL</button>
 </div>
 
 <div class="meal-card-full">
   <div class="meal-calories" id="dinnerCalories">710 kcal</div>
-
   <div class="meal-top">
     <div class="meal-emoji" id="dinnerEmoji">🥩</div>
-
     <div class="meal-info">
       <div class="meal-type">DINNER</div>
       <div class="meal-name" id="dinnerName">Lean Beef & Sweet Potato</div>
       <div class="meal-desc" id="dinnerDesc">Lean beef mince, roasted sweet potato and green vegetables.</div>
     </div>
   </div>
-
   <div class="meal-macros">
     <span><strong id="dinnerP">60g</strong> Protein</span>
     <span><strong id="dinnerC">65g</strong> Carbs</span>
     <span><strong id="dinnerF">20g</strong> Fat</span>
   </div>
-
   <button class="swap-btn" onclick="swapMeal('dinner')">↻ SWAP MEAL</button>
 </div>
 
 <div class="meal-card-full">
   <div class="meal-calories" id="snackCalories">330 kcal</div>
-
   <div class="meal-top">
     <div class="meal-emoji" id="snackEmoji">🍓</div>
-
     <div class="meal-info">
       <div class="meal-type">SNACK</div>
       <div class="meal-name" id="snackName">Greek Yoghurt Protein Bowl</div>
       <div class="meal-desc" id="snackDesc">Greek yoghurt, berries and a small serving of nuts.</div>
     </div>
   </div>
-
   <div class="meal-macros">
     <span><strong id="snackP">25g</strong> Protein</span>
     <span><strong id="snackC">25g</strong> Carbs</span>
     <span><strong id="snackF">12g</strong> Fat</span>
   </div>
-
   <button class="swap-btn" onclick="swapMeal('snack')">↻ SWAP MEAL</button>
 </div>
 
 <section class="shopping-card">
-
   <div class="shopping-top">
     <div class="shopping-title">🛒 Shopping List</div>
     <div class="shopping-count">12 ITEMS</div>
   </div>
-
   <div class="shopping-items">
     <div class="shopping-item">Chicken breast</div>
     <div class="shopping-item">Lean beef mince</div>
@@ -1299,11 +1192,7 @@ button{cursor:pointer}
     <div class="shopping-item">Mixed nuts</div>
     <div class="shopping-item">Light sauce</div>
   </div>
-
-  <button class="shopping-btn" onclick="alert('Shopping list ready! 🛒')">
-    VIEW FULL SHOPPING LIST
-  </button>
-
+  <button class="shopping-btn" onclick="alert('Shopping list ready! 🛒')">VIEW FULL SHOPPING LIST</button>
 </section>
 
 </section>
@@ -1321,68 +1210,30 @@ button{cursor:pointer}
 </div>
 
 <section class="setup-card">
-
   <label class="setup-label">YOUR GOAL</label>
-
   <div class="goal-grid">
-    <button class="goal-btn active" data-goal="lose" onclick="selectGoal(this)">
-      <span>🔥</span>Lose Weight
-    </button>
-
-    <button class="goal-btn" data-goal="maintain" onclick="selectGoal(this)">
-      <span>⚡</span>Maintain
-    </button>
-
-    <button class="goal-btn" data-goal="gain" onclick="selectGoal(this)">
-      <span>💪</span>Build Muscle
-    </button>
+    <button class="goal-btn active" data-goal="lose" onclick="selectGoal(this)"><span>🔥</span>Lose Weight</button>
+    <button class="goal-btn" data-goal="maintain" onclick="selectGoal(this)"><span>⚡</span>Maintain</button>
+    <button class="goal-btn" data-goal="gain" onclick="selectGoal(this)"><span>💪</span>Build Muscle</button>
   </div>
-
 </section>
 
 <section class="setup-card">
-
   <div class="setup-grid">
-
-    <div>
-      <label class="setup-label">AGE</label>
-      <input id="userAge" class="setup-input" type="number" value="38">
-    </div>
-
-    <div>
-      <label class="setup-label">SEX</label>
-      <select id="userSex" class="setup-input">
-        <option value="male">Male</option>
-        <option value="female">Female</option>
-      </select>
-    </div>
-
+    <div><label class="setup-label">AGE</label><input id="userAge" class="setup-input" type="number" value="38"></div>
+    <div><label class="setup-label">SEX</label><select id="userSex" class="setup-input"><option value="male">Male</option><option value="female">Female</option></select></div>
   </div>
-
 </section>
 
 <section class="setup-card">
-
   <div class="setup-grid">
-
-    <div>
-      <label class="setup-label">WEIGHT (KG)</label>
-      <input id="userWeight" class="setup-input" type="number" step="0.1" value="84">
-    </div>
-
-    <div>
-      <label class="setup-label">HEIGHT (CM)</label>
-      <input id="userHeight" class="setup-input" type="number" value="173">
-    </div>
-
+    <div><label class="setup-label">WEIGHT (KG)</label><input id="userWeight" class="setup-input" type="number" step="0.1" value="84"></div>
+    <div><label class="setup-label">HEIGHT (CM)</label><input id="userHeight" class="setup-input" type="number" value="173"></div>
   </div>
-
 </section>
 
 <section class="setup-card">
-
   <label class="setup-label">ACTIVITY LEVEL</label>
-
   <select id="userActivity" class="setup-input">
     <option value="1.2">Low Activity</option>
     <option value="1.375">Lightly Active</option>
@@ -1390,61 +1241,43 @@ button{cursor:pointer}
     <option value="1.725">Very Active</option>
     <option value="1.9">Extremely Active</option>
   </select>
-
 </section>
 
-<button class="generate-btn" onclick="generatePlan()">
-  ⚡ SAVE & GENERATE MY PLAN
-</button>
+<button class="generate-btn" onclick="generatePlan()">⚡ SAVE & GENERATE MY PLAN</button>
 
 </section>
 
 </div>
 
 <nav class="bottom-nav">
-
-<button class="nav-item active" id="homeNav" onclick="showHome()">
-  <span class="nav-icon">⌂</span>
-  <span>Home</span>
-</button>
-
-<button class="nav-item">
-  <span class="nav-icon">▦</span>
-  <span>Calendar</span>
-</button>
-
-<button class="nav-item" id="workoutNav" onclick="showWorkout()">
-  <span class="nav-icon">🏋️</span>
-  <span>Workouts</span>
-</button>
-
-<button class="nav-item" id="mealNav" onclick="showMeals()">
-  <span class="nav-icon">🍽️</span>
-  <span>Meals</span>
-</button>
-
-<button class="nav-item" onclick="showSetup()">
-  <span class="nav-icon">☰</span>
-  <span>More</span>
-</button>
-
+  <button class="nav-item active" id="homeNav" onclick="showHome()"><span class="nav-icon">⌂</span><span>Home</span></button>
+  <button class="nav-item"><span class="nav-icon">▦</span><span>Calendar</span></button>
+  <button class="nav-item" id="workoutNav" onclick="showWorkout()"><span class="nav-icon">🏋️</span><span>Workouts</span></button>
+  <button class="nav-item" id="mealNav" onclick="showMeals()"><span class="nav-icon">🍽️</span><span>Meals</span></button>
+  <button class="nav-item" onclick="showSetup()"><span class="nav-icon">☰</span><span>More</span></button>
 </nav>
 
 <script>
 
 let selectedGoal="lose";
+let selectedDay="monday";
+
+const dayNames={
+  monday:"Monday",
+  tuesday:"Tuesday",
+  wednesday:"Wednesday",
+  thursday:"Thursday",
+  friday:"Friday",
+  saturday:"Saturday",
+  sunday:"Sunday"
+};
 
 function hideAllScreens(){
-  document.querySelectorAll(".screen").forEach(screen=>{
-    screen.classList.remove("active");
-  });
+  document.querySelectorAll(".screen").forEach(screen=>screen.classList.remove("active"));
 }
 
 function setNav(active){
-  document.querySelectorAll(".nav-item").forEach(item=>{
-    item.classList.remove("active");
-  });
-
+  document.querySelectorAll(".nav-item").forEach(item=>item.classList.remove("active"));
   if(active==="home") document.getElementById("homeNav").classList.add("active");
   if(active==="workout") document.getElementById("workoutNav").classList.add("active");
   if(active==="meal") document.getElementById("mealNav").classList.add("active");
@@ -1468,6 +1301,7 @@ function showMeals(){
   hideAllScreens();
   document.getElementById("mealScreen").classList.add("active");
   setNav("meal");
+  renderDayMeals();
   window.scrollTo(0,0);
 }
 
@@ -1480,24 +1314,17 @@ function showSetup(){
 
 function toggleExercise(card){
   card.classList.toggle("completed");
-
-  card.querySelector(".exercise-check").innerHTML=
-    card.classList.contains("completed") ? "✓" : "";
-
+  card.querySelector(".exercise-check").innerHTML=card.classList.contains("completed") ? "✓" : "";
   updateWorkoutProgress();
 }
 
 function updateWorkoutProgress(){
-
   const exercises=document.querySelectorAll(".exercise-card");
   const completed=document.querySelectorAll(".exercise-card.completed").length;
   const total=exercises.length;
 
-  document.getElementById("workoutProgressText").textContent=
-    completed+" / "+total;
-
-  document.getElementById("workoutProgressFill").style.width=
-    (completed/total*100)+"%";
+  document.getElementById("workoutProgressText").textContent=completed+" / "+total;
+  document.getElementById("workoutProgressFill").style.width=(completed/total*100)+"%";
 
   const button=document.getElementById("finishButton");
 
@@ -1517,19 +1344,13 @@ function finishWorkout(){
   showHome();
 }
 
-/* GOAL SELECTOR */
+/* PERSONAL PLAN */
 
 function selectGoal(button){
-
-  document.querySelectorAll(".goal-btn").forEach(btn=>{
-    btn.classList.remove("active");
-  });
-
+  document.querySelectorAll(".goal-btn").forEach(btn=>btn.classList.remove("active"));
   button.classList.add("active");
   selectedGoal=button.dataset.goal;
 }
-
-/* CALCULATE PERSONAL PLAN */
 
 function generatePlan(){
 
@@ -1544,107 +1365,151 @@ function generatePlan(){
     return;
   }
 
-  let bmr;
-
-  if(sex==="male"){
-    bmr=(10*weight)+(6.25*height)-(5*age)+5;
-  }else{
-    bmr=(10*weight)+(6.25*height)-(5*age)-161;
-  }
+  let bmr=sex==="male"
+    ? (10*weight)+(6.25*height)-(5*age)+5
+    : (10*weight)+(6.25*height)-(5*age)-161;
 
   const maintenance=bmr*activity;
 
   let calories;
-
-  if(selectedGoal==="lose"){
-    calories=Math.round(maintenance-400);
-  }
-
-  if(selectedGoal==="maintain"){
-    calories=Math.round(maintenance);
-  }
-
-  if(selectedGoal==="gain"){
-    calories=Math.round(maintenance+300);
-  }
+  if(selectedGoal==="lose") calories=Math.round(maintenance-400);
+  if(selectedGoal==="maintain") calories=Math.round(maintenance);
+  if(selectedGoal==="gain") calories=Math.round(maintenance+300);
 
   const protein=Math.round(weight*2);
-  const fats=Math.round(weight*0.8);
-  const carbs=Math.round((calories-(protein*4)-(fats*9))/4);
+  const fats=Math.round(weight*.8);
+  const carbs=Math.max(0,Math.round((calories-(protein*4)-(fats*9))/4));
 
-  const plan={
-    age:age,
-    weight:weight,
-    height:height,
-    sex:sex,
-    activity:activity,
-    goal:selectedGoal,
-    calories:calories,
-    protein:protein,
-    carbs:carbs,
-    fats:fats
-  };
+  const plan={age,weight,height,sex,activity,goal:selectedGoal,calories,protein,carbs,fats};
 
   localStorage.setItem("shiftfitPlan",JSON.stringify(plan));
-
   updatePlan(plan);
 
   alert("⚡ Your personalised ShiftFit meal plan is ready!");
-
   showMeals();
 }
 
 function updatePlan(plan){
 
-  document.getElementById("homeCalories").textContent=
-    plan.calories.toLocaleString();
+  document.getElementById("homeCalories").textContent=plan.calories.toLocaleString();
+  document.getElementById("homeProtein").textContent=plan.protein+"g";
+  document.getElementById("mealCalories").textContent=plan.calories.toLocaleString();
+  document.getElementById("mealProtein").textContent=plan.protein+"g";
+  document.getElementById("mealCarbs").textContent=plan.carbs+"g";
+  document.getElementById("mealFats").textContent=plan.fats+"g";
 
-  document.getElementById("homeProtein").textContent=
-    plan.protein+"g";
-
-  document.getElementById("mealCalories").textContent=
-    plan.calories.toLocaleString();
-
-  document.getElementById("mealProtein").textContent=
-    plan.protein+"g";
-
-  document.getElementById("mealCarbs").textContent=
-    plan.carbs+"g";
-
-  document.getElementById("mealFats").textContent=
-    plan.fats+"g";
-
-  let goalText;
+  let goalText="HIGH PROTEIN";
 
   if(plan.goal==="lose"){
     goalText="FAT LOSS";
-    document.getElementById("mealSubtitle").textContent=
-      "High-protein meals designed to help you lose fat while protecting muscle.";
+    document.getElementById("mealSubtitle").textContent="High-protein meals designed to help you lose fat while protecting muscle.";
   }
 
   if(plan.goal==="maintain"){
     goalText="MAINTAIN";
-    document.getElementById("mealSubtitle").textContent=
-      "Balanced meals designed to fuel your lifestyle and maintain your weight.";
+    document.getElementById("mealSubtitle").textContent="Balanced meals designed to fuel your lifestyle and maintain your weight.";
   }
 
   if(plan.goal==="gain"){
     goalText="BUILD MUSCLE";
-    document.getElementById("mealSubtitle").textContent=
-      "High-protein meals designed to support strength, recovery and muscle growth.";
+    document.getElementById("mealSubtitle").textContent="High-protein meals designed to support strength, recovery and muscle growth.";
   }
 
   document.getElementById("goalBadge").textContent=goalText;
-
   scaleMeals(plan);
 }
 
-/* SCALE MEALS TO TARGET */
+/* MEAL OPTIONS */
+
+const mealOptions={
+
+  breakfast:[
+    {name:"Protein Oats & Berries",desc:"Oats, whey protein, Greek yoghurt and mixed berries.",emoji:"🥣"},
+    {name:"Egg & Avocado Bagel",desc:"Eggs, avocado and a toasted wholemeal bagel.",emoji:"🥯"},
+    {name:"Protein Pancake Stack",desc:"Protein pancakes topped with banana and Greek yoghurt.",emoji:"🥞"}
+  ],
+
+  lunch:[
+    {name:"Chicken Rice Power Bowl",desc:"Grilled chicken, rice, vegetables and a light sauce.",emoji:"🍗"},
+    {name:"Turkey Pasta Bowl",desc:"Lean turkey mince, wholewheat pasta and tomato sauce.",emoji:"🍝"},
+    {name:"Chicken Wrap & Wedges",desc:"High-protein chicken wrap with seasoned potato wedges.",emoji:"🌯"}
+  ],
+
+  dinner:[
+    {name:"Lean Beef & Sweet Potato",desc:"Lean beef mince, roasted sweet potato and green vegetables.",emoji:"🥩"},
+    {name:"Chicken Stir Fry",desc:"Chicken breast, rice noodles and fresh mixed vegetables.",emoji:"🍜"},
+    {name:"Salmon & Rice",desc:"Baked salmon, jasmine rice and roasted vegetables.",emoji:"🐟"}
+  ],
+
+  snack:[
+    {name:"Greek Yoghurt Protein Bowl",desc:"Greek yoghurt, berries and a small serving of nuts.",emoji:"🍓"},
+    {name:"Protein Shake & Banana",desc:"Whey protein shake with banana and peanut butter.",emoji:"🥤"},
+    {name:"Cottage Cheese Snack",desc:"Cottage cheese, crackers and fresh fruit.",emoji:"🧀"}
+  ]
+};
+
+/* EACH DAY GETS ITS OWN MEALS */
+
+let weeklyMeals={
+  monday:{breakfast:0,lunch:0,dinner:0,snack:0},
+  tuesday:{breakfast:1,lunch:1,dinner:1,snack:1},
+  wednesday:{breakfast:2,lunch:2,dinner:2,snack:2},
+  thursday:{breakfast:0,lunch:1,dinner:2,snack:0},
+  friday:{breakfast:1,lunch:2,dinner:0,snack:1},
+  saturday:{breakfast:2,lunch:0,dinner:1,snack:2},
+  sunday:{breakfast:0,lunch:2,dinner:2,snack:1}
+};
+
+function loadWeeklyMeals(){
+  const saved=localStorage.getItem("shiftfitWeeklyMeals");
+  if(saved) weeklyMeals=JSON.parse(saved);
+}
+
+function saveWeeklyMeals(){
+  localStorage.setItem("shiftfitWeeklyMeals",JSON.stringify(weeklyMeals));
+}
+
+function selectDay(day,button){
+
+  selectedDay=day;
+
+  document.querySelectorAll(".day-btn").forEach(btn=>btn.classList.remove("active"));
+  button.classList.add("active");
+
+  renderDayMeals();
+}
+
+function renderDayMeals(){
+
+  document.getElementById("selectedDayTitle").textContent=dayNames[selectedDay]+"'s Meals";
+
+  ["breakfast","lunch","dinner","snack"].forEach(type=>{
+
+    const index=weeklyMeals[selectedDay][type];
+    const meal=mealOptions[type][index];
+
+    document.getElementById(type+"Emoji").textContent=meal.emoji;
+    document.getElementById(type+"Name").textContent=meal.name;
+    document.getElementById(type+"Desc").textContent=meal.desc;
+
+  });
+
+  const saved=localStorage.getItem("shiftfitPlan");
+  if(saved) scaleMeals(JSON.parse(saved));
+}
+
+function swapMeal(type){
+
+  weeklyMeals[selectedDay][type]=
+    (weeklyMeals[selectedDay][type]+1)%mealOptions[type].length;
+
+  saveWeeklyMeals();
+  renderDayMeals();
+}
+
+/* SCALE MACROS TO PERSONAL TARGET */
 
 function scaleMeals(plan){
-
-  const total=2200;
-  const ratio=plan.calories/total;
 
   const mealCalories={
     breakfast:Math.round(plan.calories*.24),
@@ -1652,13 +1517,6 @@ function scaleMeals(plan){
     dinner:Math.round(plan.calories*.32),
     snack:Math.round(plan.calories*.15)
   };
-
-  ["breakfast","lunch","dinner","snack"].forEach(type=>{
-
-    document.getElementById(type+"Calories").textContent=
-      mealCalories[type]+" kcal";
-
-  });
 
   const portions={
     breakfast:.25,
@@ -1669,112 +1527,12 @@ function scaleMeals(plan){
 
   ["breakfast","lunch","dinner","snack"].forEach(type=>{
 
-    document.getElementById(type+"P").textContent=
-      Math.round(plan.protein*portions[type])+"g";
-
-    document.getElementById(type+"C").textContent=
-      Math.round(plan.carbs*portions[type])+"g";
-
-    document.getElementById(type+"F").textContent=
-      Math.round(plan.fats*portions[type])+"g";
+    document.getElementById(type+"Calories").textContent=mealCalories[type]+" kcal";
+    document.getElementById(type+"P").textContent=Math.round(plan.protein*portions[type])+"g";
+    document.getElementById(type+"C").textContent=Math.round(plan.carbs*portions[type])+"g";
+    document.getElementById(type+"F").textContent=Math.round(plan.fats*portions[type])+"g";
 
   });
-}
-
-/* MEAL SWAPS */
-
-const mealOptions={
-
-  breakfast:[
-    {
-      name:"Protein Oats & Berries",
-      desc:"Oats, whey protein, Greek yoghurt and mixed berries.",
-      emoji:"🥣"
-    },
-    {
-      name:"Egg & Avocado Bagel",
-      desc:"Eggs, avocado and a toasted wholemeal bagel.",
-      emoji:"🥯"
-    },
-    {
-      name:"Protein Pancake Stack",
-      desc:"Protein pancakes topped with banana and Greek yoghurt.",
-      emoji:"🥞"
-    }
-  ],
-
-  lunch:[
-    {
-      name:"Chicken Rice Power Bowl",
-      desc:"Grilled chicken, rice, vegetables and a light sauce.",
-      emoji:"🍗"
-    },
-    {
-      name:"Turkey Pasta Bowl",
-      desc:"Lean turkey mince, wholewheat pasta and tomato sauce.",
-      emoji:"🍝"
-    },
-    {
-      name:"Chicken Wrap & Wedges",
-      desc:"High-protein chicken wrap with seasoned potato wedges.",
-      emoji:"🌯"
-    }
-  ],
-
-  dinner:[
-    {
-      name:"Lean Beef & Sweet Potato",
-      desc:"Lean beef mince, roasted sweet potato and green vegetables.",
-      emoji:"🥩"
-    },
-    {
-      name:"Chicken Stir Fry",
-      desc:"Chicken breast, rice noodles and fresh mixed vegetables.",
-      emoji:"🍜"
-    },
-    {
-      name:"Salmon & Rice",
-      desc:"Baked salmon, jasmine rice and roasted vegetables.",
-      emoji:"🐟"
-    }
-  ],
-
-  snack:[
-    {
-      name:"Greek Yoghurt Protein Bowl",
-      desc:"Greek yoghurt, berries and a small serving of nuts.",
-      emoji:"🍓"
-    },
-    {
-      name:"Protein Shake & Banana",
-      desc:"Whey protein shake with banana and peanut butter.",
-      emoji:"🥤"
-    },
-    {
-      name:"Cottage Cheese Snack",
-      desc:"Cottage cheese, crackers and fresh fruit.",
-      emoji:"🧀"
-    }
-  ]
-};
-
-const mealIndex={
-  breakfast:0,
-  lunch:0,
-  dinner:0,
-  snack:0
-};
-
-function swapMeal(type){
-
-  mealIndex[type]=
-    (mealIndex[type]+1)%mealOptions[type].length;
-
-  const meal=mealOptions[type][mealIndex[type]];
-
-  document.getElementById(type+"Emoji").textContent=meal.emoji;
-  document.getElementById(type+"Name").textContent=meal.name;
-  document.getElementById(type+"Desc").textContent=meal.desc;
 }
 
 /* LOAD SAVED PLAN */
@@ -1782,7 +1540,6 @@ function swapMeal(type){
 function loadSavedPlan(){
 
   const saved=localStorage.getItem("shiftfitPlan");
-
   if(!saved) return;
 
   const plan=JSON.parse(saved);
@@ -1797,16 +1554,15 @@ function loadSavedPlan(){
 
   document.querySelectorAll(".goal-btn").forEach(btn=>{
     btn.classList.remove("active");
-
-    if(btn.dataset.goal===plan.goal){
-      btn.classList.add("active");
-    }
+    if(btn.dataset.goal===plan.goal) btn.classList.add("active");
   });
 
   updatePlan(plan);
 }
 
+loadWeeklyMeals();
 loadSavedPlan();
+renderDayMeals();
 
 </script>
 
