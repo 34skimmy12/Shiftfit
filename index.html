@@ -16,11 +16,13 @@
   --purple2:#8b5cf6;
   --purple-light:#a78bfa;
   --green:#35df8d;
-  --blue:#36a8ff;
   --orange:#ff941f;
 }
 
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
 
 html{background:#03030a}
 
@@ -34,12 +36,10 @@ body{
     radial-gradient(ellipse at 50% -18%,rgba(111,45,255,.42),rgba(63,25,150,.18) 24%,transparent 52%),
     radial-gradient(ellipse at -15% 28%,rgba(0,174,255,.13),transparent 34%),
     radial-gradient(ellipse at 112% 42%,rgba(139,45,255,.22),transparent 38%),
-    radial-gradient(ellipse at 50% 105%,rgba(65,35,180,.18),transparent 45%),
     linear-gradient(180deg,#070512,#050611 38%,#08061a 68%,#03040a);
   background-attachment:fixed;
 }
 
-/* SUBTLE CYBER GRID — LIGHTNING REMOVED */
 body::before{
   content:"";
   position:fixed;
@@ -54,7 +54,6 @@ body::before{
 }
 
 .app{
-  position:relative;
   width:100%;
   max-width:500px;
   min-height:100vh;
@@ -62,15 +61,17 @@ body::before{
   padding:22px 18px 105px;
 }
 
-button{
+button,input,select{
   font-family:inherit;
-  cursor:pointer;
 }
+
+button{cursor:pointer}
 
 .screen{display:none}
 .screen.active{display:block}
 
 /* HEADER */
+
 .home-header{
   display:flex;
   align-items:center;
@@ -89,7 +90,7 @@ button{
   justify-content:center;
 }
 
-.menu-icon{font-size:29px;line-height:1}
+.menu-icon{font-size:29px}
 
 .logo{
   font-size:27px;
@@ -115,6 +116,7 @@ button{
 .profile-btn{font-size:25px}
 
 /* USER */
+
 .user-row{
   display:flex;
   align-items:center;
@@ -134,13 +136,20 @@ button{
   box-shadow:0 0 12px rgba(109,40,217,.55);
 }
 
-.user-name{font-size:21px;font-weight:850}
-.user-level{color:var(--muted);font-size:13px;margin-top:3px}
+.user-name{
+  font-size:21px;
+  font-weight:850;
+}
+
+.user-level{
+  color:var(--muted);
+  font-size:13px;
+  margin-top:3px;
+}
 
 /* TODAY PLAN */
+
 .today-plan,.meal-summary{
-  position:relative;
-  overflow:hidden;
   padding:20px;
   border-radius:22px;
   border:1px solid #303a60;
@@ -156,7 +165,10 @@ button{
   justify-content:space-between;
 }
 
-.plan-heading{font-size:17px;font-weight:850}
+.plan-heading{
+  font-size:17px;
+  font-weight:850;
+}
 
 .shift-badge{
   background:linear-gradient(135deg,#ff9c26,#f47b12);
@@ -169,7 +181,6 @@ button{
 
 .shift-time-row{
   display:flex;
-  align-items:center;
   gap:10px;
   margin-top:15px;
   color:#d7daea;
@@ -192,11 +203,25 @@ button{
 }
 
 .plan-stat:last-child{border-right:none}
-.stat-icon{font-size:19px;margin-bottom:4px}
-.plan-stat-label{color:#bbc0d1;font-size:11px}
-.plan-stat-value{font-size:20px;font-weight:900;margin-top:4px}
 
-/* HOME ACTIONS */
+.stat-icon{
+  font-size:19px;
+  margin-bottom:4px;
+}
+
+.plan-stat-label{
+  color:#bbc0d1;
+  font-size:11px;
+}
+
+.plan-stat-value{
+  font-size:20px;
+  font-weight:900;
+  margin-top:4px;
+}
+
+/* ACTION CARDS */
+
 .action-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -214,17 +239,39 @@ button{
 }
 
 .workout-card{
-  background:radial-gradient(circle at 100% 0%,rgba(47,222,139,.13),transparent 38%),linear-gradient(145deg,#102329,#0a1520);
+  background:
+    radial-gradient(circle at 100% 0%,rgba(47,222,139,.13),transparent 38%),
+    linear-gradient(145deg,#102329,#0a1520);
 }
 
 .meal-card{
-  background:radial-gradient(circle at 100% 0%,rgba(109,91,255,.25),transparent 40%),linear-gradient(145deg,#171e47,#0d1125);
+  background:
+    radial-gradient(circle at 100% 0%,rgba(109,91,255,.25),transparent 40%),
+    linear-gradient(145deg,#171e47,#0d1125);
 }
 
-.action-icon{font-size:31px;margin-bottom:17px}
-.action-label{color:#b9c0d0;font-size:12px;font-weight:850}
-.action-title{font-size:20px;font-weight:900;margin-top:5px}
-.action-desc{color:#9ca5b9;font-size:12px;margin-top:5px}
+.action-icon{
+  font-size:31px;
+  margin-bottom:17px;
+}
+
+.action-label{
+  color:#b9c0d0;
+  font-size:12px;
+  font-weight:850;
+}
+
+.action-title{
+  font-size:20px;
+  font-weight:900;
+  margin-top:5px;
+}
+
+.action-desc{
+  color:#9ca5b9;
+  font-size:12px;
+  margin-top:5px;
+}
 
 .action-button{
   position:absolute;
@@ -241,6 +288,7 @@ button{
 }
 
 /* PROGRESS */
+
 .progress-card{
   margin-top:18px;
   padding:17px;
@@ -249,7 +297,11 @@ button{
   background:linear-gradient(145deg,#11162a,#0a0e1d);
 }
 
-.progress-title{font-size:15px;font-weight:850;margin-bottom:15px}
+.progress-title{
+  font-size:15px;
+  font-weight:850;
+  margin-bottom:15px;
+}
 
 .progress-content{
   display:flex;
@@ -293,19 +345,22 @@ button{
 }
 
 .progress-row:last-child{border-bottom:none}
+
 .progress-row-label{color:#c5cada}
 .progress-row-value{font-weight:800}
 .on-track{color:var(--green)}
 
 .dot{
   display:inline-block;
-  width:8px;height:8px;
+  width:8px;
+  height:8px;
   border-radius:50%;
   background:var(--green);
   margin-right:5px;
 }
 
 /* AI */
+
 .ai-card{
   display:flex;
   align-items:center;
@@ -318,7 +373,8 @@ button{
 }
 
 .ai-bot{
-  width:58px;height:58px;
+  width:58px;
+  height:58px;
   border-radius:15px;
   display:flex;
   align-items:center;
@@ -332,7 +388,8 @@ button{
 .ai-text{color:#c2c6d4;font-size:12px;margin-top:3px}
 .ai-arrow{font-size:30px;color:#d6c6ff}
 
-/* GENERIC SCREEN */
+/* GENERIC */
+
 .back-btn{
   border:none;
   background:transparent;
@@ -342,25 +399,30 @@ button{
   padding:5px 0 20px;
 }
 
-/* WORKOUT */
-.workout-day,.meal-kicker{
+.workout-day,.meal-kicker,.setup-kicker{
   color:#c5b5ff;
   font-size:12px;
   font-weight:950;
   letter-spacing:4px;
 }
 
-.workout-header h1,.meal-header h1{
+.workout-header h1,
+.meal-header h1,
+.setup-header h1{
   margin:9px 0 8px;
   font-size:39px;
   letter-spacing:-1.5px;
 }
 
-.workout-header p,.meal-header p{
+.workout-header p,
+.meal-header p,
+.setup-header p{
   color:var(--muted);
   font-size:16px;
   line-height:1.5;
 }
+
+/* WORKOUT */
 
 .workout-stats{
   display:grid;
@@ -400,7 +462,8 @@ button{
 }
 
 .exercise-check{
-  width:45px;height:45px;
+  width:45px;
+  height:45px;
   min-width:45px;
   border-radius:13px;
   display:flex;
@@ -456,7 +519,8 @@ button{
   background:linear-gradient(135deg,#7c3aed,#4f46e5);
 }
 
-/* MEAL PLANS */
+/* MEAL PLAN */
+
 .meal-header{margin-bottom:20px}
 
 .day-selector{
@@ -491,7 +555,6 @@ button{
   background:linear-gradient(135deg,#7c3aed,#5123c5);
   border-color:#986cff;
   color:#e6ddff;
-  box-shadow:0 0 18px rgba(109,40,217,.25);
 }
 
 .meal-summary{margin-bottom:17px}
@@ -665,7 +728,109 @@ button{
   font-weight:900;
 }
 
+/* SETUP SCREEN */
+
+.setup-header{
+  margin-bottom:22px;
+}
+
+.setup-card{
+  padding:18px;
+  margin-bottom:15px;
+  border-radius:21px;
+  border:1px solid #293253;
+  background:linear-gradient(145deg,#151b31,#0c1122);
+}
+
+.setup-label{
+  display:block;
+  margin-bottom:10px;
+  color:#c9cde0;
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:1px;
+}
+
+.setup-input{
+  width:100%;
+  border:1px solid #374164;
+  border-radius:13px;
+  padding:14px;
+  color:white;
+  font-size:16px;
+  font-weight:800;
+  outline:none;
+  background:#0a0f20;
+}
+
+.setup-input:focus{
+  border-color:#8b5cf6;
+  box-shadow:0 0 0 3px rgba(139,92,246,.12);
+}
+
+.setup-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.goal-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+}
+
+.goal-btn{
+  min-height:88px;
+  padding:10px 5px;
+  border-radius:15px;
+  border:1px solid #303a60;
+  background:#0d1326;
+  color:#aab1c5;
+  font-size:11px;
+  font-weight:850;
+}
+
+.goal-btn span{
+  display:block;
+  font-size:24px;
+  margin-bottom:6px;
+}
+
+.goal-btn.active{
+  border-color:#936bff;
+  background:linear-gradient(145deg,#382070,#17143a);
+  color:white;
+  box-shadow:0 0 20px rgba(109,40,217,.2);
+}
+
+.generate-btn{
+  width:100%;
+  margin-top:5px;
+  padding:18px;
+  border:none;
+  border-radius:16px;
+  color:white;
+  font-size:15px;
+  font-weight:950;
+  background:linear-gradient(135deg,#8b3cff,#5123c5);
+  box-shadow:0 8px 25px rgba(109,40,217,.28);
+}
+
+.edit-plan-btn{
+  width:100%;
+  margin-top:12px;
+  padding:13px;
+  border:1px solid rgba(139,92,246,.4);
+  border-radius:12px;
+  background:rgba(109,40,217,.10);
+  color:#cdbdff;
+  font-size:12px;
+  font-weight:900;
+}
+
 /* SHOPPING */
+
 .shopping-card{
   padding:18px;
   margin-top:20px;
@@ -676,7 +841,6 @@ button{
 
 .shopping-top{
   display:flex;
-  align-items:center;
   justify-content:space-between;
 }
 
@@ -722,6 +886,7 @@ button{
 }
 
 /* BOTTOM NAV */
+
 .bottom-nav{
   position:fixed;
   z-index:20;
@@ -757,10 +922,14 @@ button{
 }
 
 @media(max-width:360px){
-  .app{padding-left:14px;padding-right:14px}
-  .action-card{min-height:175px}
+  .app{
+    padding-left:14px;
+    padding-right:14px;
+  }
+
   .plan-stat-value{font-size:17px}
   .shopping-items{grid-template-columns:1fr}
+  .meal-macros{gap:8px}
 }
 </style>
 </head>
@@ -770,6 +939,7 @@ button{
 <div class="app">
 
 <!-- HOME -->
+
 <section id="homeScreen" class="screen active">
 
 <header class="home-header">
@@ -779,7 +949,7 @@ button{
     <span class="logo-bolt">⚡</span><span class="logo-shift">SHIFT</span><span class="logo-fit">FIT</span>
   </div>
 
-  <button class="profile-btn">⚙</button>
+  <button class="profile-btn" onclick="showSetup()">⚙</button>
 </header>
 
 <div class="user-row">
@@ -805,13 +975,15 @@ button{
     <div class="plan-stat">
       <div class="stat-icon">🔥</div>
       <div class="plan-stat-label">Calories</div>
-      <div class="plan-stat-value">2,200</div>
+      <div class="plan-stat-value" id="homeCalories">2,200</div>
     </div>
+
     <div class="plan-stat">
       <div class="stat-icon">🏋️</div>
       <div class="plan-stat-label">Protein</div>
-      <div class="plan-stat-value">180g</div>
+      <div class="plan-stat-value" id="homeProtein">180g</div>
     </div>
+
     <div class="plan-stat">
       <div class="stat-icon">💧</div>
       <div class="plan-stat-label">Water</div>
@@ -821,6 +993,7 @@ button{
 </section>
 
 <div class="action-grid">
+
   <section class="action-card workout-card">
     <div class="action-icon">🏋️</div>
     <div class="action-label">WORKOUT</div>
@@ -833,35 +1006,54 @@ button{
     <div class="action-icon">🍽️</div>
     <div class="action-label">MEALS</div>
     <div class="action-title">High Protein</div>
-    <div class="action-desc">4 meals • Shift adjusted</div>
+    <div class="action-desc">Personalised for you</div>
     <button class="action-button" onclick="showMeals()">View Plan</button>
   </section>
+
 </div>
 
 <section class="progress-card">
   <div class="progress-title">Weekly Progress</div>
+
   <div class="progress-content">
-    <div class="progress-ring"><div class="progress-inner">78%</div></div>
+    <div class="progress-ring">
+      <div class="progress-inner">78%</div>
+    </div>
+
     <div class="progress-info">
-      <div class="progress-row"><span class="progress-row-label">Workouts</span><span class="progress-row-value">5/6</span></div>
-      <div class="progress-row"><span class="progress-row-label">Calories</span><span class="progress-row-value on-track"><span class="dot"></span>On Track</span></div>
-      <div class="progress-row"><span class="progress-row-label">Protein</span><span class="progress-row-value on-track"><span class="dot"></span>On Track</span></div>
+      <div class="progress-row">
+        <span class="progress-row-label">Workouts</span>
+        <span class="progress-row-value">5/6</span>
+      </div>
+
+      <div class="progress-row">
+        <span class="progress-row-label">Calories</span>
+        <span class="progress-row-value on-track"><span class="dot"></span>On Track</span>
+      </div>
+
+      <div class="progress-row">
+        <span class="progress-row-label">Protein</span>
+        <span class="progress-row-value on-track"><span class="dot"></span>On Track</span>
+      </div>
     </div>
   </div>
 </section>
 
 <section class="ai-card">
   <div class="ai-bot">🤖</div>
+
   <div class="ai-content">
     <div class="ai-title">ShiftFit AI Coach</div>
     <div class="ai-text">Your personal fitness coach. Ask me anything.</div>
   </div>
+
   <div class="ai-arrow">›</div>
 </section>
 
 </section>
 
 <!-- WORKOUT -->
+
 <section id="workoutScreen" class="screen">
 
 <button class="back-btn" onclick="showHome()">← Back to Home</button>
@@ -883,7 +1075,10 @@ button{
     <span>WORKOUT PROGRESS</span>
     <span id="workoutProgressText">0 / 5</span>
   </div>
-  <div class="progress-bar"><div class="progress-fill" id="workoutProgressFill"></div></div>
+
+  <div class="progress-bar">
+    <div class="progress-fill" id="workoutProgressFill"></div>
+  </div>
 </div>
 
 <div class="exercise-card" onclick="toggleExercise(this)">
@@ -900,7 +1095,7 @@ button{
   <div class="exercise-content">
     <div class="exercise-name">2. Incline Dumbbell Press</div>
     <div class="exercise-sets">4 sets × 10–12 reps</div>
-    <div class="exercise-tip">Keep the movement controlled and avoid locking out harshly.</div>
+    <div class="exercise-tip">Keep the movement controlled.</div>
   </div>
 </div>
 
@@ -909,7 +1104,7 @@ button{
   <div class="exercise-content">
     <div class="exercise-name">3. Shoulder Press</div>
     <div class="exercise-sets">3 sets × 8–12 reps</div>
-    <div class="exercise-tip">Brace your core and press smoothly overhead.</div>
+    <div class="exercise-tip">Brace your core and press smoothly.</div>
   </div>
 </div>
 
@@ -918,7 +1113,7 @@ button{
   <div class="exercise-content">
     <div class="exercise-name">4. Tricep Dips</div>
     <div class="exercise-sets">3 sets × 12–15 reps</div>
-    <div class="exercise-tip">Keep control throughout the full range of motion.</div>
+    <div class="exercise-tip">Keep control throughout the movement.</div>
   </div>
 </div>
 
@@ -927,15 +1122,18 @@ button{
   <div class="exercise-content">
     <div class="exercise-name">5. Chest Flyes</div>
     <div class="exercise-sets">3 sets × 12–15 reps</div>
-    <div class="exercise-tip">Use a controlled stretch and squeeze your chest.</div>
+    <div class="exercise-tip">Use a controlled stretch and squeeze.</div>
   </div>
 </div>
 
-<button id="finishButton" class="finish-button" disabled onclick="finishWorkout()">COMPLETE ALL EXERCISES</button>
+<button id="finishButton" class="finish-button" disabled onclick="finishWorkout()">
+  COMPLETE ALL EXERCISES
+</button>
 
 </section>
 
 <!-- MEALS -->
+
 <section id="mealScreen" class="screen">
 
 <button class="back-btn" onclick="showHome()">← Back to Home</button>
@@ -943,94 +1141,145 @@ button{
 <div class="meal-header">
   <div class="meal-kicker">YOUR NUTRITION</div>
   <h1>Meal Plan</h1>
-  <p>High-protein meals built around your goals and shift.</p>
+  <p id="mealSubtitle">High-protein meals built around your goals and shift.</p>
 </div>
 
 <div class="day-selector">
-  <button class="day-btn active" onclick="selectDay(this,'MON')">MON<strong>25</strong></button>
-  <button class="day-btn" onclick="selectDay(this,'TUE')">TUE<strong>26</strong></button>
-  <button class="day-btn" onclick="selectDay(this,'WED')">WED<strong>27</strong></button>
-  <button class="day-btn" onclick="selectDay(this,'THU')">THU<strong>28</strong></button>
-  <button class="day-btn" onclick="selectDay(this,'FRI')">FRI<strong>29</strong></button>
-  <button class="day-btn" onclick="selectDay(this,'SAT')">SAT<strong>30</strong></button>
-  <button class="day-btn" onclick="selectDay(this,'SUN')">SUN<strong>31</strong></button>
+  <button class="day-btn active">MON<strong>25</strong></button>
+  <button class="day-btn">TUE<strong>26</strong></button>
+  <button class="day-btn">WED<strong>27</strong></button>
+  <button class="day-btn">THU<strong>28</strong></button>
+  <button class="day-btn">FRI<strong>29</strong></button>
+  <button class="day-btn">SAT<strong>30</strong></button>
+  <button class="day-btn">SUN<strong>31</strong></button>
 </div>
 
 <section class="meal-summary">
+
   <div class="summary-top">
     <div>
       <div class="summary-label">DAILY TARGET</div>
-      <div class="summary-calories">2,200 <span>kcal</span></div>
+      <div class="summary-calories">
+        <span id="mealCalories">2,200</span> <span>kcal</span>
+      </div>
     </div>
-    <div class="summary-badge">HIGH PROTEIN</div>
+
+    <div class="summary-badge" id="goalBadge">HIGH PROTEIN</div>
   </div>
 
   <div class="macro-grid">
-    <div class="macro-box"><span>PROTEIN</span><strong>180g</strong></div>
-    <div class="macro-box"><span>CARBS</span><strong>220g</strong></div>
-    <div class="macro-box"><span>FATS</span><strong>67g</strong></div>
+    <div class="macro-box">
+      <span>PROTEIN</span>
+      <strong id="mealProtein">180g</strong>
+    </div>
+
+    <div class="macro-box">
+      <span>CARBS</span>
+      <strong id="mealCarbs">220g</strong>
+    </div>
+
+    <div class="macro-box">
+      <span>FATS</span>
+      <strong id="mealFats">67g</strong>
+    </div>
   </div>
+
+  <button class="edit-plan-btn" onclick="showSetup()">⚙ EDIT MY PERSONAL PLAN</button>
+
 </section>
 
 <div class="meal-section-title">Today's Meals</div>
 
-<div class="meal-card-full" id="breakfastCard">
+<div class="meal-card-full">
   <div class="meal-calories" id="breakfastCalories">520 kcal</div>
+
   <div class="meal-top">
-    <div class="meal-emoji">🥣</div>
+    <div class="meal-emoji" id="breakfastEmoji">🥣</div>
+
     <div class="meal-info">
       <div class="meal-type">BREAKFAST</div>
       <div class="meal-name" id="breakfastName">Protein Oats & Berries</div>
       <div class="meal-desc" id="breakfastDesc">Oats, whey protein, Greek yoghurt and mixed berries.</div>
     </div>
   </div>
-  <div class="meal-macros"><span><strong id="breakfastP">45g</strong> Protein</span><span><strong id="breakfastC">58g</strong> Carbs</span><span><strong id="breakfastF">12g</strong> Fat</span></div>
+
+  <div class="meal-macros">
+    <span><strong id="breakfastP">45g</strong> Protein</span>
+    <span><strong id="breakfastC">58g</strong> Carbs</span>
+    <span><strong id="breakfastF">12g</strong> Fat</span>
+  </div>
+
   <button class="swap-btn" onclick="swapMeal('breakfast')">↻ SWAP MEAL</button>
 </div>
 
-<div class="meal-card-full" id="lunchCard">
+<div class="meal-card-full">
   <div class="meal-calories" id="lunchCalories">640 kcal</div>
+
   <div class="meal-top">
-    <div class="meal-emoji">🍗</div>
+    <div class="meal-emoji" id="lunchEmoji">🍗</div>
+
     <div class="meal-info">
       <div class="meal-type">LUNCH</div>
       <div class="meal-name" id="lunchName">Chicken Rice Power Bowl</div>
       <div class="meal-desc" id="lunchDesc">Grilled chicken, rice, vegetables and a light sauce.</div>
     </div>
   </div>
-  <div class="meal-macros"><span><strong id="lunchP">58g</strong> Protein</span><span><strong id="lunchC">72g</strong> Carbs</span><span><strong id="lunchF">14g</strong> Fat</span></div>
+
+  <div class="meal-macros">
+    <span><strong id="lunchP">58g</strong> Protein</span>
+    <span><strong id="lunchC">72g</strong> Carbs</span>
+    <span><strong id="lunchF">14g</strong> Fat</span>
+  </div>
+
   <button class="swap-btn" onclick="swapMeal('lunch')">↻ SWAP MEAL</button>
 </div>
 
-<div class="meal-card-full" id="dinnerCard">
+<div class="meal-card-full">
   <div class="meal-calories" id="dinnerCalories">710 kcal</div>
+
   <div class="meal-top">
-    <div class="meal-emoji">🥩</div>
+    <div class="meal-emoji" id="dinnerEmoji">🥩</div>
+
     <div class="meal-info">
       <div class="meal-type">DINNER</div>
       <div class="meal-name" id="dinnerName">Lean Beef & Sweet Potato</div>
       <div class="meal-desc" id="dinnerDesc">Lean beef mince, roasted sweet potato and green vegetables.</div>
     </div>
   </div>
-  <div class="meal-macros"><span><strong id="dinnerP">60g</strong> Protein</span><span><strong id="dinnerC">65g</strong> Carbs</span><span><strong id="dinnerF">20g</strong> Fat</span></div>
+
+  <div class="meal-macros">
+    <span><strong id="dinnerP">60g</strong> Protein</span>
+    <span><strong id="dinnerC">65g</strong> Carbs</span>
+    <span><strong id="dinnerF">20g</strong> Fat</span>
+  </div>
+
   <button class="swap-btn" onclick="swapMeal('dinner')">↻ SWAP MEAL</button>
 </div>
 
-<div class="meal-card-full" id="snackCard">
+<div class="meal-card-full">
   <div class="meal-calories" id="snackCalories">330 kcal</div>
+
   <div class="meal-top">
-    <div class="meal-emoji">🍓</div>
+    <div class="meal-emoji" id="snackEmoji">🍓</div>
+
     <div class="meal-info">
       <div class="meal-type">SNACK</div>
       <div class="meal-name" id="snackName">Greek Yoghurt Protein Bowl</div>
       <div class="meal-desc" id="snackDesc">Greek yoghurt, berries and a small serving of nuts.</div>
     </div>
   </div>
-  <div class="meal-macros"><span><strong id="snackP">25g</strong> Protein</span><span><strong id="snackC">25g</strong> Carbs</span><span><strong id="snackF">12g</strong> Fat</span></div>
+
+  <div class="meal-macros">
+    <span><strong id="snackP">25g</strong> Protein</span>
+    <span><strong id="snackC">25g</strong> Carbs</span>
+    <span><strong id="snackF">12g</strong> Fat</span>
+  </div>
+
   <button class="swap-btn" onclick="swapMeal('snack')">↻ SWAP MEAL</button>
 </div>
 
 <section class="shopping-card">
+
   <div class="shopping-top">
     <div class="shopping-title">🛒 Shopping List</div>
     <div class="shopping-count">12 ITEMS</div>
@@ -1051,31 +1300,154 @@ button{
     <div class="shopping-item">Light sauce</div>
   </div>
 
-  <button class="shopping-btn" onclick="alert('Shopping list ready! 🛒')">VIEW FULL SHOPPING LIST</button>
+  <button class="shopping-btn" onclick="alert('Shopping list ready! 🛒')">
+    VIEW FULL SHOPPING LIST
+  </button>
+
 </section>
+
+</section>
+
+<!-- PERSONAL SETUP -->
+
+<section id="setupScreen" class="screen">
+
+<button class="back-btn" onclick="showMeals()">← Back to Meal Plan</button>
+
+<div class="setup-header">
+  <div class="setup-kicker">SHIFT FIT PERSONALISATION</div>
+  <h1>Build Your Plan</h1>
+  <p>Tell ShiftFit about you and we'll calculate your personalised calories and macros.</p>
+</div>
+
+<section class="setup-card">
+
+  <label class="setup-label">YOUR GOAL</label>
+
+  <div class="goal-grid">
+    <button class="goal-btn active" data-goal="lose" onclick="selectGoal(this)">
+      <span>🔥</span>Lose Weight
+    </button>
+
+    <button class="goal-btn" data-goal="maintain" onclick="selectGoal(this)">
+      <span>⚡</span>Maintain
+    </button>
+
+    <button class="goal-btn" data-goal="gain" onclick="selectGoal(this)">
+      <span>💪</span>Build Muscle
+    </button>
+  </div>
+
+</section>
+
+<section class="setup-card">
+
+  <div class="setup-grid">
+
+    <div>
+      <label class="setup-label">AGE</label>
+      <input id="userAge" class="setup-input" type="number" value="38">
+    </div>
+
+    <div>
+      <label class="setup-label">SEX</label>
+      <select id="userSex" class="setup-input">
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+      </select>
+    </div>
+
+  </div>
+
+</section>
+
+<section class="setup-card">
+
+  <div class="setup-grid">
+
+    <div>
+      <label class="setup-label">WEIGHT (KG)</label>
+      <input id="userWeight" class="setup-input" type="number" step="0.1" value="84">
+    </div>
+
+    <div>
+      <label class="setup-label">HEIGHT (CM)</label>
+      <input id="userHeight" class="setup-input" type="number" value="173">
+    </div>
+
+  </div>
+
+</section>
+
+<section class="setup-card">
+
+  <label class="setup-label">ACTIVITY LEVEL</label>
+
+  <select id="userActivity" class="setup-input">
+    <option value="1.2">Low Activity</option>
+    <option value="1.375">Lightly Active</option>
+    <option value="1.55" selected>Moderately Active</option>
+    <option value="1.725">Very Active</option>
+    <option value="1.9">Extremely Active</option>
+  </select>
+
+</section>
+
+<button class="generate-btn" onclick="generatePlan()">
+  ⚡ SAVE & GENERATE MY PLAN
+</button>
 
 </section>
 
 </div>
 
 <nav class="bottom-nav">
-  <button class="nav-item active" id="homeNav" onclick="showHome()"><span class="nav-icon">⌂</span><span>Home</span></button>
-  <button class="nav-item"><span class="nav-icon">▦</span><span>Calendar</span></button>
-  <button class="nav-item" id="workoutNav" onclick="showWorkout()"><span class="nav-icon">🏋️</span><span>Workouts</span></button>
-  <button class="nav-item" id="mealNav" onclick="showMeals()"><span class="nav-icon">🍽️</span><span>Meals</span></button>
-  <button class="nav-item"><span class="nav-icon">☰</span><span>More</span></button>
+
+<button class="nav-item active" id="homeNav" onclick="showHome()">
+  <span class="nav-icon">⌂</span>
+  <span>Home</span>
+</button>
+
+<button class="nav-item">
+  <span class="nav-icon">▦</span>
+  <span>Calendar</span>
+</button>
+
+<button class="nav-item" id="workoutNav" onclick="showWorkout()">
+  <span class="nav-icon">🏋️</span>
+  <span>Workouts</span>
+</button>
+
+<button class="nav-item" id="mealNav" onclick="showMeals()">
+  <span class="nav-icon">🍽️</span>
+  <span>Meals</span>
+</button>
+
+<button class="nav-item" onclick="showSetup()">
+  <span class="nav-icon">☰</span>
+  <span>More</span>
+</button>
+
 </nav>
 
 <script>
+
+let selectedGoal="lose";
+
+function hideAllScreens(){
+  document.querySelectorAll(".screen").forEach(screen=>{
+    screen.classList.remove("active");
+  });
+}
+
 function setNav(active){
-  document.querySelectorAll(".nav-item").forEach(item=>item.classList.remove("active"));
+  document.querySelectorAll(".nav-item").forEach(item=>{
+    item.classList.remove("active");
+  });
+
   if(active==="home") document.getElementById("homeNav").classList.add("active");
   if(active==="workout") document.getElementById("workoutNav").classList.add("active");
   if(active==="meal") document.getElementById("mealNav").classList.add("active");
-}
-
-function hideAllScreens(){
-  document.querySelectorAll(".screen").forEach(screen=>screen.classList.remove("active"));
 }
 
 function showHome(){
@@ -1099,20 +1471,33 @@ function showMeals(){
   window.scrollTo(0,0);
 }
 
+function showSetup(){
+  hideAllScreens();
+  document.getElementById("setupScreen").classList.add("active");
+  setNav("");
+  window.scrollTo(0,0);
+}
+
 function toggleExercise(card){
   card.classList.toggle("completed");
+
   card.querySelector(".exercise-check").innerHTML=
     card.classList.contains("completed") ? "✓" : "";
+
   updateWorkoutProgress();
 }
 
 function updateWorkoutProgress(){
+
   const exercises=document.querySelectorAll(".exercise-card");
   const completed=document.querySelectorAll(".exercise-card.completed").length;
   const total=exercises.length;
 
-  document.getElementById("workoutProgressText").textContent=completed+" / "+total;
-  document.getElementById("workoutProgressFill").style.width=(completed/total*100)+"%";
+  document.getElementById("workoutProgressText").textContent=
+    completed+" / "+total;
+
+  document.getElementById("workoutProgressFill").style.width=
+    (completed/total*100)+"%";
 
   const button=document.getElementById("finishButton");
 
@@ -1128,52 +1513,301 @@ function updateWorkoutProgress(){
 }
 
 function finishWorkout(){
-  alert("🏆 Workout complete! Great work, Andrew!");
+  alert("🏆 Workout complete! Great work!");
   showHome();
 }
 
-function selectDay(button,day){
-  document.querySelectorAll(".day-btn").forEach(btn=>btn.classList.remove("active"));
+/* GOAL SELECTOR */
+
+function selectGoal(button){
+
+  document.querySelectorAll(".goal-btn").forEach(btn=>{
+    btn.classList.remove("active");
+  });
+
   button.classList.add("active");
+  selectedGoal=button.dataset.goal;
 }
 
+/* CALCULATE PERSONAL PLAN */
+
+function generatePlan(){
+
+  const age=parseFloat(document.getElementById("userAge").value);
+  const weight=parseFloat(document.getElementById("userWeight").value);
+  const height=parseFloat(document.getElementById("userHeight").value);
+  const sex=document.getElementById("userSex").value;
+  const activity=parseFloat(document.getElementById("userActivity").value);
+
+  if(!age || !weight || !height){
+    alert("Please enter your age, weight and height.");
+    return;
+  }
+
+  let bmr;
+
+  if(sex==="male"){
+    bmr=(10*weight)+(6.25*height)-(5*age)+5;
+  }else{
+    bmr=(10*weight)+(6.25*height)-(5*age)-161;
+  }
+
+  const maintenance=bmr*activity;
+
+  let calories;
+
+  if(selectedGoal==="lose"){
+    calories=Math.round(maintenance-400);
+  }
+
+  if(selectedGoal==="maintain"){
+    calories=Math.round(maintenance);
+  }
+
+  if(selectedGoal==="gain"){
+    calories=Math.round(maintenance+300);
+  }
+
+  const protein=Math.round(weight*2);
+  const fats=Math.round(weight*0.8);
+  const carbs=Math.round((calories-(protein*4)-(fats*9))/4);
+
+  const plan={
+    age:age,
+    weight:weight,
+    height:height,
+    sex:sex,
+    activity:activity,
+    goal:selectedGoal,
+    calories:calories,
+    protein:protein,
+    carbs:carbs,
+    fats:fats
+  };
+
+  localStorage.setItem("shiftfitPlan",JSON.stringify(plan));
+
+  updatePlan(plan);
+
+  alert("⚡ Your personalised ShiftFit meal plan is ready!");
+
+  showMeals();
+}
+
+function updatePlan(plan){
+
+  document.getElementById("homeCalories").textContent=
+    plan.calories.toLocaleString();
+
+  document.getElementById("homeProtein").textContent=
+    plan.protein+"g";
+
+  document.getElementById("mealCalories").textContent=
+    plan.calories.toLocaleString();
+
+  document.getElementById("mealProtein").textContent=
+    plan.protein+"g";
+
+  document.getElementById("mealCarbs").textContent=
+    plan.carbs+"g";
+
+  document.getElementById("mealFats").textContent=
+    plan.fats+"g";
+
+  let goalText;
+
+  if(plan.goal==="lose"){
+    goalText="FAT LOSS";
+    document.getElementById("mealSubtitle").textContent=
+      "High-protein meals designed to help you lose fat while protecting muscle.";
+  }
+
+  if(plan.goal==="maintain"){
+    goalText="MAINTAIN";
+    document.getElementById("mealSubtitle").textContent=
+      "Balanced meals designed to fuel your lifestyle and maintain your weight.";
+  }
+
+  if(plan.goal==="gain"){
+    goalText="BUILD MUSCLE";
+    document.getElementById("mealSubtitle").textContent=
+      "High-protein meals designed to support strength, recovery and muscle growth.";
+  }
+
+  document.getElementById("goalBadge").textContent=goalText;
+
+  scaleMeals(plan);
+}
+
+/* SCALE MEALS TO TARGET */
+
+function scaleMeals(plan){
+
+  const total=2200;
+  const ratio=plan.calories/total;
+
+  const mealCalories={
+    breakfast:Math.round(plan.calories*.24),
+    lunch:Math.round(plan.calories*.29),
+    dinner:Math.round(plan.calories*.32),
+    snack:Math.round(plan.calories*.15)
+  };
+
+  ["breakfast","lunch","dinner","snack"].forEach(type=>{
+
+    document.getElementById(type+"Calories").textContent=
+      mealCalories[type]+" kcal";
+
+  });
+
+  const portions={
+    breakfast:.25,
+    lunch:.30,
+    dinner:.32,
+    snack:.13
+  };
+
+  ["breakfast","lunch","dinner","snack"].forEach(type=>{
+
+    document.getElementById(type+"P").textContent=
+      Math.round(plan.protein*portions[type])+"g";
+
+    document.getElementById(type+"C").textContent=
+      Math.round(plan.carbs*portions[type])+"g";
+
+    document.getElementById(type+"F").textContent=
+      Math.round(plan.fats*portions[type])+"g";
+
+  });
+}
+
+/* MEAL SWAPS */
+
 const mealOptions={
+
   breakfast:[
-    {name:"Protein Oats & Berries",desc:"Oats, whey protein, Greek yoghurt and mixed berries.",cal:"520 kcal",p:"45g",c:"58g",f:"12g",emoji:"🥣"},
-    {name:"Egg & Avocado Bagel",desc:"Eggs, avocado and a toasted wholemeal bagel.",cal:"540 kcal",p:"38g",c:"55g",f:"19g",emoji:"🥯"},
-    {name:"Protein Pancake Stack",desc:"Protein pancakes topped with banana and Greek yoghurt.",cal:"510 kcal",p:"42g",c:"62g",f:"10g",emoji:"🥞"}
+    {
+      name:"Protein Oats & Berries",
+      desc:"Oats, whey protein, Greek yoghurt and mixed berries.",
+      emoji:"🥣"
+    },
+    {
+      name:"Egg & Avocado Bagel",
+      desc:"Eggs, avocado and a toasted wholemeal bagel.",
+      emoji:"🥯"
+    },
+    {
+      name:"Protein Pancake Stack",
+      desc:"Protein pancakes topped with banana and Greek yoghurt.",
+      emoji:"🥞"
+    }
   ],
+
   lunch:[
-    {name:"Chicken Rice Power Bowl",desc:"Grilled chicken, rice, vegetables and a light sauce.",cal:"640 kcal",p:"58g",c:"72g",f:"14g",emoji:"🍗"},
-    {name:"Turkey Pasta Bowl",desc:"Lean turkey mince, wholewheat pasta and tomato sauce.",cal:"630 kcal",p:"55g",c:"75g",f:"13g",emoji:"🍝"},
-    {name:"Chicken Wrap & Wedges",desc:"High-protein chicken wrap with seasoned potato wedges.",cal:"650 kcal",p:"56g",c:"70g",f:"17g",emoji:"🌯"}
+    {
+      name:"Chicken Rice Power Bowl",
+      desc:"Grilled chicken, rice, vegetables and a light sauce.",
+      emoji:"🍗"
+    },
+    {
+      name:"Turkey Pasta Bowl",
+      desc:"Lean turkey mince, wholewheat pasta and tomato sauce.",
+      emoji:"🍝"
+    },
+    {
+      name:"Chicken Wrap & Wedges",
+      desc:"High-protein chicken wrap with seasoned potato wedges.",
+      emoji:"🌯"
+    }
   ],
+
   dinner:[
-    {name:"Lean Beef & Sweet Potato",desc:"Lean beef mince, roasted sweet potato and green vegetables.",cal:"710 kcal",p:"60g",c:"65g",f:"20g",emoji:"🥩"},
-    {name:"Chicken Stir Fry",desc:"Chicken breast, rice noodles and fresh mixed vegetables.",cal:"680 kcal",p:"58g",c:"78g",f:"15g",emoji:"🍜"},
-    {name:"Salmon & Rice",desc:"Baked salmon, jasmine rice and roasted vegetables.",cal:"720 kcal",p:"55g",c:"68g",f:"24g",emoji:"🐟"}
+    {
+      name:"Lean Beef & Sweet Potato",
+      desc:"Lean beef mince, roasted sweet potato and green vegetables.",
+      emoji:"🥩"
+    },
+    {
+      name:"Chicken Stir Fry",
+      desc:"Chicken breast, rice noodles and fresh mixed vegetables.",
+      emoji:"🍜"
+    },
+    {
+      name:"Salmon & Rice",
+      desc:"Baked salmon, jasmine rice and roasted vegetables.",
+      emoji:"🐟"
+    }
   ],
+
   snack:[
-    {name:"Greek Yoghurt Protein Bowl",desc:"Greek yoghurt, berries and a small serving of nuts.",cal:"330 kcal",p:"25g",c:"25g",f:"12g",emoji:"🍓"},
-    {name:"Protein Shake & Banana",desc:"Whey protein shake with a banana and peanut butter.",cal:"340 kcal",p:"30g",c:"35g",f:"10g",emoji:"🥤"},
-    {name:"Cottage Cheese Snack",desc:"Cottage cheese, crackers and fresh fruit.",cal:"320 kcal",p:"28g",c:"30g",f:"9g",emoji:"🧀"}
+    {
+      name:"Greek Yoghurt Protein Bowl",
+      desc:"Greek yoghurt, berries and a small serving of nuts.",
+      emoji:"🍓"
+    },
+    {
+      name:"Protein Shake & Banana",
+      desc:"Whey protein shake with banana and peanut butter.",
+      emoji:"🥤"
+    },
+    {
+      name:"Cottage Cheese Snack",
+      desc:"Cottage cheese, crackers and fresh fruit.",
+      emoji:"🧀"
+    }
   ]
 };
 
-const mealIndex={breakfast:0,lunch:0,dinner:0,snack:0};
+const mealIndex={
+  breakfast:0,
+  lunch:0,
+  dinner:0,
+  snack:0
+};
 
 function swapMeal(type){
-  mealIndex[type]=(mealIndex[type]+1)%mealOptions[type].length;
+
+  mealIndex[type]=
+    (mealIndex[type]+1)%mealOptions[type].length;
+
   const meal=mealOptions[type][mealIndex[type]];
 
-  document.querySelector("#"+type+"Card .meal-emoji").textContent=meal.emoji;
+  document.getElementById(type+"Emoji").textContent=meal.emoji;
   document.getElementById(type+"Name").textContent=meal.name;
   document.getElementById(type+"Desc").textContent=meal.desc;
-  document.getElementById(type+"Calories").textContent=meal.cal;
-  document.getElementById(type+"P").textContent=meal.p;
-  document.getElementById(type+"C").textContent=meal.c;
-  document.getElementById(type+"F").textContent=meal.f;
 }
+
+/* LOAD SAVED PLAN */
+
+function loadSavedPlan(){
+
+  const saved=localStorage.getItem("shiftfitPlan");
+
+  if(!saved) return;
+
+  const plan=JSON.parse(saved);
+
+  selectedGoal=plan.goal;
+
+  document.getElementById("userAge").value=plan.age;
+  document.getElementById("userWeight").value=plan.weight;
+  document.getElementById("userHeight").value=plan.height;
+  document.getElementById("userSex").value=plan.sex;
+  document.getElementById("userActivity").value=plan.activity;
+
+  document.querySelectorAll(".goal-btn").forEach(btn=>{
+    btn.classList.remove("active");
+
+    if(btn.dataset.goal===plan.goal){
+      btn.classList.add("active");
+    }
+  });
+
+  updatePlan(plan);
+}
+
+loadSavedPlan();
+
 </script>
 
 </body>
