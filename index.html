@@ -7,15 +7,19 @@
 
 <style>
 :root{
-  --bg:#090b16;
-  --surface:#111629;
-  --surface-2:#181e35;
-  --border:rgba(255,255,255,.08);
-  --text:#f8f8fc;
-  --muted:#9da4b8;
-  --purple:#8b5cf6;
+  --bg:#070914;
+  --bg2:#0b0e1c;
+  --card:#11162b;
+  --card2:#121a31;
+  --border:#29314d;
+  --text:#f4f5fb;
+  --muted:#aab1c5;
+  --purple:#6d28d9;
+  --purple2:#8b5cf6;
   --purple-light:#a78bfa;
-  --green:#59d7a7;
+  --green:#35df8d;
+  --blue:#36a8ff;
+  --orange:#ff941f;
 }
 
 *{
@@ -23,13 +27,22 @@
   -webkit-tap-highlight-color:transparent;
 }
 
+html{
+  background:var(--bg);
+}
+
 body{
   margin:0;
   background:
-    radial-gradient(circle at 85% -10%,rgba(139,92,246,.22),transparent 28%),
-    linear-gradient(180deg,#090b16 0%,#0c1020 100%);
+    radial-gradient(circle at 80% 0%,rgba(109,40,217,.18),transparent 30%),
+    linear-gradient(180deg,#070914 0%,#090d1a 100%);
   color:var(--text);
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+button{
+  font-family:inherit;
+  cursor:pointer;
 }
 
 .app{
@@ -37,349 +50,419 @@ body{
   max-width:500px;
   min-height:100vh;
   margin:auto;
-  padding:22px 18px 110px;
+  padding:22px 18px 105px;
 }
 
-/* HEADER */
+.screen{
+  display:none;
+}
 
-.header{
+.screen.active{
+  display:block;
+}
+
+/* =========================
+   HOME HEADER
+========================= */
+
+.home-header{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  margin-bottom:28px;
+  margin-bottom:25px;
 }
 
-.logo{
-  font-size:28px;
-  font-weight:950;
-  font-style:italic;
-  letter-spacing:-1.8px;
-}
-
-.logo .bolt{
-  color:var(--purple-light);
-  margin-right:3px;
-}
-
-.logo .fit{
-  color:var(--purple-light);
-}
-
-.profile{
-  width:44px;
-  height:44px;
-  border-radius:50%;
-  border:1px solid rgba(167,139,250,.65);
-  background:linear-gradient(135deg,#242b50,#101426);
+.menu-btn,
+.profile-btn{
+  width:48px;
+  height:48px;
+  border:none;
+  background:transparent;
+  color:white;
   display:flex;
   align-items:center;
   justify-content:center;
+}
+
+.menu-icon{
+  font-size:29px;
+  line-height:1;
+}
+
+.logo{
+  font-size:27px;
+  font-weight:1000;
+  font-style:italic;
+  letter-spacing:-2px;
+  transform:skew(-5deg);
+}
+
+.logo-bolt{
+  color:#854cff;
+  margin-right:4px;
+  text-shadow:0 0 15px rgba(132,76,255,.7);
+}
+
+.logo-shift{
+  color:#f5f5f7;
+}
+
+.logo-fit{
+  color:#8656ff;
+  text-shadow:0 0 16px rgba(132,76,255,.5);
+}
+
+.profile-btn{
+  font-size:25px;
+}
+
+/* =========================
+   USER
+========================= */
+
+.user-row{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  margin:5px 2px 22px;
+}
+
+.avatar{
+  width:54px;
+  height:54px;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 50% 35%,#6176a6 0 13%,transparent 14%),
+    radial-gradient(circle at 50% 90%,#293653 0 34%,transparent 35%),
+    linear-gradient(135deg,#2a3454,#11182c);
+  border:2px solid #6d49d7;
+  box-shadow:0 0 18px rgba(109,40,217,.4);
+}
+
+.user-name{
   font-size:21px;
-  box-shadow:0 0 20px rgba(139,92,246,.15);
+  font-weight:850;
 }
 
-/* GREETING */
-
-.greeting{
-  margin-bottom:22px;
-}
-
-.greeting-small{
+.user-level{
   color:var(--muted);
-  font-size:15px;
-  margin-bottom:5px;
+  font-size:13px;
+  margin-top:3px;
 }
 
-.greeting h1{
-  margin:0;
-  font-size:32px;
-  letter-spacing:-1px;
-}
+/* =========================
+   TODAY PLAN CARD
+========================= */
 
-.greeting h1 span{
-  color:var(--purple-light);
-}
-
-/* TODAY'S SHIFT */
-
-.today-card{
+.today-plan{
   position:relative;
   overflow:hidden;
-  background:
-    radial-gradient(circle at 100% 0%,rgba(139,92,246,.25),transparent 38%),
-    linear-gradient(135deg,#1a2140,#10152a);
-  border:1px solid rgba(139,92,246,.32);
-  border-radius:24px;
   padding:20px;
-  box-shadow:0 12px 35px rgba(0,0,0,.22);
+  border-radius:22px;
+  border:1px solid #303a60;
+  background:
+    radial-gradient(circle at 100% 0%,rgba(88,70,255,.18),transparent 35%),
+    linear-gradient(145deg,#151b36,#0c1123);
+  box-shadow:0 15px 40px rgba(0,0,0,.3);
 }
 
-.today-card:before{
+.today-plan:after{
   content:"";
   position:absolute;
-  width:170px;
-  height:170px;
-  right:-80px;
-  bottom:-100px;
+  width:250px;
+  height:110px;
+  right:-60px;
+  top:30px;
+  border-top:1px solid rgba(166,139,255,.15);
   border-radius:50%;
-  border:30px solid rgba(139,92,246,.08);
+  transform:rotate(12deg);
 }
 
-.card-top{
+.plan-top{
+  position:relative;
+  z-index:1;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  position:relative;
-  z-index:1;
 }
 
-.eyebrow{
-  color:#c5b5ff;
-  font-size:12px;
-  font-weight:900;
-  letter-spacing:2px;
+.plan-heading{
+  font-size:17px;
+  font-weight:850;
 }
 
 .shift-badge{
-  background:rgba(255,150,47,.15);
-  color:#ffad62;
-  border:1px solid rgba(255,150,47,.25);
-  padding:7px 10px;
-  border-radius:9px;
+  background:linear-gradient(135deg,#ff9c26,#f47b12);
+  color:#251307;
+  padding:7px 15px;
+  border-radius:10px;
   font-size:11px;
-  font-weight:900;
+  font-weight:950;
+  letter-spacing:.5px;
 }
 
-.shift-title{
-  font-size:25px;
-  font-weight:900;
-  margin:13px 0 5px;
+.shift-time-row{
   position:relative;
   z-index:1;
-}
-
-.shift-time{
-  color:var(--muted);
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-top:15px;
+  color:#d7daea;
   font-size:15px;
+  font-weight:700;
+}
+
+.calendar-mini{
+  font-size:19px;
+}
+
+.plan-stats{
   position:relative;
   z-index:1;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  margin-top:17px;
+  padding-top:17px;
+  border-top:1px solid rgba(255,255,255,.08);
 }
 
-.shift-divider{
-  height:1px;
-  background:var(--border);
-  margin:20px 0 15px;
+.plan-stat{
+  text-align:center;
+  padding:0 7px;
+  border-right:1px solid rgba(255,255,255,.1);
 }
 
-.shift-footer{
-  display:flex;
-  align-items:center;
-  gap:9px;
-  color:#d8dbea;
-  font-size:13px;
+.plan-stat:last-child{
+  border-right:none;
 }
 
-/* SECTION */
-
-.section{
-  margin-top:29px;
+.stat-icon{
+  font-size:19px;
+  margin-bottom:4px;
 }
 
-.section-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin-bottom:14px;
+.plan-stat-label{
+  color:#bbc0d1;
+  font-size:11px;
 }
 
-.section-title{
+.plan-stat-value{
   font-size:20px;
-  font-weight:850;
-  letter-spacing:-.3px;
+  font-weight:900;
+  margin-top:4px;
 }
 
-.see-all{
-  border:none;
-  background:none;
-  color:var(--purple-light);
-  font-size:13px;
-  font-weight:800;
-}
-
-/* MAIN ACTION CARDS */
+/* =========================
+   ACTION CARDS
+========================= */
 
 .action-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:13px;
+  margin-top:17px;
 }
 
 .action-card{
-  min-height:205px;
-  padding:17px;
-  border-radius:22px;
-  border:1px solid var(--border);
-  display:flex;
-  flex-direction:column;
-  overflow:hidden;
   position:relative;
+  overflow:hidden;
+  min-height:185px;
+  padding:17px;
+  border-radius:20px;
+  border:1px solid #293253;
 }
 
 .action-card:before{
   content:"";
   position:absolute;
-  width:120px;
-  height:120px;
+  width:135px;
+  height:135px;
   border-radius:50%;
-  top:-60px;
-  right:-50px;
-  opacity:.18;
+  top:-68px;
+  right:-58px;
 }
 
-.workout{
-  background:linear-gradient(145deg,#162e35,#101827);
+.workout-card{
+  background:linear-gradient(145deg,#102329,#0a1520);
 }
 
-.workout:before{
-  background:#3ddc97;
+.workout-card:before{
+  background:rgba(47,222,139,.2);
 }
 
-.meals{
-  background:linear-gradient(145deg,#1b2450,#101629);
+.meal-card{
+  background:linear-gradient(145deg,#171e47,#0d1125);
 }
 
-.meals:before{
-  background:#6676ff;
+.meal-card:before{
+  background:rgba(109,91,255,.28);
 }
 
-.card-icon{
-  width:46px;
-  height:46px;
-  border-radius:14px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:23px;
-  margin-bottom:14px;
-  background:rgba(255,255,255,.08);
+.action-icon{
+  position:relative;
+  z-index:1;
+  font-size:31px;
+  margin-bottom:17px;
 }
 
-.card-label{
-  color:#aeb6c8;
+.action-label{
+  position:relative;
+  z-index:1;
+  color:#b9c0d0;
   font-size:12px;
-  font-weight:750;
+  font-weight:850;
+  letter-spacing:.4px;
 }
 
-.card-title{
-  font-size:19px;
+.action-title{
+  position:relative;
+  z-index:1;
+  font-size:20px;
   font-weight:900;
-  margin-top:4px;
+  margin-top:5px;
 }
 
-.card-desc{
-  color:var(--muted);
+.action-desc{
+  position:relative;
+  z-index:1;
+  color:#9ca5b9;
   font-size:12px;
-  line-height:1.45;
-  margin-top:6px;
+  margin-top:5px;
 }
 
-.card-button{
-  margin-top:auto;
+.action-button{
+  position:absolute;
+  z-index:2;
+  bottom:15px;
+  left:15px;
+  right:15px;
   border:none;
   color:white;
-  font-size:13px;
+  padding:10px 6px;
+  border-radius:9px;
+  font-size:12px;
   font-weight:850;
-  padding:11px 8px;
-  border-radius:11px;
-  background:linear-gradient(135deg,#7654e8,#5c45c7);
+  background:linear-gradient(135deg,#7d31e8,#5123c5);
 }
 
-/* PROGRESS */
+/* =========================
+   WEEKLY PROGRESS
+========================= */
 
 .progress-card{
-  display:flex;
-  gap:17px;
-  align-items:center;
-  background:linear-gradient(135deg,#141a30,#101426);
-  border:1px solid var(--border);
-  border-radius:22px;
+  margin-top:18px;
   padding:17px;
+  border-radius:20px;
+  border:1px solid #293253;
+  background:linear-gradient(145deg,#11162a,#0a0e1d);
+}
+
+.progress-title{
+  font-size:15px;
+  font-weight:850;
+  margin-bottom:15px;
+}
+
+.progress-content{
+  display:flex;
+  align-items:center;
+  gap:20px;
 }
 
 .progress-ring{
-  width:92px;
-  height:92px;
-  min-width:92px;
+  width:94px;
+  height:94px;
+  min-width:94px;
   border-radius:50%;
   background:conic-gradient(
-    var(--purple-light) 0deg 274deg,
-    #28304a 274deg 360deg
+    var(--green) 0deg 281deg,
+    #1b2740 281deg 360deg
   );
   display:flex;
   align-items:center;
   justify-content:center;
+  transform:rotate(-90deg);
 }
 
-.progress-ring-inner{
-  width:70px;
-  height:70px;
+.progress-inner{
+  width:72px;
+  height:72px;
   border-radius:50%;
-  background:#12172a;
+  background:#101528;
   display:flex;
   align-items:center;
   justify-content:center;
+  transform:rotate(90deg);
   font-size:20px;
-  font-weight:900;
+  font-weight:950;
 }
 
-.progress-details{
+.progress-info{
   flex:1;
 }
 
 .progress-row{
-  display:flex;
-  justify-content:space-between;
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items:center;
+  padding:8px 0;
+  border-bottom:1px solid rgba(255,255,255,.07);
   font-size:13px;
-  padding:7px 0;
-  border-bottom:1px solid rgba(255,255,255,.06);
 }
 
 .progress-row:last-child{
   border-bottom:none;
 }
 
-.progress-row span:first-child{
-  color:var(--muted);
+.progress-row-label{
+  color:#c5cada;
 }
 
-.progress-good{
-  color:var(--green);
+.progress-row-value{
   font-weight:800;
 }
 
-/* AI COACH */
+.on-track{
+  color:var(--green);
+}
+
+.dot{
+  display:inline-block;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--green);
+  margin-right:5px;
+}
+
+/* =========================
+   AI COACH
+========================= */
 
 .ai-card{
   display:flex;
   align-items:center;
-  gap:13px;
+  gap:14px;
+  margin-top:17px;
+  padding:13px;
+  border-radius:18px;
+  border:1px solid rgba(133,86,255,.5);
   background:
-    radial-gradient(circle at 5% 50%,rgba(139,92,246,.3),transparent 32%),
-    linear-gradient(135deg,#26134e,#12172c);
-  border:1px solid rgba(139,92,246,.38);
-  border-radius:20px;
-  padding:15px;
+    radial-gradient(circle at 10% 50%,rgba(108,39,236,.35),transparent 28%),
+    linear-gradient(135deg,#1b1041,#11162a);
 }
 
-.ai-icon{
-  width:52px;
-  height:52px;
-  border-radius:16px;
+.ai-bot{
+  width:58px;
+  height:58px;
+  border-radius:15px;
   display:flex;
   align-items:center;
   justify-content:center;
-  background:linear-gradient(135deg,#8b5cf6,#4c1d95);
-  font-size:26px;
+  font-size:31px;
+  background:radial-gradient(circle,#7455f4,#26135e);
+  box-shadow:0 0 18px rgba(119,73,255,.45);
 }
 
 .ai-content{
@@ -392,58 +475,235 @@ body{
 }
 
 .ai-text{
-  color:#c1c5d5;
+  color:#c2c6d4;
   font-size:12px;
   line-height:1.4;
   margin-top:3px;
 }
 
 .ai-arrow{
-  color:#c9b8ff;
-  font-size:25px;
+  font-size:30px;
+  color:#d6c6ff;
 }
 
-/* BOTTOM NAV */
+/* =========================
+   WORKOUT SCREEN
+========================= */
+
+.back-btn{
+  border:none;
+  background:transparent;
+  color:white;
+  font-size:16px;
+  font-weight:800;
+  padding:5px 0 20px;
+}
+
+.workout-header{
+  margin-bottom:22px;
+}
+
+.workout-day{
+  color:#c5b5ff;
+  font-size:12px;
+  font-weight:950;
+  letter-spacing:4px;
+}
+
+.workout-header h1{
+  margin:9px 0 8px;
+  font-size:39px;
+  letter-spacing:-1.5px;
+}
+
+.workout-header p{
+  color:var(--muted);
+  font-size:16px;
+  line-height:1.5;
+}
+
+.workout-stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-bottom:24px;
+}
+
+.workout-stat{
+  background:#171d34;
+  border:1px solid #293253;
+  border-radius:17px;
+  padding:14px 6px;
+  text-align:center;
+}
+
+.workout-stat small{
+  display:block;
+  color:var(--muted);
+  font-size:9px;
+  letter-spacing:1px;
+  margin-bottom:6px;
+}
+
+.workout-stat strong{
+  font-size:14px;
+}
+
+.workout-progress{
+  margin-bottom:22px;
+}
+
+.workout-progress-top{
+  display:flex;
+  justify-content:space-between;
+  font-size:13px;
+  font-weight:850;
+  color:#c5cada;
+  margin-bottom:9px;
+}
+
+.progress-bar{
+  height:11px;
+  background:#171c31;
+  border-radius:20px;
+  overflow:hidden;
+  border:1px solid #293253;
+}
+
+.progress-fill{
+  width:0%;
+  height:100%;
+  background:linear-gradient(90deg,#7c3aed,#9b87ff,#5cd8b3);
+  transition:.3s;
+}
+
+.exercise-card{
+  display:flex;
+  gap:15px;
+  align-items:flex-start;
+  padding:17px;
+  margin-bottom:12px;
+  border-radius:20px;
+  border:1px solid #293253;
+  background:#151b31;
+}
+
+.exercise-card.completed{
+  border-color:#75d7bd;
+  background:#162832;
+}
+
+.exercise-check{
+  width:45px;
+  height:45px;
+  min-width:45px;
+  border-radius:13px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#e8e9ef;
+  color:#163c34;
+  font-size:24px;
+  font-weight:950;
+}
+
+.exercise-card.completed .exercise-check{
+  background:#8fd3bd;
+}
+
+.exercise-content{
+  flex:1;
+}
+
+.exercise-name{
+  font-size:18px;
+  font-weight:900;
+}
+
+.exercise-sets{
+  color:#82d7ba;
+  font-size:14px;
+  font-weight:850;
+  margin-top:6px;
+}
+
+.exercise-tip{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.45;
+  margin-top:10px;
+}
+
+.finish-button{
+  width:100%;
+  margin-top:8px;
+  padding:17px;
+  border:none;
+  border-radius:16px;
+  color:white;
+  font-size:15px;
+  font-weight:950;
+  background:#30364d;
+  opacity:.5;
+}
+
+.finish-button.ready{
+  opacity:1;
+  background:linear-gradient(135deg,#7c3aed,#4f46e5);
+}
+
+/* =========================
+   BOTTOM NAV
+========================= */
 
 .bottom-nav{
   position:fixed;
-  z-index:10;
+  z-index:20;
   bottom:0;
   left:50%;
   transform:translateX(-50%);
   width:min(500px,100%);
-  background:rgba(9,11,22,.94);
-  backdrop-filter:blur(18px);
-  border-top:1px solid rgba(255,255,255,.07);
   display:grid;
   grid-template-columns:repeat(5,1fr);
-  padding:10px 5px calc(10px + env(safe-area-inset-bottom));
+  background:rgba(7,9,20,.96);
+  backdrop-filter:blur(18px);
+  border-top:1px solid rgba(255,255,255,.08);
+  padding:10px 4px calc(10px + env(safe-area-inset-bottom));
 }
 
 .nav-item{
   border:none;
   background:transparent;
-  color:#727b93;
+  color:#7e869b;
   display:flex;
   flex-direction:column;
   align-items:center;
-  gap:4px;
-  font-size:10px;
+  gap:5px;
   padding:5px 0;
+  font-size:10px;
 }
 
-.nav-icon{
-  font-size:20px;
+.nav-item .nav-icon{
+  font-size:21px;
 }
 
 .nav-item.active{
-  color:var(--purple-light);
+  color:#8656ff;
 }
 
 @media(max-width:360px){
-  .app{padding-left:14px;padding-right:14px}
-  .greeting h1{font-size:29px}
-  .action-card{min-height:190px}
+  .app{
+    padding-left:14px;
+    padding-right:14px;
+  }
+
+  .action-card{
+    min-height:175px;
+  }
+
+  .plan-stat-value{
+    font-size:17px;
+  }
 }
 </style>
 </head>
@@ -452,141 +712,365 @@ body{
 
 <div class="app">
 
-  <header class="header">
-    <div class="logo">
-      <span class="bolt">⚡</span>SHIFT<span class="fit">FIT</span>
+  <!-- ================= HOME ================= -->
+
+  <section id="homeScreen" class="screen active">
+
+    <header class="home-header">
+      <button class="menu-btn">
+        <span class="menu-icon">☰</span>
+      </button>
+
+      <div class="logo">
+        <span class="logo-bolt">⚡</span><span class="logo-shift">SHIFT</span><span class="logo-fit">FIT</span>
+      </div>
+
+      <button class="profile-btn">⚙</button>
+    </header>
+
+    <div class="user-row">
+      <div class="avatar"></div>
+
+      <div>
+        <div class="user-name">Andrew</div>
+        <div class="user-level">Level 1 • ShiftFit Member</div>
+      </div>
     </div>
-    <div class="profile">👤</div>
-  </header>
 
-  <section class="greeting">
-    <div class="greeting-small">Tuesday, 25 August</div>
-    <h1>Ready to <span>move?</span> 💪</h1>
-  </section>
+    <!-- TODAY'S PLAN -->
 
-  <section class="today-card">
-    <div class="card-top">
-      <div class="eyebrow">TODAY'S SHIFT</div>
-      <div class="shift-badge">DAY SHIFT</div>
-    </div>
+    <section class="today-plan">
 
-    <div class="shift-title">Early Shift</div>
-    <div class="shift-time">06:00 – 18:00</div>
+      <div class="plan-top">
+        <div class="plan-heading">Today's Plan</div>
+        <div class="shift-badge">DAY SHIFT</div>
+      </div>
 
-    <div class="shift-divider"></div>
+      <div class="shift-time-row">
+        <span class="calendar-mini">▣</span>
+        <span>06:00 – 18:00</span>
+      </div>
 
-    <div class="shift-footer">
-      ⚡ Your plan has been adjusted around today's shift
-    </div>
-  </section>
+      <div class="plan-stats">
 
-  <section class="section">
+        <div class="plan-stat">
+          <div class="stat-icon">🔥</div>
+          <div class="plan-stat-label">Calories</div>
+          <div class="plan-stat-value">2,200</div>
+        </div>
 
-    <div class="section-header">
-      <div class="section-title">Today's Plan</div>
-      <button class="see-all">View all</button>
-    </div>
+        <div class="plan-stat">
+          <div class="stat-icon">🏋️</div>
+          <div class="plan-stat-label">Protein</div>
+          <div class="plan-stat-value">180g</div>
+        </div>
+
+        <div class="plan-stat">
+          <div class="stat-icon">💧</div>
+          <div class="plan-stat-label">Water</div>
+          <div class="plan-stat-value">2.5L</div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ACTIONS -->
 
     <div class="action-grid">
 
-      <div class="action-card workout">
-        <div class="card-icon">🏋️</div>
-        <div class="card-label">WORKOUT</div>
-        <div class="card-title">Upper Body</div>
-        <div class="card-desc">4 exercises • 45 mins</div>
-        <button class="card-button">Start workout</button>
-      </div>
+      <section class="action-card workout-card">
+        <div class="action-icon">🏋️</div>
+        <div class="action-label">WORKOUT</div>
+        <div class="action-title">Push Day</div>
+        <div class="action-desc">5 exercises • 60 mins</div>
 
-      <div class="action-card meals">
-        <div class="card-icon">🍽️</div>
-        <div class="card-label">NUTRITION</div>
-        <div class="card-title">Today's Meals</div>
-        <div class="card-desc">4 meals • High protein</div>
-        <button class="card-button">View meals</button>
-      </div>
+        <button class="action-button" onclick="showWorkout()">
+          Start Workout
+        </button>
+      </section>
 
-    </div>
+      <section class="action-card meal-card">
+        <div class="action-icon">🍽️</div>
+        <div class="action-label">MEALS</div>
+        <div class="action-title">High Protein</div>
+        <div class="action-desc">4 meals • Shift adjusted</div>
 
-  </section>
-
-  <section class="section">
-
-    <div class="section-header">
-      <div class="section-title">Weekly Progress</div>
-    </div>
-
-    <div class="progress-card">
-
-      <div class="progress-ring">
-        <div class="progress-ring-inner">76%</div>
-      </div>
-
-      <div class="progress-details">
-        <div class="progress-row">
-          <span>Workouts</span>
-          <strong>3 / 4</strong>
-        </div>
-        <div class="progress-row">
-          <span>Meals</span>
-          <strong class="progress-good">On track</strong>
-        </div>
-        <div class="progress-row">
-          <span>Consistency</span>
-          <strong class="progress-good">Great</strong>
-        </div>
-      </div>
+        <button class="action-button">
+          View Plan
+        </button>
+      </section>
 
     </div>
 
-  </section>
+    <!-- WEEKLY PROGRESS -->
 
-  <section class="section">
+    <section class="progress-card">
 
-    <div class="ai-card">
-      <div class="ai-icon">🤖</div>
+      <div class="progress-title">Weekly Progress</div>
+
+      <div class="progress-content">
+
+        <div class="progress-ring">
+          <div class="progress-inner" id="homeProgressPercent">78%</div>
+        </div>
+
+        <div class="progress-info">
+
+          <div class="progress-row">
+            <span class="progress-row-label">Workouts</span>
+            <span class="progress-row-value" id="homeWorkoutCount">5/6</span>
+          </div>
+
+          <div class="progress-row">
+            <span class="progress-row-label">Calories</span>
+            <span class="progress-row-value on-track">
+              <span class="dot"></span>On Track
+            </span>
+          </div>
+
+          <div class="progress-row">
+            <span class="progress-row-label">Protein</span>
+            <span class="progress-row-value on-track">
+              <span class="dot"></span>On Track
+            </span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- AI COACH -->
+
+    <section class="ai-card">
+      <div class="ai-bot">🤖</div>
 
       <div class="ai-content">
         <div class="ai-title">ShiftFit AI Coach</div>
         <div class="ai-text">
-          Your shift has changed? I'll adapt your workout and meals.
+          Your personal fitness coach. Ask me anything.
         </div>
       </div>
 
       <div class="ai-arrow">›</div>
+    </section>
+
+  </section>
+
+
+  <!-- ================= WORKOUT ================= -->
+
+  <section id="workoutScreen" class="screen">
+
+    <button class="back-btn" onclick="showHome()">← Back to Home</button>
+
+    <div class="workout-header">
+      <div class="workout-day">TODAY'S WORKOUT</div>
+      <h1>Push Day</h1>
+      <p>Build strength and muscle with your personalised workout.</p>
     </div>
+
+    <div class="workout-stats">
+
+      <div class="workout-stat">
+        <small>TIME</small>
+        <strong>60 min</strong>
+      </div>
+
+      <div class="workout-stat">
+        <small>LEVEL</small>
+        <strong>Beginner</strong>
+      </div>
+
+      <div class="workout-stat">
+        <small>FOCUS</small>
+        <strong>Push</strong>
+      </div>
+
+    </div>
+
+    <div class="workout-progress">
+
+      <div class="workout-progress-top">
+        <span>WORKOUT PROGRESS</span>
+        <span id="workoutProgressText">0 / 5</span>
+      </div>
+
+      <div class="progress-bar">
+        <div class="progress-fill" id="workoutProgressFill"></div>
+      </div>
+
+    </div>
+
+
+    <div class="exercise-card" onclick="toggleExercise(this)">
+      <div class="exercise-check"></div>
+
+      <div class="exercise-content">
+        <div class="exercise-name">1. Bench Press</div>
+        <div class="exercise-sets">4 sets × 8–10 reps</div>
+        <div class="exercise-tip">Control the weight and keep your shoulders stable.</div>
+      </div>
+    </div>
+
+
+    <div class="exercise-card" onclick="toggleExercise(this)">
+      <div class="exercise-check"></div>
+
+      <div class="exercise-content">
+        <div class="exercise-name">2. Incline Dumbbell Press</div>
+        <div class="exercise-sets">4 sets × 10–12 reps</div>
+        <div class="exercise-tip">Keep the movement controlled and avoid locking out harshly.</div>
+      </div>
+    </div>
+
+
+    <div class="exercise-card" onclick="toggleExercise(this)">
+      <div class="exercise-check"></div>
+
+      <div class="exercise-content">
+        <div class="exercise-name">3. Shoulder Press</div>
+        <div class="exercise-sets">3 sets × 8–12 reps</div>
+        <div class="exercise-tip">Brace your core and press smoothly overhead.</div>
+      </div>
+    </div>
+
+
+    <div class="exercise-card" onclick="toggleExercise(this)">
+      <div class="exercise-check"></div>
+
+      <div class="exercise-content">
+        <div class="exercise-name">4. Tricep Dips</div>
+        <div class="exercise-sets">3 sets × 12–15 reps</div>
+        <div class="exercise-tip">Keep control throughout the full range of motion.</div>
+      </div>
+    </div>
+
+
+    <div class="exercise-card" onclick="toggleExercise(this)">
+      <div class="exercise-check"></div>
+
+      <div class="exercise-content">
+        <div class="exercise-name">5. Chest Flyes</div>
+        <div class="exercise-sets">3 sets × 12–15 reps</div>
+        <div class="exercise-tip">Use a controlled stretch and squeeze your chest.</div>
+      </div>
+    </div>
+
+
+    <button id="finishButton" class="finish-button" disabled onclick="finishWorkout()">
+      COMPLETE ALL EXERCISES
+    </button>
 
   </section>
 
 </div>
 
+
+<!-- ================= NAV ================= -->
+
 <nav class="bottom-nav">
 
-  <button class="nav-item active">
+  <button class="nav-item active" id="homeNav" onclick="showHome()">
     <span class="nav-icon">⌂</span>
-    Home
+    <span>Home</span>
   </button>
 
   <button class="nav-item">
     <span class="nav-icon">▦</span>
-    Calendar
+    <span>Calendar</span>
   </button>
 
-  <button class="nav-item">
-    <span class="nav-icon">💪</span>
-    Workouts
+  <button class="nav-item" id="workoutNav" onclick="showWorkout()">
+    <span class="nav-icon">🏋️</span>
+    <span>Workouts</span>
   </button>
 
   <button class="nav-item">
     <span class="nav-icon">◔</span>
-    Progress
+    <span>Progress</span>
   </button>
 
   <button class="nav-item">
     <span class="nav-icon">☰</span>
-    More
+    <span>More</span>
   </button>
 
 </nav>
+
+
+<script>
+
+function showHome(){
+  document.getElementById("homeScreen").classList.add("active");
+  document.getElementById("workoutScreen").classList.remove("active");
+
+  document.getElementById("homeNav").classList.add("active");
+  document.getElementById("workoutNav").classList.remove("active");
+
+  window.scrollTo(0,0);
+}
+
+function showWorkout(){
+  document.getElementById("homeScreen").classList.remove("active");
+  document.getElementById("workoutScreen").classList.add("active");
+
+  document.getElementById("homeNav").classList.remove("active");
+  document.getElementById("workoutNav").classList.add("active");
+
+  window.scrollTo(0,0);
+}
+
+function toggleExercise(card){
+
+  card.classList.toggle("completed");
+
+  const check = card.querySelector(".exercise-check");
+
+  if(card.classList.contains("completed")){
+    check.innerHTML = "✓";
+  } else {
+    check.innerHTML = "";
+  }
+
+  updateWorkoutProgress();
+}
+
+function updateWorkoutProgress(){
+
+  const exercises = document.querySelectorAll(".exercise-card");
+  const completed = document.querySelectorAll(".exercise-card.completed").length;
+  const total = exercises.length;
+
+  document.getElementById("workoutProgressText").textContent =
+    completed + " / " + total;
+
+  document.getElementById("workoutProgressFill").style.width =
+    (completed / total * 100) + "%";
+
+  const button = document.getElementById("finishButton");
+
+  if(completed === total){
+    button.disabled = false;
+    button.classList.add("ready");
+    button.textContent = "FINISH WORKOUT 🏆";
+  } else {
+    button.disabled = true;
+    button.classList.remove("ready");
+    button.textContent = "COMPLETE ALL EXERCISES";
+  }
+}
+
+function finishWorkout(){
+
+  alert("🏆 Workout complete! Great work, Andrew!");
+
+  showHome();
+}
+
+</script>
 
 </body>
 </html>
