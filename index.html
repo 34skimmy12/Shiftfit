@@ -199,16 +199,8 @@ button{cursor:pointer}
 }
 
 .plan-stat:last-child{border-right:none}
-
-.stat-icon{
-  font-size:19px;
-  margin-bottom:4px;
-}
-
-.plan-stat-label{
-  color:#bbc0d1;
-  font-size:11px;
-}
+.stat-icon{font-size:19px;margin-bottom:4px}
+.plan-stat-label{color:#bbc0d1;font-size:11px}
 
 .plan-stat-value{
   font-size:20px;
@@ -246,16 +238,8 @@ button{cursor:pointer}
     linear-gradient(145deg,#171e47,#0d1125);
 }
 
-.action-icon{
-  font-size:31px;
-  margin-bottom:17px;
-}
-
-.action-label{
-  color:#b9c0d0;
-  font-size:12px;
-  font-weight:850;
-}
+.action-icon{font-size:31px;margin-bottom:17px}
+.action-label{color:#b9c0d0;font-size:12px;font-weight:850}
 
 .action-title{
   font-size:20px;
@@ -341,7 +325,6 @@ button{cursor:pointer}
 }
 
 .progress-row:last-child{border-bottom:none}
-
 .progress-row-label{color:#c5cada}
 .progress-row-value{font-weight:800}
 .on-track{color:var(--green)}
@@ -515,7 +498,7 @@ button{cursor:pointer}
   background:linear-gradient(135deg,#7c3aed,#4f46e5);
 }
 
-/* MEAL PLAN */
+/* MEALS */
 
 .meal-header{margin-bottom:20px}
 
@@ -724,7 +707,7 @@ button{cursor:pointer}
   font-weight:900;
 }
 
-/* SETUP SCREEN */
+/* SETUP */
 
 .setup-header{margin-bottom:22px}
 
@@ -808,75 +791,6 @@ button{cursor:pointer}
   font-size:15px;
   font-weight:950;
   background:linear-gradient(135deg,#8b3cff,#5123c5);
-  box-shadow:0 8px 25px rgba(109,40,217,.28);
-}
-
-.edit-plan-btn{
-  width:100%;
-  margin-top:12px;
-  padding:13px;
-  border:1px solid rgba(139,92,246,.4);
-  border-radius:12px;
-  background:rgba(109,40,217,.10);
-  color:#cdbdff;
-  font-size:12px;
-  font-weight:900;
-}
-
-/* SHOPPING */
-
-.shopping-card{
-  padding:18px;
-  margin-top:20px;
-  border-radius:21px;
-  border:1px solid rgba(53,223,141,.24);
-  background:linear-gradient(145deg,#10251f,#0b1818);
-}
-
-.shopping-top{
-  display:flex;
-  justify-content:space-between;
-}
-
-.shopping-title{
-  font-size:17px;
-  font-weight:900;
-}
-
-.shopping-count{
-  color:#75e7b1;
-  font-size:11px;
-  font-weight:850;
-}
-
-.shopping-items{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-  margin-top:15px;
-}
-
-.shopping-item{
-  color:#c7d1d0;
-  font-size:12px;
-}
-
-.shopping-item::before{
-  content:"✓";
-  color:#55dc9b;
-  margin-right:7px;
-}
-
-.shopping-btn{
-  width:100%;
-  margin-top:16px;
-  padding:12px;
-  border:none;
-  border-radius:11px;
-  color:#07150f;
-  font-size:12px;
-  font-weight:950;
-  background:linear-gradient(135deg,#56e8a1,#25ba73);
 }
 
 /* BOTTOM NAV */
@@ -916,13 +830,8 @@ button{cursor:pointer}
 }
 
 @media(max-width:360px){
-  .app{
-    padding-left:14px;
-    padding-right:14px;
-  }
-
+  .app{padding-left:14px;padding-right:14px}
   .plan-stat-value{font-size:17px}
-  .shopping-items{grid-template-columns:1fr}
   .meal-macros{gap:8px}
 }
 </style>
@@ -959,8 +868,7 @@ button{cursor:pointer}
   </div>
 
   <div class="shift-time-row">
-    <span>▣</span>
-    <span>06:00 – 18:00</span>
+    <span>▣</span><span>06:00 – 18:00</span>
   </div>
 
   <div class="plan-stats">
@@ -969,11 +877,13 @@ button{cursor:pointer}
       <div class="plan-stat-label">Calories</div>
       <div class="plan-stat-value" id="homeCalories">2,200</div>
     </div>
+
     <div class="plan-stat">
       <div class="stat-icon">🏋️</div>
       <div class="plan-stat-label">Protein</div>
       <div class="plan-stat-value" id="homeProtein">180g</div>
     </div>
+
     <div class="plan-stat">
       <div class="stat-icon">💧</div>
       <div class="plan-stat-label">Water</div>
@@ -1003,9 +913,7 @@ button{cursor:pointer}
 <section class="progress-card">
   <div class="progress-title">Weekly Progress</div>
   <div class="progress-content">
-    <div class="progress-ring">
-      <div class="progress-inner">78%</div>
-    </div>
+    <div class="progress-ring"><div class="progress-inner">78%</div></div>
     <div class="progress-info">
       <div class="progress-row"><span class="progress-row-label">Workouts</span><span class="progress-row-value">5/6</span></div>
       <div class="progress-row"><span class="progress-row-label">Calories</span><span class="progress-row-value on-track"><span class="dot"></span>On Track</span></div>
@@ -1025,9 +933,8 @@ button{cursor:pointer}
 
 </section>
 
-<!-- WORKOUT -->
-
 <section id="workoutScreen" class="screen">
+
 <button class="back-btn" onclick="showHome()">← Back to Home</button>
 
 <div class="workout-header">
@@ -1057,9 +964,8 @@ button{cursor:pointer}
 <div class="exercise-card" onclick="toggleExercise(this)"><div class="exercise-check"></div><div class="exercise-content"><div class="exercise-name">5. Chest Flyes</div><div class="exercise-sets">3 sets × 12–15 reps</div><div class="exercise-tip">Use a controlled stretch and squeeze.</div></div></div>
 
 <button id="finishButton" class="finish-button" disabled onclick="finishWorkout()">COMPLETE ALL EXERCISES</button>
-</section>
 
-<!-- MEALS -->
+</section>
 
 <section id="mealScreen" class="screen">
 
@@ -1072,13 +978,13 @@ button{cursor:pointer}
 </div>
 
 <div class="day-selector">
-  <button class="day-btn active" data-day="monday" onclick="selectDay('monday',this)">MON<strong>25</strong></button>
-  <button class="day-btn" data-day="tuesday" onclick="selectDay('tuesday',this)">TUE<strong>26</strong></button>
-  <button class="day-btn" data-day="wednesday" onclick="selectDay('wednesday',this)">WED<strong>27</strong></button>
-  <button class="day-btn" data-day="thursday" onclick="selectDay('thursday',this)">THU<strong>28</strong></button>
-  <button class="day-btn" data-day="friday" onclick="selectDay('friday',this)">FRI<strong>29</strong></button>
-  <button class="day-btn" data-day="saturday" onclick="selectDay('saturday',this)">SAT<strong>30</strong></button>
-  <button class="day-btn" data-day="sunday" onclick="selectDay('sunday',this)">SUN<strong>31</strong></button>
+  <button class="day-btn active" data-day="0" onclick="selectDay(0,this)">MON<strong>25</strong></button>
+  <button class="day-btn" data-day="1" onclick="selectDay(1,this)">TUE<strong>26</strong></button>
+  <button class="day-btn" data-day="2" onclick="selectDay(2,this)">WED<strong>27</strong></button>
+  <button class="day-btn" data-day="3" onclick="selectDay(3,this)">THU<strong>28</strong></button>
+  <button class="day-btn" data-day="4" onclick="selectDay(4,this)">FRI<strong>29</strong></button>
+  <button class="day-btn" data-day="5" onclick="selectDay(5,this)">SAT<strong>30</strong></button>
+  <button class="day-btn" data-day="6" onclick="selectDay(6,this)">SUN<strong>31</strong></button>
 </div>
 
 <section class="meal-summary">
@@ -1096,108 +1002,84 @@ button{cursor:pointer}
     <div class="macro-box"><span>FATS</span><strong id="mealFats">67g</strong></div>
   </div>
 
-  <button class="edit-plan-btn" onclick="showSetup()">⚙ EDIT MY PERSONAL PLAN</button>
+  <button class="generate-btn" onclick="showSetup()">⚙ EDIT MY PERSONAL PLAN</button>
 </section>
 
-<div class="meal-section-title" id="selectedDayTitle">Monday's Meals</div>
+<div class="meal-section-title" id="dayMealTitle">Monday's Meals</div>
 
 <div class="meal-card-full">
-  <div class="meal-calories" id="breakfastCalories">520 kcal</div>
+  <div class="meal-calories" id="breakfastCalories"></div>
   <div class="meal-top">
-    <div class="meal-emoji" id="breakfastEmoji">🥣</div>
+    <div class="meal-emoji" id="breakfastEmoji"></div>
     <div class="meal-info">
       <div class="meal-type">BREAKFAST</div>
-      <div class="meal-name" id="breakfastName">Protein Oats & Berries</div>
-      <div class="meal-desc" id="breakfastDesc">Oats, whey protein, Greek yoghurt and mixed berries.</div>
+      <div class="meal-name" id="breakfastName"></div>
+      <div class="meal-desc" id="breakfastDesc"></div>
     </div>
   </div>
   <div class="meal-macros">
-    <span><strong id="breakfastP">45g</strong> Protein</span>
-    <span><strong id="breakfastC">58g</strong> Carbs</span>
-    <span><strong id="breakfastF">12g</strong> Fat</span>
+    <span><strong id="breakfastP"></strong> Protein</span>
+    <span><strong id="breakfastC"></strong> Carbs</span>
+    <span><strong id="breakfastF"></strong> Fat</span>
   </div>
   <button class="swap-btn" onclick="swapMeal('breakfast')">↻ SWAP MEAL</button>
 </div>
 
 <div class="meal-card-full">
-  <div class="meal-calories" id="lunchCalories">640 kcal</div>
+  <div class="meal-calories" id="lunchCalories"></div>
   <div class="meal-top">
-    <div class="meal-emoji" id="lunchEmoji">🍗</div>
+    <div class="meal-emoji" id="lunchEmoji"></div>
     <div class="meal-info">
       <div class="meal-type">LUNCH</div>
-      <div class="meal-name" id="lunchName">Chicken Rice Power Bowl</div>
-      <div class="meal-desc" id="lunchDesc">Grilled chicken, rice, vegetables and a light sauce.</div>
+      <div class="meal-name" id="lunchName"></div>
+      <div class="meal-desc" id="lunchDesc"></div>
     </div>
   </div>
   <div class="meal-macros">
-    <span><strong id="lunchP">58g</strong> Protein</span>
-    <span><strong id="lunchC">72g</strong> Carbs</span>
-    <span><strong id="lunchF">14g</strong> Fat</span>
+    <span><strong id="lunchP"></strong> Protein</span>
+    <span><strong id="lunchC"></strong> Carbs</span>
+    <span><strong id="lunchF"></strong> Fat</span>
   </div>
   <button class="swap-btn" onclick="swapMeal('lunch')">↻ SWAP MEAL</button>
 </div>
 
 <div class="meal-card-full">
-  <div class="meal-calories" id="dinnerCalories">710 kcal</div>
+  <div class="meal-calories" id="dinnerCalories"></div>
   <div class="meal-top">
-    <div class="meal-emoji" id="dinnerEmoji">🥩</div>
+    <div class="meal-emoji" id="dinnerEmoji"></div>
     <div class="meal-info">
       <div class="meal-type">DINNER</div>
-      <div class="meal-name" id="dinnerName">Lean Beef & Sweet Potato</div>
-      <div class="meal-desc" id="dinnerDesc">Lean beef mince, roasted sweet potato and green vegetables.</div>
+      <div class="meal-name" id="dinnerName"></div>
+      <div class="meal-desc" id="dinnerDesc"></div>
     </div>
   </div>
   <div class="meal-macros">
-    <span><strong id="dinnerP">60g</strong> Protein</span>
-    <span><strong id="dinnerC">65g</strong> Carbs</span>
-    <span><strong id="dinnerF">20g</strong> Fat</span>
+    <span><strong id="dinnerP"></strong> Protein</span>
+    <span><strong id="dinnerC"></strong> Carbs</span>
+    <span><strong id="dinnerF"></strong> Fat</span>
   </div>
   <button class="swap-btn" onclick="swapMeal('dinner')">↻ SWAP MEAL</button>
 </div>
 
 <div class="meal-card-full">
-  <div class="meal-calories" id="snackCalories">330 kcal</div>
+  <div class="meal-calories" id="snackCalories"></div>
   <div class="meal-top">
-    <div class="meal-emoji" id="snackEmoji">🍓</div>
+    <div class="meal-emoji" id="snackEmoji"></div>
     <div class="meal-info">
       <div class="meal-type">SNACK</div>
-      <div class="meal-name" id="snackName">Greek Yoghurt Protein Bowl</div>
-      <div class="meal-desc" id="snackDesc">Greek yoghurt, berries and a small serving of nuts.</div>
+      <div class="meal-name" id="snackName"></div>
+      <div class="meal-desc" id="snackDesc"></div>
     </div>
   </div>
   <div class="meal-macros">
-    <span><strong id="snackP">25g</strong> Protein</span>
-    <span><strong id="snackC">25g</strong> Carbs</span>
-    <span><strong id="snackF">12g</strong> Fat</span>
+    <span><strong id="snackP"></strong> Protein</span>
+    <span><strong id="snackC"></strong> Carbs</span>
+    <span><strong id="snackF"></strong> Fat</span>
   </div>
   <button class="swap-btn" onclick="swapMeal('snack')">↻ SWAP MEAL</button>
 </div>
 
-<section class="shopping-card">
-  <div class="shopping-top">
-    <div class="shopping-title">🛒 Shopping List</div>
-    <div class="shopping-count">12 ITEMS</div>
-  </div>
-  <div class="shopping-items">
-    <div class="shopping-item">Chicken breast</div>
-    <div class="shopping-item">Lean beef mince</div>
-    <div class="shopping-item">Eggs</div>
-    <div class="shopping-item">Greek yoghurt</div>
-    <div class="shopping-item">Protein powder</div>
-    <div class="shopping-item">Oats</div>
-    <div class="shopping-item">Rice</div>
-    <div class="shopping-item">Sweet potatoes</div>
-    <div class="shopping-item">Mixed berries</div>
-    <div class="shopping-item">Green vegetables</div>
-    <div class="shopping-item">Mixed nuts</div>
-    <div class="shopping-item">Light sauce</div>
-  </div>
-  <button class="shopping-btn" onclick="alert('Shopping list ready! 🛒')">VIEW FULL SHOPPING LIST</button>
 </section>
-
-</section>
-
-<!-- PERSONAL SETUP -->
 
 <section id="setupScreen" class="screen">
 
@@ -1211,6 +1093,7 @@ button{cursor:pointer}
 
 <section class="setup-card">
   <label class="setup-label">YOUR GOAL</label>
+
   <div class="goal-grid">
     <button class="goal-btn active" data-goal="lose" onclick="selectGoal(this)"><span>🔥</span>Lose Weight</button>
     <button class="goal-btn" data-goal="maintain" onclick="selectGoal(this)"><span>⚡</span>Maintain</button>
@@ -1259,25 +1142,98 @@ button{cursor:pointer}
 
 <script>
 
-let selectedGoal="lose";
-let selectedDay="monday";
+/* =========================
+   SHIFT FIT APP STATE
+========================= */
 
-const dayNames={
-  monday:"Monday",
-  tuesday:"Tuesday",
-  wednesday:"Wednesday",
-  thursday:"Thursday",
-  friday:"Friday",
-  saturday:"Saturday",
-  sunday:"Sunday"
+let selectedGoal="lose";
+let selectedDay=0;
+
+const dayNames=[
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday"
+];
+
+const mealOptions={
+
+  breakfast:[
+    {name:"Protein Oats & Berries",desc:"Oats, whey protein, Greek yoghurt and mixed berries.",emoji:"🥣"},
+    {name:"Egg & Avocado Bagel",desc:"Eggs, avocado and a toasted wholemeal bagel.",emoji:"🥯"},
+    {name:"Protein Pancake Stack",desc:"Protein pancakes topped with banana and Greek yoghurt.",emoji:"🥞"},
+    {name:"Greek Yoghurt Breakfast Bowl",desc:"Greek yoghurt, granola, berries and honey.",emoji:"🍓"},
+    {name:"Eggs on Wholemeal Toast",desc:"High-protein eggs served on toasted wholemeal bread.",emoji:"🍳"}
+  ],
+
+  lunch:[
+    {name:"Chicken Rice Power Bowl",desc:"Grilled chicken, rice, vegetables and a light sauce.",emoji:"🍗"},
+    {name:"Turkey Pasta Bowl",desc:"Lean turkey mince, wholewheat pasta and tomato sauce.",emoji:"🍝"},
+    {name:"Chicken Wrap & Wedges",desc:"High-protein chicken wrap with seasoned potato wedges.",emoji:"🌯"},
+    {name:"Tuna Jacket Potato",desc:"Tuna, light mayo and a baked jacket potato.",emoji:"🥔"},
+    {name:"Beef Burrito Bowl",desc:"Lean beef, rice, beans and fresh salad.",emoji:"🥙"}
+  ],
+
+  dinner:[
+    {name:"Lean Beef & Sweet Potato",desc:"Lean beef mince, roasted sweet potato and green vegetables.",emoji:"🥩"},
+    {name:"Chicken Stir Fry",desc:"Chicken breast, rice noodles and fresh mixed vegetables.",emoji:"🍜"},
+    {name:"Salmon & Rice",desc:"Baked salmon, jasmine rice and roasted vegetables.",emoji:"🐟"},
+    {name:"Turkey Chilli",desc:"Lean turkey chilli with rice and vegetables.",emoji:"🌶️"},
+    {name:"Chicken Curry",desc:"Lean chicken curry served with basmati rice.",emoji:"🍛"}
+  ],
+
+  snack:[
+    {name:"Greek Yoghurt Protein Bowl",desc:"Greek yoghurt, berries and a small serving of nuts.",emoji:"🍓"},
+    {name:"Protein Shake & Banana",desc:"Whey protein shake with banana and peanut butter.",emoji:"🥤"},
+    {name:"Cottage Cheese Snack",desc:"Cottage cheese, crackers and fresh fruit.",emoji:"🧀"},
+    {name:"Protein Bar & Fruit",desc:"A high-protein snack bar with fresh fruit.",emoji:"🍫"},
+    {name:"Boiled Eggs & Apple",desc:"Simple high-protein eggs with a fresh apple.",emoji:"🥚"}
+  ]
 };
 
+/* =========================
+   CREATE 7-DAY WEEK
+========================= */
+
+function createWeekPlan(){
+
+  const week=[];
+
+  for(let day=0;day<7;day++){
+
+    week.push({
+      breakfast:day%mealOptions.breakfast.length,
+      lunch:day%mealOptions.lunch.length,
+      dinner:day%mealOptions.dinner.length,
+      snack:day%mealOptions.snack.length
+    });
+
+  }
+
+  return week;
+}
+
+let weeklyMeals=createWeekPlan();
+
+/* =========================
+   SCREEN NAVIGATION
+========================= */
+
 function hideAllScreens(){
-  document.querySelectorAll(".screen").forEach(screen=>screen.classList.remove("active"));
+  document.querySelectorAll(".screen").forEach(screen=>{
+    screen.classList.remove("active");
+  });
 }
 
 function setNav(active){
-  document.querySelectorAll(".nav-item").forEach(item=>item.classList.remove("active"));
+
+  document.querySelectorAll(".nav-item").forEach(item=>{
+    item.classList.remove("active");
+  });
+
   if(active==="home") document.getElementById("homeNav").classList.add("active");
   if(active==="workout") document.getElementById("workoutNav").classList.add("active");
   if(active==="meal") document.getElementById("mealNav").classList.add("active");
@@ -1301,7 +1257,7 @@ function showMeals(){
   hideAllScreens();
   document.getElementById("mealScreen").classList.add("active");
   setNav("meal");
-  renderDayMeals();
+  renderSelectedDay();
   window.scrollTo(0,0);
 }
 
@@ -1312,19 +1268,31 @@ function showSetup(){
   window.scrollTo(0,0);
 }
 
+/* =========================
+   WORKOUT
+========================= */
+
 function toggleExercise(card){
+
   card.classList.toggle("completed");
-  card.querySelector(".exercise-check").innerHTML=card.classList.contains("completed") ? "✓" : "";
+
+  card.querySelector(".exercise-check").textContent=
+    card.classList.contains("completed") ? "✓" : "";
+
   updateWorkoutProgress();
 }
 
 function updateWorkoutProgress(){
+
   const exercises=document.querySelectorAll(".exercise-card");
   const completed=document.querySelectorAll(".exercise-card.completed").length;
   const total=exercises.length;
 
-  document.getElementById("workoutProgressText").textContent=completed+" / "+total;
-  document.getElementById("workoutProgressFill").style.width=(completed/total*100)+"%";
+  document.getElementById("workoutProgressText").textContent=
+    completed+" / "+total;
+
+  document.getElementById("workoutProgressFill").style.width=
+    (completed/total*100)+"%";
 
   const button=document.getElementById("finishButton");
 
@@ -1344,13 +1312,72 @@ function finishWorkout(){
   showHome();
 }
 
-/* PERSONAL PLAN */
+/* =========================
+   GOAL SELECTOR
+========================= */
 
 function selectGoal(button){
-  document.querySelectorAll(".goal-btn").forEach(btn=>btn.classList.remove("active"));
+
+  document.querySelectorAll(".goal-btn").forEach(btn=>{
+    btn.classList.remove("active");
+  });
+
   button.classList.add("active");
   selectedGoal=button.dataset.goal;
 }
+
+/* =========================
+   DAY SELECTOR
+========================= */
+
+function selectDay(day,button){
+
+  selectedDay=day;
+
+  document.querySelectorAll(".day-btn").forEach(btn=>{
+    btn.classList.remove("active");
+  });
+
+  button.classList.add("active");
+
+  renderSelectedDay();
+}
+
+/* =========================
+   RENDER CURRENT DAY
+========================= */
+
+function renderSelectedDay(){
+
+  const dayPlan=weeklyMeals[selectedDay];
+
+  document.getElementById("dayMealTitle").textContent=
+    dayNames[selectedDay]+"'s Meals";
+
+  renderMeal("breakfast",dayPlan.breakfast);
+  renderMeal("lunch",dayPlan.lunch);
+  renderMeal("dinner",dayPlan.dinner);
+  renderMeal("snack",dayPlan.snack);
+
+  const saved=localStorage.getItem("shiftfitPlan");
+
+  if(saved){
+    updateMacrosForDay(JSON.parse(saved));
+  }
+}
+
+function renderMeal(type,index){
+
+  const meal=mealOptions[type][index];
+
+  document.getElementById(type+"Emoji").textContent=meal.emoji;
+  document.getElementById(type+"Name").textContent=meal.name;
+  document.getElementById(type+"Desc").textContent=meal.desc;
+}
+
+/* =========================
+   PERSONAL PLAN CALCULATOR
+========================= */
 
 function generatePlan(){
 
@@ -1365,13 +1392,18 @@ function generatePlan(){
     return;
   }
 
-  let bmr=sex==="male"
-    ? (10*weight)+(6.25*height)-(5*age)+5
-    : (10*weight)+(6.25*height)-(5*age)-161;
+  let bmr;
+
+  if(sex==="male"){
+    bmr=(10*weight)+(6.25*height)-(5*age)+5;
+  }else{
+    bmr=(10*weight)+(6.25*height)-(5*age)-161;
+  }
 
   const maintenance=bmr*activity;
 
   let calories;
+
   if(selectedGoal==="lose") calories=Math.round(maintenance-400);
   if(selectedGoal==="maintain") calories=Math.round(maintenance);
   if(selectedGoal==="gain") calories=Math.round(maintenance+300);
@@ -1380,138 +1412,91 @@ function generatePlan(){
   const fats=Math.round(weight*.8);
   const carbs=Math.max(0,Math.round((calories-(protein*4)-(fats*9))/4));
 
-  const plan={age,weight,height,sex,activity,goal:selectedGoal,calories,protein,carbs,fats};
+  const plan={
+    age,
+    weight,
+    height,
+    sex,
+    activity,
+    goal:selectedGoal,
+    calories,
+    protein,
+    carbs,
+    fats
+  };
+
+  /* NEW PERSONAL PLAN = FRESH WEEK */
+
+  weeklyMeals=createWeekPlan();
 
   localStorage.setItem("shiftfitPlan",JSON.stringify(plan));
+  localStorage.setItem("shiftfitWeeklyMeals",JSON.stringify(weeklyMeals));
+
   updatePlan(plan);
 
-  alert("⚡ Your personalised ShiftFit meal plan is ready!");
+  alert("⚡ Your personalised 7-day ShiftFit meal plan is ready!");
+
+  selectedDay=0;
+
   showMeals();
 }
 
+/* =========================
+   UPDATE PLAN DETAILS
+========================= */
+
 function updatePlan(plan){
 
-  document.getElementById("homeCalories").textContent=plan.calories.toLocaleString();
-  document.getElementById("homeProtein").textContent=plan.protein+"g";
-  document.getElementById("mealCalories").textContent=plan.calories.toLocaleString();
-  document.getElementById("mealProtein").textContent=plan.protein+"g";
-  document.getElementById("mealCarbs").textContent=plan.carbs+"g";
-  document.getElementById("mealFats").textContent=plan.fats+"g";
+  document.getElementById("homeCalories").textContent=
+    plan.calories.toLocaleString();
 
-  let goalText="HIGH PROTEIN";
+  document.getElementById("homeProtein").textContent=
+    plan.protein+"g";
+
+  document.getElementById("mealCalories").textContent=
+    plan.calories.toLocaleString();
+
+  document.getElementById("mealProtein").textContent=
+    plan.protein+"g";
+
+  document.getElementById("mealCarbs").textContent=
+    plan.carbs+"g";
+
+  document.getElementById("mealFats").textContent=
+    plan.fats+"g";
+
+  let goalText;
 
   if(plan.goal==="lose"){
     goalText="FAT LOSS";
-    document.getElementById("mealSubtitle").textContent="High-protein meals designed to help you lose fat while protecting muscle.";
+    document.getElementById("mealSubtitle").textContent=
+      "High-protein meals designed to help you lose fat while protecting muscle.";
   }
 
   if(plan.goal==="maintain"){
     goalText="MAINTAIN";
-    document.getElementById("mealSubtitle").textContent="Balanced meals designed to fuel your lifestyle and maintain your weight.";
+    document.getElementById("mealSubtitle").textContent=
+      "Balanced meals designed to fuel your lifestyle and maintain your weight.";
   }
 
   if(plan.goal==="gain"){
     goalText="BUILD MUSCLE";
-    document.getElementById("mealSubtitle").textContent="High-protein meals designed to support strength, recovery and muscle growth.";
+    document.getElementById("mealSubtitle").textContent=
+      "High-protein meals designed to support strength, recovery and muscle growth.";
   }
 
   document.getElementById("goalBadge").textContent=goalText;
-  scaleMeals(plan);
+
+  renderSelectedDay();
 }
 
-/* MEAL OPTIONS */
+/* =========================
+   SCALE MACROS FOR CURRENT DAY
+========================= */
 
-const mealOptions={
+function updateMacrosForDay(plan){
 
-  breakfast:[
-    {name:"Protein Oats & Berries",desc:"Oats, whey protein, Greek yoghurt and mixed berries.",emoji:"🥣"},
-    {name:"Egg & Avocado Bagel",desc:"Eggs, avocado and a toasted wholemeal bagel.",emoji:"🥯"},
-    {name:"Protein Pancake Stack",desc:"Protein pancakes topped with banana and Greek yoghurt.",emoji:"🥞"}
-  ],
-
-  lunch:[
-    {name:"Chicken Rice Power Bowl",desc:"Grilled chicken, rice, vegetables and a light sauce.",emoji:"🍗"},
-    {name:"Turkey Pasta Bowl",desc:"Lean turkey mince, wholewheat pasta and tomato sauce.",emoji:"🍝"},
-    {name:"Chicken Wrap & Wedges",desc:"High-protein chicken wrap with seasoned potato wedges.",emoji:"🌯"}
-  ],
-
-  dinner:[
-    {name:"Lean Beef & Sweet Potato",desc:"Lean beef mince, roasted sweet potato and green vegetables.",emoji:"🥩"},
-    {name:"Chicken Stir Fry",desc:"Chicken breast, rice noodles and fresh mixed vegetables.",emoji:"🍜"},
-    {name:"Salmon & Rice",desc:"Baked salmon, jasmine rice and roasted vegetables.",emoji:"🐟"}
-  ],
-
-  snack:[
-    {name:"Greek Yoghurt Protein Bowl",desc:"Greek yoghurt, berries and a small serving of nuts.",emoji:"🍓"},
-    {name:"Protein Shake & Banana",desc:"Whey protein shake with banana and peanut butter.",emoji:"🥤"},
-    {name:"Cottage Cheese Snack",desc:"Cottage cheese, crackers and fresh fruit.",emoji:"🧀"}
-  ]
-};
-
-/* EACH DAY GETS ITS OWN MEALS */
-
-let weeklyMeals={
-  monday:{breakfast:0,lunch:0,dinner:0,snack:0},
-  tuesday:{breakfast:1,lunch:1,dinner:1,snack:1},
-  wednesday:{breakfast:2,lunch:2,dinner:2,snack:2},
-  thursday:{breakfast:0,lunch:1,dinner:2,snack:0},
-  friday:{breakfast:1,lunch:2,dinner:0,snack:1},
-  saturday:{breakfast:2,lunch:0,dinner:1,snack:2},
-  sunday:{breakfast:0,lunch:2,dinner:2,snack:1}
-};
-
-function loadWeeklyMeals(){
-  const saved=localStorage.getItem("shiftfitWeeklyMeals");
-  if(saved) weeklyMeals=JSON.parse(saved);
-}
-
-function saveWeeklyMeals(){
-  localStorage.setItem("shiftfitWeeklyMeals",JSON.stringify(weeklyMeals));
-}
-
-function selectDay(day,button){
-
-  selectedDay=day;
-
-  document.querySelectorAll(".day-btn").forEach(btn=>btn.classList.remove("active"));
-  button.classList.add("active");
-
-  renderDayMeals();
-}
-
-function renderDayMeals(){
-
-  document.getElementById("selectedDayTitle").textContent=dayNames[selectedDay]+"'s Meals";
-
-  ["breakfast","lunch","dinner","snack"].forEach(type=>{
-
-    const index=weeklyMeals[selectedDay][type];
-    const meal=mealOptions[type][index];
-
-    document.getElementById(type+"Emoji").textContent=meal.emoji;
-    document.getElementById(type+"Name").textContent=meal.name;
-    document.getElementById(type+"Desc").textContent=meal.desc;
-
-  });
-
-  const saved=localStorage.getItem("shiftfitPlan");
-  if(saved) scaleMeals(JSON.parse(saved));
-}
-
-function swapMeal(type){
-
-  weeklyMeals[selectedDay][type]=
-    (weeklyMeals[selectedDay][type]+1)%mealOptions[type].length;
-
-  saveWeeklyMeals();
-  renderDayMeals();
-}
-
-/* SCALE MACROS TO PERSONAL TARGET */
-
-function scaleMeals(plan){
-
-  const mealCalories={
+  const calories={
     breakfast:Math.round(plan.calories*.24),
     lunch:Math.round(plan.calories*.29),
     dinner:Math.round(plan.calories*.32),
@@ -1527,22 +1512,72 @@ function scaleMeals(plan){
 
   ["breakfast","lunch","dinner","snack"].forEach(type=>{
 
-    document.getElementById(type+"Calories").textContent=mealCalories[type]+" kcal";
-    document.getElementById(type+"P").textContent=Math.round(plan.protein*portions[type])+"g";
-    document.getElementById(type+"C").textContent=Math.round(plan.carbs*portions[type])+"g";
-    document.getElementById(type+"F").textContent=Math.round(plan.fats*portions[type])+"g";
+    document.getElementById(type+"Calories").textContent=
+      calories[type]+" kcal";
+
+    document.getElementById(type+"P").textContent=
+      Math.round(plan.protein*portions[type])+"g";
+
+    document.getElementById(type+"C").textContent=
+      Math.round(plan.carbs*portions[type])+"g";
+
+    document.getElementById(type+"F").textContent=
+      Math.round(plan.fats*portions[type])+"g";
 
   });
 }
 
-/* LOAD SAVED PLAN */
+/* =========================
+   SWAP CURRENT DAY'S MEAL
+========================= */
+
+function swapMeal(type){
+
+  const currentIndex=weeklyMeals[selectedDay][type];
+
+  const nextIndex=
+    (currentIndex+1)%mealOptions[type].length;
+
+  weeklyMeals[selectedDay][type]=nextIndex;
+
+  localStorage.setItem(
+    "shiftfitWeeklyMeals",
+    JSON.stringify(weeklyMeals)
+  );
+
+  renderSelectedDay();
+}
+
+/* =========================
+   LOAD SAVED DATA
+========================= */
 
 function loadSavedPlan(){
 
-  const saved=localStorage.getItem("shiftfitPlan");
-  if(!saved) return;
+  const savedPlan=localStorage.getItem("shiftfitPlan");
+  const savedWeek=localStorage.getItem("shiftfitWeeklyMeals");
 
-  const plan=JSON.parse(saved);
+  if(savedWeek){
+
+    try{
+      weeklyMeals=JSON.parse(savedWeek);
+
+      if(!Array.isArray(weeklyMeals) || weeklyMeals.length!==7){
+        weeklyMeals=createWeekPlan();
+      }
+
+    }catch(error){
+      weeklyMeals=createWeekPlan();
+    }
+
+  }
+
+  if(!savedPlan){
+    renderSelectedDay();
+    return;
+  }
+
+  const plan=JSON.parse(savedPlan);
 
   selectedGoal=plan.goal;
 
@@ -1554,15 +1589,18 @@ function loadSavedPlan(){
 
   document.querySelectorAll(".goal-btn").forEach(btn=>{
     btn.classList.remove("active");
-    if(btn.dataset.goal===plan.goal) btn.classList.add("active");
+
+    if(btn.dataset.goal===plan.goal){
+      btn.classList.add("active");
+    }
   });
 
   updatePlan(plan);
 }
 
-loadWeeklyMeals();
+/* START APP */
+
 loadSavedPlan();
-renderDayMeals();
 
 </script>
 
