@@ -37,73 +37,103 @@ body{
   overflow-x:hidden;
   position:relative;
   background:
-    radial-gradient(ellipse at 50% -18%,rgba(111,45,255,.42) 0%,rgba(63,25,150,.18) 24%,transparent 52%),
-    radial-gradient(ellipse at -15% 28%,rgba(0,174,255,.13) 0%,transparent 34%),
-    radial-gradient(ellipse at 112% 42%,rgba(139,45,255,.22) 0%,transparent 38%),
-    radial-gradient(ellipse at 50% 105%,rgba(65,35,180,.18) 0%,transparent 45%),
-    linear-gradient(180deg,#070512 0%,#050611 38%,#08061a 68%,#03040a 100%);
+    radial-gradient(circle at 72% 8%,rgba(118,62,255,.20) 0%,transparent 22%),
+    radial-gradient(circle at 8% 42%,rgba(82,35,180,.14) 0%,transparent 28%),
+    radial-gradient(circle at 92% 68%,rgba(103,42,225,.18) 0%,transparent 30%),
+    radial-gradient(circle at 35% 92%,rgba(74,35,165,.16) 0%,transparent 28%),
+    linear-gradient(180deg,#05050d 0%,#080615 28%,#100722 55%,#070511 78%,#03040a 100%);
   background-attachment:fixed;
 }
 
-/* FUTURISTIC CYBER GRID */
+/* DARK STORM CLOUDS */
 body::before{
   content:"";
   position:fixed;
   inset:0;
   pointer-events:none;
   z-index:-2;
+  opacity:.9;
   background:
-    linear-gradient(rgba(124,92,255,.025) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(124,92,255,.025) 1px,transparent 1px),
-    radial-gradient(circle at 50% 20%,rgba(120,65,255,.10),transparent 42%);
-  background-size:52px 52px,52px 52px,100% 100%;
-  -webkit-mask-image:linear-gradient(to bottom,rgba(0,0,0,.85),rgba(0,0,0,.25),transparent);
-  mask-image:linear-gradient(to bottom,rgba(0,0,0,.85),rgba(0,0,0,.25),transparent);
+    radial-gradient(ellipse 600px 260px at 78% 10%,rgba(107,83,160,.13) 0%,rgba(49,35,84,.08) 35%,transparent 70%),
+    radial-gradient(ellipse 500px 230px at 12% 27%,rgba(80,53,132,.10) 0%,rgba(32,24,62,.06) 42%,transparent 72%),
+    radial-gradient(ellipse 650px 300px at 65% 48%,rgba(91,64,143,.10) 0%,rgba(36,23,72,.06) 40%,transparent 70%),
+    radial-gradient(ellipse 520px 260px at 10% 72%,rgba(92,51,148,.10) 0%,rgba(38,23,75,.06) 40%,transparent 72%),
+    radial-gradient(ellipse 700px 300px at 85% 90%,rgba(91,53,145,.12) 0%,rgba(32,20,67,.06) 42%,transparent 72%);
+  filter:blur(18px);
 }
 
-/* SUBTLE LIGHTNING / NEON ENERGY STREAKS */
+/* WHITE LIGHTNING BACKGROUND */
 body::after{
   content:"";
   position:fixed;
   inset:0;
   pointer-events:none;
   z-index:-1;
-  opacity:.9;
+  opacity:.78;
   background:
-    linear-gradient(128deg,
-      transparent 0%,transparent 18%,
-      rgba(255,255,255,0) 22%,
-      rgba(183,164,255,.04) 23.5%,
-      rgba(255,255,255,.16) 24%,
-      rgba(255,255,255,.035) 24.5%,
-      transparent 26%),
-    linear-gradient(52deg,
-      transparent 0%,transparent 12%,
-      rgba(255,255,255,0) 15%,
-      rgba(100,181,255,.035) 16.5%,
-      rgba(255,255,255,.12) 17%,
-      rgba(255,255,255,.03) 17.5%,
-      transparent 19%),
+    /* TOP RIGHT LIGHTNING */
+    linear-gradient(122deg,
+      transparent 0%,transparent 62.2%,
+      rgba(104,67,255,.08) 62.4%,
+      rgba(181,160,255,.22) 62.65%,
+      rgba(255,255,255,.95) 62.82%,
+      rgba(218,207,255,.30) 63.05%,
+      transparent 63.3%),
+    linear-gradient(42deg,
+      transparent 0%,transparent 73.4%,
+      rgba(255,255,255,.90) 73.65%,
+      rgba(205,188,255,.24) 73.88%,
+      transparent 74.15%),
+
+    /* CENTRAL LIGHTNING */
+    linear-gradient(158deg,
+      transparent 0%,transparent 44.7%,
+      rgba(116,81,255,.10) 44.9%,
+      rgba(203,190,255,.28) 45.15%,
+      rgba(255,255,255,.92) 45.3%,
+      rgba(225,215,255,.26) 45.5%,
+      transparent 45.75%),
+    linear-gradient(28deg,
+      transparent 0%,transparent 48.5%,
+      rgba(255,255,255,.88) 48.72%,
+      rgba(199,181,255,.25) 48.95%,
+      transparent 49.2%),
+
+    /* LEFT SIDE LIGHTNING */
     linear-gradient(118deg,
-      transparent 0%,transparent 43%,
-      rgba(139,92,246,.025) 47%,
-      rgba(255,255,255,.13) 48.5%,
-      rgba(139,92,246,.03) 49.5%,
-      transparent 52%),
-    linear-gradient(132deg,
-      transparent 0%,transparent 67%,
-      rgba(139,92,246,.025) 71%,
-      rgba(255,255,255,.13) 72.5%,
-      rgba(139,92,246,.03) 73.5%,
-      transparent 76%),
-    linear-gradient(55deg,
-      transparent 0%,transparent 78%,
-      rgba(100,170,255,.025) 81%,
-      rgba(255,255,255,.10) 82.5%,
-      rgba(139,92,246,.025) 83.5%,
-      transparent 86%),
-    radial-gradient(ellipse 80px 420px at 4% 32%,rgba(60,155,255,.10) 0%,rgba(90,70,255,.04) 38%,transparent 72%),
-    radial-gradient(ellipse 110px 480px at 97% 58%,rgba(143,57,255,.12) 0%,rgba(90,55,255,.04) 42%,transparent 74%);
+      transparent 0%,transparent 17.5%,
+      rgba(122,85,255,.10) 17.7%,
+      rgba(206,192,255,.24) 17.92%,
+      rgba(255,255,255,.88) 18.1%,
+      rgba(218,205,255,.24) 18.3%,
+      transparent 18.55%),
+    linear-gradient(62deg,
+      transparent 0%,transparent 21.5%,
+      rgba(255,255,255,.78) 21.72%,
+      rgba(193,172,255,.20) 21.95%,
+      transparent 22.2%),
+
+    /* LOWER LIGHTNING */
+    linear-gradient(140deg,
+      transparent 0%,transparent 78.3%,
+      rgba(117,79,255,.10) 78.5%,
+      rgba(204,189,255,.26) 78.72%,
+      rgba(255,255,255,.90) 78.9%,
+      rgba(220,208,255,.24) 79.12%,
+      transparent 79.38%),
+    linear-gradient(38deg,
+      transparent 0%,transparent 84.2%,
+      rgba(255,255,255,.82) 84.42%,
+      rgba(198,178,255,.22) 84.65%,
+      transparent 84.9%),
+
+    /* LIGHTNING GLOW */
+    radial-gradient(ellipse 180px 420px at 78% 18%,rgba(180,155,255,.15) 0%,rgba(111,68,255,.08) 35%,transparent 72%),
+    radial-gradient(ellipse 150px 360px at 12% 48%,rgba(173,142,255,.12) 0%,rgba(96,58,255,.06) 38%,transparent 74%),
+    radial-gradient(ellipse 220px 400px at 85% 82%,rgba(180,150,255,.13) 0%,rgba(105,65,255,.06) 40%,transparent 76%);
+  filter:drop-shadow(0 0 2px rgba(255,255,255,.8))
+         drop-shadow(0 0 8px rgba(170,125,255,.45))
+         drop-shadow(0 0 18px rgba(112,63,255,.22));
 }
 
 .app{
@@ -115,7 +145,7 @@ body::after{
   padding:22px 18px 105px;
 }
 
-/* LEFT NEON ENERGY */
+/* LEFT LIGHTNING GLOW */
 .app::before{
   content:"";
   position:absolute;
@@ -126,11 +156,11 @@ body::after{
   border-radius:50%;
   pointer-events:none;
   z-index:-1;
-  background:radial-gradient(circle,rgba(82,91,255,.22) 0%,rgba(89,55,255,.12) 30%,rgba(40,115,255,.045) 52%,transparent 72%);
+  background:radial-gradient(circle,rgba(115,86,255,.16) 0%,rgba(89,55,255,.08) 30%,rgba(255,255,255,.025) 52%,transparent 72%);
   filter:blur(22px);
 }
 
-/* RIGHT NEON ENERGY */
+/* RIGHT LIGHTNING GLOW */
 .app::after{
   content:"";
   position:absolute;
@@ -141,7 +171,7 @@ body::after{
   border-radius:50%;
   pointer-events:none;
   z-index:-1;
-  background:radial-gradient(circle,rgba(137,48,255,.24) 0%,rgba(91,54,255,.12) 32%,rgba(35,110,255,.045) 54%,transparent 73%);
+  background:radial-gradient(circle,rgba(144,91,255,.17) 0%,rgba(91,54,255,.08) 32%,rgba(255,255,255,.025) 54%,transparent 73%);
   filter:blur(24px);
 }
 
