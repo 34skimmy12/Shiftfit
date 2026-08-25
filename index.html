@@ -2,354 +2,457 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>ShiftFit</title>
+
 <style>
-:root{--bg:#0d1020;--card:#171b31;--card2:#202641;--ink:#f6f7ff;--muted:#aab1cc;--purple:#8b5cf6;--blue:#38bdf8;--green:#34d399;--orange:#fb923c;--line:#303757}
-*{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#0d1020,#12162a);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink)}
-.app{max-width:560px;margin:auto;padding:18px 14px 92px}.hidden{display:none!important}
-.logo{font-size:32px;font-weight:950;letter-spacing:-1px}.logo span{color:var(--purple)}.tagline{color:var(--muted);font-size:14px;margin-top:3px}
-.card{background:rgba(23,27,49,.96);border:1px solid var(--line);border-radius:20px;padding:16px;margin:12px 0}.hero{padding:26px 18px;text-align:center;margin-top:20px;background:linear-gradient(145deg,#1c2140,#251b46)}
-h1{font-size:28px;margin:0}.title{font-size:21px;font-weight:850;margin:4px 0 8px}.label{font-size:11px;font-weight:850;color:var(--muted);letter-spacing:.08em}.small{font-size:12px;color:var(--muted)}
-button{width:100%;border:0;border-radius:14px;padding:14px;background:linear-gradient(90deg,var(--purple),#6366f1);color:#fff;font-size:15px;font-weight:850;margin-top:10px}.secondary{background:#242a47;color:#e7e9ff;border:1px solid var(--line)}
-input,select{width:100%;background:#101426;color:#fff;border:1px solid var(--line);padding:13px;border-radius:12px;font-size:16px;margin-top:6px;margin-bottom:12px}
-.choice{display:block;width:100%;text-align:left;background:#202641;margin:8px 0;border:1px solid var(--line);color:#fff}.choice.selected{outline:2px solid var(--purple);background:#29234a}.choice b{display:block}.choice small{color:var(--muted)}
-.stepbar{height:6px;background:#242a47;border-radius:99px;overflow:hidden;margin:4px 0 18px}.stepfill{height:100%;background:linear-gradient(90deg,var(--purple),var(--blue));transition:.2s}
-.top{display:flex;justify-content:space-between;align-items:center}.pill{padding:7px 10px;border-radius:99px;background:#26203f;color:#d7c5ff;font-size:11px;font-weight:800}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.stat{background:#202641;border-radius:14px;padding:12px}.stat b{display:block;font-size:20px;margin-top:3px}.row{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--line)}.row:last-child{border:0}.grow{flex:1}.check{width:21px;height:21px;accent-color:var(--purple)}
-.calnav{display:flex;justify-content:space-between;align-items:center}.calnav button{width:auto;margin:0;padding:8px 12px;background:#242a47}.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-top:12px}.dow{text-align:center;font-size:10px;color:var(--muted);font-weight:800}.cell{min-height:64px;border-radius:11px;background:#171b31;border:1px solid #252b48;padding:6px;cursor:pointer}.cell.selected{outline:2px solid var(--purple)}.num{font-size:12px;font-weight:850}.tag{display:block;margin-top:6px;border-radius:5px;padding:3px;font-size:9px;font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.day{background:#51331e;color:#ffc59a}.night{background:#173854;color:#9bd9ff}.off{background:#263044;color:#bdc7dd}.gym{background:#193d34;color:#91e8cb}.rest{background:#332e43;color:#d1c7e7}
-.meal{padding:11px;background:#202641;border-radius:12px;margin:8px 0}
-.patternbox{display:flex;gap:7px;flex-wrap:wrap;padding:12px;background:#101426;border:1px dashed #414a72;border-radius:14px;margin:10px 0}.chip{padding:8px 10px;border-radius:10px;background:#29234a;font-size:12px;font-weight:800}.chip .x{margin-left:7px;color:#ff9b9b;cursor:pointer}.addrow{display:grid;grid-template-columns:1fr 1fr;gap:8px}.addrow button{margin:0;padding:11px;font-size:12px}.danger{background:#3b2630!important}.hint{padding:10px;border-radius:12px;background:#151a30;color:var(--muted);font-size:12px}
-.chat{display:flex;flex-direction:column;gap:10px;min-height:360px}.bubble{max-width:88%;padding:12px 14px;border-radius:16px;font-size:14px;line-height:1.4}.bubble.ai{align-self:flex-start;background:#24213f;border:1px solid #4b3b75}.bubble.user{align-self:flex-end;background:linear-gradient(135deg,#7c3aed,#4f46e5)}.quick{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}.quick button{width:auto;margin:0;padding:8px 10px;font-size:11px;background:#242a47}.chatinput{display:flex;gap:8px;margin-top:12px}.chatinput input{margin:0;flex:1}.chatinput button{width:auto;margin:0;padding:0 15px}.premiumHero{background:linear-gradient(145deg,#25183f,#182847);border-color:#59418b}
-.playerHero{background:linear-gradient(145deg,#25183f,#182847);min-height:150px;display:flex;align-items:center;justify-content:center;font-size:68px}.progressTrack{height:8px;background:#101426;border-radius:99px;overflow:hidden;margin:14px 0}.progressBar{height:100%;background:linear-gradient(90deg,var(--purple),var(--blue));width:0%;transition:.3s}.exerciseNav{display:flex;justify-content:space-between;gap:8px}.exerciseNav button{margin:0}.setRow{display:flex;align-items:center;justify-content:space-between;padding:12px;background:#202641;border-radius:12px;margin:8px 0}.setDone{background:#203d36}.setBtn{width:auto;margin:0;padding:8px 12px;background:#322c52}.timer{font-size:42px;font-weight:950;text-align:center;letter-spacing:2px;margin:12px 0}.tip{padding:11px;border-left:3px solid var(--purple);background:#171b31;border-radius:8px;margin:9px 0;font-size:13px}.videoBox{aspect-ratio:16/9;background:#0a0d18;border:1px solid var(--line);border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:10px 0}.play{font-size:48px}.lockedOverlay{padding:10px;border-radius:12px;background:#30264a;color:#ded3ff;font-size:12px;text-align:center}
-.calHint{font-size:12px;color:var(--muted);margin:6px 0 12px}
-.dayPlanner{margin-top:12px}
-.dayHeader{display:flex;justify-content:space-between;align-items:center;gap:10px}
-.shiftPill{padding:7px 10px;border-radius:99px;font-size:12px;font-weight:800;background:#27365f}
-.sectionSpacer{height:12px}
-.planSection{padding:12px;border-radius:14px;background:#171b31;border:1px solid var(--line);margin-top:10px}
-.planSection h3{margin:0 0 8px;font-size:13px;letter-spacing:.5px;color:#b7bde2}
-.planMeal{padding:10px 0;border-top:1px solid #2a304c}
-.planMeal:first-of-type{border-top:0;padding-top:0}
-.planMeal b{display:block;font-size:14px}
-.planMeal span{font-size:12px;color:var(--muted)}
-.workoutLine{padding:7px 0;border-top:1px solid #2a304c;font-size:13px}
-.workoutLine:first-of-type{border-top:0}
-.totalRow{display:flex;justify-content:space-between;gap:8px;font-weight:900;font-size:14px}
-.calDay{position:relative}
-.calMini{font-size:9px;line-height:1.1;opacity:.88;margin-top:3px;white-space:nowrap;overflow:hidden}
-.calWorkout{font-size:9px;font-weight:800;margin-top:2px;white-space:nowrap;overflow:hidden}
-.calendarDetailCard{position:sticky;bottom:0;z-index:5}
-.progressGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.statCard{padding:14px;border-radius:16px;background:#171b31;border:1px solid var(--line)}
-.statNum{font-size:25px;font-weight:950;margin-top:4px}
-.statSub{font-size:11px;color:var(--muted);margin-top:4px}
-.chart{height:180px;display:flex;align-items:flex-end;gap:8px;padding:14px 4px;border-bottom:1px solid var(--line)}
-.barWrap{height:100%;flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:5px}
-.bar{width:100%;border-radius:8px 8px 2px 2px;background:linear-gradient(180deg,var(--purple),var(--blue))}
-.barWrap span{font-size:10px;color:var(--muted)}
-.progressRow{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-top:1px solid #2a304c}
-.progressRow:first-child{border-top:0}
-.badgeRow{display:flex;gap:8px;overflow:auto;padding-bottom:3px}
-.badge{min-width:100px;padding:12px;border-radius:14px;background:#201c38;text-align:center;font-size:11px}
-.badge .ico{font-size:24px;display:block;margin-bottom:5px}
-.photoSlots{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.photoSlot{height:130px;border:1px dashed #4a537b;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--muted);font-size:12px}
-.insight{padding:13px;border-radius:14px;background:linear-gradient(145deg,#25183f,#182847);font-size:13px;line-height:1.45}
-.storeFlow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.storeOption{padding:12px;border:1px solid var(--line);background:#171b31;border-radius:14px;text-align:left;color:var(--text);font-weight:800}
-.storeOption.selected{border-color:var(--purple);box-shadow:0 0 0 1px var(--purple);background:#211b38}
-.storeOption small{display:block;color:var(--muted);font-weight:500;margin-top:4px}
-.mealCard{padding:12px;border-radius:14px;background:#171b31;border:1px solid var(--line);margin-top:10px}
-.mealCard b{display:block}.mealMacros{font-size:12px;color:var(--muted);margin-top:5px}
-.mealActions{display:flex;gap:8px;margin-top:10px}.mealActions button{width:auto;margin:0;padding:8px 10px}
-.recipe{font-size:12px;line-height:1.5;color:#c7cbe0;margin-top:8px;padding-top:8px;border-top:1px solid #2a304c}
-.shopItem{display:flex;justify-content:space-between;gap:8px;padding:10px 0;border-top:1px solid #2a304c;font-size:13px}
-.shopItem:first-child{border-top:0}.shopItem span:last-child{font-weight:900}
-.shopTotal{display:flex;justify-content:space-between;padding-top:12px;margin-top:8px;border-top:1px solid var(--line);font-size:17px;font-weight:950}
-.countryHero{padding:14px;border-radius:16px;background:linear-gradient(145deg,#25183f,#182847);margin-bottom:10px}
-.syncHero{padding:16px;border-radius:18px;background:linear-gradient(145deg,#25183f,#182847);border:1px solid #4c3978;margin-bottom:10px}
-.syncStatus{display:flex;align-items:center;justify-content:space-between;padding:12px;border-radius:14px;background:#171b31;border:1px solid var(--line);margin-top:10px}
-.syncDot{width:10px;height:10px;border-radius:50%;background:#4ade80;display:inline-block;margin-right:7px}
-.syncDot.off{background:#68708f}
-.integration{display:flex;align-items:center;gap:12px;padding:13px;border-radius:15px;background:#171b31;border:1px solid var(--line);margin-top:9px}
-.integrationIcon{font-size:28px;width:42px;text-align:center}
-.integrationInfo{flex:1}.integrationInfo b{display:block}.integrationInfo span{font-size:11px;color:var(--muted)}
-.connectBtn{width:auto;margin:0;padding:8px 11px}
-.permissionRow{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-top:1px solid #2a304c;font-size:13px}
-.permissionRow:first-child{border-top:0}
-.switch{width:44px;height:25px;border-radius:99px;background:#303650;padding:3px;display:flex;align-items:center;transition:.2s}
-.switch.on{justify-content:flex-end;background:var(--purple)}
-.knob{width:19px;height:19px;border-radius:50%;background:white}
-.syncWorkout{padding:11px;border-radius:12px;background:#171b31;border:1px solid var(--line);margin-top:8px}
-.notifyHero{padding:16px;border-radius:18px;background:linear-gradient(145deg,#25183f,#182847);border:1px solid #4c3978;margin-bottom:10px}
-.reminderCard{padding:13px;border-radius:15px;background:#171b31;border:1px solid var(--line);margin-top:9px}
-.reminderTop{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.reminderIcon{font-size:24px}
-.reminderName{font-weight:900}.reminderDesc{font-size:11px;color:var(--muted);margin-top:3px}
-.timeBtn{width:auto;margin:10px 0 0;padding:8px 10px}
-.notificationPreview{padding:13px;border-radius:15px;background:#101426;border:1px solid var(--line);margin-top:9px}
-.notificationPreview b{display:block}.notificationPreview span{font-size:12px;color:var(--muted)}
-.quietBox{padding:12px;border-radius:14px;background:#201c38;border:1px solid #393159;margin-top:9px}
+:root {
+  --bg: #0d1020;
+  --card: #171b31;
+  --card2: #202641;
+  --text: #f4f5fb;
+  --muted: #9ba3bd;
+  --purple: #8b5cf6;
+  --purple2: #6366f1;
+  --border: #343b5c;
+}
 
-.syncWorkout b{display:block}.syncWorkout span{font-size:11px;color:var(--muted)}
+* {
+  box-sizing: border-box;
+}
 
-.pillRow{display:flex;gap:8px;overflow:auto;padding:2px 0 8px}.pill{white-space:nowrap;padding:8px 11px;border-radius:99px;background:#202641;border:1px solid var(--line);font-size:12px;font-weight:800}
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
 
+.app {
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 28px 20px 40px;
+}
 
-.closeDetail{width:auto;margin:0;padding:7px 10px}
-.lock{font-size:11px;background:#3a2a5c;padding:5px 8px;border-radius:99px;color:#d8c7ff;font-weight:800}.nav{position:fixed;bottom:0;left:0;right:0;background:#12162a;border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}.navin{max-width:560px;margin:auto;display:flex;justify-content:space-around}.nav button{width:auto;background:transparent;color:var(--muted);font-size:10px;padding:9px 4px;margin:0}.nav button.active{color:#bda4ff}
+.logo {
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  margin-bottom: 45px;
+}
 
-.onboardingOverlay{position:fixed;inset:0;z-index:100;background:#0d1020;overflow:auto;padding:20px;display:flex;align-items:center;justify-content:center}
-.onboardingCard{width:min(520px,100%);background:#171b31;border:1px solid var(--line);border-radius:24px;padding:22px}
-.stepDots{display:flex;gap:6px;margin:14px 0}.stepDot{height:6px;flex:1;border-radius:9px;background:#303650}.stepDot.on{background:var(--purple)}
-.optionGrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.choice{padding:13px;border-radius:14px;border:1px solid var(--line);background:#101426;color:var(--text);text-align:left}.choice.selected{border-color:var(--purple);background:#211b38}
-.input{width:100%;box-sizing:border-box;padding:13px;border-radius:12px;border:1px solid var(--line);background:#101426;color:var(--text);margin-top:7px}
-.hiddenOnboarding{display:none}
+.logo span {
+  color: var(--purple);
+}
 
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  padding: 28px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.25);
+}
+
+.eyebrow {
+  color: #b7bdd2;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  margin-bottom: 14px;
+}
+
+h1 {
+  font-size: 38px;
+  line-height: 1.1;
+  margin: 0 0 12px;
+}
+
+p {
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.stepbar {
+  display: flex;
+  gap: 8px;
+  margin: 28px 0;
+}
+
+.stepbar div {
+  height: 7px;
+  flex: 1;
+  border-radius: 10px;
+  background: #3b425e;
+  transition: .3s;
+}
+
+.stepbar div.active {
+  background: linear-gradient(90deg, var(--purple), var(--purple2));
+}
+
+.question {
+  margin-top: 25px;
+}
+
+.question h2 {
+  font-size: 25px;
+  margin-bottom: 20px;
+}
+
+.choice {
+  width: 100%;
+  border: 1px solid var(--border);
+  background: var(--card2);
+  color: white;
+  border-radius: 16px;
+  padding: 18px;
+  margin-bottom: 12px;
+  font-size: 17px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.choice.selected {
+  border-color: var(--purple);
+  background: rgba(139,92,246,.18);
+}
+
+input, select {
+  width: 100%;
+  padding: 17px;
+  margin-bottom: 14px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--card2);
+  color: white;
+  font-size: 17px;
+}
+
+.btn {
+  width: 100%;
+  border: 0;
+  padding: 19px;
+  margin-top: 24px;
+  border-radius: 16px;
+  background: linear-gradient(90deg, var(--purple), var(--purple2));
+  color: white;
+  font-size: 18px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.back {
+  background: transparent;
+  color: var(--muted);
+  border: 0;
+  font-size: 15px;
+  margin-top: 18px;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
+
+.result-box {
+  background: var(--card2);
+  padding: 20px;
+  border-radius: 18px;
+  margin-top: 20px;
+}
+
+.result-box h3 {
+  margin-top: 0;
+}
+
+.badge {
+  display: inline-block;
+  background: rgba(139,92,246,.2);
+  color: #c4b5fd;
+  padding: 8px 12px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: bold;
+}
 </style>
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0d1020">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="ShiftFit">
 </head>
+
 <body>
-<div id="onboarding" class="onboardingOverlay">
- <div class="onboardingCard">
-  <div class="label">WELCOME TO SHIFTFIT</div>
-  <h1 id="onboardTitle">Let's build your plan 💪</h1>
-  <div class="stepDots"><div class="stepDot on"></div><div class="stepDot"></div><div class="stepDot"></div><div class="stepDot"></div></div>
-  <div id="onboardContent"></div>
-  <button id="onboardNext" onclick="nextOnboarding()">CONTINUE</button>
- </div>
-</div>
 
 <div class="app">
 
-<section id="welcome">
-  <div class="hero card"><div class="logo">SHIFT<span>FIT</span> ⚡</div><div class="tagline">Work shifts. Gym goals. We’ve got you.</div>
-  <div style="font-size:60px;margin:28px 0">💪</div><div class="title">Your fitness plan, built around your life.</div><p class="small">Tell us about yourself, your goal and your shifts. ShiftFit will build your starting plan.</p><button onclick="nextStep()">CREATE MY PLAN</button></div>
-</section>
+  <div class="logo">SHIFT<span>FIT</span></div>
 
-<section id="onboard" class="hidden">
-  <div class="top"><div><div class="logo">SHIFT<span>FIT</span></div><div class="tagline">Let's build your plan</div></div><div class="pill" id="stepText">Step 1 of 5</div></div>
-  <div class="stepbar"><div class="stepfill" id="stepFill"></div></div>
-  <div id="stepContent"></div>
-</section>
+  <!-- STEP 1 -->
+  <section class="card" id="step1">
 
-<section id="dashboard" class="hidden">
-  <div class="top"><div><div class="logo">SHIFT<span>FIT</span> ⚡</div><div class="tagline">Work shifts. Gym goals. We’ve got you.</div></div><div class="pill" id="goalPill"></div></div>
-  <div class="card" id="todayCard"></div>
-  <div class="grid2">
-    <div class="stat"><span class="small">Calories</span><b id="calories"></b></div>
-    <div class="stat"><span class="small">Protein</span><b id="protein"></b></div>
-  </div>
-  <div class="card"><div class="label">NEXT WORKOUT</div><div class="title" id="nextWorkout"></div><div class="small" id="workoutHint"></div><button onclick="showTab('calendar')">VIEW MY PLAN</button></div>
-</section>
+    <div class="eyebrow">WELCOME TO SHIFTFIT</div>
 
-<section id="calendar" class="hidden">
- <div class="top"><div><h1>Calendar</h1><div class="tagline">Your shifts + training plan</div></div></div>
- <div class="card"><div class="calnav"><button onclick="changeMonth(-1)">‹</button><div class="title" id="monthTitle"></div><button onclick="changeMonth(1)">›</button></div><div class="calendar" id="calendarGrid"></div></div>
- <div class="card" id="dayDetails">Tap a date to see your plan.</div>
-</section>
+    <h1>Let's build your plan 💪</h1>
 
-<section id="workout" class="hidden">
-<div class="top"><div><h1>Workout</h1><div class="tagline">Train around your shifts</div></div><div class="lock">⭐ PREMIUM PLAYER</div></div>
-<div id="workoutHome"><div class="card" id="workoutDetails"></div><button onclick="startWorkout()">START INTERACTIVE WORKOUT ▶</button></div>
-<div id="workoutPlayer" class="hidden">
- <div class="card playerHero" id="exerciseVisual">🏋️</div>
- <div class="card">
-  <div class="label" id="exerciseCount"></div><div class="title" id="exerciseName"></div>
-  <div class="small" id="exerciseMeta"></div><div class="progressTrack"><div class="progressBar" id="exerciseProgress"></div></div>
-  <div class="videoBox"><div class="play">▶️</div><b>Exercise demonstration</b><div class="small">Premium video player placeholder</div></div>
-  <div id="formTips"></div>
- </div>
- <div class="card"><div class="label">COMPLETE YOUR SETS</div><div id="sets"></div></div>
- <div class="card"><div class="label">REST TIMER</div><div class="timer" id="timerDisplay">01:30</div><div class="exerciseNav"><button class="secondary" onclick="toggleTimer()">START / PAUSE</button><button class="secondary" onclick="skipTimer()">SKIP REST</button></div></div>
- <div class="exerciseNav"><button class="secondary" onclick="previousExercise()">‹ BACK</button><button onclick="nextExercise()">NEXT EXERCISE ›</button></div>
- <button class="secondary" onclick="exitWorkout()">EXIT WORKOUT</button>
-</div></section>
-<section id="notifications" class="hidden">
-<div class="top"><div><h1>Smart Reminders 🔔</h1><div class="tagline">Shift-aware support, when you need it</div></div></div>
-<div class="notifyHero"><div class="label">SHIFT FIT SMART ALERTS</div><div class="title">Your routine, without the remembering 🧠</div><p class="small">ShiftFit adapts reminders around your shift pattern, workout plan, meals and recovery.</p></div>
-<div class="card"><div class="label">REMINDER STATUS</div><div class="syncStatus"><div><span class="syncDot" id="notifyDot"></span><b id="notifyState">Smart reminders active</b><div class="small" id="notifySummary">Personalised around your plan</div></div><button class="connectBtn" onclick="toggleAllNotifications()">PAUSE / RESUME</button></div></div>
-<div class="card"><div class="label">YOUR REMINDERS</div><div id="reminderList"></div></div>
-<div class="card"><div class="label">QUIET HOURS</div><div class="quietBox"><b>😴 Protect your sleep & recovery</b><div class="small" id="quietSummary">No non-essential reminders during quiet hours.</div><div class="mealActions"><button class="secondary" onclick="setQuietHours()">SET QUIET HOURS</button><button class="secondary" onclick="toggleQuiet()">TOGGLE ON / OFF</button></div></div></div>
-<div class="card"><div class="label">PREVIEW</div><div class="title">What ShiftFit might say</div><div id="notificationPreview"></div><button class="secondary" onclick="sendTestNotification()">SHOW TEST REMINDER</button></div>
-</section><section id="sync" class="hidden">
-<div class="top"><div><h1>Connect & Sync 🔗</h1><div class="tagline">Bring your real-world fitness into ShiftFit</div></div></div>
-<div class="syncHero"><div class="label">YOUR FITNESS HUB</div><div class="title">Everything in one place ⌚</div><p class="small">Connect supported health platforms and fitness services to bring workouts and activity into ShiftFit.</p></div>
-<div class="card"><div class="label">SYNC STATUS</div><div class="syncStatus"><div><span class="syncDot" id="syncDot"></span><b id="syncState">Not connected</b><div class="small" id="lastSync">Connect a service to begin syncing</div></div><button class="connectBtn" onclick="syncNow()">SYNC NOW</button></div></div>
-<div class="card"><div class="label">CONNECT SERVICES</div><div class="title">Apps & devices</div><div id="integrationList"></div></div>
-<div class="card"><div class="label">WHAT TO SYNC</div><div id="permissionList"></div></div>
-<div class="card"><div class="label">RECENT IMPORTS</div><div class="title">Synced activity</div><div id="syncedWorkouts"></div></div>
-<div class="card"><div class="label">HOW IT WORKS</div><div class="tip">🔐 You choose which data ShiftFit can access.</div><div class="tip">🔄 Imported workouts can feed into workout history and Progress.</div><div class="tip">🤖 Your AI Coach can eventually use permitted workout data for personalised suggestions.</div></div>
-</section><section id="meals" class="hidden"><div class="top"><div><h1>Meals</h1><div class="tagline">Built around your target</div></div></div><div class="card" id="mealDetails"></div></section>
-<section id="notifications" class="hidden">
-<div class="top"><div><h1>Smart Reminders 🔔</h1><div class="tagline">Shift-aware support, when you need it</div></div></div>
-<div class="notifyHero"><div class="label">SHIFT FIT SMART ALERTS</div><div class="title">Your routine, without the remembering 🧠</div><p class="small">ShiftFit adapts reminders around your shift pattern, workout plan, meals and recovery.</p></div>
-<div class="card"><div class="label">REMINDER STATUS</div><div class="syncStatus"><div><span class="syncDot" id="notifyDot"></span><b id="notifyState">Smart reminders active</b><div class="small" id="notifySummary">Personalised around your plan</div></div><button class="connectBtn" onclick="toggleAllNotifications()">PAUSE / RESUME</button></div></div>
-<div class="card"><div class="label">YOUR REMINDERS</div><div id="reminderList"></div></div>
-<div class="card"><div class="label">QUIET HOURS</div><div class="quietBox"><b>😴 Protect your sleep & recovery</b><div class="small" id="quietSummary">No non-essential reminders during quiet hours.</div><div class="mealActions"><button class="secondary" onclick="setQuietHours()">SET QUIET HOURS</button><button class="secondary" onclick="toggleQuiet()">TOGGLE ON / OFF</button></div></div></div>
-<div class="card"><div class="label">PREVIEW</div><div class="title">What ShiftFit might say</div><div id="notificationPreview"></div><button class="secondary" onclick="sendTestNotification()">SHOW TEST REMINDER</button></div>
-</section><section id="sync" class="hidden">
-<div class="top"><div><h1>Connect & Sync 🔗</h1><div class="tagline">Bring your real-world fitness into ShiftFit</div></div></div>
-<div class="syncHero"><div class="label">YOUR FITNESS HUB</div><div class="title">Everything in one place ⌚</div><p class="small">Connect supported health platforms and fitness services to bring workouts and activity into ShiftFit.</p></div>
-<div class="card"><div class="label">SYNC STATUS</div><div class="syncStatus"><div><span class="syncDot" id="syncDot"></span><b id="syncState">Not connected</b><div class="small" id="lastSync">Connect a service to begin syncing</div></div><button class="connectBtn" onclick="syncNow()">SYNC NOW</button></div></div>
-<div class="card"><div class="label">CONNECT SERVICES</div><div class="title">Apps & devices</div><div id="integrationList"></div></div>
-<div class="card"><div class="label">WHAT TO SYNC</div><div id="permissionList"></div></div>
-<div class="card"><div class="label">RECENT IMPORTS</div><div class="title">Synced activity</div><div id="syncedWorkouts"></div></div>
-<div class="card"><div class="label">HOW IT WORKS</div><div class="tip">🔐 You choose which data ShiftFit can access.</div><div class="tip">🔄 Imported workouts can feed into workout history and Progress.</div><div class="tip">🤖 Your AI Coach can eventually use permitted workout data for personalised suggestions.</div></div>
-</section><section id="meals" class="hidden">
-<div class="top"><div><h1>Meals & Shopping 🍽️</h1><div class="tagline">Eat well around your life and shifts</div></div></div>
-<div class="countryHero"><div class="label">YOUR SHOPPING PROFILE</div><div class="title" id="shoppingProfile">🇬🇧 United Kingdom</div><div class="small" id="shoppingCurrency">GBP (£) • Choose your country and store</div></div>
-<div class="card"><div class="label">1. WHERE ARE YOU?</div><div class="title">Choose country 🌍</div><div class="storeFlow" id="countryOptions"></div></div>
-<div class="card"><div class="label">2. WHERE DO YOU SHOP?</div><div class="title">Choose supermarket 🏪</div><div class="storeFlow" id="storeOptions"></div></div>
-<div class="card"><div class="label">TODAY'S MEAL PLAN</div><div class="title">Fuel your workout 💪</div><div id="mealList"></div><div class="totalRow" style="margin-top:12px"><span>🔥 DAILY TOTAL</span><span id="mealTotal"></span></div><div class="totalRow" style="margin-top:7px"><span>💪 PROTEIN</span><span id="mealProtein"></span></div></div>
-<div class="card"><div class="label">FORTNIGHTLY SHOPPING LIST</div><div class="title" id="shopTitle">Your 14-day shop 🛒</div><div class="small" id="shopSubtitle"></div><div id="shoppingList"></div><div class="shopTotal"><span>ESTIMATED TOTAL</span><span id="shoppingTotal"></span></div><button onclick="changeFortnight()">CHANGE TO 7 / 14 DAYS</button></div>
-</section><section id="progress" class="hidden">
-<div class="top"><div><h1>Progress 📈</h1><div class="tagline">See the results your work is creating</div></div></div>
-<div class="progressGrid">
- <div class="statCard"><div class="label">CURRENT WEIGHT</div><div class="statNum" id="currentWeight">84.0kg</div><div class="statSub" id="weightChange">Starting point</div></div>
- <div class="statCard"><div class="label">WORKOUT STREAK</div><div class="statNum" id="streakNum">0 🔥</div><div class="statSub">Keep showing up</div></div>
- <div class="statCard"><div class="label">THIS MONTH</div><div class="statNum" id="monthWorkouts">0</div><div class="statSub">Workouts completed</div></div>
- <div class="statCard"><div class="label">PERSONAL BESTS</div><div class="statNum" id="pbCount">0 🏆</div><div class="statSub">Strength records</div></div>
+    <p>
+      Answer a few quick questions and ShiftFit will build a personalised fitness plan around you.
+    </p>
+
+    <div class="stepbar">
+      <div class="active"></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+
+    <button class="btn" onclick="nextStep(1)">
+      CONTINUE
+    </button>
+
+  </section>
+
+
+  <!-- STEP 2 -->
+  <section class="card hidden" id="step2">
+
+    <div class="eyebrow">STEP 1 OF 4</div>
+
+    <h1>What's your main goal?</h1>
+
+    <div class="stepbar">
+      <div class="active"></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+
+    <div class="question">
+      <button class="choice" onclick="selectChoice(this, 'goal', 'Lose weight')">
+        🔥 Lose weight
+      </button>
+
+      <button class="choice" onclick="selectChoice(this, 'goal', 'Build muscle')">
+        💪 Build muscle
+      </button>
+
+      <button class="choice" onclick="selectChoice(this, 'goal', 'Get fitter')">
+        ⚡ Get fitter
+      </button>
+
+      <button class="choice" onclick="selectChoice(this, 'goal', 'Improve health')">
+        ❤️ Improve my health
+      </button>
+    </div>
+
+    <button class="btn" onclick="nextStep(2)">
+      CONTINUE
+    </button>
+
+    <button class="back" onclick="previousStep(2)">
+      ← Back
+    </button>
+
+  </section>
+
+
+  <!-- STEP 3 -->
+  <section class="card hidden" id="step3">
+
+    <div class="eyebrow">STEP 2 OF 4</div>
+
+    <h1>Tell us about yourself</h1>
+
+    <div class="stepbar">
+      <div class="active"></div>
+      <div class="active"></div>
+      <div></div>
+      <div></div>
+    </div>
+
+    <div class="question">
+
+      <input id="age" type="number" placeholder="Your age">
+
+      <select id="gender">
+        <option value="">Select your gender</option>
+        <option>Male</option>
+        <option>Female</option>
+        <option>Prefer not to say</option>
+      </select>
+
+      <input id="height" type="number" placeholder="Height in cm">
+
+      <input id="weight" type="number" placeholder="Weight in kg">
+
+    </div>
+
+    <button class="btn" onclick="nextStep(3)">
+      CONTINUE
+    </button>
+
+    <button class="back" onclick="previousStep(3)">
+      ← Back
+    </button>
+
+  </section>
+
+
+  <!-- STEP 4 -->
+  <section class="card hidden" id="step4">
+
+    <div class="eyebrow">STEP 3 OF 4</div>
+
+    <h1>How active are you?</h1>
+
+    <div class="stepbar">
+      <div class="active"></div>
+      <div class="active"></div>
+      <div class="active"></div>
+      <div></div>
+    </div>
+
+    <div class="question">
+
+      <button class="choice" onclick="selectChoice(this, 'activity', 'Low activity')">
+        🛋️ Low activity
+      </button>
+
+      <button class="choice" onclick="selectChoice(this, 'activity', 'Lightly active')">
+        🚶 Lightly active
+      </button>
+
+      <button class="choice" onclick="selectChoice(this, 'activity', 'Moderately active')">
+        🏃 Moderately active
+      </button>
+
+      <button class="choice" onclick="selectChoice(this, 'activity', 'Very active')">
+        🏋️ Very active
+      </button>
+
+    </div>
+
+    <button class="btn" onclick="buildPlan()">
+      BUILD MY PLAN 🚀
+    </button>
+
+    <button class="back" onclick="previousStep(4)">
+      ← Back
+    </button>
+
+  </section>
+
+
+  <!-- RESULT -->
+  <section class="card hidden" id="result">
+
+    <div class="eyebrow">YOUR SHIFTFIT PLAN</div>
+
+    <h1>Your plan is ready! 🎉</h1>
+
+    <span class="badge" id="goalBadge"></span>
+
+    <div class="result-box">
+      <h3>💪 Your starting plan</h3>
+
+      <p id="planText"></p>
+
+      <p><strong>Weekly target:</strong> 3–4 workouts</p>
+
+      <p><strong>Focus:</strong> Consistency, progressive improvement and sustainable results.</p>
+    </div>
+
+    <button class="btn" onclick="restart()">
+      START AGAIN
+    </button>
+
+  </section>
+
 </div>
-<div class="card"><div class="label">WEIGHT TREND</div><div class="title">Your journey</div><div class="chart" id="weightChart"></div><button class="secondary" onclick="addWeightCheckin()">+ ADD WEIGHT CHECK-IN</button></div>
-<div class="card"><div class="label">STRENGTH PROGRESS</div><div class="title">Personal bests 🏆</div><div id="strengthList"></div><button class="secondary" onclick="addDemoPB()">+ LOG NEW PERSONAL BEST</button></div>
-<div class="card"><div class="label">ACHIEVEMENTS</div><div class="badgeRow">
- <div class="badge"><span class="ico">🔥</span>First streak<br><span class="small">Complete 3 workouts</span></div>
- <div class="badge"><span class="ico">🏋️</span>Strong start<br><span class="small">Complete 10 workouts</span></div>
- <div class="badge"><span class="ico">🏆</span>Record breaker<br><span class="small">Set a PB</span></div>
- <div class="badge"><span class="ico">📅</span>Consistent<br><span class="small">12 workouts/month</span></div>
-</div></div>
-<div class="card"><div class="label">PROGRESS PHOTOS</div><div class="title">Your visual journey 📸</div><div class="photoSlots"><div class="photoSlot">📷<br>STARTING PHOTO</div><div class="photoSlot">＋<br>ADD LATEST PHOTO</div></div></div>
-<div class="card"><div class="label">AI COACH INSIGHT ⭐</div><div class="insight" id="progressInsight"></div></div>
-</section><section id="coach" class="hidden">
-<div class="top"><div><h1>AI Coach 🤖</h1><div class="tagline">Your personal ShiftFit coach</div></div><div class="lock">⭐ PREMIUM</div></div>
-<div class="card premiumHero" id="coachHeader"></div>
-<div class="card" id="chatCard">
-  <div class="chat" id="chat"></div>
-  <div class="quick">
-    <button onclick="askQuick('Should I train today?')">Should I train today?</button>
-    <button onclick="askQuick('What should I eat?')">What should I eat?</button>
-    <button onclick="askQuick('Give me a 30 minute workout')">30 min workout</button>
-    <button onclick="askQuick('How should I recover?')">Recovery advice</button>
-  </div>
-  <div class="chatinput"><input id="coachInput" placeholder="Ask your ShiftFit Coach..."><button onclick="sendCoach()">SEND</button></div>
-</div>
-</section>
-<section id="profile" class="hidden"><div class="top"><div><h1>My Plan</h1><div class="tagline">Your ShiftFit settings</div></div></div><div class="card" id="profileDetails"></div><button class="secondary" onclick="restart()">EDIT MY DETAILS</button></section>
 
-</div>
-<nav id="nav" class="nav hidden"><div class="navin">
-<button class="active" data-tab="dashboard" onclick="showTab('dashboard')">🏠<br>Today</button>
-<button data-tab="calendar" onclick="showTab('calendar')">📅<br>Calendar</button>
-<button data-tab="workout" onclick="showTab('workout')">🏋️<br>Workout</button>
-<button data-tab="notifications" onclick="showTab('notifications')">🔔<br>Alerts</button><button data-tab="sync" onclick="showTab('sync')">⌚<br>Sync</button><button data-tab="meals" onclick="showTab('meals')">🍽️<br>Meals</button>
-<button data-tab="notifications" onclick="showTab('notifications')">🔔<br>Alerts</button><button data-tab="sync" onclick="showTab('sync')">⌚<br>Sync</button><button data-tab="meals" onclick="showTab('meals')">🍽️<br>Meals</button><button data-tab="progress" onclick="showTab('progress')">📈<br>Progress</button><button data-tab="coach" onclick="showTab('coach')">🤖<br>Coach</button><button data-tab="profile" onclick="showTab('profile')">👤<br>Plan</button>
-</div></nav>
 
 <script>
-const state={step:0,age:"",height:"",weight:"",sex:"male",activity:"moderate",goal:"build",pattern:"2D2N4O",start:"",days:3,time:"mid-morning",place:"gym",experience:"beginner",premium:true,notificationsPaused:false,quietHours:{enabled:true,start:"22:00",end:"07:00"},reminders:{workout:true,meal:true,shift:true,recovery:true,checkin:true},reminderTimes:{workout:"10:00",meal:"12:30",shift:"60 min before",recovery:"20:30",checkin:"Sunday 18:00"},connectedServices:[],syncPermissions:{workouts:true,steps:false,heart:false,sleep:false,weight:true},syncedWorkouts:[],country:"UK",store:"Aldi",shopDays:14,mealSwap:0,progressWeights:[],completedWorkouts:0,personalBests:[{name:"Bench Press",weight:40},{name:"Leg Press",weight:100}],customPattern:["DAY","DAY","NIGHT","NIGHT","OFF","OFF","OFF","OFF"]};
-const steps=[
-()=>`<div class="card"><div class="label">ABOUT YOU</div><div class="title">Let's start with the basics</div>
-<label class="small">Age</label><input id="age" type="number" value="${state.age}" placeholder="e.g. 30">
-<label class="small">Height (cm)</label><input id="height" type="number" value="${state.height}" placeholder="e.g. 175">
-<label class="small">Weight (kg)</label><input id="weight" type="number" value="${state.weight}" placeholder="e.g. 80">
-<label class="small">Sex</label><select id="sex"><option value="male" ${state.sex==="male"?"selected":""}>Male</option><option value="female" ${state.sex==="female"?"selected":""}>Female</option></select>
-<label class="small">Activity level</label><select id="activity"><option value="low">Low</option><option value="moderate" selected>Moderate</option><option value="high">High</option></select><button onclick="saveAbout()">CONTINUE</button></div>`,
-()=>`<div class="card"><div class="label">YOUR GOAL</div><div class="title">What are you working towards?</div>${choice("lose","🔥","Lose fat","Reduce body fat while keeping muscle")}${choice("build","💪","Build muscle","Gain strength and muscle")}${choice("strong","🏋️","Get stronger","Focus on progressive strength")}${choice("maintain","⚖️","Maintain","Stay fit and maintain weight")}<button onclick="nextStep()">CONTINUE</button></div>`,
-()=>`<div class="card"><div class="label">YOUR SHIFTS</div><div class="title">How do you work?</div>${choice("2D2N4O","🔄","2 Days / 2 Nights / 4 Off","Repeating 8-day pattern")}${choice("4O4O","🔁","4 On / 4 Off","Four work days then four off")}${choice("MF","🕘","Monday–Friday","Regular working week")}${choice("custom","✏️","Custom pattern","Build any repeating rota")}<div id="customBuilder" class="${state.pattern==="custom"?"":"hidden"}"><div class="hint">Add your shifts in the exact order they repeat. Example: DAY → DAY → NIGHT → NIGHT → OFF → OFF → OFF → OFF.</div><div class="patternbox" id="patternChips"></div><div class="addrow"><button class="secondary" onclick="addPattern('DAY')">🟠 DAY</button><button class="secondary" onclick="addPattern('NIGHT')">🔵 NIGHT</button><button class="secondary" onclick="addPattern('EARLY')">🌅 EARLY</button><button class="secondary" onclick="addPattern('LATE')">🌇 LATE</button><button class="secondary" onclick="addPattern('OFF')">⚪ OFF</button><button class="secondary" onclick="clearPattern()">🗑️ CLEAR</button></div></div><label class="small">When does this pattern start?</label><input id="start" type="date" value="${state.start}"><button onclick="saveShift()">CONTINUE</button></div>`,
-()=>`<div class="card"><div class="label">YOUR TRAINING</div><div class="title">What works for your life?</div><label class="small">Training days per week</label><select id="days"><option>2</option><option selected>3</option><option>4</option><option>5</option></select><label class="small">Preferred training time</label><select id="time"><option>morning</option><option selected>mid-morning</option><option>afternoon</option><option>evening</option></select><label class="small">Where do you train?</label><select id="place"><option selected>gym</option><option>home</option></select><label class="small">Experience</label><select id="experience"><option selected>beginner</option><option>intermediate</option><option>advanced</option></select><button onclick="saveTraining()">CONTINUE</button></div>`,
-()=>`<div class="card"><div class="label">YOUR PLAN IS READY</div><div class="title">Welcome to ShiftFit ⚡</div><p class="small">We've built your starting calorie target, protein target and a training plan around your shift pattern.</p><div class="grid2"><div class="stat"><span class="small">Daily calories</span><b>${calc().cal.toLocaleString()}</b></div><div class="stat"><span class="small">Protein</span><b>${calc().protein}g</b></div></div><div class="meal"><b>Training:</b> ${state.days} days/week • ${state.time}</div><div class="meal"><b>Shifts:</b> ${patternName()}</div><button onclick="finish()">LET'S GO ⚡</button></div>`
-];
-function choice(val,icon,title,desc){return `<button class="choice ${state.goal===val||state.pattern===val?"selected":""}" onclick="pick('${val}')"><b>${icon} ${title}</b><small>${desc}</small></button>`}
-function pick(v){if(["lose","build","strong","maintain"].includes(v))state.goal=v;else state.pattern=v;renderStep()}
-function addPattern(v){if(state.customPattern.length<31){state.customPattern.push(v);renderPatternChips()}}
-function removePattern(i){state.customPattern.splice(i,1);renderPatternChips()}
-function clearPattern(){state.customPattern=[];renderPatternChips()}
-function renderPatternChips(){let el=document.getElementById("patternChips");if(!el)return;el.innerHTML=state.customPattern.length?state.customPattern.map((x,i)=>`<span class="chip">${x}<span class="x" onclick="removePattern(${i})">×</span></span>`).join(""):'<span class="small">Your pattern is empty. Add DAY, NIGHT, EARLY, LATE or OFF.</span>'}
-function renderStep(){document.getElementById("stepText").textContent=`Step ${state.step+1} of 5`;document.getElementById("stepFill").style.width=((state.step+1)/5*100)+"%";document.getElementById("stepContent").innerHTML=steps[state.step]();renderPatternChips()}
-function nextStep(){if(document.getElementById("welcome").classList.contains("hidden")===false){document.getElementById("welcome").classList.add("hidden");document.getElementById("onboard").classList.remove("hidden")}else{state.step=Math.min(4,state.step+1)}renderStep()}
-function saveAbout(){["age","height","weight","sex","activity"].forEach(k=>state[k]=document.getElementById(k).value);nextStep()}
-function saveShift(){if(state.pattern==="custom"&&state.customPattern.length===0){alert("Please add at least one shift or OFF day to your custom pattern.");return}state.start=document.getElementById("start").value||new Date().toISOString().slice(0,10);nextStep()}
-function saveTraining(){["days","time","place","experience"].forEach(k=>state[k]=document.getElementById(k).value);nextStep()}
-function calc(){let w=Number(state.weight)||80,h=Number(state.height)||175,a=Number(state.age)||30;let b=state.sex==="male"?10*w+6.25*h-5*a+5:10*w+6.25*h-5*a-161;let mult={low:1.35,moderate:1.55,high:1.725}[state.activity]||1.55;let cal=Math.round(b*mult);if(state.goal==="lose")cal-=400;if(state.goal==="build")cal+=200;if(state.goal==="strong")cal+=100;return{cal:Math.round(cal/50)*50,protein:Math.round(w*(state.goal==="build"?1.8:1.6))}}
-function patternName(){return{"2D2N4O":"2 Days / 2 Nights / 4 Off","4O4O":"4 On / 4 Off","MF":"Monday–Friday","custom":"Custom: "+(state.customPattern||[]).join(" → ")}[state.pattern]}
-function shiftFor(d){let start=new Date(state.start+"T12:00:00"),x=new Date(d.getFullYear(),d.getMonth(),d.getDate()),diff=Math.floor((x-start)/86400000);if(diff<0)return"OFF";if(state.pattern==="MF"){let wd=x.getDay();return wd>=1&&wd<=5?"DAY":"OFF"}if(state.pattern==="4O4O")return(diff%8)<4?"DAY":"OFF";if(state.pattern==="2D2N4O"){let n=((diff%8)+8)%8;return n<2?"DAY":n<4?"NIGHT":"OFF"}if(state.pattern==="custom"){let p=state.customPattern||[];return p.length?p[((diff%p.length)+p.length)%p.length]:"OFF"}return"OFF"}
-const workouts=["PUSH","PULL","LEGS","UPPER","LOWER"];function workoutFor(d){let s=shiftFor(d);if(s==="NIGHT")return"REST";let start=new Date(state.start+"T12:00:00"),diff=Math.floor((new Date(d.getFullYear(),d.getMonth(),d.getDate())-start)/86400000);if(s==="OFF"){let candidates=[];for(let i=0;i<30;i++){let x=new Date(start);x.setDate(start.getDate()+i);if(shiftFor(x)==="OFF")candidates.push(x)}let idx=candidates.findIndex(x=>x.toDateString()===d.toDateString());if(idx>=0)return workouts[idx%Math.min(workouts.length,Number(state.days)||3)]}return (s==="DAY"||s==="EARLY"||s==="LATE")&&state.days>=4?workouts[Math.abs(diff)%3]:"REST"}
-function mealPlan(type){let c=calc().cal;let meals=type==="REST"?["🍳 Eggs + wholemeal toast","🥗 Chicken/tuna salad + carbs","🍽️ Lean protein + potatoes + vegetables","🍌 Greek yoghurt + fruit"]:["🥣 Oats + Greek yoghurt + banana","🍗 Chicken + rice + vegetables","🍽️ Lean mince/fish + potatoes or pasta","🍌 High-protein snack + fruit"];return{cal:c,meals}}
-function renderDashboard(){let d=new Date(),s=shiftFor(d),w=workoutFor(d),p=calc();document.getElementById("goalPill").textContent=state.goal.toUpperCase();document.getElementById("calories").textContent=p.cal.toLocaleString()+" kcal";document.getElementById("protein").textContent=p.protein+"g";document.getElementById("todayCard").innerHTML=`<div class="label">TODAY</div><div class="title">${s==="OFF"?"DAY OFF":s+" SHIFT"} • ${w}</div><div class="small">${w==="REST"?"Recovery is part of the plan.":"Suggested "+state.time+" training session."}</div>`;document.getElementById("nextWorkout").textContent=w;document.getElementById("workoutHint").textContent=w==="REST"?"Rest, walk or stretch today.":"Your workout has been scheduled around your shifts.";renderWorkout(d);renderMeals(d);renderProfile()}
-let view,selected;
 
-function mealPlanFor(d){
- let w=workoutFor(d), c=calc(), train=w!=="REST";
- if(train) return {
-  breakfast:["Greek yoghurt, oats & berries",420,30],
-  lunch:["Chicken & rice bowl",650,50],
-  dinner:["Salmon, potatoes & vegetables",700,45],
-  snack:["Protein shake + banana",300,30],
-  total:2070, protein:155
- };
- return {
-  breakfast:["Eggs on wholegrain toast",400,28],
-  lunch:["Chicken wrap & salad",600,48],
-  dinner:["Lean beef, potatoes & vegetables",720,50],
-  snack:["Greek yoghurt & berries",250,22],
-  total:1970, protein:148
- };
-}
-function workoutExercisesFor(d){
- let w=workoutFor(d);
- const x={
-  PUSH:["Bench Press — 3 × 8–12","Incline Dumbbell Press — 3 × 8–12","Shoulder Press — 3 × 8–12","Lateral Raises — 3 × 12–15","Tricep Pushdowns — 3 × 10–15"],
-  PULL:["Lat Pulldown — 3 × 8–12","Cable Row — 3 × 8–12","Face Pulls — 3 × 12–15","Bicep Curls — 3 × 10–12"],
-  LEGS:["Leg Press — 3 × 10–12","Leg Curl — 3 × 10–12","Leg Extension — 3 × 10–12","Calf Raises — 3 × 12–15"],
-  UPPER:["Chest Press — 3 × 8–12","Lat Pulldown — 3 × 8–12","Shoulder Press — 3 × 8–12"],
-  LOWER:["Leg Press — 3 × 10–12","Leg Curl — 3 × 10–12","Calf Raises — 3 × 12–15"],
-  REST:["Light walk — 20–30 min","Mobility & stretching","Prioritise sleep and recovery"]
- };
- return x[w]||x.REST;
-}
-function renderDayDetail(d){
- let shift=shiftFor(d), workout=workoutFor(d), meals=mealPlanFor(d), ex=workoutExercisesFor(d);
- let detail=document.getElementById("calendarDetail"); if(!detail)return;
- let dateText=d.toLocaleDateString(undefined,{weekday:"long",day:"numeric",month:"long"});
- detail.innerHTML=`<div class="card calendarDetailCard">
-  <div class="dayHeader"><div><div class="label">SHIFT FIT DAILY PLAN</div><div class="title">${dateText}</div></div><button class="secondary closeDetail" onclick="document.getElementById('calendarDetail').innerHTML=''">CLOSE ✕</button></div>
-  <div class="sectionSpacer"></div>
-  <div class="planSection"><h3>📅 SHIFT</h3><div class="shiftPill">${shift==="OFF"?"⚪ DAY OFF":shift==="NIGHT"?"🔵 NIGHT SHIFT":shift==="DAY"?"🔴 DAY SHIFT":"🟣 "+shift+" SHIFT"}</div></div>
-  <div class="sectionSpacer"></div>
-  <div class="planSection"><h3>🏋️ WORKOUT — ${workout}</h3>${ex.map(a=>`<div class="workoutLine">• ${a}</div>`).join("")}</div>
-  <div class="sectionSpacer"></div>
-  <div class="planSection"><h3>🍽️ MEALS</h3>
-   <div class="planMeal"><b>🍳 BREAKFAST — ${meals.breakfast[0]}</b><span>${meals.breakfast[1]} kcal • ${meals.breakfast[2]}g protein</span></div>
-   <div class="planMeal"><b>🥗 LUNCH — ${meals.lunch[0]}</b><span>${meals.lunch[1]} kcal • ${meals.lunch[2]}g protein</span></div>
-   <div class="planMeal"><b>🍽️ DINNER — ${meals.dinner[0]}</b><span>${meals.dinner[1]} kcal • ${meals.dinner[2]}g protein</span></div>
-   <div class="planMeal"><b>🍌 SNACK — ${meals.snack[0]}</b><span>${meals.snack[1]} kcal • ${meals.snack[2]}g protein</span></div>
-  </div>
-  <div class="sectionSpacer"></div>
-  <div class="planSection"><div class="totalRow"><span>🔥 TOTAL</span><span>${meals.total.toLocaleString()} kcal</span></div><div class="totalRow" style="margin-top:7px"><span>💪 PROTEIN</span><span>${meals.protein}g</span></div></div>
- </div>`;
- detail.scrollIntoView({behavior:"smooth",block:"start"});
+const answers = {
+  goal: "",
+  activity: ""
+};
+
+function nextStep(current) {
+
+  if (current === 2 && !answers.goal) {
+    alert("Please choose your main goal first.");
+    return;
+  }
+
+  if (current === 3) {
+    const age = document.getElementById("age").value;
+    const height = document.getElementById("height").value;
+    const weight = document.getElementById("weight").value;
+
+    if (!age || !height || !weight) {
+      alert("Please fill in your age, height and weight.");
+      return;
+    }
+  }
+
+  document.getElementById("step" + current).classList.add("hidden");
+  document.getElementById("step" + (current + 1)).classList.remove("hidden");
 }
 
-let calendarCursor=new Date(new Date().getFullYear(),new Date().getMonth(),1);
-function changeMonth(delta){calendarCursor=new Date(calendarCursor.getFullYear(),calendarCursor.getMonth()+delta,1);renderCalendar()}
-function renderCalendar(){
- let box=document.getElementById("calendarView");if(!box)return;
- let year=calendarCursor.getFullYear(),month=calendarCursor.getMonth();
- let first=new Date(year,month,1),startDay=(first.getDay()+6)%7,days=new Date(year,month+1,0).getDate();
- let names=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
- let out=`<div class="calHead"><button onclick="changeMonth(-1)">‹</button><div><b id="monthTitle">${first.toLocaleDateString(undefined,{month:"long",year:"numeric"})}</b></div><button onclick="changeMonth(1)">›</button></div><div class="grid heads">${names.map(n=>`<div>${n}</div>`).join("")}</div><div class="grid cal">`;
- for(let i=0;i<startDay;i++)out+=`<div class="day empty"></div>`;
- for(let day=1;day<=days;day++){
-  let d=new Date(year,month,day),s=shiftFor(d),w=workoutFor(d),m=mealPlanFor(d);
-  let cls=s==="DAY"?"dayShift":s==="NIGHT"?"nightShift":s==="OFF"?"offShift":"otherShift";
-  out+=`<button class="day ${cls} calDay" onclick="renderDayDetail(new Date(${year},${month},${day}))"><b>${day}</b><div class="calWorkout">${w==="REST"?"🧘 REST":"🏋️ "+w}</div><div class="calMini">🍽️ ${m.total} kcal</div><div class="calMini">💪 ${m.protein}g</div></button>`;
- }
- out+=`</div>`;
- box.innerHTML=out;
+function previousStep(current) {
+  document.getElementById("step" + current).classList.add("hidden");
+  document.getElementById("step" + (current - 1)).classList.remove("hidden");
 }
+
+function selectChoice(button, category, value) {
+
+  const parent = button.parentElement;
+  const buttons = parent.querySelectorAll(".choice");
+
+  buttons.forEach(btn => btn.classList.remove("selected"));
+
+  button.classList.add("selected");
+
+  answers[category] = value;
+}
+
+function buildPlan() {
+
+  if (!answers.activity) {
+    alert("Please select your activity level.");
+    return;
+  }
+
+  document.getElementById("step4").classList.add("hidden");
+  document.getElementById("result").classList.remove("hidden");
+
+  const goal = answers.goal;
+  const activity = answers.activity;
+
+  document.getElementById("goalBadge").textContent = goal;
+
+  document.getElementById("planText").textContent =
+    "Based on your goal to " +
+    goal.toLowerCase() +
+    " and your current activity level of " +
+    activity.toLowerCase() +
+    ", ShiftFit recommends starting with a balanced programme that gradually increases in difficulty.";
+}
+
+function restart() {
+
+  answers.goal = "";
+  answers.activity = "";
+
+  document.getElementById("result").classList.add("hidden");
+  document.getElementById("step1").classList.remove("hidden");
+
+  document.querySelectorAll(".choice").forEach(button => {
+    button.classList.remove("selected");
+  });
+
+}
+
+</script>
+
+</body>
+</html>
