@@ -33,11 +33,52 @@ html{
 
 body{
   margin:0;
+  min-height:100vh;
   background:
-    radial-gradient(circle at 80% 0%,rgba(109,40,217,.18),transparent 30%),
-    linear-gradient(180deg,#070914 0%,#090d1a 100%);
+    radial-gradient(circle at 10% 15%,rgba(111,66,193,.18),transparent 24%),
+    radial-gradient(circle at 90% 8%,rgba(90,70,255,.16),transparent 22%),
+    radial-gradient(circle at 50% 55%,rgba(59,40,120,.10),transparent 35%),
+    linear-gradient(135deg,#060814 0%,#0b0d1d 45%,#080a15 100%);
   color:var(--text);
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  overflow-x:hidden;
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:-2;
+  opacity:.55;
+  background:
+    linear-gradient(
+      120deg,
+      transparent 0%,
+      transparent 22%,
+      rgba(139,92,246,.035) 22.1%,
+      transparent 22.5%,
+      transparent 48%,
+      rgba(139,92,246,.025) 48.1%,
+      transparent 48.5%,
+      transparent 75%,
+      rgba(139,92,246,.03) 75.1%,
+      transparent 75.5%
+    );
+}
+
+body::after{
+  content:"⚡";
+  position:fixed;
+  top:90px;
+  right:-45px;
+  font-size:280px;
+  font-weight:900;
+  color:rgba(139,92,246,.035);
+  transform:rotate(-12deg);
+  pointer-events:none;
+  z-index:-1;
+  filter:blur(1px);
 }
 
 button{
@@ -46,11 +87,48 @@ button{
 }
 
 .app{
+  position:relative;
   width:100%;
   max-width:500px;
   min-height:100vh;
   margin:auto;
   padding:22px 18px 105px;
+}
+
+.app::before{
+  content:"";
+  position:absolute;
+  width:280px;
+  height:280px;
+  top:280px;
+  left:-180px;
+  border-radius:50%;
+  background:radial-gradient(
+    circle,
+    rgba(139,92,246,.13) 0%,
+    rgba(139,92,246,.05) 35%,
+    transparent 70%
+  );
+  pointer-events:none;
+  z-index:-1;
+}
+
+.app::after{
+  content:"";
+  position:absolute;
+  width:250px;
+  height:250px;
+  top:650px;
+  right:-170px;
+  border-radius:50%;
+  background:radial-gradient(
+    circle,
+    rgba(59,130,246,.09) 0%,
+    rgba(139,92,246,.04) 40%,
+    transparent 72%
+  );
+  pointer-events:none;
+  z-index:-1;
 }
 
 .screen{
@@ -712,8 +790,6 @@ button{
 
 <div class="app">
 
-  <!-- ================= HOME ================= -->
-
   <section id="homeScreen" class="screen active">
 
     <header class="home-header">
@@ -736,8 +812,6 @@ button{
         <div class="user-level">Level 1 • ShiftFit Member</div>
       </div>
     </div>
-
-    <!-- TODAY'S PLAN -->
 
     <section class="today-plan">
 
@@ -772,10 +846,7 @@ button{
         </div>
 
       </div>
-
     </section>
-
-    <!-- ACTIONS -->
 
     <div class="action-grid">
 
@@ -802,8 +873,6 @@ button{
       </section>
 
     </div>
-
-    <!-- WEEKLY PROGRESS -->
 
     <section class="progress-card">
 
@@ -837,12 +906,8 @@ button{
           </div>
 
         </div>
-
       </div>
-
     </section>
-
-    <!-- AI COACH -->
 
     <section class="ai-card">
       <div class="ai-bot">🤖</div>
@@ -858,9 +923,6 @@ button{
     </section>
 
   </section>
-
-
-  <!-- ================= WORKOUT ================= -->
 
   <section id="workoutScreen" class="screen">
 
@@ -904,10 +966,8 @@ button{
 
     </div>
 
-
     <div class="exercise-card" onclick="toggleExercise(this)">
       <div class="exercise-check"></div>
-
       <div class="exercise-content">
         <div class="exercise-name">1. Bench Press</div>
         <div class="exercise-sets">4 sets × 8–10 reps</div>
@@ -915,10 +975,8 @@ button{
       </div>
     </div>
 
-
     <div class="exercise-card" onclick="toggleExercise(this)">
       <div class="exercise-check"></div>
-
       <div class="exercise-content">
         <div class="exercise-name">2. Incline Dumbbell Press</div>
         <div class="exercise-sets">4 sets × 10–12 reps</div>
@@ -926,10 +984,8 @@ button{
       </div>
     </div>
 
-
     <div class="exercise-card" onclick="toggleExercise(this)">
       <div class="exercise-check"></div>
-
       <div class="exercise-content">
         <div class="exercise-name">3. Shoulder Press</div>
         <div class="exercise-sets">3 sets × 8–12 reps</div>
@@ -937,10 +993,8 @@ button{
       </div>
     </div>
 
-
     <div class="exercise-card" onclick="toggleExercise(this)">
       <div class="exercise-check"></div>
-
       <div class="exercise-content">
         <div class="exercise-name">4. Tricep Dips</div>
         <div class="exercise-sets">3 sets × 12–15 reps</div>
@@ -948,17 +1002,14 @@ button{
       </div>
     </div>
 
-
     <div class="exercise-card" onclick="toggleExercise(this)">
       <div class="exercise-check"></div>
-
       <div class="exercise-content">
         <div class="exercise-name">5. Chest Flyes</div>
         <div class="exercise-sets">3 sets × 12–15 reps</div>
         <div class="exercise-tip">Use a controlled stretch and squeeze your chest.</div>
       </div>
     </div>
-
 
     <button id="finishButton" class="finish-button" disabled onclick="finishWorkout()">
       COMPLETE ALL EXERCISES
@@ -967,9 +1018,6 @@ button{
   </section>
 
 </div>
-
-
-<!-- ================= NAV ================= -->
 
 <nav class="bottom-nav">
 
@@ -1000,9 +1048,7 @@ button{
 
 </nav>
 
-
 <script>
-
 function showHome(){
   document.getElementById("homeScreen").classList.add("active");
   document.getElementById("workoutScreen").classList.remove("active");
@@ -1024,14 +1070,13 @@ function showWorkout(){
 }
 
 function toggleExercise(card){
-
   card.classList.toggle("completed");
 
   const check = card.querySelector(".exercise-check");
 
   if(card.classList.contains("completed")){
     check.innerHTML = "✓";
-  } else {
+  }else{
     check.innerHTML = "";
   }
 
@@ -1039,7 +1084,6 @@ function toggleExercise(card){
 }
 
 function updateWorkoutProgress(){
-
   const exercises = document.querySelectorAll(".exercise-card");
   const completed = document.querySelectorAll(".exercise-card.completed").length;
   const total = exercises.length;
@@ -1056,7 +1100,7 @@ function updateWorkoutProgress(){
     button.disabled = false;
     button.classList.add("ready");
     button.textContent = "FINISH WORKOUT 🏆";
-  } else {
+  }else{
     button.disabled = true;
     button.classList.remove("ready");
     button.textContent = "COMPLETE ALL EXERCISES";
@@ -1064,12 +1108,9 @@ function updateWorkoutProgress(){
 }
 
 function finishWorkout(){
-
   alert("🏆 Workout complete! Great work, Andrew!");
-
   showHome();
 }
-
 </script>
 
 </body>
