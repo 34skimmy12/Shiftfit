@@ -8,15 +8,14 @@
 <style>
 :root{
   --bg:#0d1020;
-  --card:#20253d;
-  --card-dark:#171b31;
+  --card:#202641;
+  --card2:#2b314d;
+  --text:#f1f1f5;
+  --muted:#b6bdd0;
   --purple:#8b5cf6;
   --purple2:#6366d8;
-  --text:#f4f4f7;
-  --muted:#aeb5c9;
-  --border:#3a4266;
-  --green:#69d6ad;
-  --green-bg:#173d35;
+  --green:#86d7bd;
+  --border:#465176;
 }
 
 *{
@@ -31,319 +30,276 @@ body{
 }
 
 .app{
-  max-width:560px;
-  min-height:100vh;
+  max-width:760px;
   margin:auto;
-  padding:28px 20px 50px;
+  padding:32px 20px 60px;
 }
 
 .logo{
   font-size:30px;
-  font-weight:900;
+  font-weight:950;
   letter-spacing:-1px;
-  margin-bottom:35px;
+  margin-bottom:55px;
 }
 
 .logo span{
-  color:#9b7cff;
+  color:#a78bfa;
 }
 
-.progress{
-  display:flex;
-  gap:7px;
+.hidden{
+  display:none !important;
+}
+
+.center{
+  text-align:center;
+}
+
+.hero-title{
+  font-size:52px;
+  line-height:1.05;
+  margin:10px 0 18px;
+  font-weight:900;
+  letter-spacing:-2px;
+}
+
+.subtitle{
+  color:var(--muted);
+  font-size:20px;
+  line-height:1.5;
   margin-bottom:35px;
 }
 
-.progress div{
-  height:6px;
-  flex:1;
-  border-radius:20px;
-  background:#303752;
+.week-label{
+  color:#c4b5fd;
+  font-weight:900;
+  letter-spacing:5px;
+  font-size:15px;
+  margin-top:10px;
 }
 
-.progress .active{
-  background:linear-gradient(90deg,var(--purple),#a78bfa);
-}
-
-.screen{
-  display:none;
-}
-
-.screen.active{
-  display:block;
-}
-
-.card{
-  background:var(--card-dark);
-  border:1px solid var(--border);
-  border-radius:28px;
+.plan-card,
+.exercise-card{
+  background:var(--card);
+  border:2px solid var(--border);
+  border-radius:32px;
   padding:28px;
+  margin:22px 0;
 }
 
-.eyebrow{
-  color:#c0c5d8;
-  font-size:13px;
+.day-label{
+  color:#bba7ff;
   font-weight:900;
   letter-spacing:3px;
-  margin-bottom:15px;
+  font-size:14px;
 }
 
-h1{
-  font-size:42px;
-  line-height:1.08;
-  margin:0 0 18px;
-  letter-spacing:-1.5px;
+.plan-title{
+  font-size:30px;
+  margin:12px 0 20px;
 }
 
-h2{
-  font-size:27px;
-  margin:0 0 12px;
+.tag{
+  display:inline-block;
+  background:#173d38;
+  color:var(--green);
+  padding:10px 18px;
+  border-radius:18px;
+  font-weight:800;
 }
 
-p{
+.plan-text{
   color:var(--muted);
   font-size:18px;
-  line-height:1.55;
+  line-height:1.7;
 }
 
-button{
-  width:100%;
-  border:0;
-  border-radius:18px;
-  padding:18px;
-  margin-top:18px;
-  font-size:18px;
-  font-weight:800;
-  color:white;
-  background:linear-gradient(90deg,var(--purple),var(--purple2));
-  cursor:pointer;
-}
-
-.choice{
-  text-align:left;
-  background:var(--card);
-  border:1px solid var(--border);
-}
-
-.choice.selected{
-  border-color:#9b7cff;
-  background:#2c2850;
-}
-
-input,select{
-  width:100%;
-  padding:18px;
-  margin:10px 0;
-  border-radius:15px;
-  border:1px solid var(--border);
-  background:#101426;
-  color:white;
-  font-size:17px;
-}
-
-.plan-header{
-  text-align:center;
-  padding:10px 0 25px;
-}
-
-.badge{
-  display:inline-block;
-  background:#302b55;
-  color:#c8bbff;
-  padding:10px 18px;
-  border-radius:30px;
-  font-weight:800;
-  margin-bottom:18px;
-}
-
-.summary{
-  background:var(--card);
-  border-radius:22px;
-  padding:22px;
-  margin:20px 0;
-}
-
-.day{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:22px;
-  padding:22px;
-  margin:15px 0;
+.plan-card{
   cursor:pointer;
   transition:.2s;
 }
 
-.day:active{
+.plan-card:active{
   transform:scale(.98);
 }
 
-.day.completed{
-  border-color:var(--green);
-}
-
-.day-top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-}
-
-.day h3{
-  margin:5px 0 7px;
-  font-size:23px;
-}
-
-.day-number{
-  color:#b79dff;
-  font-size:13px;
+.top-button{
+  width:100%;
+  border:none;
+  border-radius:22px;
+  padding:22px;
+  margin-top:25px;
+  font-size:25px;
   font-weight:900;
-  letter-spacing:2px;
+  color:white;
+  background:linear-gradient(135deg,var(--purple),var(--purple2));
 }
 
-.tag{
-  color:var(--green);
-  background:var(--green-bg);
-  padding:9px 14px;
-  border-radius:15px;
-  font-size:14px;
-  font-weight:800;
-  white-space:nowrap;
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin:28px 0 38px;
 }
 
-.exercises{
+.stat{
+  background:var(--card2);
+  border-radius:24px;
+  padding:22px 8px;
+  text-align:center;
+}
+
+.stat small{
+  display:block;
   color:var(--muted);
-  line-height:1.7;
-  margin-top:15px;
-  font-size:17px;
+  font-size:13px;
+  margin-bottom:8px;
+  letter-spacing:1px;
 }
 
-.tap{
-  color:#a98cff;
-  font-size:14px;
-  font-weight:700;
-  margin-top:15px;
+.stat strong{
+  font-size:18px;
 }
 
-.progress-box{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:20px;
-  padding:20px;
-  margin-bottom:20px;
+.progress-wrap{
+  margin:20px 0 30px;
 }
 
-.progress-title{
+.progress-top{
   display:flex;
   justify-content:space-between;
-  font-weight:800;
-  margin-bottom:12px;
+  color:var(--muted);
+  margin-bottom:10px;
+  font-weight:700;
 }
 
-.progress-track{
-  height:10px;
-  background:#101426;
+.progress-bar{
+  height:14px;
+  background:#1b2036;
   border-radius:20px;
   overflow:hidden;
+  border:1px solid var(--border);
 }
 
 .progress-fill{
-  height:100%;
   width:0%;
+  height:100%;
   background:linear-gradient(90deg,var(--purple),var(--green));
-  border-radius:20px;
-  transition:.4s;
+  transition:width .3s;
 }
 
-.back{
-  width:auto;
-  background:#202641;
-  border:1px solid var(--border);
-  margin:0 0 25px;
-  padding:14px 18px;
-  font-size:16px;
-}
-
-.workout-info{
+.exercise-card{
   display:flex;
-  gap:10px;
-  margin:18px 0;
-}
-
-.info-pill{
-  flex:1;
-  text-align:center;
-  padding:13px 8px;
-  background:var(--card);
-  border-radius:15px;
-  color:var(--muted);
-  font-size:14px;
-}
-
-.info-pill strong{
-  display:block;
-  color:white;
-  margin-top:4px;
-}
-
-.exercise{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:20px;
-  padding:20px;
-  margin:14px 0;
-}
-
-.exercise-top{
-  display:flex;
-  gap:14px;
+  gap:20px;
   align-items:flex-start;
+  cursor:pointer;
+  transition:.2s;
 }
 
-.exercise-check{
-  width:25px;
-  height:25px;
-  accent-color:var(--purple);
-  flex-shrink:0;
-  margin-top:3px;
+.exercise-card:active{
+  transform:scale(.985);
 }
 
-.exercise-name{
-  font-size:20px;
-  font-weight:800;
+.exercise-card.completed{
+  border-color:var(--green);
+  background:#1b2c36;
 }
 
-.exercise-details{
+.check{
+  width:58px;
+  height:58px;
+  min-width:58px;
+  border-radius:18px;
+  background:#f1f1f1;
+  border:3px solid #bfc3cb;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#163c34;
+  font-size:28px;
+  font-weight:900;
+}
+
+.completed .check{
+  background:var(--green);
+  border-color:var(--green);
+}
+
+.exercise-content{
+  flex:1;
+}
+
+.exercise-title{
+  font-size:26px;
+  font-weight:900;
+  margin-bottom:8px;
+}
+
+.exercise-sets{
   color:var(--green);
-  font-weight:700;
-  margin-top:8px;
+  font-size:18px;
+  font-weight:900;
+  margin-bottom:16px;
 }
 
 .exercise-tip{
   color:var(--muted);
-  font-size:15px;
+  font-size:17px;
   line-height:1.5;
-  margin-top:8px;
 }
 
-.complete{
-  background:linear-gradient(90deg,#16a56d,#39c98b);
+.finish-button{
+  width:100%;
+  border:none;
+  border-radius:22px;
+  padding:22px;
+  margin-top:20px;
+  font-size:23px;
+  font-weight:900;
+  color:white;
+  background:#303750;
+  opacity:.5;
+  transition:.3s;
 }
 
-.completed-message{
-  display:none;
+.finish-button.ready{
+  opacity:1;
+  background:linear-gradient(135deg,#7c3aed,#4f46e5);
+}
+
+.finish-button:disabled{
+  cursor:not-allowed;
+}
+
+.success{
   text-align:center;
-  background:#173d35;
-  border:1px solid var(--green);
-  color:#b6f4d7;
-  padding:18px;
-  border-radius:18px;
-  margin:18px 0;
-  font-weight:800;
+  padding:80px 20px;
 }
 
-.small{
-  font-size:15px;
+.success-icon{
+  font-size:80px;
+}
+
+.success h1{
+  font-size:46px;
+  margin-bottom:15px;
+}
+
+.success p{
   color:var(--muted);
+  font-size:20px;
+  line-height:1.5;
+}
+
+.next-day{
+  width:100%;
+  border:none;
+  border-radius:22px;
+  padding:22px;
+  margin-top:30px;
+  font-size:22px;
+  font-weight:900;
+  color:white;
+  background:linear-gradient(135deg,var(--purple),var(--purple2));
 }
 </style>
 </head>
@@ -352,401 +308,220 @@ input,select{
 
 <div class="app">
 
-<div class="logo">SHIFT<span>FIT</span></div>
+  <div class="logo">SHIFT<span>FIT</span></div>
 
-<div class="progress" id="progress">
-  <div class="active"></div>
-  <div></div>
-  <div></div>
-  <div></div>
-</div>
+  <!-- 7 DAY PLAN SCREEN -->
+  <section id="planScreen">
 
-<!-- WELCOME -->
-<section class="screen active" id="screen1">
-  <div class="card">
-    <div class="eyebrow">WELCOME TO SHIFTFIT</div>
-    <h1>Let's build your plan 💪</h1>
-    <p>Answer a few questions and ShiftFit will create your personalised 7-day workout plan.</p>
-    <button onclick="nextScreen(2)">CONTINUE</button>
-  </div>
-</section>
-
-<!-- GOAL -->
-<section class="screen" id="screen2">
-  <div class="card">
-    <div class="eyebrow">STEP 1 OF 4</div>
-    <h2>What's your main goal?</h2>
-
-    <button class="choice" onclick="selectGoal(this,'Build muscle')">💪 Build muscle</button>
-    <button class="choice" onclick="selectGoal(this,'Lose weight')">🔥 Lose weight</button>
-    <button class="choice" onclick="selectGoal(this,'Get fitter')">⚡ Get fitter</button>
-    <button class="choice" onclick="selectGoal(this,'Improve strength')">🏋️ Improve strength</button>
-
-    <button onclick="nextScreen(3)">CONTINUE</button>
-  </div>
-</section>
-
-<!-- EXPERIENCE -->
-<section class="screen" id="screen3">
-  <div class="card">
-    <div class="eyebrow">STEP 2 OF 4</div>
-    <h2>What's your experience level?</h2>
-
-    <button class="choice" onclick="selectLevel(this,'Beginner')">🌱 Beginner</button>
-    <button class="choice" onclick="selectLevel(this,'Intermediate')">💪 Intermediate</button>
-    <button class="choice" onclick="selectLevel(this,'Advanced')">🔥 Advanced</button>
-
-    <button onclick="nextScreen(4)">CONTINUE</button>
-  </div>
-</section>
-
-<!-- DETAILS -->
-<section class="screen" id="screen4">
-  <div class="card">
-    <div class="eyebrow">STEP 3 OF 4</div>
-    <h2>Tell us about yourself</h2>
-
-    <input id="name" placeholder="Your name">
-    <input id="age" type="number" placeholder="Your age">
-
-    <select id="activity">
-      <option value="">Current activity level</option>
-      <option>Not very active</option>
-      <option>Lightly active</option>
-      <option>Very active</option>
-    </select>
-
-    <button onclick="showReady()">BUILD MY PLAN</button>
-  </div>
-</section>
-
-<!-- READY -->
-<section class="screen" id="ready">
-  <div class="card">
-    <div class="plan-header">
-      <div class="eyebrow">YOUR SHIFTFIT PLAN</div>
-      <h1 id="readyTitle">Your plan is ready! 🎉</h1>
-      <div class="badge" id="goalBadge">Build muscle</div>
+    <div class="center">
+      <div class="week-label">YOUR PERSONALISED WEEK</div>
+      <h1 class="hero-title">Andrew's 7-day<br>plan 💪</h1>
+      <p class="subtitle">
+        Complete what you can. ShiftFit is about consistency, not perfection.
+      </p>
     </div>
 
-    <div class="summary">
-      <h2>💪 Your starting plan</h2>
-      <p id="planSummary">ShiftFit has built a balanced programme for you.</p>
-      <p><strong>Weekly target:</strong> <span id="weeklyTarget">3–4 workouts</span></p>
-      <p><strong>Focus:</strong> Consistency, progression and sustainable results.</p>
+    <div class="plan-card" onclick="openWorkout()">
+      <div class="day-label">DAY 1</div>
+      <div class="plan-title">Upper Body</div>
+      <span class="tag">Strength</span>
+      <p class="plan-text">Push-ups/bench press • Rows • Shoulder press • Bicep curls</p>
     </div>
 
-    <button onclick="showPlan()">VIEW MY 7-DAY PLAN</button>
-  </div>
-</section>
-
-<!-- PLAN -->
-<section class="screen" id="plan">
-
-  <div class="plan-header">
-    <div class="eyebrow">YOUR PERSONALISED WEEK</div>
-    <h1><span id="planName">Your</span> 7-day plan 💪</h1>
-    <p class="small">Tap any workout to see your exercises, sets and reps.</p>
-  </div>
-
-  <div class="progress-box">
-    <div class="progress-title">
-      <span>Weekly progress</span>
-      <span id="progressText">0 / 7 days</span>
+    <div class="plan-card">
+      <div class="day-label">DAY 2</div>
+      <div class="plan-title">Lower Body</div>
+      <span class="tag">Strength</span>
+      <p class="plan-text">Squats • Lunges • Glute bridges • Calf raises</p>
     </div>
-    <div class="progress-track">
-      <div class="progress-fill" id="progressFill"></div>
+
+    <div class="plan-card">
+      <div class="day-label">DAY 3</div>
+      <div class="plan-title">Active Recovery</div>
+      <span class="tag">Recovery</span>
+      <p class="plan-text">Walking • Stretching • Mobility</p>
     </div>
-  </div>
 
-  <div id="days"></div>
+    <div class="plan-card">
+      <div class="day-label">DAY 4</div>
+      <div class="plan-title">Full Body</div>
+      <span class="tag">Strength</span>
+      <p class="plan-text">Compound movements • Core • Full-body conditioning</p>
+    </div>
 
-  <button onclick="restart()">START A NEW PLAN</button>
-</section>
+    <div class="plan-card">
+      <div class="day-label">DAY 5</div>
+      <div class="plan-title">Cardio + Core</div>
+      <span class="tag">Fitness</span>
+      <p class="plan-text">Cardio • Planks • Core exercises</p>
+    </div>
 
-<!-- WORKOUT DETAIL -->
-<section class="screen" id="workoutScreen">
+    <div class="plan-card">
+      <div class="day-label">DAY 6</div>
+      <div class="plan-title">Optional Workout</div>
+      <span class="tag">Flexible</span>
+      <p class="plan-text">Choose an activity you enjoy</p>
+    </div>
 
-  <button class="back" onclick="showPlan()">← BACK TO PLAN</button>
+    <div class="plan-card">
+      <div class="day-label">DAY 7</div>
+      <div class="plan-title">Rest & Recover</div>
+      <span class="tag">Recovery</span>
+      <p class="plan-text">Rest, hydrate and prepare for the next week</p>
+    </div>
 
-  <div class="eyebrow" id="workoutDay">DAY 1</div>
-  <h1 id="workoutTitle">Upper Body</h1>
-  <p id="workoutIntro">Complete the exercises below at a comfortable pace.</p>
+  </section>
 
-  <div class="workout-info">
-    <div class="info-pill">TIME<strong>45 min</strong></div>
-    <div class="info-pill">LEVEL<strong id="workoutLevel">Beginner</strong></div>
-    <div class="info-pill">FOCUS<strong id="workoutFocus">Strength</strong></div>
-  </div>
 
-  <div id="workoutExercises"></div>
+  <!-- WORKOUT SCREEN -->
+  <section id="workoutScreen" class="hidden">
 
-  <div class="completed-message" id="completedMessage">
-    🎉 Workout completed! Great job — your progress has been saved.
-  </div>
+    <h1 class="hero-title">Upper Body</h1>
+    <p class="subtitle">Complete the exercises below at a comfortable pace.</p>
 
-  <button onclick="startWorkout()">▶ START WORKOUT</button>
-  <button class="complete" onclick="completeWorkout()">✓ COMPLETE WORKOUT</button>
+    <div class="stats">
+      <div class="stat">
+        <small>TIME</small>
+        <strong>45 min</strong>
+      </div>
+      <div class="stat">
+        <small>LEVEL</small>
+        <strong>Beginner</strong>
+      </div>
+      <div class="stat">
+        <small>FOCUS</small>
+        <strong>Strength</strong>
+      </div>
+    </div>
 
-</section>
+    <div class="progress-wrap">
+      <div class="progress-top">
+        <span>WORKOUT PROGRESS</span>
+        <span id="progressText">0 / 4</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+
+    <div class="exercise-card" onclick="toggleExercise(this)">
+      <div class="check"></div>
+      <div class="exercise-content">
+        <div class="exercise-title">1. Push-ups</div>
+        <div class="exercise-sets">3 sets × 8–12 reps</div>
+        <div class="exercise-tip">Keep your body straight and lower under control.</div>
+      </div>
+    </div>
+
+    <div class="exercise-card" onclick="toggleExercise(this)">
+      <div class="check"></div>
+      <div class="exercise-content">
+        <div class="exercise-title">2. Dumbbell Rows</div>
+        <div class="exercise-sets">3 sets × 10 reps</div>
+        <div class="exercise-tip">Pull your elbow towards your hip.</div>
+      </div>
+    </div>
+
+    <div class="exercise-card" onclick="toggleExercise(this)">
+      <div class="check"></div>
+      <div class="exercise-content">
+        <div class="exercise-title">3. Shoulder Press</div>
+        <div class="exercise-sets">3 sets × 8–12 reps</div>
+        <div class="exercise-tip">Keep your core tight and control the weight.</div>
+      </div>
+    </div>
+
+    <div class="exercise-card" onclick="toggleExercise(this)">
+      <div class="check"></div>
+      <div class="exercise-content">
+        <div class="exercise-title">4. Bicep Curls</div>
+        <div class="exercise-sets">3 sets × 10–12 reps</div>
+        <div class="exercise-tip">Avoid swinging your body and move slowly.</div>
+      </div>
+    </div>
+
+    <button id="finishButton" class="finish-button" disabled onclick="finishWorkout()">
+      COMPLETE ALL EXERCISES
+    </button>
+
+  </section>
+
+
+  <!-- SUCCESS SCREEN -->
+  <section id="successScreen" class="hidden">
+    <div class="success">
+      <div class="success-icon">🏆</div>
+      <h1>Workout complete!</h1>
+      <p>
+        Great work, Andrew! You completed Day 1 of your ShiftFit plan. 💪
+      </p>
+      <p>
+        <strong>1 workout down. Keep building the habit.</strong>
+      </p>
+
+      <button class="next-day" onclick="showPlan()">
+        VIEW MY 7-DAY PLAN
+      </button>
+    </div>
+  </section>
 
 </div>
 
 <script>
-let selectedGoal="Build muscle";
-let selectedLevel="Beginner";
-let currentScreen=1;
-let currentWorkout=null;
-let completedDays=[];
-
-function selectGoal(button,value){
-  document.querySelectorAll("#screen2 .choice").forEach(b=>b.classList.remove("selected"));
-  button.classList.add("selected");
-  selectedGoal=value;
+function openWorkout() {
+  document.getElementById("planScreen").classList.add("hidden");
+  document.getElementById("workoutScreen").classList.remove("hidden");
+  window.scrollTo(0, 0);
 }
 
-function selectLevel(button,value){
-  document.querySelectorAll("#screen3 .choice").forEach(b=>b.classList.remove("selected"));
-  button.classList.add("selected");
-  selectedLevel=value;
-}
+function toggleExercise(card) {
+  card.classList.toggle("completed");
 
-function nextScreen(number){
-  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
-  document.getElementById("screen"+number).classList.add("active");
-  currentScreen=number;
+  const check = card.querySelector(".check");
+
+  if (card.classList.contains("completed")) {
+    check.innerHTML = "✓";
+  } else {
+    check.innerHTML = "";
+  }
+
   updateProgress();
-  window.scrollTo(0,0);
 }
 
-function updateProgress(){
-  const bars=document.querySelectorAll("#progress div");
-  bars.forEach((bar,index)=>{
-    bar.classList.toggle("active",index<currentScreen);
-  });
-}
+function updateProgress() {
+  const exercises = document.querySelectorAll(".exercise-card");
+  const completed = document.querySelectorAll(".exercise-card.completed").length;
+  const total = exercises.length;
 
-function showReady(){
-  const name=document.getElementById("name").value.trim();
+  document.getElementById("progressText").textContent =
+    completed + " / " + total;
 
-  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
-  document.getElementById("ready").classList.add("active");
+  document.getElementById("progressFill").style.width =
+    (completed / total * 100) + "%";
 
-  document.getElementById("readyTitle").textContent=
-    name ? name+", your plan is ready! 🎉" : "Your plan is ready! 🎉";
+  const button = document.getElementById("finishButton");
 
-  document.getElementById("goalBadge").textContent=selectedGoal;
-
-  const summaries={
-    "Build muscle":"Your programme focuses on strength training and progressive overload to help you build muscle.",
-    "Lose weight":"Your programme combines strength and cardio to help you burn calories and build healthy habits.",
-    "Get fitter":"Your programme uses strength, cardio and recovery to improve your overall fitness.",
-    "Improve strength":"Your programme focuses on key movements and progressive overload to help you become stronger."
-  };
-
-  document.getElementById("planSummary").textContent=summaries[selectedGoal];
-
-  document.getElementById("weeklyTarget").textContent=
-    selectedLevel==="Beginner" ? "3–4 workouts" :
-    selectedLevel==="Intermediate" ? "4–5 workouts" :
-    "5–6 workouts";
-
-  document.getElementById("progress").style.display="none";
-  window.scrollTo(0,0);
-}
-
-function showPlan(){
-  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
-  document.getElementById("plan").classList.add("active");
-
-  const name=document.getElementById("name").value.trim();
-  document.getElementById("planName").textContent=name ? name+"'s" : "Your";
-
-  buildPlan();
-  updateWorkoutProgress();
-  window.scrollTo(0,0);
-}
-
-function getWorkouts(){
-
-  const muscle=[
-    ["Day 1","Upper Body","Strength","Push-ups • Rows • Shoulder press • Bicep curls",[
-      ["Push-ups","3 sets × 8–12 reps","Keep your body straight and lower under control."],
-      ["Dumbbell Rows","3 sets × 10 reps","Pull your elbow towards your hip."],
-      ["Shoulder Press","3 sets × 8–12 reps","Keep your core tight and control the weight."],
-      ["Bicep Curls","3 sets × 10–12 reps","Avoid swinging your body."]
-    ]],
-    ["Day 2","Lower Body","Strength","Squats • Lunges • Glute bridges • Calf raises",[
-      ["Squats","3 sets × 10–12 reps","Keep your chest up and knees controlled."],
-      ["Lunges","3 sets × 8 reps each leg","Take controlled steps and keep your balance."],
-      ["Glute Bridges","3 sets × 12 reps","Squeeze your glutes at the top."],
-      ["Calf Raises","3 sets × 15 reps","Use a full range of movement."]
-    ]],
-    ["Day 3","Active Recovery","Recovery","Easy walking • Mobility • Stretching",[
-      ["Easy Walk","20–30 minutes","Keep a comfortable pace."],
-      ["Mobility","10 minutes","Focus on hips, shoulders and ankles."],
-      ["Stretching","5–10 minutes","Move gently and don't force stretches."]
-    ]],
-    ["Day 4","Push Day","Strength","Chest • Shoulders • Triceps",[
-      ["Push-ups or Bench Press","3 sets × 8–12 reps","Choose a version suitable for your level."],
-      ["Shoulder Press","3 sets × 10 reps","Control every repetition."],
-      ["Tricep Dips","3 sets × 8–10 reps","Keep your shoulders comfortable."]
-    ]],
-    ["Day 5","Pull Day","Strength","Back • Biceps • Core",[
-      ["Rows","3 sets × 10 reps","Focus on squeezing your back muscles."],
-      ["Bicep Curls","3 sets × 12 reps","Use controlled movement."],
-      ["Plank","3 × 30 seconds","Keep your core tight."]
-    ]],
-    ["Day 6","Full Body","Strength","Squats • Push-ups • Rows • Core",[
-      ["Squats","3 sets × 12 reps","Move under control."],
-      ["Push-ups","3 sets × 8–12 reps","Adjust difficulty if needed."],
-      ["Rows","3 sets × 10 reps","Keep your back controlled."],
-      ["Plank","3 × 30 seconds","Breathe steadily."]
-    ]],
-    ["Day 7","Rest & Recover","Rest","Rest • Hydrate • Sleep well",[
-      ["Recovery Day","No sets required","Rest and allow your body to recover."],
-      ["Hydration","Drink water","Stay well hydrated throughout the day."],
-      ["Sleep","Aim for quality sleep","Recovery is part of your training."]
-    ]]
-  ];
-
-  if(selectedGoal==="Lose weight"){
-    muscle[0][1]="Full Body Burn";
-    muscle[0][2]="Fitness";
-    muscle[3][1]="Cardio Day";
-    muscle[3][2]="Cardio";
-    muscle[5][1]="Full Body Circuit";
-    muscle[5][2]="Conditioning";
+  if (completed === total) {
+    button.disabled = false;
+    button.classList.add("ready");
+    button.textContent = "FINISH WORKOUT 🏆";
+  } else {
+    button.disabled = true;
+    button.classList.remove("ready");
+    button.textContent = "COMPLETE ALL EXERCISES";
   }
-
-  if(selectedGoal==="Get fitter"){
-    muscle[0][1]="Full Body Strength";
-    muscle[1][1]="Cardio & Lower Body";
-    muscle[3][1]="Fitness Intervals";
-    muscle[3][2]="Fitness";
-  }
-
-  if(selectedGoal==="Improve strength"){
-    muscle[0][1]="Upper Strength";
-    muscle[1][1]="Lower Strength";
-    muscle[3][1]="Full Body Strength";
-    muscle[5][1]="Strength Session";
-  }
-
-  return muscle;
 }
 
-function buildPlan(){
-  const workouts=getWorkouts();
-  const container=document.getElementById("days");
-  container.innerHTML="";
-
-  workouts.forEach((workout,index)=>{
-    const day=document.createElement("div");
-
-    day.className="day";
-    if(completedDays.includes(index)) day.classList.add("completed");
-
-    day.onclick=()=>openWorkout(index);
-
-    day.innerHTML=`
-      <div class="day-top">
-        <div>
-          <div class="day-number">${workout[0].toUpperCase()}</div>
-          <h3>${workout[1]} ${completedDays.includes(index) ? "✓" : ""}</h3>
-        </div>
-        <span class="tag">${workout[2]}</span>
-      </div>
-      <div class="exercises">${workout[3]}</div>
-      <div class="tap">Tap to view workout →</div>
-    `;
-
-    container.appendChild(day);
-  });
+function finishWorkout() {
+  document.getElementById("workoutScreen").classList.add("hidden");
+  document.getElementById("successScreen").classList.remove("hidden");
+  window.scrollTo(0, 0);
 }
 
-function openWorkout(index){
-  currentWorkout=index;
-  const workout=getWorkouts()[index];
-
-  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
-  document.getElementById("workoutScreen").classList.add("active");
-
-  document.getElementById("workoutDay").textContent=workout[0].toUpperCase();
-  document.getElementById("workoutTitle").textContent=workout[1];
-  document.getElementById("workoutLevel").textContent=selectedLevel;
-  document.getElementById("workoutFocus").textContent=workout[2];
-
-  const container=document.getElementById("workoutExercises");
-  container.innerHTML="";
-
-  workout[4].forEach((exercise,index)=>{
-    const item=document.createElement("div");
-    item.className="exercise";
-
-    item.innerHTML=`
-      <div class="exercise-top">
-        <input class="exercise-check" type="checkbox" id="exercise${index}">
-        <div>
-          <div class="exercise-name">${index+1}. ${exercise[0]}</div>
-          <div class="exercise-details">${exercise[1]}</div>
-          <div class="exercise-tip">${exercise[2]}</div>
-        </div>
-      </div>
-    `;
-
-    container.appendChild(item);
-  });
-
-  document.getElementById("completedMessage").style.display=
-    completedDays.includes(index) ? "block" : "none";
-
-  window.scrollTo(0,0);
-}
-
-function startWorkout(){
-  const button=event.target;
-  button.textContent="🔥 WORKOUT IN PROGRESS";
-  button.style.background="linear-gradient(90deg,#f97316,#ef4444)";
-}
-
-function completeWorkout(){
-  if(currentWorkout===null) return;
-
-  if(!completedDays.includes(currentWorkout)){
-    completedDays.push(currentWorkout);
-  }
-
-  document.getElementById("completedMessage").style.display="block";
-
-  const button=event.target;
-  button.textContent="✓ WORKOUT COMPLETED";
-  button.style.background="#16a56d";
-
-  updateWorkoutProgress();
-}
-
-function updateWorkoutProgress(){
-  const count=completedDays.length;
-  document.getElementById("progressText").textContent=count+" / 7 days";
-  document.getElementById("progressFill").style.width=(count/7*100)+"%";
-}
-
-function restart(){
-  selectedGoal="Build muscle";
-  selectedLevel="Beginner";
-  currentWorkout=null;
-  completedDays=[];
-
-  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
-  document.getElementById("screen1").classList.add("active");
-
-  document.getElementById("progress").style.display="flex";
-
-  currentScreen=1;
-  updateProgress();
-
-  window.scrollTo(0,0);
+function showPlan() {
+  document.getElementById("successScreen").classList.add("hidden");
+  document.getElementById("planScreen").classList.remove("hidden");
+  window.scrollTo(0, 0);
 }
 </script>
 
