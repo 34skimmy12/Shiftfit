@@ -54,7 +54,7 @@ body::before{
   position:fixed;
   inset:0;
   pointer-events:none;
-  z-index:-2;
+  z-index:-3;
 
   background:
     linear-gradient(
@@ -86,30 +86,82 @@ body::before{
     );
 }
 
-/* HUGE BACKGROUND LIGHTNING */
+/* SUBTLE WHITE LIGHTNING ENERGY STREAKS */
 body::after{
-  content:"⚡";
+  content:"";
   position:fixed;
-  top:110px;
-  right:-35px;
-  font-size:290px;
-  font-weight:900;
-  font-family:Arial,sans-serif;
-  color:rgba(132,76,255,.075);
-  text-shadow:
-    0 0 30px rgba(111,66,255,.18),
-    0 0 90px rgba(111,66,255,.14),
-    0 0 160px rgba(111,66,255,.10);
-  transform:rotate(-12deg);
+  inset:0;
   pointer-events:none;
-  z-index:-1;
+  z-index:-2;
+
+  background:
+    linear-gradient(
+      118deg,
+      transparent 0%,
+      transparent 11%,
+      rgba(255,255,255,0) 11.15%,
+      rgba(255,255,255,.10) 11.3%,
+      rgba(255,255,255,.035) 11.55%,
+      transparent 11.8%,
+      transparent 100%
+    ),
+
+    linear-gradient(
+      116deg,
+      transparent 0%,
+      transparent 31%,
+      rgba(255,255,255,0) 31.1%,
+      rgba(255,255,255,.075) 31.25%,
+      rgba(220,225,255,.025) 31.5%,
+      transparent 31.8%,
+      transparent 100%
+    ),
+
+    linear-gradient(
+      119deg,
+      transparent 0%,
+      transparent 55%,
+      rgba(255,255,255,0) 55.1%,
+      rgba(255,255,255,.12) 55.25%,
+      rgba(225,230,255,.035) 55.5%,
+      transparent 55.8%,
+      transparent 100%
+    ),
+
+    linear-gradient(
+      117deg,
+      transparent 0%,
+      transparent 76%,
+      rgba(255,255,255,0) 76.1%,
+      rgba(255,255,255,.08) 76.25%,
+      rgba(220,225,255,.025) 76.5%,
+      transparent 76.8%,
+      transparent 100%
+    ),
+
+    linear-gradient(
+      62deg,
+      transparent 0%,
+      transparent 23%,
+      rgba(255,255,255,.055) 23.15%,
+      transparent 23.45%,
+      transparent 100%
+    ),
+
+    linear-gradient(
+      62deg,
+      transparent 0%,
+      transparent 67%,
+      rgba(255,255,255,.05) 67.15%,
+      transparent 67.4%,
+      transparent 100%
+    );
+
+  filter:drop-shadow(0 0 3px rgba(255,255,255,.08))
+         drop-shadow(0 0 12px rgba(180,170,255,.05));
 }
 
-button{
-  font-family:inherit;
-  cursor:pointer;
-}
-
+/* APP */
 .app{
   position:relative;
   width:100%;
@@ -860,7 +912,6 @@ button{
 
 <div class="app">
 
-  <!-- HOME SCREEN -->
   <section id="homeScreen" class="screen active">
 
     <header class="home-header">
@@ -996,7 +1047,6 @@ button{
   </section>
 
 
-  <!-- WORKOUT SCREEN -->
   <section id="workoutScreen" class="screen">
 
     <button class="back-btn" onclick="showHome()">← Back to Home</button>
@@ -1093,7 +1143,6 @@ button{
 </div>
 
 
-<!-- BOTTOM NAVIGATION -->
 <nav class="bottom-nav">
 
   <button class="nav-item active" id="homeNav" onclick="showHome()">
