@@ -8,17 +8,20 @@
 <style>
 :root{
   --bg:#0d1020;
-  --card:#171b31;
-  --card2:#202641;
+  --card:#20253d;
+  --card-dark:#171b31;
   --purple:#8b5cf6;
   --purple2:#6366d8;
   --text:#f4f4f7;
   --muted:#aeb5c9;
-  --border:#343c60;
-  --green:#46d39a;
+  --border:#3a4266;
+  --green:#69d6ad;
+  --green-bg:#173d35;
 }
 
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 
 body{
   margin:0;
@@ -31,7 +34,7 @@ body{
   max-width:560px;
   min-height:100vh;
   margin:auto;
-  padding:28px 20px 40px;
+  padding:28px 20px 50px;
 }
 
 .logo{
@@ -41,7 +44,9 @@ body{
   margin-bottom:35px;
 }
 
-.logo span{color:#9b7cff}
+.logo span{
+  color:#9b7cff;
+}
 
 .progress{
   display:flex;
@@ -60,27 +65,32 @@ body{
   background:linear-gradient(90deg,var(--purple),#a78bfa);
 }
 
-.screen{display:none}
-.screen.active{display:block}
+.screen{
+  display:none;
+}
+
+.screen.active{
+  display:block;
+}
 
 .card{
-  background:var(--card);
+  background:var(--card-dark);
   border:1px solid var(--border);
   border-radius:28px;
   padding:28px;
 }
 
 .eyebrow{
-  color:#b9bfd2;
+  color:#c0c5d8;
   font-size:13px;
-  font-weight:800;
+  font-weight:900;
   letter-spacing:3px;
   margin-bottom:15px;
 }
 
 h1{
   font-size:42px;
-  line-height:1.05;
+  line-height:1.08;
   margin:0 0 18px;
   letter-spacing:-1.5px;
 }
@@ -100,9 +110,9 @@ button{
   width:100%;
   border:0;
   border-radius:18px;
-  padding:19px;
-  margin-top:20px;
-  font-size:19px;
+  padding:18px;
+  margin-top:18px;
+  font-size:18px;
   font-weight:800;
   color:white;
   background:linear-gradient(90deg,var(--purple),var(--purple2));
@@ -110,20 +120,14 @@ button{
 }
 
 .choice{
-  width:100%;
   text-align:left;
-  margin:12px 0;
-  padding:19px;
-  border-radius:18px;
-  background:var(--card2);
+  background:var(--card);
   border:1px solid var(--border);
-  color:white;
-  font-size:18px;
 }
 
 .choice.selected{
   border-color:#9b7cff;
-  background:#29244a;
+  background:#2c2850;
 }
 
 input,select{
@@ -153,7 +157,7 @@ input,select{
 }
 
 .summary{
-  background:var(--card2);
+  background:var(--card);
   border-radius:22px;
   padding:22px;
   margin:20px 0;
@@ -162,54 +166,185 @@ input,select{
 .day{
   background:var(--card);
   border:1px solid var(--border);
-  border-radius:20px;
-  padding:20px;
-  margin:14px 0;
+  border-radius:22px;
+  padding:22px;
+  margin:15px 0;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.day:active{
+  transform:scale(.98);
+}
+
+.day.completed{
+  border-color:var(--green);
 }
 
 .day-top{
   display:flex;
   justify-content:space-between;
   align-items:center;
+  gap:10px;
 }
 
 .day h3{
-  margin:0 0 7px;
-  font-size:21px;
+  margin:5px 0 7px;
+  font-size:23px;
 }
 
 .day-number{
-  color:#a98cff;
+  color:#b79dff;
   font-size:13px;
   font-weight:900;
-  letter-spacing:1px;
+  letter-spacing:2px;
 }
 
 .tag{
-  display:inline-block;
   color:var(--green);
-  background:#17352f;
-  padding:6px 10px;
-  border-radius:10px;
-  font-size:13px;
+  background:var(--green-bg);
+  padding:9px 14px;
+  border-radius:15px;
+  font-size:14px;
   font-weight:800;
+  white-space:nowrap;
 }
 
 .exercises{
   color:var(--muted);
   line-height:1.7;
-  margin-top:14px;
+  margin-top:15px;
+  font-size:17px;
 }
 
-.rest{
-  opacity:.8;
+.tap{
+  color:#a98cff;
+  font-size:14px;
+  font-weight:700;
+  margin-top:15px;
+}
+
+.progress-box{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:20px;
+  margin-bottom:20px;
+}
+
+.progress-title{
+  display:flex;
+  justify-content:space-between;
+  font-weight:800;
+  margin-bottom:12px;
+}
+
+.progress-track{
+  height:10px;
+  background:#101426;
+  border-radius:20px;
+  overflow:hidden;
+}
+
+.progress-fill{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,var(--purple),var(--green));
+  border-radius:20px;
+  transition:.4s;
+}
+
+.back{
+  width:auto;
+  background:#202641;
+  border:1px solid var(--border);
+  margin:0 0 25px;
+  padding:14px 18px;
+  font-size:16px;
+}
+
+.workout-info{
+  display:flex;
+  gap:10px;
+  margin:18px 0;
+}
+
+.info-pill{
+  flex:1;
+  text-align:center;
+  padding:13px 8px;
+  background:var(--card);
+  border-radius:15px;
+  color:var(--muted);
+  font-size:14px;
+}
+
+.info-pill strong{
+  display:block;
+  color:white;
+  margin-top:4px;
+}
+
+.exercise{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:20px;
+  margin:14px 0;
+}
+
+.exercise-top{
+  display:flex;
+  gap:14px;
+  align-items:flex-start;
+}
+
+.exercise-check{
+  width:25px;
+  height:25px;
+  accent-color:var(--purple);
+  flex-shrink:0;
+  margin-top:3px;
+}
+
+.exercise-name{
+  font-size:20px;
+  font-weight:800;
+}
+
+.exercise-details{
+  color:var(--green);
+  font-weight:700;
+  margin-top:8px;
+}
+
+.exercise-tip{
+  color:var(--muted);
+  font-size:15px;
+  line-height:1.5;
+  margin-top:8px;
+}
+
+.complete{
+  background:linear-gradient(90deg,#16a56d,#39c98b);
+}
+
+.completed-message{
+  display:none;
+  text-align:center;
+  background:#173d35;
+  border:1px solid var(--green);
+  color:#b6f4d7;
+  padding:18px;
+  border-radius:18px;
+  margin:18px 0;
+  font-weight:800;
 }
 
 .small{
   font-size:15px;
   color:var(--muted);
 }
-
 </style>
 </head>
 
@@ -217,133 +352,168 @@ input,select{
 
 <div class="app">
 
-  <div class="logo">SHIFT<span>FIT</span></div>
+<div class="logo">SHIFT<span>FIT</span></div>
 
-  <div class="progress" id="progress">
-    <div class="active"></div>
-    <div></div>
-    <div></div>
-    <div></div>
+<div class="progress" id="progress">
+  <div class="active"></div>
+  <div></div>
+  <div></div>
+  <div></div>
+</div>
+
+<!-- WELCOME -->
+<section class="screen active" id="screen1">
+  <div class="card">
+    <div class="eyebrow">WELCOME TO SHIFTFIT</div>
+    <h1>Let's build your plan 💪</h1>
+    <p>Answer a few questions and ShiftFit will create your personalised 7-day workout plan.</p>
+    <button onclick="nextScreen(2)">CONTINUE</button>
+  </div>
+</section>
+
+<!-- GOAL -->
+<section class="screen" id="screen2">
+  <div class="card">
+    <div class="eyebrow">STEP 1 OF 4</div>
+    <h2>What's your main goal?</h2>
+
+    <button class="choice" onclick="selectGoal(this,'Build muscle')">💪 Build muscle</button>
+    <button class="choice" onclick="selectGoal(this,'Lose weight')">🔥 Lose weight</button>
+    <button class="choice" onclick="selectGoal(this,'Get fitter')">⚡ Get fitter</button>
+    <button class="choice" onclick="selectGoal(this,'Improve strength')">🏋️ Improve strength</button>
+
+    <button onclick="nextScreen(3)">CONTINUE</button>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section class="screen" id="screen3">
+  <div class="card">
+    <div class="eyebrow">STEP 2 OF 4</div>
+    <h2>What's your experience level?</h2>
+
+    <button class="choice" onclick="selectLevel(this,'Beginner')">🌱 Beginner</button>
+    <button class="choice" onclick="selectLevel(this,'Intermediate')">💪 Intermediate</button>
+    <button class="choice" onclick="selectLevel(this,'Advanced')">🔥 Advanced</button>
+
+    <button onclick="nextScreen(4)">CONTINUE</button>
+  </div>
+</section>
+
+<!-- DETAILS -->
+<section class="screen" id="screen4">
+  <div class="card">
+    <div class="eyebrow">STEP 3 OF 4</div>
+    <h2>Tell us about yourself</h2>
+
+    <input id="name" placeholder="Your name">
+    <input id="age" type="number" placeholder="Your age">
+
+    <select id="activity">
+      <option value="">Current activity level</option>
+      <option>Not very active</option>
+      <option>Lightly active</option>
+      <option>Very active</option>
+    </select>
+
+    <button onclick="showReady()">BUILD MY PLAN</button>
+  </div>
+</section>
+
+<!-- READY -->
+<section class="screen" id="ready">
+  <div class="card">
+    <div class="plan-header">
+      <div class="eyebrow">YOUR SHIFTFIT PLAN</div>
+      <h1 id="readyTitle">Your plan is ready! 🎉</h1>
+      <div class="badge" id="goalBadge">Build muscle</div>
+    </div>
+
+    <div class="summary">
+      <h2>💪 Your starting plan</h2>
+      <p id="planSummary">ShiftFit has built a balanced programme for you.</p>
+      <p><strong>Weekly target:</strong> <span id="weeklyTarget">3–4 workouts</span></p>
+      <p><strong>Focus:</strong> Consistency, progression and sustainable results.</p>
+    </div>
+
+    <button onclick="showPlan()">VIEW MY 7-DAY PLAN</button>
+  </div>
+</section>
+
+<!-- PLAN -->
+<section class="screen" id="plan">
+
+  <div class="plan-header">
+    <div class="eyebrow">YOUR PERSONALISED WEEK</div>
+    <h1><span id="planName">Your</span> 7-day plan 💪</h1>
+    <p class="small">Tap any workout to see your exercises, sets and reps.</p>
   </div>
 
-  <!-- SCREEN 1 -->
-  <section class="screen active" id="screen1">
-    <div class="card">
-      <div class="eyebrow">WELCOME TO SHIFTFIT</div>
-      <h1>Let's build your plan 💪</h1>
-      <p>Answer a few quick questions and we'll create your personalised 7-day fitness plan.</p>
-      <button onclick="nextScreen(2)">CONTINUE</button>
+  <div class="progress-box">
+    <div class="progress-title">
+      <span>Weekly progress</span>
+      <span id="progressText">0 / 7 days</span>
     </div>
-  </section>
-
-  <!-- SCREEN 2 -->
-  <section class="screen" id="screen2">
-    <div class="card">
-      <div class="eyebrow">STEP 1 OF 4</div>
-      <h2>What's your main goal?</h2>
-
-      <button class="choice" onclick="selectChoice(this,'Build muscle')">💪 Build muscle</button>
-      <button class="choice" onclick="selectChoice(this,'Lose weight')">🔥 Lose weight</button>
-      <button class="choice" onclick="selectChoice(this,'Get fitter')">⚡ Get fitter</button>
-      <button class="choice" onclick="selectChoice(this,'Improve strength')">🏋️ Improve strength</button>
-
-      <button onclick="nextScreen(3)">CONTINUE</button>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
     </div>
-  </section>
+  </div>
 
-  <!-- SCREEN 3 -->
-  <section class="screen" id="screen3">
-    <div class="card">
-      <div class="eyebrow">STEP 2 OF 4</div>
-      <h2>What's your experience level?</h2>
+  <div id="days"></div>
 
-      <button class="choice" onclick="selectChoice(this,'Beginner')">🌱 Beginner</button>
-      <button class="choice" onclick="selectChoice(this,'Intermediate')">💪 Intermediate</button>
-      <button class="choice" onclick="selectChoice(this,'Advanced')">🔥 Advanced</button>
+  <button onclick="restart()">START A NEW PLAN</button>
+</section>
 
-      <button onclick="nextScreen(4)">CONTINUE</button>
-    </div>
-  </section>
+<!-- WORKOUT DETAIL -->
+<section class="screen" id="workoutScreen">
 
-  <!-- SCREEN 4 -->
-  <section class="screen" id="screen4">
-    <div class="card">
-      <div class="eyebrow">STEP 3 OF 4</div>
-      <h2>Tell us about yourself</h2>
+  <button class="back" onclick="showPlan()">← BACK TO PLAN</button>
 
-      <input id="name" placeholder="Your name">
-      <input id="age" type="number" placeholder="Your age">
+  <div class="eyebrow" id="workoutDay">DAY 1</div>
+  <h1 id="workoutTitle">Upper Body</h1>
+  <p id="workoutIntro">Complete the exercises below at a comfortable pace.</p>
 
-      <select id="activity">
-        <option value="">Current activity level</option>
-        <option value="Not very active">Not very active</option>
-        <option value="Lightly active">Lightly active</option>
-        <option value="Very active">Very active</option>
-      </select>
+  <div class="workout-info">
+    <div class="info-pill">TIME<strong>45 min</strong></div>
+    <div class="info-pill">LEVEL<strong id="workoutLevel">Beginner</strong></div>
+    <div class="info-pill">FOCUS<strong id="workoutFocus">Strength</strong></div>
+  </div>
 
-      <button onclick="showReady()">BUILD MY PLAN</button>
-    </div>
-  </section>
+  <div id="workoutExercises"></div>
 
-  <!-- READY SCREEN -->
-  <section class="screen" id="ready">
-    <div class="card">
-      <div class="plan-header">
-        <div class="eyebrow">YOUR SHIFTFIT PLAN</div>
-        <h1 id="readyTitle">Your plan is ready! 🎉</h1>
-        <div class="badge" id="goalBadge">Build muscle</div>
-      </div>
+  <div class="completed-message" id="completedMessage">
+    🎉 Workout completed! Great job — your progress has been saved.
+  </div>
 
-      <div class="summary">
-        <h2>💪 Your starting plan</h2>
-        <p id="planSummary">
-          ShiftFit recommends a balanced programme that gradually increases in difficulty.
-        </p>
-        <p><strong>Weekly target:</strong> <span id="weeklyTarget">3–4 workouts</span></p>
-        <p><strong>Focus:</strong> Consistency, progressive improvement and sustainable results.</p>
-      </div>
+  <button onclick="startWorkout()">▶ START WORKOUT</button>
+  <button class="complete" onclick="completeWorkout()">✓ COMPLETE WORKOUT</button>
 
-      <button onclick="showPlan()">VIEW MY 7-DAY PLAN</button>
-    </div>
-  </section>
-
-  <!-- 7 DAY PLAN -->
-  <section class="screen" id="plan">
-    <div class="plan-header">
-      <div class="eyebrow">YOUR PERSONALISED WEEK</div>
-      <h1><span id="planName">Your</span> 7-day plan 💪</h1>
-      <p class="small">Complete what you can. ShiftFit is about consistency, not perfection.</p>
-    </div>
-
-    <div id="days"></div>
-
-    <button onclick="restart()">START A NEW PLAN</button>
-  </section>
+</section>
 
 </div>
 
 <script>
-let selectedGoal = "Build muscle";
-let selectedLevel = "Beginner";
-let currentScreen = 1;
+let selectedGoal="Build muscle";
+let selectedLevel="Beginner";
+let currentScreen=1;
+let currentWorkout=null;
+let completedDays=[];
 
-function selectChoice(button,value){
-  const parent = button.parentElement;
-  parent.querySelectorAll(".choice").forEach(b=>b.classList.remove("selected"));
+function selectGoal(button,value){
+  document.querySelectorAll("#screen2 .choice").forEach(b=>b.classList.remove("selected"));
   button.classList.add("selected");
+  selectedGoal=value;
+}
 
-  if(value === "Build muscle" || value === "Lose weight" ||
-     value === "Get fitter" || value === "Improve strength"){
-    selectedGoal=value;
-  } else {
-    selectedLevel=value;
-  }
+function selectLevel(button,value){
+  document.querySelectorAll("#screen3 .choice").forEach(b=>b.classList.remove("selected"));
+  button.classList.add("selected");
+  selectedLevel=value;
 }
 
 function nextScreen(number){
   document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
   document.getElementById("screen"+number).classList.add("active");
-
   currentScreen=number;
   updateProgress();
   window.scrollTo(0,0);
@@ -352,7 +522,7 @@ function nextScreen(number){
 function updateProgress(){
   const bars=document.querySelectorAll("#progress div");
   bars.forEach((bar,index)=>{
-    bar.classList.toggle("active",index < currentScreen);
+    bar.classList.toggle("active",index<currentScreen);
   });
 }
 
@@ -362,22 +532,24 @@ function showReady(){
   document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
   document.getElementById("ready").classList.add("active");
 
-  document.getElementById("readyTitle").textContent =
-    name ? name + ", your plan is ready! 🎉" : "Your plan is ready! 🎉";
+  document.getElementById("readyTitle").textContent=
+    name ? name+", your plan is ready! 🎉" : "Your plan is ready! 🎉";
 
   document.getElementById("goalBadge").textContent=selectedGoal;
 
   const summaries={
-    "Build muscle":"Your programme focuses on strength training, progressive overload and enough recovery to help you build muscle.",
-    "Lose weight":"Your programme combines strength training and cardio to help you burn calories while building healthy habits.",
-    "Get fitter":"Your programme improves overall fitness through a balanced mix of strength, cardio and recovery.",
-    "Improve strength":"Your programme focuses on compound movements, progressive overload and recovery to build real strength."
+    "Build muscle":"Your programme focuses on strength training and progressive overload to help you build muscle.",
+    "Lose weight":"Your programme combines strength and cardio to help you burn calories and build healthy habits.",
+    "Get fitter":"Your programme uses strength, cardio and recovery to improve your overall fitness.",
+    "Improve strength":"Your programme focuses on key movements and progressive overload to help you become stronger."
   };
 
   document.getElementById("planSummary").textContent=summaries[selectedGoal];
+
   document.getElementById("weeklyTarget").textContent=
     selectedLevel==="Beginner" ? "3–4 workouts" :
-    selectedLevel==="Intermediate" ? "4–5 workouts" : "5–6 workouts";
+    selectedLevel==="Intermediate" ? "4–5 workouts" :
+    "5–6 workouts";
 
   document.getElementById("progress").style.display="none";
   window.scrollTo(0,0);
@@ -391,84 +563,189 @@ function showPlan(){
   document.getElementById("planName").textContent=name ? name+"'s" : "Your";
 
   buildPlan();
+  updateWorkoutProgress();
   window.scrollTo(0,0);
 }
 
-function buildPlan(){
-  let workouts;
+function getWorkouts(){
+
+  const muscle=[
+    ["Day 1","Upper Body","Strength","Push-ups • Rows • Shoulder press • Bicep curls",[
+      ["Push-ups","3 sets × 8–12 reps","Keep your body straight and lower under control."],
+      ["Dumbbell Rows","3 sets × 10 reps","Pull your elbow towards your hip."],
+      ["Shoulder Press","3 sets × 8–12 reps","Keep your core tight and control the weight."],
+      ["Bicep Curls","3 sets × 10–12 reps","Avoid swinging your body."]
+    ]],
+    ["Day 2","Lower Body","Strength","Squats • Lunges • Glute bridges • Calf raises",[
+      ["Squats","3 sets × 10–12 reps","Keep your chest up and knees controlled."],
+      ["Lunges","3 sets × 8 reps each leg","Take controlled steps and keep your balance."],
+      ["Glute Bridges","3 sets × 12 reps","Squeeze your glutes at the top."],
+      ["Calf Raises","3 sets × 15 reps","Use a full range of movement."]
+    ]],
+    ["Day 3","Active Recovery","Recovery","Easy walking • Mobility • Stretching",[
+      ["Easy Walk","20–30 minutes","Keep a comfortable pace."],
+      ["Mobility","10 minutes","Focus on hips, shoulders and ankles."],
+      ["Stretching","5–10 minutes","Move gently and don't force stretches."]
+    ]],
+    ["Day 4","Push Day","Strength","Chest • Shoulders • Triceps",[
+      ["Push-ups or Bench Press","3 sets × 8–12 reps","Choose a version suitable for your level."],
+      ["Shoulder Press","3 sets × 10 reps","Control every repetition."],
+      ["Tricep Dips","3 sets × 8–10 reps","Keep your shoulders comfortable."]
+    ]],
+    ["Day 5","Pull Day","Strength","Back • Biceps • Core",[
+      ["Rows","3 sets × 10 reps","Focus on squeezing your back muscles."],
+      ["Bicep Curls","3 sets × 12 reps","Use controlled movement."],
+      ["Plank","3 × 30 seconds","Keep your core tight."]
+    ]],
+    ["Day 6","Full Body","Strength","Squats • Push-ups • Rows • Core",[
+      ["Squats","3 sets × 12 reps","Move under control."],
+      ["Push-ups","3 sets × 8–12 reps","Adjust difficulty if needed."],
+      ["Rows","3 sets × 10 reps","Keep your back controlled."],
+      ["Plank","3 × 30 seconds","Breathe steadily."]
+    ]],
+    ["Day 7","Rest & Recover","Rest","Rest • Hydrate • Sleep well",[
+      ["Recovery Day","No sets required","Rest and allow your body to recover."],
+      ["Hydration","Drink water","Stay well hydrated throughout the day."],
+      ["Sleep","Aim for quality sleep","Recovery is part of your training."]
+    ]]
+  ];
 
   if(selectedGoal==="Lose weight"){
-    workouts=[
-      ["Day 1","Full Body Burn","Strength + cardio","Squats • Push-ups • Dumbbell rows • 15 min brisk cardio"],
-      ["Day 2","Active Recovery","Recovery","30 min walk • Stretching • Mobility"],
-      ["Day 3","Upper Body","Strength","Push-ups • Shoulder press • Rows • Bicep curls"],
-      ["Day 4","Cardio Day","Cardio","25–40 min walking, cycling or jogging"],
-      ["Day 5","Lower Body","Strength","Squats • Lunges • Glute bridges • Calf raises"],
-      ["Day 6","Full Body Circuit","Conditioning","3 rounds: squats • push-ups • rows • mountain climbers"],
-      ["Day 7","Rest & Recover","Rest","Rest, hydrate and prepare for next week"]
-    ];
-  } else if(selectedGoal==="Get fitter"){
-    workouts=[
-      ["Day 1","Full Body Strength","Strength","Squats • Push-ups • Rows • Plank"],
-      ["Day 2","Cardio","Fitness","25–30 min walking, cycling or jogging"],
-      ["Day 3","Recovery","Recovery","Stretching • Mobility • Easy walk"],
-      ["Day 4","Upper Body","Strength","Push-ups • Shoulder press • Rows • Curls"],
-      ["Day 5","Cardio Intervals","Fitness","Warm up • intervals • cool down"],
-      ["Day 6","Lower Body","Strength","Squats • Lunges • Glute bridges • Calf raises"],
-      ["Day 7","Rest","Rest","Full recovery day"]
-    ];
-  } else if(selectedGoal==="Improve strength"){
-    workouts=[
-      ["Day 1","Upper Strength","Strength","Bench press/push-ups • Rows • Shoulder press"],
-      ["Day 2","Lower Strength","Strength","Squats • Romanian deadlifts • Lunges"],
-      ["Day 3","Recovery","Recovery","Mobility • Stretching • Easy walk"],
-      ["Day 4","Full Body Strength","Strength","Squat • Press • Row • Core"],
-      ["Day 5","Active Recovery","Recovery","20–30 min easy movement"],
-      ["Day 6","Strength Session","Strength","Repeat key lifts and focus on good form"],
-      ["Day 7","Rest","Rest","Full recovery"]
-    ];
-  } else {
-    workouts=[
-      ["Day 1","Upper Body","Strength","Push-ups/bench press • Rows • Shoulder press • Bicep curls"],
-      ["Day 2","Lower Body","Strength","Squats • Lunges • Glute bridges • Calf raises"],
-      ["Day 3","Recovery","Recovery","20–30 min easy walking • Mobility • Stretching"],
-      ["Day 4","Push Day","Strength","Chest • Shoulders • Triceps"],
-      ["Day 5","Pull Day","Strength","Back • Biceps • Core"],
-      ["Day 6","Full Body","Strength","Squats • Push-ups • Rows • Core circuit"],
-      ["Day 7","Rest & Recover","Rest","Rest, sleep well and let your muscles recover"]
-    ];
+    muscle[0][1]="Full Body Burn";
+    muscle[0][2]="Fitness";
+    muscle[3][1]="Cardio Day";
+    muscle[3][2]="Cardio";
+    muscle[5][1]="Full Body Circuit";
+    muscle[5][2]="Conditioning";
   }
 
+  if(selectedGoal==="Get fitter"){
+    muscle[0][1]="Full Body Strength";
+    muscle[1][1]="Cardio & Lower Body";
+    muscle[3][1]="Fitness Intervals";
+    muscle[3][2]="Fitness";
+  }
+
+  if(selectedGoal==="Improve strength"){
+    muscle[0][1]="Upper Strength";
+    muscle[1][1]="Lower Strength";
+    muscle[3][1]="Full Body Strength";
+    muscle[5][1]="Strength Session";
+  }
+
+  return muscle;
+}
+
+function buildPlan(){
+  const workouts=getWorkouts();
   const container=document.getElementById("days");
   container.innerHTML="";
 
   workouts.forEach((workout,index)=>{
     const day=document.createElement("div");
-    day.className="day"+(workout[2]==="Rest" ? " rest":"");
+
+    day.className="day";
+    if(completedDays.includes(index)) day.classList.add("completed");
+
+    day.onclick=()=>openWorkout(index);
 
     day.innerHTML=`
       <div class="day-top">
         <div>
           <div class="day-number">${workout[0].toUpperCase()}</div>
-          <h3>${workout[1]}</h3>
+          <h3>${workout[1]} ${completedDays.includes(index) ? "✓" : ""}</h3>
         </div>
         <span class="tag">${workout[2]}</span>
       </div>
       <div class="exercises">${workout[3]}</div>
+      <div class="tap">Tap to view workout →</div>
     `;
 
     container.appendChild(day);
   });
 }
 
+function openWorkout(index){
+  currentWorkout=index;
+  const workout=getWorkouts()[index];
+
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById("workoutScreen").classList.add("active");
+
+  document.getElementById("workoutDay").textContent=workout[0].toUpperCase();
+  document.getElementById("workoutTitle").textContent=workout[1];
+  document.getElementById("workoutLevel").textContent=selectedLevel;
+  document.getElementById("workoutFocus").textContent=workout[2];
+
+  const container=document.getElementById("workoutExercises");
+  container.innerHTML="";
+
+  workout[4].forEach((exercise,index)=>{
+    const item=document.createElement("div");
+    item.className="exercise";
+
+    item.innerHTML=`
+      <div class="exercise-top">
+        <input class="exercise-check" type="checkbox" id="exercise${index}">
+        <div>
+          <div class="exercise-name">${index+1}. ${exercise[0]}</div>
+          <div class="exercise-details">${exercise[1]}</div>
+          <div class="exercise-tip">${exercise[2]}</div>
+        </div>
+      </div>
+    `;
+
+    container.appendChild(item);
+  });
+
+  document.getElementById("completedMessage").style.display=
+    completedDays.includes(index) ? "block" : "none";
+
+  window.scrollTo(0,0);
+}
+
+function startWorkout(){
+  const button=event.target;
+  button.textContent="🔥 WORKOUT IN PROGRESS";
+  button.style.background="linear-gradient(90deg,#f97316,#ef4444)";
+}
+
+function completeWorkout(){
+  if(currentWorkout===null) return;
+
+  if(!completedDays.includes(currentWorkout)){
+    completedDays.push(currentWorkout);
+  }
+
+  document.getElementById("completedMessage").style.display="block";
+
+  const button=event.target;
+  button.textContent="✓ WORKOUT COMPLETED";
+  button.style.background="#16a56d";
+
+  updateWorkoutProgress();
+}
+
+function updateWorkoutProgress(){
+  const count=completedDays.length;
+  document.getElementById("progressText").textContent=count+" / 7 days";
+  document.getElementById("progressFill").style.width=(count/7*100)+"%";
+}
+
 function restart(){
   selectedGoal="Build muscle";
   selectedLevel="Beginner";
+  currentWorkout=null;
+  completedDays=[];
+
   document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
   document.getElementById("screen1").classList.add("active");
+
   document.getElementById("progress").style.display="flex";
+
   currentScreen=1;
   updateProgress();
+
   window.scrollTo(0,0);
 }
 </script>
