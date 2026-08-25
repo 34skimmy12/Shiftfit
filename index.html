@@ -7,11 +7,9 @@
 
 <style>
 :root{
-  --bg:#070914;
-  --bg2:#0b0e1c;
+  --bg:#05030d;
   --card:#11162b;
-  --card2:#121a31;
-  --border:#29314d;
+  --border:#303a60;
   --text:#f4f5fb;
   --muted:#aab1c5;
   --purple:#6d28d9;
@@ -27,12 +25,8 @@
   -webkit-tap-highlight-color:transparent;
 }
 
-/* =========================
-   FUTURISTIC NEON BACKGROUND
-========================= */
-
 html{
-  background:#03050d;
+  background:#05030d;
 }
 
 body{
@@ -41,16 +35,20 @@ body{
   color:var(--text);
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   overflow-x:hidden;
+  position:relative;
 
   background:
-    radial-gradient(circle at 50% -10%, rgba(139,92,246,.38), transparent 32%),
-    radial-gradient(circle at 0% 35%, rgba(0,229,255,.14), transparent 28%),
-    radial-gradient(circle at 100% 55%, rgba(139,92,246,.18), transparent 30%),
-    radial-gradient(circle at 50% 100%, rgba(35,255,183,.10), transparent 35%),
-    linear-gradient(180deg,#03050d 0%,#080b1b 45%,#03050d 100%);
+    radial-gradient(ellipse at 50% -10%,rgba(123,58,255,.38) 0%,transparent 40%),
+    radial-gradient(circle at 5% 22%,rgba(0,174,255,.15) 0%,transparent 26%),
+    radial-gradient(circle at 100% 38%,rgba(154,48,255,.24) 0%,transparent 32%),
+    radial-gradient(circle at 18% 75%,rgba(0,255,183,.08) 0%,transparent 25%),
+    radial-gradient(circle at 85% 88%,rgba(105,44,255,.22) 0%,transparent 30%),
+    linear-gradient(145deg,#05030d 0%,#0c0820 30%,#070d20 58%,#110824 78%,#04050d 100%);
+
+  background-attachment:fixed;
 }
 
-/* NEON GRID */
+/* FUTURISTIC GRID + ENERGY LINES */
 body::before{
   content:"";
   position:fixed;
@@ -58,43 +56,53 @@ body::before{
   pointer-events:none;
   z-index:-2;
 
-  background-image:
-    linear-gradient(rgba(139,92,246,.055) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(139,92,246,.055) 1px, transparent 1px);
-
-  background-size:42px 42px;
-
-  mask-image:linear-gradient(
-    to bottom,
-    rgba(0,0,0,.75),
-    rgba(0,0,0,.25) 55%,
-    transparent 100%
-  );
+  background:
+    linear-gradient(
+      115deg,
+      transparent 0%,
+      transparent 18%,
+      rgba(139,92,246,.09) 18.1%,
+      transparent 18.35%,
+      transparent 42%,
+      rgba(54,168,255,.06) 42.1%,
+      transparent 42.3%,
+      transparent 68%,
+      rgba(139,92,246,.08) 68.1%,
+      transparent 68.35%
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0,
+      transparent 79px,
+      rgba(139,92,246,.025) 80px,
+      transparent 81px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0,
+      transparent 79px,
+      rgba(139,92,246,.018) 80px,
+      transparent 81px
+    );
 }
 
-/* CENTRAL NEON GLOW */
+/* HUGE BACKGROUND LIGHTNING */
 body::after{
-  content:"";
+  content:"⚡";
   position:fixed;
-  width:700px;
-  height:700px;
-  top:120px;
-  left:50%;
-  transform:translateX(-50%);
-  border-radius:50%;
+  top:110px;
+  right:-35px;
+  font-size:290px;
+  font-weight:900;
+  font-family:Arial,sans-serif;
+  color:rgba(132,76,255,.075);
+  text-shadow:
+    0 0 30px rgba(111,66,255,.18),
+    0 0 90px rgba(111,66,255,.14),
+    0 0 160px rgba(111,66,255,.10);
+  transform:rotate(-12deg);
   pointer-events:none;
   z-index:-1;
-
-  background:
-    radial-gradient(
-      circle at 50% 50%,
-      rgba(125,60,255,.16) 0%,
-      rgba(75,35,190,.09) 28%,
-      rgba(0,229,255,.035) 48%,
-      transparent 70%
-    );
-
-  filter:blur(8px);
 }
 
 button{
@@ -111,47 +119,53 @@ button{
   padding:22px 18px 105px;
 }
 
-/* LEFT CYAN NEON GLOW */
+/* LEFT NEON ENERGY */
 .app::before{
   content:"";
-  position:fixed;
-  width:420px;
-  height:420px;
-  top:18%;
-  left:-260px;
+  position:absolute;
+  width:400px;
+  height:400px;
+  top:160px;
+  left:-280px;
   border-radius:50%;
+  pointer-events:none;
+  z-index:-1;
+
   background:
     radial-gradient(
       circle,
-      rgba(0,229,255,.18) 0%,
-      rgba(0,229,255,.07) 35%,
-      transparent 70%
+      rgba(121,63,255,.30) 0%,
+      rgba(100,52,255,.16) 28%,
+      rgba(49,140,255,.07) 50%,
+      transparent 72%
     );
+
+  filter:blur(10px);
+}
+
+/* RIGHT NEON ENERGY */
+.app::after{
+  content:"";
+  position:absolute;
+  width:430px;
+  height:430px;
+  top:580px;
+  right:-310px;
+  border-radius:50%;
   pointer-events:none;
   z-index:-1;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(149,59,255,.32) 0%,
+      rgba(93,53,255,.16) 30%,
+      rgba(30,133,255,.07) 52%,
+      transparent 72%
+    );
+
   filter:blur(12px);
 }
-
-/* GHOST LIGHTNING BOLT */
-.app::after{
-  content:"⚡";
-  position:fixed;
-  right:-38px;
-  top:28%;
-  font-size:310px;
-  font-weight:1000;
-  color:rgba(139,92,246,.055);
-  text-shadow:
-    0 0 30px rgba(139,92,246,.18),
-    0 0 80px rgba(0,229,255,.08);
-  transform:rotate(-12deg);
-  pointer-events:none;
-  z-index:-1;
-}
-
-/* =========================
-   SCREEN SYSTEM
-========================= */
 
 .screen{
   display:none;
@@ -200,7 +214,9 @@ button{
 .logo-bolt{
   color:#854cff;
   margin-right:4px;
-  text-shadow:0 0 15px rgba(132,76,255,.7);
+  text-shadow:
+    0 0 10px rgba(132,76,255,.8),
+    0 0 25px rgba(132,76,255,.5);
 }
 
 .logo-shift{
@@ -209,7 +225,9 @@ button{
 
 .logo-fit{
   color:#8656ff;
-  text-shadow:0 0 16px rgba(132,76,255,.5);
+  text-shadow:
+    0 0 12px rgba(132,76,255,.8),
+    0 0 28px rgba(132,76,255,.4);
 }
 
 .profile-btn{
@@ -236,7 +254,9 @@ button{
     radial-gradient(circle at 50% 90%,#293653 0 34%,transparent 35%),
     linear-gradient(135deg,#2a3454,#11182c);
   border:2px solid #6d49d7;
-  box-shadow:0 0 18px rgba(109,40,217,.4);
+  box-shadow:
+    0 0 12px rgba(109,40,217,.55),
+    0 0 28px rgba(109,40,217,.25);
 }
 
 .user-name{
@@ -251,7 +271,7 @@ button{
 }
 
 /* =========================
-   TODAY PLAN CARD
+   TODAY PLAN
 ========================= */
 
 .today-plan{
@@ -261,9 +281,12 @@ button{
   border-radius:22px;
   border:1px solid #303a60;
   background:
-    radial-gradient(circle at 100% 0%,rgba(88,70,255,.18),transparent 35%),
+    radial-gradient(circle at 100% 0%,rgba(88,70,255,.24),transparent 35%),
+    radial-gradient(circle at 0% 100%,rgba(28,120,255,.06),transparent 32%),
     linear-gradient(145deg,#151b36,#0c1123);
-  box-shadow:0 15px 40px rgba(0,0,0,.3);
+  box-shadow:
+    0 15px 40px rgba(0,0,0,.35),
+    0 0 30px rgba(104,66,255,.08);
 }
 
 .today-plan:after{
@@ -273,7 +296,7 @@ button{
   height:110px;
   right:-60px;
   top:30px;
-  border-top:1px solid rgba(166,139,255,.15);
+  border-top:1px solid rgba(166,139,255,.18);
   border-radius:50%;
   transform:rotate(12deg);
 }
@@ -299,6 +322,7 @@ button{
   font-size:11px;
   font-weight:950;
   letter-spacing:.5px;
+  box-shadow:0 0 18px rgba(255,148,31,.18);
 }
 
 .shift-time-row{
@@ -371,6 +395,7 @@ button{
   padding:17px;
   border-radius:20px;
   border:1px solid #293253;
+  box-shadow:0 12px 30px rgba(0,0,0,.18);
 }
 
 .action-card:before{
@@ -384,19 +409,23 @@ button{
 }
 
 .workout-card{
-  background:linear-gradient(145deg,#102329,#0a1520);
+  background:
+    radial-gradient(circle at 100% 0%,rgba(47,222,139,.13),transparent 38%),
+    linear-gradient(145deg,#102329,#0a1520);
 }
 
 .workout-card:before{
-  background:rgba(47,222,139,.2);
+  background:rgba(47,222,139,.22);
 }
 
 .meal-card{
-  background:linear-gradient(145deg,#171e47,#0d1125);
+  background:
+    radial-gradient(circle at 100% 0%,rgba(109,91,255,.25),transparent 40%),
+    linear-gradient(145deg,#171e47,#0d1125);
 }
 
 .meal-card:before{
-  background:rgba(109,91,255,.28);
+  background:rgba(109,91,255,.30);
 }
 
 .action-icon{
@@ -443,7 +472,10 @@ button{
   border-radius:9px;
   font-size:12px;
   font-weight:850;
-  background:linear-gradient(135deg,#7d31e8,#5123c5);
+  background:linear-gradient(135deg,#8b3cff,#5123c5);
+  box-shadow:
+    0 5px 18px rgba(109,40,217,.3),
+    inset 0 1px 0 rgba(255,255,255,.12);
 }
 
 /* =========================
@@ -455,7 +487,10 @@ button{
   padding:17px;
   border-radius:20px;
   border:1px solid #293253;
-  background:linear-gradient(145deg,#11162a,#0a0e1d);
+  background:
+    radial-gradient(circle at 0% 50%,rgba(83,56,255,.08),transparent 30%),
+    linear-gradient(145deg,#11162a,#0a0e1d);
+  box-shadow:0 12px 30px rgba(0,0,0,.18);
 }
 
 .progress-title{
@@ -483,6 +518,7 @@ button{
   align-items:center;
   justify-content:center;
   transform:rotate(-90deg);
+  box-shadow:0 0 18px rgba(53,223,141,.12);
 }
 
 .progress-inner{
@@ -534,6 +570,7 @@ button{
   border-radius:50%;
   background:var(--green);
   margin-right:5px;
+  box-shadow:0 0 8px rgba(53,223,141,.7);
 }
 
 /* =========================
@@ -547,10 +584,12 @@ button{
   margin-top:17px;
   padding:13px;
   border-radius:18px;
-  border:1px solid rgba(133,86,255,.5);
+  border:1px solid rgba(133,86,255,.55);
   background:
-    radial-gradient(circle at 10% 50%,rgba(108,39,236,.35),transparent 28%),
+    radial-gradient(circle at 10% 50%,rgba(108,39,236,.42),transparent 28%),
+    radial-gradient(circle at 90% 20%,rgba(76,55,255,.13),transparent 35%),
     linear-gradient(135deg,#1b1041,#11162a);
+  box-shadow:0 0 30px rgba(108,39,236,.10);
 }
 
 .ai-bot{
@@ -562,7 +601,9 @@ button{
   justify-content:center;
   font-size:31px;
   background:radial-gradient(circle,#7455f4,#26135e);
-  box-shadow:0 0 18px rgba(119,73,255,.45);
+  box-shadow:
+    0 0 18px rgba(119,73,255,.55),
+    0 0 35px rgba(119,73,255,.2);
 }
 
 .ai-content{
@@ -630,7 +671,8 @@ button{
 }
 
 .workout-stat{
-  background:#171d34;
+  background:
+    linear-gradient(145deg,rgba(28,35,62,.96),rgba(13,18,36,.96));
   border:1px solid #293253;
   border-radius:17px;
   padding:14px 6px;
@@ -685,12 +727,14 @@ button{
   margin-bottom:12px;
   border-radius:20px;
   border:1px solid #293253;
-  background:#151b31;
+  background:
+    linear-gradient(145deg,rgba(21,27,49,.96),rgba(12,17,34,.96));
 }
 
 .exercise-card.completed{
   border-color:#75d7bd;
-  background:#162832;
+  background:
+    linear-gradient(145deg,#162d36,#10232b);
 }
 
 .exercise-check{
@@ -709,6 +753,7 @@ button{
 
 .exercise-card.completed .exercise-check{
   background:#8fd3bd;
+  box-shadow:0 0 15px rgba(143,211,189,.25);
 }
 
 .exercise-content{
@@ -750,6 +795,7 @@ button{
 .finish-button.ready{
   opacity:1;
   background:linear-gradient(135deg,#7c3aed,#4f46e5);
+  box-shadow:0 8px 25px rgba(109,40,217,.3);
 }
 
 /* =========================
@@ -765,9 +811,10 @@ button{
   width:min(500px,100%);
   display:grid;
   grid-template-columns:repeat(5,1fr);
-  background:rgba(7,9,20,.96);
-  backdrop-filter:blur(18px);
-  border-top:1px solid rgba(255,255,255,.08);
+  background:rgba(5,6,18,.92);
+  backdrop-filter:blur(22px);
+  border-top:1px solid rgba(139,92,246,.15);
+  box-shadow:0 -10px 35px rgba(0,0,0,.18);
   padding:10px 4px calc(10px + env(safe-area-inset-bottom));
 }
 
@@ -788,7 +835,8 @@ button{
 }
 
 .nav-item.active{
-  color:#8656ff;
+  color:#9b6dff;
+  text-shadow:0 0 12px rgba(139,92,246,.45);
 }
 
 @media(max-width:360px){
@@ -904,14 +952,14 @@ button{
       <div class="progress-content">
 
         <div class="progress-ring">
-          <div class="progress-inner" id="homeProgressPercent">78%</div>
+          <div class="progress-inner">78%</div>
         </div>
 
         <div class="progress-info">
 
           <div class="progress-row">
             <span class="progress-row-label">Workouts</span>
-            <span class="progress-row-value" id="homeWorkoutCount">5/6</span>
+            <span class="progress-row-value">5/6</span>
           </div>
 
           <div class="progress-row">
@@ -946,6 +994,7 @@ button{
     </section>
 
   </section>
+
 
   <!-- WORKOUT SCREEN -->
   <section id="workoutScreen" class="screen">
@@ -1043,6 +1092,7 @@ button{
 
 </div>
 
+
 <!-- BOTTOM NAVIGATION -->
 <nav class="bottom-nav">
 
@@ -1072,6 +1122,7 @@ button{
   </button>
 
 </nav>
+
 
 <script>
 function showHome(){
