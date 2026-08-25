@@ -38,20 +38,17 @@ body{
   position:relative;
 
   background:
-    radial-gradient(ellipse at 50% -8%,rgba(122,58,255,.32) 0%,transparent 38%),
-    radial-gradient(circle at 0% 18%,rgba(38,92,255,.10) 0%,transparent 30%),
-    radial-gradient(circle at 100% 24%,rgba(154,48,255,.22) 0%,transparent 34%),
-    radial-gradient(circle at 15% 70%,rgba(54,168,255,.07) 0%,transparent 28%),
-    radial-gradient(circle at 88% 82%,rgba(110,44,255,.18) 0%,transparent 32%),
-    linear-gradient(145deg,#05030d 0%,#090719 28%,#070a1b 55%,#10071f 78%,#04050d 100%);
+    radial-gradient(ellipse at 50% -10%,rgba(123,58,255,.38) 0%,transparent 40%),
+    radial-gradient(circle at 5% 22%,rgba(0,174,255,.10) 0%,transparent 26%),
+    radial-gradient(circle at 100% 38%,rgba(154,48,255,.20) 0%,transparent 32%),
+    radial-gradient(circle at 18% 75%,rgba(0,255,183,.05) 0%,transparent 25%),
+    radial-gradient(circle at 85% 88%,rgba(105,44,255,.18) 0%,transparent 30%),
+    linear-gradient(145deg,#05030d 0%,#0c0820 30%,#070d20 58%,#110824 78%,#04050d 100%);
 
   background-attachment:fixed;
 }
 
-/* =====================================
-   FUTURISTIC GRID + SOFT ENERGY LINES
-===================================== */
-
+/* SUBTLE FUTURISTIC GRID */
 body::before{
   content:"";
   position:fixed;
@@ -60,121 +57,89 @@ body::before{
   z-index:-2;
 
   background:
-    /* SOFT WHITE ELECTRIC STREAKS */
-    linear-gradient(
-      38deg,
-      transparent 0%,
-      transparent 18.7%,
-      rgba(255,255,255,0) 18.8%,
-      rgba(255,255,255,.13) 18.95%,
-      rgba(255,255,255,.025) 19.12%,
-      transparent 19.3%,
-      transparent 100%
-    ),
-
-    linear-gradient(
-      118deg,
-      transparent 0%,
-      transparent 31.8%,
-      rgba(255,255,255,0) 31.9%,
-      rgba(255,255,255,.10) 32.05%,
-      rgba(255,255,255,.018) 32.2%,
-      transparent 32.4%,
-      transparent 100%
-    ),
-
-    linear-gradient(
-      64deg,
-      transparent 0%,
-      transparent 52.5%,
-      rgba(255,255,255,0) 52.6%,
-      rgba(255,255,255,.11) 52.75%,
-      rgba(255,255,255,.02) 52.92%,
-      transparent 53.1%,
-      transparent 100%
-    ),
-
-    linear-gradient(
-      126deg,
-      transparent 0%,
-      transparent 72.2%,
-      rgba(255,255,255,0) 72.3%,
-      rgba(255,255,255,.09) 72.45%,
-      rgba(255,255,255,.018) 72.62%,
-      transparent 72.8%,
-      transparent 100%
-    ),
-
-    /* PURPLE / BLUE FUTURISTIC ENERGY */
-    linear-gradient(
-      115deg,
-      transparent 0%,
-      transparent 21%,
-      rgba(139,92,246,.07) 21.1%,
-      transparent 21.3%,
-      transparent 45%,
-      rgba(54,168,255,.045) 45.1%,
-      transparent 45.3%,
-      transparent 70%,
-      rgba(139,92,246,.065) 70.1%,
-      transparent 70.3%
-    ),
-
-    /* SUBTLE GRID */
     repeating-linear-gradient(
       90deg,
       transparent 0,
-      transparent 84px,
-      rgba(139,92,246,.022) 85px,
-      transparent 86px
+      transparent 79px,
+      rgba(139,92,246,.018) 80px,
+      transparent 81px
     ),
-
     repeating-linear-gradient(
       0deg,
       transparent 0,
-      transparent 84px,
-      rgba(139,92,246,.016) 85px,
-      transparent 86px
+      transparent 79px,
+      rgba(139,92,246,.014) 80px,
+      transparent 81px
     );
 }
 
-/* =====================================
-   LARGE SOFT ELECTRIC GLOW
-   NO GIANT LIGHTNING SYMBOL
-===================================== */
-
+/* SUBTLE WHITE LIGHTNING ENERGY STREAKS */
 body::after{
   content:"";
   position:fixed;
-  width:600px;
-  height:600px;
-  top:-180px;
-  right:-250px;
-  border-radius:50%;
+  inset:0;
   pointer-events:none;
   z-index:-1;
+  opacity:.72;
 
   background:
-    radial-gradient(
-      circle,
-      rgba(127,70,255,.15) 0%,
-      rgba(105,58,255,.08) 32%,
-      rgba(54,168,255,.035) 52%,
-      transparent 72%
+    /* LEFT UPPER LIGHTNING */
+    linear-gradient(
+      128deg,
+      transparent 0%,
+      transparent 24.2%,
+      rgba(255,255,255,0) 24.4%,
+      rgba(255,255,255,.18) 24.7%,
+      rgba(255,255,255,.05) 25.1%,
+      transparent 25.5%
+    ),
+
+    /* LEFT MIDDLE LIGHTNING */
+    linear-gradient(
+      52deg,
+      transparent 0%,
+      transparent 16.8%,
+      rgba(255,255,255,0) 17%,
+      rgba(255,255,255,.14) 17.25%,
+      rgba(255,255,255,.04) 17.6%,
+      transparent 18%
+    ),
+
+    /* CENTRE LIGHTNING STREAK */
+    linear-gradient(
+      118deg,
+      transparent 0%,
+      transparent 48.6%,
+      rgba(255,255,255,0) 48.8%,
+      rgba(255,255,255,.16) 49.05%,
+      rgba(255,255,255,.045) 49.45%,
+      transparent 49.8%
+    ),
+
+    /* RIGHT UPPER LIGHTNING */
+    linear-gradient(
+      132deg,
+      transparent 0%,
+      transparent 72.2%,
+      rgba(255,255,255,0) 72.4%,
+      rgba(255,255,255,.15) 72.65%,
+      rgba(255,255,255,.04) 73.05%,
+      transparent 73.4%
+    ),
+
+    /* RIGHT LOWER LIGHTNING */
+    linear-gradient(
+      55deg,
+      transparent 0%,
+      transparent 82.8%,
+      rgba(255,255,255,0) 83%,
+      rgba(255,255,255,.12) 83.25%,
+      rgba(255,255,255,.035) 83.65%,
+      transparent 84%
     );
-
-  filter:blur(22px);
 }
 
-/* =====================================
-   BUTTONS
-===================================== */
-
-button{
-  font-family:inherit;
-  cursor:pointer;
-}
-
+/* MAIN APP */
 .app{
   position:relative;
   width:100%;
@@ -185,7 +150,6 @@ button{
 }
 
 /* LEFT NEON ENERGY */
-
 .app::before{
   content:"";
   position:absolute;
@@ -200,17 +164,16 @@ button{
   background:
     radial-gradient(
       circle,
-      rgba(121,63,255,.25) 0%,
-      rgba(100,52,255,.12) 28%,
-      rgba(49,140,255,.05) 50%,
+      rgba(121,63,255,.30) 0%,
+      rgba(100,52,255,.16) 28%,
+      rgba(49,140,255,.07) 50%,
       transparent 72%
     );
 
-  filter:blur(15px);
+  filter:blur(10px);
 }
 
 /* RIGHT NEON ENERGY */
-
 .app::after{
   content:"";
   position:absolute;
@@ -225,13 +188,18 @@ button{
   background:
     radial-gradient(
       circle,
-      rgba(149,59,255,.28) 0%,
-      rgba(93,53,255,.12) 30%,
-      rgba(30,133,255,.05) 52%,
+      rgba(149,59,255,.32) 0%,
+      rgba(93,53,255,.16) 30%,
+      rgba(30,133,255,.07) 52%,
       transparent 72%
     );
 
-  filter:blur(16px);
+  filter:blur(12px);
+}
+
+button{
+  font-family:inherit;
+  cursor:pointer;
 }
 
 .screen{
@@ -1062,7 +1030,6 @@ button{
 
   </section>
 
-
   <!-- WORKOUT SCREEN -->
   <section id="workoutScreen" class="screen">
 
@@ -1159,7 +1126,6 @@ button{
 
 </div>
 
-
 <!-- BOTTOM NAVIGATION -->
 <nav class="bottom-nav">
 
@@ -1189,7 +1155,6 @@ button{
   </button>
 
 </nav>
-
 
 <script>
 function showHome(){
