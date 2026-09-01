@@ -22,34 +22,6 @@ export default async function handler(req, res) {
       .replace(/[^a-z0-9]+/g, " ")
       .trim();
 
-  const numberValue = value => {
-    const number = Number(value);
-    return Number.isFinite(number) ? number : null;
-  };
-
-  const retailerAliases = {
-    tesco: "tesco",
-    "tesco uk": "tesco",
-    sainsburys: "sainsburys",
-    "sainsbury's": "sainsburys",
-    "sainsbury’s": "sainsburys",
-    asda: "asda",
-    morrisons: "morrisons",
-    "morrisons supermarket": "morrisons",
-    waitrose: "waitrose",
-    aldi: "aldi"
-  };
-
-  const normaliseRetailer = value => {
-    const key = clean(value);
-
-    if (retailerAliases[key]) {
-      return retailerAliases[key];
-    }
-
-    return key.replace(/\s+/g, "");
-  };
-
   const defaultRetailers = [
     "tesco",
     "sainsburys",
@@ -59,6 +31,23 @@ export default async function handler(req, res) {
     "aldi"
   ];
 
+  const normaliseRetailer = value => {
+    const key = clean(value);
+
+    const aliases = {
+      "tesco": "tesco",
+      "tesco uk": "tesco",
+      "sainsburys": "sainsburys",
+      "sainsbury's": "sainsburys",
+      "asda": "asda",
+      "morrisons": "morrisons",
+      "waitrose": "waitrose",
+      "aldi": "aldi"
+    };
+
+    return aliases[key] || key.replace(/\s+/g, "");
+  };
+
   const normaliseItems = body => {
     return (
       Array.isArray(body?.items)
@@ -67,339 +56,17 @@ export default async function handler(req, res) {
     )
       .map(item => ({
         name: String(item?.name || "").trim(),
-        qty: Math.max(1, Number(item?.qty) || 1)
+        qty: Math.max(
+          1,
+          Number(item?.qty) || 1
+        )
       }))
       .filter(item => item.name)
       .slice(0, 30);
   };
 
-  const normaliseRetailers = body => {
-    const supplied =
-      Array.isArray(body?.retailers) &&
-      body.retailers.length
-        ? body.retailers
-        : defaultRetailers;
-
-    return supplied
-      .map(normaliseRetailer)
-      .filter(Boolean);
-  };
-
-  const findItemName = (row, items) => {
-    const possibleNames = [
-      row?.item,
-      row?.query,
-      row?.searchQuery,
-      row?.search_query,
-      row?.queryName,
-      row?.name,
-      row?.product_name
-    ]
-      .map(value => String(value || "").trim())
-      .filter(Boolean);
-
-    if (!possibleNames.length) {
-      return "";
-    }
-
-    for (const possible of possibleNames) {
-      const exact = items.find(
-        item => clean(item.name) === clean(possible)
-      );
-
-      if (exact) {
-        return exact.name;
-      }
-    }
-
-    let bestMatch = null;
-    let bestScore = 0;
-
-    for (const possible of possibleNames) {
-      const sourceWords = new Set(
-        clean(possible)
-          .split(" ")
-          .filter(word => word.length > 2)
-      );
-
-      for (const item of items) {
-        const targetWords = new Set(
-          clean(item.name)
-            .split(" ")
-            .filter(word => word.length > 2)
-        );
-
-        if (!sourceWords.size || !targetWords.size) {
-          continue;
-        }
-
-        let overlap = 0;
-
-        for (const word of sourceWords) {
-          if (targetWords.has(word)) {
-            overlap++;
-          }
-        }
-
-        const score =
-          overlap /
-          Math.max(
-            sourceWords.size,
-            targetWords.size
-          );
-
-        if (score > bestScore) {
-          bestScore = score;
-          bestMatch = item.name;
-        }
-      }
-    }
-
-    return bestScore >= 0.3
-      ? bestMatch
-      : "";
-  };
-
-  const normaliseRows = (rows, items) => {
-    const products = [];
-
-    for (const row of rows) {
-      if (!row || typeof row !== "object") {
-        continue;
-      }
-
-      const nestedRetailers =
-        Array.isArray(row.retailers)
-          ? row.retailers
-          : Array.isArray(row.prices)
-          ? row.prices
-          : [];
-
-      if (nestedRetailers.length) {
-        const itemName =
-          findItemName(row, items);
-
-        if (itemName) {
-          for (const retailerRow of nestedRetailers) {
-            if (
-              !retailerRow ||
-              typeof retailerRow !== "object"
-            ) {
-              continue;
-            }
-
-            const retailer =
-              normaliseRetailer(
-                retailerRow.name ||
-                retailerRow.retailer ||
-                retailerRow.supermarket
-              );
-
-            const price =
-              numberValue(
-                retailerRow.price ??
-                retailerRow.currentPrice ??
-                retailerRow.current_price
-              );
-
-            if (!retailer || price === null) {
-              continue;
-            }
-
-            products.push({
-              item: itemName,
-
-              retailer: retailer,
-
-              product:
-                retailerRow.product ||
-                row.product ||
-                row.productName ||
-                row.name ||
-                itemName,
-
-              price: price,
-
-              unitPrice:
-                retailerRow.pricePerUnit ||
-                retailerRow.unitPrice ||
-                "",
-
-              pack:
-                retailerRow.packSize ||
-                retailerRow.pack ||
-                row.packSize ||
-                "",
-
-              url:
-                retailerRow.outboundUrl ||
-                retailerRow.url ||
-                row.url ||
-                "",
-
-              image:
-                retailerRow.imageUrl ||
-                retailerRow.image ||
-                row.imageUrl ||
-                ""
-            });
-          }
-
-          continue;
-        }
-      }
-
-      const retailer =
-        normaliseRetailer(
-          row.retailer ||
-          row.supermarket ||
-          row.supermarket_name ||
-          row.store
-        );
-
-      const price =
-        numberValue(
-          row.price ??
-          row.current_price ??
-          row.retail_price
-        );
-
-      const itemName =
-        findItemName(row, items);
-
-      if (
-        itemName &&
-        retailer &&
-        price !== null
-      ) {
-        products.push({
-          item: itemName,
-
-          retailer: retailer,
-
-          product:
-            row.product ||
-            row.product_name ||
-            row.productName ||
-            row.name ||
-            itemName,
-
-          price: price,
-
-          unitPrice:
-            row.pricePerUnit ||
-            row.unit_price ||
-            row.normalized_price ||
-            "",
-
-          pack:
-            row.packaging ||
-            row.pack_size ||
-            row.packSize ||
-            row.size ||
-            "",
-
-          url:
-            row.url ||
-            row.product_url ||
-            row.productUrl ||
-            "",
-
-          image:
-            row.image ||
-            row.image_url ||
-            row.imageUrl ||
-            ""
-        });
-      }
-    }
-
-    return products;
-  };
-
-  const buildBaskets = (
-    products,
-    items,
-    retailers
-  ) => {
-    const baskets =
-      retailers
-        .map(retailer => {
-          const basket = {
-            retailer,
-            total: 0,
-            items: [],
-            missing: []
-          };
-
-          for (const item of items) {
-            const matches =
-              products.filter(product =>
-                clean(product.item) ===
-                  clean(item.name) &&
-                clean(product.retailer) ===
-                  clean(retailer)
-              );
-
-            if (!matches.length) {
-              basket.missing.push(
-                item.name
-              );
-
-              continue;
-            }
-
-            const match =
-              [...matches].sort(
-                (a, b) =>
-                  a.price - b.price
-              )[0];
-
-            const lineTotal =
-              Number(
-                (
-                  match.price *
-                  item.qty
-                ).toFixed(2)
-              );
-
-            basket.total += lineTotal;
-
-            basket.items.push({
-              ...match,
-              qty: item.qty,
-              lineTotal
-            });
-          }
-
-          basket.total =
-            Number(
-              basket.total.toFixed(2)
-            );
-
-          return basket;
-        })
-        .sort(
-          (a, b) =>
-            a.total - b.total
-        );
-
-    const completeBaskets =
-      baskets.filter(
-        basket =>
-          basket.items.length > 0 &&
-          basket.missing.length === 0
-      );
-
-    return {
-      baskets,
-      bestBasket:
-        completeBaskets[0] || null
-    };
-  };
-
   /*
-   * START NEW PRICE CHECK
+   * START APIFY PRICE CHECK
    */
   if (req.method === "POST") {
     const body =
@@ -417,7 +84,12 @@ export default async function handler(req, res) {
       normaliseItems(body);
 
     const retailers =
-      normaliseRetailers(body);
+      Array.isArray(body?.retailers) &&
+      body.retailers.length
+        ? body.retailers.map(
+            normaliseRetailer
+          )
+        : defaultRetailers;
 
     if (!items.length) {
       return res.status(400).json({
@@ -428,15 +100,38 @@ export default async function handler(req, res) {
     }
 
     try {
-      const apifyUrl =
+      const url =
         "https://api.apify.com/v2/actors/" +
         "studio-amba~uk-grocery-price-matrix/runs" +
         "?token=" +
         encodeURIComponent(token);
 
+      const input = {
+        searchQueries:
+          items.map(
+            item => item.name
+          ),
+
+        retailers,
+
+        maxItemsPerSource: 15,
+
+        timeoutPerSourceSecs: 150,
+
+        proxyConfiguration: {
+          useApifyProxy: true,
+
+          apifyProxyGroups: [
+            "RESIDENTIAL"
+          ],
+
+          apifyProxyCountry: "GB"
+        }
+      };
+
       const response =
         await fetch(
-          apifyUrl,
+          url,
           {
             method: "POST",
 
@@ -445,35 +140,46 @@ export default async function handler(req, res) {
                 "application/json"
             },
 
-            body: JSON.stringify({
-              searchQueries:
-                items.map(
-                  item => item.name
-                ),
-
-              retailers,
-
-              maxItemsPerSource: 10,
-
-              timeoutPerSourceSecs: 90,
-
-              proxyConfiguration: {
-                useApifyProxy: true,
-
-                apifyProxyGroups: [
-                  "RESIDENTIAL"
-                ],
-
-                apifyProxyCountry: "GB"
-              }
-            })
+            body:
+              JSON.stringify(input)
           }
         );
 
       const text =
         await response.text();
 
+      /*
+       * IMPORTANT:
+       * Return Apify's actual error.
+       */
       if (!response.ok) {
+        let providerError = null;
+
+        try {
+          providerError =
+            JSON.parse(text);
+        } catch {
+          providerError = null;
+        }
+
+        const message =
+          providerError?.error?.message ||
+          providerError?.message ||
+          providerError?.error ||
+          text ||
+          "Apify rejected the request.";
+
+        console.error(
+          "APIFY START FAILED",
+          {
+            status:
+              response.status,
+
+            response:
+              text.slice(0, 3000)
+          }
+        );
+
         return res.status(502).json({
           error:
             "PRICE_PROVIDER_START_ERROR",
@@ -481,22 +187,35 @@ export default async function handler(req, res) {
           providerStatus:
             response.status,
 
-          detail:
-            text.slice(0, 1000)
+          providerMessage:
+            String(message).slice(
+              0,
+              2000
+            ),
+
+          providerResponse:
+            text.slice(
+              0,
+              3000
+            )
         });
       }
 
       let data;
 
       try {
-        data = JSON.parse(text);
+        data =
+          JSON.parse(text);
       } catch {
         return res.status(502).json({
           error:
             "INVALID_PROVIDER_RESPONSE",
 
           message:
-            "Apify returned an invalid response."
+            "Apify returned an invalid response.",
+
+          providerResponse:
+            text.slice(0, 3000)
         });
       }
 
@@ -509,14 +228,18 @@ export default async function handler(req, res) {
             "NO_APIFY_RUN_ID",
 
           message:
-            "Apify did not return a run ID."
+            "Apify did not return a run ID.",
+
+          providerResponse:
+            text.slice(0, 3000)
         });
       }
 
       return res.status(202).json({
         status: "RUNNING",
 
-        runId: run.id,
+        runId:
+          run.id,
 
         datasetId:
           run.defaultDatasetId ||
@@ -532,7 +255,7 @@ export default async function handler(req, res) {
 
     } catch (error) {
       console.error(
-        "Apify start error:",
+        "BEST BASKET START ERROR",
         error
       );
 
@@ -542,13 +265,13 @@ export default async function handler(req, res) {
 
         message:
           error?.message ||
-          "Unable to start price check."
+          "Unable to contact Apify."
       });
     }
   }
 
   /*
-   * CHECK EXISTING PRICE CHECK
+   * POLL APIFY RUN
    */
   if (req.method === "GET") {
     const runId =
@@ -570,42 +293,42 @@ export default async function handler(req, res) {
         "?token=" +
         encodeURIComponent(token);
 
-      const runResponse =
+      const response =
         await fetch(runUrl);
 
-      const runText =
-        await runResponse.text();
+      const text =
+        await response.text();
 
-      if (!runResponse.ok) {
+      if (!response.ok) {
         return res.status(502).json({
           error:
             "APIFY_STATUS_ERROR",
 
           providerStatus:
-            runResponse.status,
+            response.status,
 
-          detail:
-            runText.slice(0, 1000)
+          providerResponse:
+            text.slice(0, 3000)
         });
       }
 
-      let runData;
+      let data;
 
       try {
-        runData =
-          JSON.parse(runText);
+        data =
+          JSON.parse(text);
       } catch {
         return res.status(502).json({
           error:
             "INVALID_APIFY_STATUS",
 
           message:
-            "Apify returned an invalid status response."
+            "Apify returned invalid status data."
         });
       }
 
       const run =
-        runData.data || runData;
+        data.data || data;
 
       const status =
         String(
@@ -620,10 +343,6 @@ export default async function handler(req, res) {
           status: "RUNNING",
 
           runId,
-
-          startedAt:
-            run.startedAt ||
-            null,
 
           statusMessage:
             status === "READY"
@@ -673,13 +392,10 @@ export default async function handler(req, res) {
             "NO_DATASET_ID",
 
           message:
-            "Apify completed but no dataset was returned."
+            "Apify completed but returned no dataset."
         });
       }
 
-      /*
-       * DOWNLOAD RESULTS
-       */
       const datasetUrl =
         "https://api.apify.com/v2/datasets/" +
         encodeURIComponent(datasetId) +
@@ -700,8 +416,8 @@ export default async function handler(req, res) {
           providerStatus:
             datasetResponse.status,
 
-          detail:
-            datasetText.slice(0, 1000)
+          providerResponse:
+            datasetText.slice(0, 3000)
         });
       }
 
@@ -724,96 +440,77 @@ export default async function handler(req, res) {
         rows = [rows];
       }
 
-      /*
-       * RECOVER SHOPPING LIST
-       */
-      let finalItems = [];
+      let items = [];
 
       if (
         typeof req.query?.items ===
         "string"
       ) {
         try {
-          finalItems =
+          items =
             JSON.parse(
               req.query.items
             );
         } catch {
-          finalItems = [];
+          items = [];
         }
       }
 
-      if (!finalItems.length) {
-        const inferred =
+      if (!items.length) {
+        items =
           rows
-            .map(row =>
-              row?.item ||
-              row?.query ||
-              row?.searchQuery
-            )
-            .filter(Boolean);
-
-        finalItems =
-          [
-            ...new Map(
-              inferred.map(
-                name => [
-                  clean(name),
-
-                  {
-                    name:
-                      String(name),
-
-                    qty: 1
-                  }
-                ]
-              )
-            ).values()
-          ];
+            .map(row => ({
+              name:
+                String(
+                  row?.item ||
+                  row?.query ||
+                  row?.searchQuery ||
+                  ""
+                ),
+              qty: 1
+            }))
+            .filter(
+              item => item.name
+            );
       }
 
-      /*
-       * RECOVER RETAILERS
-       */
-      let finalRetailers = [];
+      let retailers =
+        defaultRetailers;
 
       if (
         typeof req.query?.retailers ===
         "string"
       ) {
         try {
-          finalRetailers =
+          const supplied =
             JSON.parse(
               req.query.retailers
             );
+
+          if (
+            Array.isArray(
+              supplied
+            ) &&
+            supplied.length
+          ) {
+            retailers =
+              supplied.map(
+                normaliseRetailer
+              );
+          }
         } catch {
-          finalRetailers = [];
+          retailers =
+            defaultRetailers;
         }
       }
 
-      if (!finalRetailers.length) {
-        finalRetailers =
-          defaultRetailers;
-      }
-
       /*
-       * BUILD PRICE DATA
+       * Return raw Apify data for now.
+       * This lets us verify exactly what the Actor produced.
        */
-      const products =
-        normaliseRows(
-          rows,
-          finalItems
-        );
-
-      const result =
-        buildBaskets(
-          products,
-          finalItems,
-          finalRetailers
-        );
-
       return res.status(200).json({
-        status: "SUCCEEDED",
+        status:
+          "SUCCEEDED",
 
         source:
           "Apify UK Grocery Price Matrix",
@@ -821,25 +518,20 @@ export default async function handler(req, res) {
         checkedAt:
           new Date().toISOString(),
 
-        items:
-          finalItems,
+        items,
 
-        baskets:
-          result.baskets,
-
-        bestBasket:
-          result.bestBasket,
-
-        partial:
-          !result.bestBasket,
+        retailers,
 
         productsFound:
-          products.length
+          rows.length,
+
+        rawResults:
+          rows.slice(0, 100)
       });
 
     } catch (error) {
       console.error(
-        "Best Basket polling error:",
+        "BEST BASKET POLL ERROR",
         error
       );
 
@@ -859,6 +551,6 @@ export default async function handler(req, res) {
       "METHOD_NOT_ALLOWED",
 
     message:
-      "Only GET and POST requests are supported."
+      "Only GET and POST are supported."
   });
 }
