@@ -21,7 +21,11 @@
 }
 
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html{background:#03030a}
+
+html{
+  background:#03030a;
+}
+
 body{
   margin:0;
   min-height:100vh;
@@ -56,36 +60,86 @@ body::before{
   padding:22px 18px 110px;
 }
 
-button,input,select{font-family:inherit}
-button{cursor:pointer}
-.screen{display:none}
-.screen.active{display:block}
+button,input,select{
+  font-family:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.screen{
+  display:none;
+}
+
+.screen.active{
+  display:block;
+}
 
 /* HEADER */
+
 .home-header{
   display:flex;
   align-items:center;
   justify-content:space-between;
   margin-bottom:25px;
 }
+
 .menu-btn,.profile-btn{
-  width:48px;height:48px;border:none;background:transparent;color:white;
-  display:flex;align-items:center;justify-content:center;
+  width:48px;
+  height:48px;
+  border:none;
+  background:transparent;
+  color:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
-.menu-icon{font-size:29px}
+
+.menu-icon{
+  font-size:29px;
+}
+
 .logo{
-  font-size:27px;font-weight:1000;font-style:italic;
-  letter-spacing:-2px;transform:skew(-5deg);
+  font-size:27px;
+  font-weight:1000;
+  font-style:italic;
+  letter-spacing:-2px;
+  transform:skew(-5deg);
 }
-.logo-bolt{color:#854cff;margin-right:4px;text-shadow:0 0 10px rgba(132,76,255,.8)}
-.logo-shift{color:#f5f5f7}
-.logo-fit{color:#8656ff;text-shadow:0 0 12px rgba(132,76,255,.8)}
-.profile-btn{font-size:25px}
+
+.logo-bolt{
+  color:#854cff;
+  margin-right:4px;
+  text-shadow:0 0 10px rgba(132,76,255,.8);
+}
+
+.logo-shift{
+  color:#f5f5f7;
+}
+
+.logo-fit{
+  color:#8656ff;
+  text-shadow:0 0 12px rgba(132,76,255,.8);
+}
+
+.profile-btn{
+  font-size:25px;
+}
 
 /* HOME */
-.user-row{display:flex;align-items:center;gap:13px;margin:5px 2px 22px}
+
+.user-row{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  margin:5px 2px 22px;
+}
+
 .avatar{
-  width:54px;height:54px;border-radius:50%;
+  width:54px;
+  height:54px;
+  border-radius:50%;
   background:
     radial-gradient(circle at 50% 35%,#6176a6 0 13%,transparent 14%),
     radial-gradient(circle at 50% 90%,#293653 0 34%,transparent 35%),
@@ -93,285 +147,844 @@ button{cursor:pointer}
   border:2px solid #6d49d7;
   box-shadow:0 0 12px rgba(109,40,217,.55);
 }
-.user-name{font-size:21px;font-weight:850}
-.user-level{color:var(--muted);font-size:13px;margin-top:3px}
+
+.user-name{
+  font-size:21px;
+  font-weight:850;
+}
+
+.user-level{
+  color:var(--muted);
+  font-size:13px;
+  margin-top:3px;
+}
 
 .today-plan,.meal-summary{
-  padding:20px;border-radius:22px;border:1px solid #303a60;
+  padding:20px;
+  border-radius:22px;
+  border:1px solid #303a60;
   background:
     radial-gradient(circle at 100% 0%,rgba(88,70,255,.24),transparent 35%),
     linear-gradient(145deg,#151b36,#0c1123);
   box-shadow:0 15px 40px rgba(0,0,0,.35);
 }
-.plan-top{display:flex;align-items:center;justify-content:space-between}
-.plan-heading{font-size:17px;font-weight:850}
-.shift-badge{
-  background:linear-gradient(135deg,#ff9c26,#f47b12);color:#251307;
-  padding:7px 15px;border-radius:10px;font-size:11px;font-weight:950;
-}
-.shift-time-row{display:flex;gap:10px;margin-top:15px;color:#d7daea;font-size:15px;font-weight:700}
-.plan-stats{
-  display:grid;grid-template-columns:repeat(3,1fr);
-  margin-top:17px;padding-top:17px;border-top:1px solid rgba(255,255,255,.08);
-}
-.plan-stat{text-align:center;padding:0 7px;border-right:1px solid rgba(255,255,255,.1)}
-.plan-stat:last-child{border-right:none}
-.stat-icon{font-size:19px;margin-bottom:4px}
-.plan-stat-label{color:#bbc0d1;font-size:11px}
-.plan-stat-value{font-size:20px;font-weight:900;margin-top:4px}
 
-.action-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:17px}
-.action-card{
-  position:relative;overflow:hidden;min-height:185px;padding:17px;
-  border-radius:20px;border:1px solid #293253;
+.plan-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
 }
+
+.plan-heading{
+  font-size:17px;
+  font-weight:850;
+}
+
+.shift-badge{
+  background:linear-gradient(135deg,#ff9c26,#f47b12);
+  color:#251307;
+  padding:7px 15px;
+  border-radius:10px;
+  font-size:11px;
+  font-weight:950;
+}
+
+.shift-time-row{
+  display:flex;
+  gap:10px;
+  margin-top:15px;
+  color:#d7daea;
+  font-size:15px;
+  font-weight:700;
+}
+
+.plan-stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  margin-top:17px;
+  padding-top:17px;
+  border-top:1px solid rgba(255,255,255,.08);
+}
+
+.plan-stat{
+  text-align:center;
+  padding:0 7px;
+  border-right:1px solid rgba(255,255,255,.1);
+}
+
+.plan-stat:last-child{
+  border-right:none;
+}
+
+.stat-icon{
+  font-size:19px;
+  margin-bottom:4px;
+}
+
+.plan-stat-label{
+  color:#bbc0d1;
+  font-size:11px;
+}
+
+.plan-stat-value{
+  font-size:20px;
+  font-weight:900;
+  margin-top:4px;
+}
+
+.action-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:13px;
+  margin-top:17px;
+}
+
+.action-card{
+  position:relative;
+  overflow:hidden;
+  min-height:185px;
+  padding:17px;
+  border-radius:20px;
+  border:1px solid #293253;
+}
+
 .workout-card{
   background:
     radial-gradient(circle at 100% 0%,rgba(47,222,139,.13),transparent 38%),
     linear-gradient(145deg,#102329,#0a1520);
 }
+
 .meal-card{
   background:
     radial-gradient(circle at 100% 0%,rgba(109,91,255,.25),transparent 40%),
     linear-gradient(145deg,#171e47,#0d1125);
 }
-.action-icon{font-size:31px;margin-bottom:17px}
-.action-label{color:#b9c0d0;font-size:12px;font-weight:850}
-.action-title{font-size:20px;font-weight:900;margin-top:5px}
-.action-desc{color:#9ca5b9;font-size:12px;margin-top:5px}
+
+.action-icon{
+  font-size:31px;
+  margin-bottom:17px;
+}
+
+.action-label{
+  color:#b9c0d0;
+  font-size:12px;
+  font-weight:850;
+}
+
+.action-title{
+  font-size:20px;
+  font-weight:900;
+  margin-top:5px;
+}
+
+.action-desc{
+  color:#9ca5b9;
+  font-size:12px;
+  margin-top:5px;
+}
+
 .action-button{
-  position:absolute;bottom:15px;left:15px;right:15px;border:none;color:white;
-  padding:10px 6px;border-radius:9px;font-size:12px;font-weight:850;
+  position:absolute;
+  bottom:15px;
+  left:15px;
+  right:15px;
+  border:none;
+  color:white;
+  padding:10px 6px;
+  border-radius:9px;
+  font-size:12px;
+  font-weight:850;
   background:linear-gradient(135deg,#8b3cff,#5123c5);
 }
 
 .progress-card{
-  margin-top:18px;padding:17px;border-radius:20px;border:1px solid #293253;
+  margin-top:18px;
+  padding:17px;
+  border-radius:20px;
+  border:1px solid #293253;
   background:linear-gradient(145deg,#11162a,#0a0e1d);
 }
-.progress-title{font-size:15px;font-weight:850;margin-bottom:15px}
-.progress-content{display:flex;align-items:center;gap:20px}
+
+.progress-title{
+  font-size:15px;
+  font-weight:850;
+  margin-bottom:15px;
+}
+
+.progress-content{
+  display:flex;
+  align-items:center;
+  gap:20px;
+}
+
 .progress-ring{
-  width:94px;height:94px;min-width:94px;border-radius:50%;
+  width:94px;
+  height:94px;
+  min-width:94px;
+  border-radius:50%;
   background:conic-gradient(var(--green) 0deg 281deg,#1b2740 281deg);
-  display:flex;align-items:center;justify-content:center;transform:rotate(-90deg);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transform:rotate(-90deg);
 }
+
 .progress-inner{
-  width:72px;height:72px;border-radius:50%;background:#101528;
-  display:flex;align-items:center;justify-content:center;transform:rotate(90deg);
-  font-size:20px;font-weight:950;
+  width:72px;
+  height:72px;
+  border-radius:50%;
+  background:#101528;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transform:rotate(90deg);
+  font-size:20px;
+  font-weight:950;
 }
-.progress-info{flex:1}
+
+.progress-info{
+  flex:1;
+}
+
 .progress-row{
-  display:grid;grid-template-columns:1fr auto;padding:8px 0;
-  border-bottom:1px solid rgba(255,255,255,.07);font-size:13px;
+  display:grid;
+  grid-template-columns:1fr auto;
+  padding:8px 0;
+  border-bottom:1px solid rgba(255,255,255,.07);
+  font-size:13px;
 }
-.progress-row:last-child{border-bottom:none}
-.progress-row-label{color:#c5cada}
-.progress-row-value{font-weight:800}
-.on-track{color:var(--green)}
+
+.progress-row:last-child{
+  border-bottom:none;
+}
+
+.progress-row-label{
+  color:#c5cada;
+}
+
+.progress-row-value{
+  font-weight:800;
+}
+
+.on-track{
+  color:var(--green);
+}
+
 .dot{
-  display:inline-block;width:8px;height:8px;border-radius:50%;
-  background:var(--green);margin-right:5px;
+  display:inline-block;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--green);
+  margin-right:5px;
 }
 
 .ai-card{
-  display:flex;align-items:center;gap:14px;margin-top:17px;padding:13px;
-  border-radius:18px;border:1px solid rgba(133,86,255,.55);
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-top:17px;
+  padding:13px;
+  border-radius:18px;
+  border:1px solid rgba(133,86,255,.55);
   background:linear-gradient(135deg,#1b1041,#11162a);
 }
+
 .ai-bot{
-  width:58px;height:58px;border-radius:15px;display:flex;
-  align-items:center;justify-content:center;font-size:31px;
+  width:58px;
+  height:58px;
+  border-radius:15px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:31px;
   background:radial-gradient(circle,#7455f4,#26135e);
 }
-.ai-content{flex:1}
-.ai-title{font-size:15px;font-weight:900}
-.ai-text{color:#c2c6d4;font-size:12px;margin-top:3px}
-.ai-arrow{font-size:30px;color:#d6c6ff}
+
+.ai-content{
+  flex:1;
+}
+
+.ai-title{
+  font-size:15px;
+  font-weight:900;
+}
+
+.ai-text{
+  color:#c2c6d4;
+  font-size:12px;
+  margin-top:3px;
+}
+
+.ai-arrow{
+  font-size:30px;
+  color:#d6c6ff;
+}
 
 /* GENERIC */
+
 .back-btn{
-  border:none;background:transparent;color:white;font-size:16px;
-  font-weight:800;padding:5px 0 20px;
+  border:none;
+  background:transparent;
+  color:white;
+  font-size:16px;
+  font-weight:800;
+  padding:5px 0 20px;
 }
+
 .workout-day,.meal-kicker,.setup-kicker,.shopping-kicker{
-  color:#c5b5ff;font-size:12px;font-weight:950;letter-spacing:4px;
+  color:#c5b5ff;
+  font-size:12px;
+  font-weight:950;
+  letter-spacing:4px;
 }
+
 .workout-header h1,.meal-header h1,.setup-header h1,.shopping-header h1{
-  margin:9px 0 8px;font-size:39px;letter-spacing:-1.5px;
+  margin:9px 0 8px;
+  font-size:39px;
+  letter-spacing:-1.5px;
 }
+
 .workout-header p,.meal-header p,.setup-header p,.shopping-header p{
-  color:var(--muted);font-size:16px;line-height:1.5;
+  color:var(--muted);
+  font-size:16px;
+  line-height:1.5;
 }
 
 /* WORKOUT */
-.workout-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:22px 0 24px}
+
+.workout-stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin:22px 0 24px;
+}
+
 .workout-stat{
-  background:#12182d;border:1px solid #293253;border-radius:17px;
-  padding:14px 6px;text-align:center;
+  background:#12182d;
+  border:1px solid #293253;
+  border-radius:17px;
+  padding:14px 6px;
+  text-align:center;
 }
-.workout-stat small{display:block;color:var(--muted);font-size:9px;margin-bottom:6px}
+
+.workout-stat small{
+  display:block;
+  color:var(--muted);
+  font-size:9px;
+  margin-bottom:6px;
+}
+
 .exercise-card{
-  display:flex;gap:15px;padding:17px;margin-bottom:12px;border-radius:20px;
-  border:1px solid #293253;background:linear-gradient(145deg,#151b31,#0c1122);
+  display:flex;
+  gap:15px;
+  padding:17px;
+  margin-bottom:12px;
+  border-radius:20px;
+  border:1px solid #293253;
+  background:linear-gradient(145deg,#151b31,#0c1122);
 }
-.exercise-card.completed{border-color:#75d7bd;background:#10232b}
+
+.exercise-card.completed{
+  border-color:#75d7bd;
+  background:#10232b;
+}
+
 .exercise-check{
-  width:45px;height:45px;min-width:45px;border-radius:13px;display:flex;
-  align-items:center;justify-content:center;background:#e8e9ef;color:#163c34;font-size:24px;
+  width:45px;
+  height:45px;
+  min-width:45px;
+  border-radius:13px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#e8e9ef;
+  color:#163c34;
+  font-size:24px;
 }
-.exercise-content{flex:1}
-.exercise-name{font-size:18px;font-weight:900}
-.exercise-sets{color:#82d7ba;font-size:14px;font-weight:850;margin-top:6px}
-.exercise-tip{color:var(--muted);font-size:13px;line-height:1.45;margin-top:10px}
-.workout-progress{margin:22px 0}
-.workout-progress-top{display:flex;justify-content:space-between;font-size:13px;font-weight:850;margin-bottom:9px}
-.progress-bar{height:11px;background:#171c31;border-radius:20px;overflow:hidden}
+
+.exercise-content{
+  flex:1;
+}
+
+.exercise-name{
+  font-size:18px;
+  font-weight:900;
+}
+
+.exercise-sets{
+  color:#82d7ba;
+  font-size:14px;
+  font-weight:850;
+  margin-top:6px;
+}
+
+.exercise-tip{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.45;
+  margin-top:10px;
+}
+
+.workout-progress{
+  margin:22px 0;
+}
+
+.workout-progress-top{
+  display:flex;
+  justify-content:space-between;
+  font-size:13px;
+  font-weight:850;
+  margin-bottom:9px;
+}
+
+.progress-bar{
+  height:11px;
+  background:#171c31;
+  border-radius:20px;
+  overflow:hidden;
+}
+
 .progress-fill{
-  width:0%;height:100%;
-  background:linear-gradient(90deg,#7c3aed,#9b87ff,#5cd8b3);transition:.3s;
+  width:0%;
+  height:100%;
+  background:linear-gradient(90deg,#7c3aed,#9b87ff,#5cd8b3);
+  transition:.3s;
 }
+
 .finish-button{
-  width:100%;padding:17px;border:none;border-radius:16px;color:white;
-  font-weight:950;background:#30364d;opacity:.5;
+  width:100%;
+  padding:17px;
+  border:none;
+  border-radius:16px;
+  color:white;
+  font-weight:950;
+  background:#30364d;
+  opacity:.5;
 }
-.finish-button.ready{opacity:1;background:linear-gradient(135deg,#7c3aed,#4f46e5)}
+
+.finish-button.ready{
+  opacity:1;
+  background:linear-gradient(135deg,#7c3aed,#4f46e5);
+}
 
 /* MEALS */
-.meal-header{margin-bottom:20px}
+
+.meal-header{
+  margin-bottom:20px;
+}
+
 .day-selector{
-  display:flex;gap:9px;overflow-x:auto;padding:3px 0 14px;scrollbar-width:none;
+  display:flex;
+  gap:9px;
+  overflow-x:auto;
+  padding:3px 0 14px;
+  scrollbar-width:none;
 }
-.day-selector::-webkit-scrollbar{display:none}
+
+.day-selector::-webkit-scrollbar{
+  display:none;
+}
+
 .day-btn{
-  min-width:58px;padding:10px 7px;border-radius:14px;border:1px solid #293253;
-  background:#11162a;color:#9ca5b9;font-size:11px;font-weight:850;
+  min-width:58px;
+  padding:10px 7px;
+  border-radius:14px;
+  border:1px solid #293253;
+  background:#11162a;
+  color:#9ca5b9;
+  font-size:11px;
+  font-weight:850;
 }
-.day-btn strong{display:block;color:white;font-size:14px;margin-top:4px}
+
+.day-btn strong{
+  display:block;
+  color:white;
+  font-size:14px;
+  margin-top:4px;
+}
+
 .day-btn.active{
   background:linear-gradient(135deg,#7c3aed,#5123c5);
-  border-color:#986cff;color:#e6ddff;
+  border-color:#986cff;
+  color:#e6ddff;
 }
-.meal-summary{margin-bottom:17px}
-.summary-top{display:flex;justify-content:space-between;align-items:flex-start}
-.summary-label{color:#bfc4d4;font-size:12px;font-weight:800}
-.summary-calories{font-size:36px;font-weight:950;margin-top:4px}
-.summary-calories span{font-size:13px;color:var(--muted);font-weight:700}
+
+.meal-summary{
+  margin-bottom:17px;
+}
+
+.summary-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+}
+
+.summary-label{
+  color:#bfc4d4;
+  font-size:12px;
+  font-weight:800;
+}
+
+.summary-calories{
+  font-size:36px;
+  font-weight:950;
+  margin-top:4px;
+}
+
+.summary-calories span{
+  font-size:13px;
+  color:var(--muted);
+  font-weight:700;
+}
+
 .summary-badge{
-  padding:8px 11px;border-radius:10px;background:rgba(53,223,141,.12);
-  color:#70efb1;font-size:10px;font-weight:900;
+  padding:8px 11px;
+  border-radius:10px;
+  background:rgba(53,223,141,.12);
+  color:#70efb1;
+  font-size:10px;
+  font-weight:900;
 }
-.macro-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:18px}
-.macro-box{padding:11px 5px;text-align:center;border-radius:13px;background:rgba(255,255,255,.045)}
-.macro-box span{display:block;color:var(--muted);font-size:9px;font-weight:800}
-.macro-box strong{display:block;font-size:16px;margin-top:4px}
-.meal-section-title{font-size:16px;font-weight:900;margin:21px 0 11px}
+
+.macro-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin-top:18px;
+}
+
+.macro-box{
+  padding:11px 5px;
+  text-align:center;
+  border-radius:13px;
+  background:rgba(255,255,255,.045);
+}
+
+.macro-box span{
+  display:block;
+  color:var(--muted);
+  font-size:9px;
+  font-weight:800;
+}
+
+.macro-box strong{
+  display:block;
+  font-size:16px;
+  margin-top:4px;
+}
+
+.meal-section-title{
+  font-size:16px;
+  font-weight:900;
+  margin:21px 0 11px;
+}
+
 .meal-card-full{
-  position:relative;overflow:hidden;padding:16px;margin-bottom:12px;border-radius:20px;
-  border:1px solid #293253;background:linear-gradient(145deg,#151b31,#0c1122);
+  position:relative;
+  overflow:hidden;
+  padding:16px;
+  margin-bottom:12px;
+  border-radius:20px;
+  border:1px solid #293253;
+  background:linear-gradient(145deg,#151b31,#0c1122);
 }
+
 .meal-card-full::after{
-  content:"";position:absolute;width:130px;height:130px;right:-55px;top:-55px;
-  border-radius:50%;background:rgba(109,40,217,.14);
+  content:"";
+  position:absolute;
+  width:130px;
+  height:130px;
+  right:-55px;
+  top:-55px;
+  border-radius:50%;
+  background:rgba(109,40,217,.14);
 }
-.meal-top{position:relative;z-index:1;display:flex;gap:13px}
+
+.meal-top{
+  position:relative;
+  z-index:1;
+  display:flex;
+  gap:13px;
+}
+
 .meal-emoji{
-  width:51px;height:51px;min-width:51px;display:flex;align-items:center;justify-content:center;
-  border-radius:15px;background:rgba(139,92,246,.13);font-size:27px;
+  width:51px;
+  height:51px;
+  min-width:51px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:15px;
+  background:rgba(139,92,246,.13);
+  font-size:27px;
 }
-.meal-info{flex:1}
-.meal-type{color:#a78bfa;font-size:10px;font-weight:950;letter-spacing:1.5px}
-.meal-name{font-size:17px;font-weight:900;margin-top:3px}
-.meal-desc{color:var(--muted);font-size:12px;margin-top:4px;line-height:1.4}
+
+.meal-info{
+  flex:1;
+}
+
+.meal-type{
+  color:#a78bfa;
+  font-size:10px;
+  font-weight:950;
+  letter-spacing:1.5px;
+}
+
+.meal-name{
+  font-size:17px;
+  font-weight:900;
+  margin-top:3px;
+}
+
+.meal-desc{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:4px;
+  line-height:1.4;
+}
+
 .meal-calories{
-  position:absolute;z-index:2;top:17px;right:16px;font-size:12px;
-  font-weight:900;color:#ffbd6b;
+  position:absolute;
+  z-index:2;
+  top:17px;
+  right:16px;
+  font-size:12px;
+  font-weight:900;
+  color:#ffbd6b;
 }
+
 .meal-macros{
-  position:relative;z-index:1;display:flex;gap:13px;margin-top:15px;
-  padding-top:13px;border-top:1px solid rgba(255,255,255,.07);
+  position:relative;
+  z-index:1;
+  display:flex;
+  gap:13px;
+  margin-top:15px;
+  padding-top:13px;
+  border-top:1px solid rgba(255,255,255,.07);
 }
-.meal-macros span{color:#b6bdcf;font-size:11px}
-.meal-macros strong{color:white}
+
+.meal-macros span{
+  color:#b6bdcf;
+  font-size:11px;
+}
+
+.meal-macros strong{
+  color:white;
+}
+
 .swap-btn{
-  position:relative;z-index:2;width:100%;margin-top:14px;padding:11px;border-radius:11px;
-  border:1px solid rgba(139,92,246,.35);background:rgba(109,40,217,.12);
-  color:#c9b7ff;font-size:12px;font-weight:900;
+  position:relative;
+  z-index:2;
+  width:100%;
+  margin-top:14px;
+  padding:11px;
+  border-radius:11px;
+  border:1px solid rgba(139,92,246,.35);
+  background:rgba(109,40,217,.12);
+  color:#c9b7ff;
+  font-size:12px;
+  font-weight:900;
 }
+
 .edit-plan-btn{
-  width:100%;margin-top:12px;padding:13px;border:1px solid rgba(139,92,246,.4);
-  border-radius:12px;background:rgba(109,40,217,.10);color:#cdbdff;
-  font-size:12px;font-weight:900;
+  width:100%;
+  margin-top:12px;
+  padding:13px;
+  border:1px solid rgba(139,92,246,.4);
+  border-radius:12px;
+  background:rgba(109,40,217,.10);
+  color:#cdbdff;
+  font-size:12px;
+  font-weight:900;
 }
 
 /* SETUP */
-.setup-header{margin-bottom:22px}
+
+.setup-header{
+  margin-bottom:22px;
+}
+
 .setup-card{
-  padding:18px;margin-bottom:15px;border-radius:21px;border:1px solid #293253;
+  padding:18px;
+  margin-bottom:15px;
+  border-radius:21px;
+  border:1px solid #293253;
   background:linear-gradient(145deg,#151b31,#0c1122);
 }
+
 .setup-label{
-  display:block;margin-bottom:10px;color:#c9cde0;font-size:12px;
-  font-weight:900;letter-spacing:1px;
+  display:block;
+  margin-bottom:10px;
+  color:#c9cde0;
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:1px;
 }
+
 .setup-input{
-  width:100%;border:1px solid #374164;border-radius:13px;padding:14px;color:white;
-  font-size:16px;font-weight:800;outline:none;background:#0a0f20;
+  width:100%;
+  border:1px solid #374164;
+  border-radius:13px;
+  padding:14px;
+  color:white;
+  font-size:16px;
+  font-weight:800;
+  outline:none;
+  background:#0a0f20;
 }
-.setup-input:focus{border-color:#8b5cf6;box-shadow:0 0 0 3px rgba(139,92,246,.12)}
-.setup-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.goal-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+
+.setup-input:focus{
+  border-color:#8b5cf6;
+  box-shadow:0 0 0 3px rgba(139,92,246,.12);
+}
+
+.setup-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.goal-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+}
+
 .goal-btn{
-  min-height:88px;padding:10px 5px;border-radius:15px;border:1px solid #303a60;
-  background:#0d1326;color:#aab1c5;font-size:11px;font-weight:850;
+  min-height:88px;
+  padding:10px 5px;
+  border-radius:15px;
+  border:1px solid #303a60;
+  background:#0d1326;
+  color:#aab1c5;
+  font-size:11px;
+  font-weight:850;
 }
-.goal-btn span{display:block;font-size:24px;margin-bottom:6px}
+
+.goal-btn span{
+  display:block;
+  font-size:24px;
+  margin-bottom:6px;
+}
+
 .goal-btn.active{
-  border-color:#936bff;background:linear-gradient(145deg,#382070,#17143a);
-  color:white;box-shadow:0 0 20px rgba(109,40,217,.2);
+  border-color:#936bff;
+  background:linear-gradient(145deg,#382070,#17143a);
+  color:white;
+  box-shadow:0 0 20px rgba(109,40,217,.2);
 }
+
 .generate-btn{
-  width:100%;margin-top:5px;padding:18px;border:none;border-radius:16px;color:white;
-  font-size:15px;font-weight:950;background:linear-gradient(135deg,#8b3cff,#5123c5);
+  width:100%;
+  margin-top:5px;
+  padding:18px;
+  border:none;
+  border-radius:16px;
+  color:white;
+  font-size:15px;
+  font-weight:950;
+  background:linear-gradient(135deg,#8b3cff,#5123c5);
   box-shadow:0 8px 25px rgba(109,40,217,.28);
 }
 
 /* SHOPPING */
+
 .shopping-card{
-  padding:18px;margin-top:20px;border-radius:21px;border:1px solid rgba(53,223,141,.24);
+  padding:18px;
+  margin-top:20px;
+  border-radius:21px;
+  border:1px solid rgba(53,223,141,.24);
   background:linear-gradient(145deg,#10251f,#0b1818);
 }
-.shopping-top{display:flex;justify-content:space-between}
-.shopping-title{font-size:17px;font-weight:900}
-.shopping-count{color:#75e7b1;font-size:11px;font-weight:850}
-.shopping-items{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:15px}
-.shopping-item{color:#c7d1d0;font-size:12px}
-.shopping-item::before{content:"✓";color:#55dc9b;margin-right:7px}
+
+.shopping-top{
+  display:flex;
+  justify-content:space-between;
+}
+
+.shopping-title{
+  font-size:17px;
+  font-weight:900;
+}
+
+.shopping-count{
+  color:#75e7b1;
+  font-size:11px;
+  font-weight:850;
+}
+
+.shopping-items{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:15px;
+}
+
+.shopping-item{
+  color:#c7d1d0;
+  font-size:12px;
+}
+
+.shopping-item::before{
+  content:"✓";
+  color:#55dc9b;
+  margin-right:7px;
+}
+
 .shopping-btn{
-  width:100%;margin-top:16px;padding:12px;border:none;border-radius:11px;
-  color:#07150f;font-size:12px;font-weight:950;
+  width:100%;
+  margin-top:16px;
+  padding:12px;
+  border:none;
+  border-radius:11px;
+  color:#07150f;
+  font-size:12px;
+  font-weight:950;
   background:linear-gradient(135deg,#56e8a1,#25ba73);
 }
 
 .shopping-summary{
-  display:grid;grid-template-columns:1fr 1fr;gap:11px;margin:20px 0;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:11px;
+  margin:20px 0;
 }
+
 .shopping-stat{
-  padding:15px;border-radius:17px;border:1px solid #293253;
+  padding:15px;
+  border-radius:17px;
+  border:1px solid #293253;
   background:linear-gradient(145deg,#151b31,#0c1122);
 }
-.shopping-stat small{display:block;color:var(--muted);font-size:10px;font-weight:850}
-.shopping-stat strong{display:block;font-size:24px;margin-top:7px}
+
+.shopping-stat small{
+  display:block;
+  color:var(--muted);
+  font-size:10px;
+  font-weight:850;
+}
+
+.shopping-stat strong{
+  display:block;
+  font-size:24px;
+  margin-top:7px;
+}
 
 .shopping-list-card{
-  border:1px solid #293253;border-radius:20px;overflow:hidden;
+  border:1px solid #293253;
+  border-radius:20px;
+  overflow:hidden;
   background:linear-gradient(145deg,#151b31,#0c1122);
 }
+
 .shopping-list-title{
-  padding:17px;font-size:15px;font-weight:900;
+  padding:17px;
+  font-size:15px;
+  font-weight:900;
   border-bottom:1px solid rgba(255,255,255,.07);
 }
+
 .shop-row{
   display:grid;
   grid-template-columns:28px 1fr auto 32px;
@@ -380,43 +993,99 @@ button{cursor:pointer}
   padding:14px 15px;
   border-bottom:1px solid rgba(255,255,255,.06);
 }
-.shop-row:last-child{border-bottom:none}
+
+.shop-row:last-child{
+  border-bottom:none;
+}
+
 .shop-check{
-  width:22px;height:22px;border:2px solid #64708d;border-radius:7px;
-  background:transparent;color:#07150f;font-weight:950;
-  display:flex;align-items:center;justify-content:center;
+  width:22px;
+  height:22px;
+  border:2px solid #64708d;
+  border-radius:7px;
+  background:transparent;
+  color:#07150f;
+  font-weight:950;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
+
 .shop-row.checked .shop-check{
-  border-color:#56e8a1;background:#56e8a1;
+  border-color:#56e8a1;
+  background:#56e8a1;
 }
+
 .shop-row.checked .shop-name{
-  text-decoration:line-through;color:#667081;
+  text-decoration:line-through;
+  color:#667081;
 }
-.shop-name{font-size:14px;font-weight:750}
+
+.shop-name{
+  font-size:14px;
+  font-weight:750;
+}
+
 .shop-qty{
-  width:68px;border:1px solid #374164;border-radius:9px;background:#0a0f20;
-  color:white;padding:8px 6px;text-align:center;font-size:12px;font-weight:800;
+  width:68px;
+  border:1px solid #374164;
+  border-radius:9px;
+  background:#0a0f20;
+  color:white;
+  padding:8px 6px;
+  text-align:center;
+  font-size:12px;
+  font-weight:800;
 }
+
 .delete-shop{
-  border:none;background:transparent;color:#ff7182;font-size:20px;padding:0;
+  border:none;
+  background:transparent;
+  color:#ff7182;
+  font-size:20px;
+  padding:0;
 }
+
 .add-item-card{
-  display:grid;grid-template-columns:1fr 82px;gap:10px;margin-top:15px;
+  display:grid;
+  grid-template-columns:1fr 82px;
+  gap:10px;
+  margin-top:15px;
 }
+
 .add-item-input{
-  width:100%;border:1px solid #374164;border-radius:12px;background:#0a0f20;
-  color:white;padding:13px;font-size:13px;font-weight:700;outline:none;
+  width:100%;
+  border:1px solid #374164;
+  border-radius:12px;
+  background:#0a0f20;
+  color:white;
+  padding:13px;
+  font-size:13px;
+  font-weight:700;
+  outline:none;
 }
+
 .add-item-btn{
-  border:none;border-radius:12px;color:white;font-weight:950;
+  border:none;
+  border-radius:12px;
+  color:white;
+  font-weight:950;
   background:linear-gradient(135deg,#8b3cff,#5123c5);
 }
+
 .clear-shop-btn{
-  width:100%;margin-top:15px;padding:13px;border:1px solid rgba(255,95,115,.25);
-  border-radius:12px;background:rgba(255,95,115,.08);color:#ff9baa;font-weight:900;
+  width:100%;
+  margin-top:15px;
+  padding:13px;
+  border:1px solid rgba(255,95,115,.25);
+  border-radius:12px;
+  background:rgba(255,95,115,.08);
+  color:#ff9baa;
+  font-weight:900;
 }
 
 /* BEST BASKET */
+
 .best-basket-card{
   margin-top:16px;
   padding:18px;
@@ -681,294 +1350,985 @@ button{cursor:pointer}
 }
 
 /* NAV */
+
 .bottom-nav{
-  position:fixed;z-index:20;bottom:0;left:50%;transform:translateX(-50%);
-  width:min(500px,100%);display:grid;grid-template-columns:repeat(5,1fr);
-  background:rgba(5,6,18,.94);backdrop-filter:blur(22px);
+  position:fixed;
+  z-index:20;
+  bottom:0;
+  left:50%;
+  transform:translateX(-50%);
+  width:min(500px,100%);
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  background:rgba(5,6,18,.94);
+  backdrop-filter:blur(22px);
   border-top:1px solid rgba(139,92,246,.15);
   padding:10px 4px calc(10px + env(safe-area-inset-bottom));
 }
+
 .nav-item{
-  border:none;background:transparent;color:#7e869b;display:flex;flex-direction:column;
-  align-items:center;gap:5px;padding:5px 0;font-size:10px;
+  border:none;
+  background:transparent;
+  color:#7e869b;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:5px;
+  padding:5px 0;
+  font-size:10px;
 }
-.nav-icon{font-size:21px}
-.nav-item.active{color:#9b6dff;text-shadow:0 0 12px rgba(139,92,246,.45)}
+
+.nav-icon{
+  font-size:21px;
+}
+
+.nav-item.active{
+  color:#9b6dff;
+  text-shadow:0 0 12px rgba(139,92,246,.45);
+}
 
 @media(max-width:360px){
-  .app{padding-left:14px;padding-right:14px}
-  .plan-stat-value{font-size:17px}
-  .shopping-items{grid-template-columns:1fr}
-  .meal-macros{gap:8px}
-  .shop-row{grid-template-columns:25px 1fr 58px 25px;gap:7px}
-  .shop-qty{width:58px}
-  .retailer-total{font-size:23px}
+
+  .app{
+    padding-left:14px;
+    padding-right:14px;
+  }
+
+  .plan-stat-value{
+    font-size:17px;
+  }
+
+  .shopping-items{
+    grid-template-columns:1fr;
+  }
+
+  .meal-macros{
+    gap:8px;
+  }
+
+  .shop-row{
+    grid-template-columns:25px 1fr 58px 25px;
+    gap:7px;
+  }
+
+  .shop-qty{
+    width:58px;
+  }
+
+  .retailer-total{
+    font-size:23px;
+  }
 }
 </style>
 </head>
 
 <body>
+
 <div class="app">
 
 <!-- HOME -->
+
 <section id="homeScreen" class="screen active">
+
 <header class="home-header">
-  <button class="menu-btn"><span class="menu-icon">☰</span></button>
-  <div class="logo"><span class="logo-bolt">⚡</span><span class="logo-shift">SHIFT</span><span class="logo-fit">FIT</span></div>
+
+  <button class="menu-btn">
+    <span class="menu-icon">☰</span>
+  </button>
+
+  <div class="logo">
+    <span class="logo-bolt">⚡</span>
+    <span class="logo-shift">SHIFT</span>
+    <span class="logo-fit">FIT</span>
+  </div>
+
   <button class="profile-btn" onclick="showSetup()">⚙</button>
+
 </header>
 
 <div class="user-row">
+
   <div class="avatar"></div>
+
   <div>
     <div class="user-name">Andrew</div>
     <div class="user-level">Level 1 • ShiftFit Member</div>
   </div>
+
 </div>
 
 <section class="today-plan">
+
   <div class="plan-top">
     <div class="plan-heading">Today's Plan</div>
     <div class="shift-badge">DAY SHIFT</div>
   </div>
-  <div class="shift-time-row"><span>▣</span><span>06:00 – 18:00</span></div>
-  <div class="plan-stats">
-    <div class="plan-stat"><div class="stat-icon">🔥</div><div class="plan-stat-label">Calories</div><div class="plan-stat-value" id="homeCalories">2,200</div></div>
-    <div class="plan-stat"><div class="stat-icon">🏋️</div><div class="plan-stat-label">Protein</div><div class="plan-stat-value" id="homeProtein">180g</div></div>
-    <div class="plan-stat"><div class="stat-icon">💧</div><div class="plan-stat-label">Water</div><div class="plan-stat-value">2.5L</div></div>
+
+  <div class="shift-time-row">
+    <span>▣</span>
+    <span>06:00 – 18:00</span>
   </div>
+
+  <div class="plan-stats">
+
+    <div class="plan-stat">
+      <div class="stat-icon">🔥</div>
+      <div class="plan-stat-label">Calories</div>
+      <div class="plan-stat-value" id="homeCalories">2,200</div>
+    </div>
+
+    <div class="plan-stat">
+      <div class="stat-icon">🏋️</div>
+      <div class="plan-stat-label">Protein</div>
+      <div class="plan-stat-value" id="homeProtein">180g</div>
+    </div>
+
+    <div class="plan-stat">
+      <div class="stat-icon">💧</div>
+      <div class="plan-stat-label">Water</div>
+      <div class="plan-stat-value">2.5L</div>
+    </div>
+
+  </div>
+
 </section>
 
 <div class="action-grid">
+
   <section class="action-card workout-card">
-    <div class="action-icon">🏋️</div><div class="action-label">WORKOUT</div><div class="action-title">Push Day</div><div class="action-desc">5 exercises • 60 mins</div>
-    <button class="action-button" onclick="showWorkout()">Start Workout</button>
+
+    <div class="action-icon">🏋️</div>
+    <div class="action-label">WORKOUT</div>
+    <div class="action-title">Push Day</div>
+    <div class="action-desc">5 exercises • 60 mins</div>
+
+    <button class="action-button" onclick="showWorkout()">
+      Start Workout
+    </button>
+
   </section>
+
   <section class="action-card meal-card">
-    <div class="action-icon">🍽️</div><div class="action-label">MEALS</div><div class="action-title">High Protein</div><div class="action-desc">Personalised for you</div>
-    <button class="action-button" onclick="showMeals()">View Plan</button>
+
+    <div class="action-icon">🍽️</div>
+    <div class="action-label">MEALS</div>
+    <div class="action-title">High Protein</div>
+    <div class="action-desc">Personalised for you</div>
+
+    <button class="action-button" onclick="showMeals()">
+      View Plan
+    </button>
+
   </section>
+
 </div>
 
 <section class="progress-card">
+
   <div class="progress-title">Weekly Progress</div>
+
   <div class="progress-content">
-    <div class="progress-ring"><div class="progress-inner">78%</div></div>
-    <div class="progress-info">
-      <div class="progress-row"><span class="progress-row-label">Workouts</span><span class="progress-row-value">5/6</span></div>
-      <div class="progress-row"><span class="progress-row-label">Calories</span><span class="progress-row-value on-track"><span class="dot"></span>On Track</span></div>
-      <div class="progress-row"><span class="progress-row-label">Protein</span><span class="progress-row-value on-track"><span class="dot"></span>On Track</span></div>
+
+    <div class="progress-ring">
+      <div class="progress-inner">78%</div>
     </div>
+
+    <div class="progress-info">
+
+      <div class="progress-row">
+        <span class="progress-row-label">Workouts</span>
+        <span class="progress-row-value">5/6</span>
+      </div>
+
+      <div class="progress-row">
+        <span class="progress-row-label">Calories</span>
+        <span class="progress-row-value on-track">
+          <span class="dot"></span>On Track
+        </span>
+      </div>
+
+      <div class="progress-row">
+        <span class="progress-row-label">Protein</span>
+        <span class="progress-row-value on-track">
+          <span class="dot"></span>On Track
+        </span>
+      </div>
+
+    </div>
+
   </div>
+
 </section>
 
 <section class="ai-card">
+
   <div class="ai-bot">🤖</div>
-  <div class="ai-content"><div class="ai-title">ShiftFit AI Coach</div><div class="ai-text">Your personal fitness coach. Ask me anything.</div></div>
+
+  <div class="ai-content">
+    <div class="ai-title">ShiftFit AI Coach</div>
+    <div class="ai-text">Your personal fitness coach. Ask me anything.</div>
+  </div>
+
   <div class="ai-arrow">›</div>
-</section>
+
 </section>
 
+</section>
+
+
 <!-- WORKOUT -->
+
 <section id="workoutScreen" class="screen">
-<button class="back-btn" onclick="showHome()">← Back to Home</button>
+
+<button class="back-btn" onclick="showHome()">
+  ← Back to Home
+</button>
+
 <div class="workout-header">
+
   <div class="workout-day">TODAY'S WORKOUT</div>
+
   <h1>Push Day</h1>
-  <p>Build strength and muscle with your personalised workout.</p>
+
+  <p>
+    Build strength and muscle with your personalised workout.
+  </p>
+
 </div>
 
 <div class="workout-stats">
-  <div class="workout-stat"><small>TIME</small><strong>60 min</strong></div>
-  <div class="workout-stat"><small>LEVEL</small><strong>Beginner</strong></div>
-  <div class="workout-stat"><small>FOCUS</small><strong>Push</strong></div>
+
+  <div class="workout-stat">
+    <small>TIME</small>
+    <strong>60 min</strong>
+  </div>
+
+  <div class="workout-stat">
+    <small>LEVEL</small>
+    <strong>Beginner</strong>
+  </div>
+
+  <div class="workout-stat">
+    <small>FOCUS</small>
+    <strong>Push</strong>
+  </div>
+
 </div>
 
 <div class="workout-progress">
-  <div class="workout-progress-top"><span>WORKOUT PROGRESS</span><span id="workoutProgressText">0 / 5</span></div>
-  <div class="progress-bar"><div class="progress-fill" id="workoutProgressFill"></div></div>
+
+  <div class="workout-progress-top">
+    <span>WORKOUT PROGRESS</span>
+    <span id="workoutProgressText">0 / 5</span>
+  </div>
+
+  <div class="progress-bar">
+    <div class="progress-fill" id="workoutProgressFill"></div>
+  </div>
+
 </div>
 
-<div class="exercise-card" onclick="toggleExercise(this)"><div class="exercise-check"></div><div class="exercise-content"><div class="exercise-name">1. Bench Press</div><div class="exercise-sets">4 sets × 8–10 reps</div><div class="exercise-tip">Control the weight and keep your shoulders stable.</div></div></div>
-<div class="exercise-card" onclick="toggleExercise(this)"><div class="exercise-check"></div><div class="exercise-content"><div class="exercise-name">2. Incline Dumbbell Press</div><div class="exercise-sets">4 sets × 10–12 reps</div><div class="exercise-tip">Keep the movement controlled.</div></div></div>
-<div class="exercise-card" onclick="toggleExercise(this)"><div class="exercise-check"></div><div class="exercise-content"><div class="exercise-name">3. Shoulder Press</div><div class="exercise-sets">3 sets × 8–12 reps</div><div class="exercise-tip">Brace your core and press smoothly.</div></div></div>
-<div class="exercise-card" onclick="toggleExercise(this)"><div class="exercise-check"></div><div class="exercise-content"><div class="exercise-name">4. Tricep Dips</div><div class="exercise-sets">3 sets × 12–15 reps</div><div class="exercise-tip">Keep control throughout the movement.</div></div></div>
-<div class="exercise-card" onclick="toggleExercise(this)"><div class="exercise-check"></div><div class="exercise-content"><div class="exercise-name">5. Chest Flyes</div><div class="exercise-sets">3 sets × 12–15 reps</div><div class="exercise-tip">Use a controlled stretch and squeeze.</div></div></div>
+<div class="exercise-card" onclick="toggleExercise(this)">
+  <div class="exercise-check"></div>
+  <div class="exercise-content">
+    <div class="exercise-name">1. Bench Press</div>
+    <div class="exercise-sets">4 sets × 8–10 reps</div>
+    <div class="exercise-tip">
+      Control the weight and keep your shoulders stable.
+    </div>
+  </div>
+</div>
 
-<button id="finishButton" class="finish-button" disabled onclick="finishWorkout()">COMPLETE ALL EXERCISES</button>
+<div class="exercise-card" onclick="toggleExercise(this)">
+  <div class="exercise-check"></div>
+  <div class="exercise-content">
+    <div class="exercise-name">2. Incline Dumbbell Press</div>
+    <div class="exercise-sets">4 sets × 10–12 reps</div>
+    <div class="exercise-tip">
+      Keep the movement controlled.
+    </div>
+  </div>
+</div>
+
+<div class="exercise-card" onclick="toggleExercise(this)">
+  <div class="exercise-check"></div>
+  <div class="exercise-content">
+    <div class="exercise-name">3. Shoulder Press</div>
+    <div class="exercise-sets">3 sets × 8–12 reps</div>
+    <div class="exercise-tip">
+      Brace your core and press smoothly.
+    </div>
+  </div>
+</div>
+
+<div class="exercise-card" onclick="toggleExercise(this)">
+  <div class="exercise-check"></div>
+  <div class="exercise-content">
+    <div class="exercise-name">4. Tricep Dips</div>
+    <div class="exercise-sets">3 sets × 12–15 reps</div>
+    <div class="exercise-tip">
+      Keep control throughout the movement.
+    </div>
+  </div>
+</div>
+
+<div class="exercise-card" onclick="toggleExercise(this)">
+  <div class="exercise-check"></div>
+  <div class="exercise-content">
+    <div class="exercise-name">5. Chest Flyes</div>
+    <div class="exercise-sets">3 sets × 12–15 reps</div>
+    <div class="exercise-tip">
+      Use a controlled stretch and squeeze.
+    </div>
+  </div>
+</div>
+
+<button
+  id="finishButton"
+  class="finish-button"
+  disabled
+  onclick="finishWorkout()"
+>
+  COMPLETE ALL EXERCISES
+</button>
+
 </section>
 
+
 <!-- MEALS -->
+
 <section id="mealScreen" class="screen">
-<button class="back-btn" onclick="showHome()">← Back to Home</button>
+
+<button class="back-btn" onclick="showHome()">
+  ← Back to Home
+</button>
 
 <div class="meal-header">
+
   <div class="meal-kicker">YOUR NUTRITION</div>
+
   <h1>Meal Plan</h1>
-  <p id="mealSubtitle">High-protein meals built around your goals and shift.</p>
+
+  <p id="mealSubtitle">
+    High-protein meals built around your goals and shift.
+  </p>
+
 </div>
 
 <div class="day-selector" id="daySelector"></div>
 
 <section class="meal-summary">
+
   <div class="summary-top">
-    <div><div class="summary-label">DAILY TARGET</div><div class="summary-calories"><span id="mealCalories">2,200</span> <span>kcal</span></div></div>
-    <div class="summary-badge" id="goalBadge">FAT LOSS</div>
-  </div>
-  <div class="macro-grid">
-    <div class="macro-box"><span>PROTEIN</span><strong id="mealProtein">180g</strong></div>
-    <div class="macro-box"><span>CARBS</span><strong id="mealCarbs">220g</strong></div>
-    <div class="macro-box"><span>FATS</span><strong id="mealFats">67g</strong></div>
-  </div>
-  <button class="edit-plan-btn" onclick="showSetup()">⚙ EDIT MY PERSONAL PLAN</button>
-</section>
 
-<div class="meal-section-title" id="mealDayTitle">Monday's Meals</div>
-
-<div class="meal-card-full">
-  <div class="meal-calories" id="breakfastCalories">520 kcal</div>
-  <div class="meal-top"><div class="meal-emoji" id="breakfastEmoji">🥣</div><div class="meal-info"><div class="meal-type">BREAKFAST</div><div class="meal-name" id="breakfastName">Protein Oats & Berries</div><div class="meal-desc" id="breakfastDesc">Oats, whey protein, Greek yoghurt and mixed berries.</div></div></div>
-  <div class="meal-macros"><span><strong id="breakfastP">45g</strong> Protein</span><span><strong id="breakfastC">58g</strong> Carbs</span><span><strong id="breakfastF">12g</strong> Fat</span></div>
-  <button class="swap-btn" onclick="swapMeal('breakfast')">↻ SWAP MEAL</button>
-</div>
-
-<div class="meal-card-full">
-  <div class="meal-calories" id="lunchCalories">640 kcal</div>
-  <div class="meal-top"><div class="meal-emoji" id="lunchEmoji">🍗</div><div class="meal-info"><div class="meal-type">LUNCH</div><div class="meal-name" id="lunchName">Chicken Rice Power Bowl</div><div class="meal-desc" id="lunchDesc">Grilled chicken, rice, vegetables and a light sauce.</div></div></div>
-  <div class="meal-macros"><span><strong id="lunchP">58g</strong> Protein</span><span><strong id="lunchC">72g</strong> Carbs</span><span><strong id="lunchF">14g</strong> Fat</span></div>
-  <button class="swap-btn" onclick="swapMeal('lunch')">↻ SWAP MEAL</button>
-</div>
-
-<div class="meal-card-full">
-  <div class="meal-calories" id="dinnerCalories">710 kcal</div>
-  <div class="meal-top"><div class="meal-emoji" id="dinnerEmoji">🥩</div><div class="meal-info"><div class="meal-type">DINNER</div><div class="meal-name" id="dinnerName">Lean Beef & Sweet Potato</div><div class="meal-desc" id="dinnerDesc">Lean beef mince, roasted sweet potato and green vegetables.</div></div></div>
-  <div class="meal-macros"><span><strong id="dinnerP">60g</strong> Protein</span><span><strong id="dinnerC">65g</strong> Carbs</span><span><strong id="dinnerF">20g</strong> Fat</span></div>
-  <button class="swap-btn" onclick="swapMeal('dinner')">↻ SWAP MEAL</button>
-</div>
-
-<div class="meal-card-full">
-  <div class="meal-calories" id="snackCalories">330 kcal</div>
-  <div class="meal-top"><div class="meal-emoji" id="snackEmoji">🍓</div><div class="meal-info"><div class="meal-type">SNACK</div><div class="meal-name" id="snackName">Greek Yoghurt Protein Bowl</div><div class="meal-desc" id="snackDesc">Greek yoghurt, berries and a small serving of nuts.</div></div></div>
-  <div class="meal-macros"><span><strong id="snackP">25g</strong> Protein</span><span><strong id="snackC">25g</strong> Carbs</span><span><strong id="snackF">12g</strong> Fat</span></div>
-  <button class="swap-btn" onclick="swapMeal('snack')">↻ SWAP MEAL</button>
-</div>
-
-<section class="shopping-card">
-  <div class="shopping-top"><div class="shopping-title">🛒 Weekly Shopping List</div><div class="shopping-count" id="miniShoppingCount">12 ITEMS</div></div>
-  <div class="shopping-items" id="miniShoppingItems"></div>
-  <button class="shopping-btn" onclick="showShopping()">OPEN & EDIT SHOPPING LIST</button>
-</section>
-</section>
-
-<!-- SETUP -->
-<section id="setupScreen" class="screen">
-<button class="back-btn" onclick="showMeals()">← Back to Meal Plan</button>
-<div class="setup-header">
-  <div class="setup-kicker">SHIFT FIT PERSONALISATION</div>
-  <h1>Build Your Plan</h1>
-  <p>Tell ShiftFit about you and we'll calculate your personalised calories and macros.</p>
-</div>
-
-<section class="setup-card">
-<label class="setup-label">YOUR GOAL</label>
-<div class="goal-grid">
-<button class="goal-btn active" data-goal="lose" onclick="selectGoal(this)"><span>🔥</span>Lose Weight</button>
-<button class="goal-btn" data-goal="maintain" onclick="selectGoal(this)"><span>⚡</span>Maintain</button>
-<button class="goal-btn" data-goal="gain" onclick="selectGoal(this)"><span>💪</span>Build Muscle</button>
-</div>
-</section>
-
-<section class="setup-card">
-<div class="setup-grid">
-<div><label class="setup-label">AGE</label><input id="userAge" class="setup-input" type="number" value="38"></div>
-<div><label class="setup-label">SEX</label><select id="userSex" class="setup-input"><option value="male">Male</option><option value="female">Female</option></select></div>
-</div>
-</section>
-
-<section class="setup-card">
-<div class="setup-grid">
-<div><label class="setup-label">WEIGHT (KG)</label><input id="userWeight" class="setup-input" type="number" step="0.1" value="84"></div>
-<div><label class="setup-label">HEIGHT (CM)</label><input id="userHeight" class="setup-input" type="number" value="173"></div>
-</div>
-</section>
-
-<section class="setup-card">
-<label class="setup-label">ACTIVITY LEVEL</label>
-<select id="userActivity" class="setup-input">
-<option value="1.2">Low Activity</option>
-<option value="1.375">Lightly Active</option>
-<option value="1.55" selected>Moderately Active</option>
-<option value="1.725">Very Active</option>
-<option value="1.9">Extremely Active</option>
-</select>
-</section>
-
-<button class="generate-btn" onclick="generatePlan()">⚡ SAVE & GENERATE MY PLAN</button>
-</section>
-
-<!-- SHOPPING SCREEN -->
-<section id="shoppingScreen" class="screen">
-<button class="back-btn" onclick="showMeals()">← Back to Meal Plan</button>
-
-<div class="shopping-header">
-  <div class="shopping-kicker">MONDAY – SUNDAY</div>
-  <h1>Shopping List</h1>
-  <p>Edit your weekly list, tick off what you've bought and add anything else you need.</p>
-</div>
-
-<div class="shopping-summary">
-  <div class="shopping-stat"><small>TOTAL ITEMS</small><strong id="shoppingTotal">0</strong></div>
-  <div class="shopping-stat"><small>BOUGHT</small><strong id="shoppingBought">0</strong></div>
-</div>
-
-<div class="shopping-list-card">
-  <div class="shopping-list-title">🛒 Your Weekly Basket</div>
-  <div id="shoppingList"></div>
-</div>
-
-<div class="add-item-card">
-  <input id="newShoppingItem" class="add-item-input" placeholder="Add an item...">
-  <button class="add-item-btn" onclick="addShoppingItem()">+ ADD</button>
-</div>
-
-<button class="clear-shop-btn" onclick="resetShoppingList()">RESET SHOPPING LIST</button>
-
-<!-- BEST BASKET -->
-<section class="best-basket-card">
-  <div class="best-basket-top">
     <div>
-      <div class="best-basket-kicker">LIVE SUPERMARKET COMPARISON</div>
-      <div class="best-basket-title">🏆 Best Basket</div>
-      <div class="best-basket-desc">
-        Compare your current shopping list across major UK supermarkets and find the cheapest complete basket.
+      <div class="summary-label">DAILY TARGET</div>
+
+      <div class="summary-calories">
+        <span id="mealCalories">2,200</span>
+        <span>kcal</span>
       </div>
     </div>
 
-    <div class="best-basket-trophy">🏆</div>
+    <div class="summary-badge" id="goalBadge">
+      FAT LOSS
+    </div>
+
   </div>
 
-  <button id="checkPricesButton" class="basket-button" onclick="checkBestBasket()">
+  <div class="macro-grid">
+
+    <div class="macro-box">
+      <span>PROTEIN</span>
+      <strong id="mealProtein">180g</strong>
+    </div>
+
+    <div class="macro-box">
+      <span>CARBS</span>
+      <strong id="mealCarbs">220g</strong>
+    </div>
+
+    <div class="macro-box">
+      <span>FATS</span>
+      <strong id="mealFats">67g</strong>
+    </div>
+
+  </div>
+
+  <button class="edit-plan-btn" onclick="showSetup()">
+    ⚙ EDIT MY PERSONAL PLAN
+  </button>
+
+</section>
+
+<div class="meal-section-title" id="mealDayTitle">
+  Monday's Meals
+</div>
+
+<div class="meal-card-full">
+
+  <div class="meal-calories" id="breakfastCalories">
+    520 kcal
+  </div>
+
+  <div class="meal-top">
+
+    <div class="meal-emoji" id="breakfastEmoji">
+      🥣
+    </div>
+
+    <div class="meal-info">
+
+      <div class="meal-type">BREAKFAST</div>
+
+      <div class="meal-name" id="breakfastName">
+        Protein Oats & Berries
+      </div>
+
+      <div class="meal-desc" id="breakfastDesc">
+        Oats, whey protein, Greek yoghurt and mixed berries.
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="meal-macros">
+
+    <span>
+      <strong id="breakfastP">45g</strong> Protein
+    </span>
+
+    <span>
+      <strong id="breakfastC">58g</strong> Carbs
+    </span>
+
+    <span>
+      <strong id="breakfastF">12g</strong> Fat
+    </span>
+
+  </div>
+
+  <button class="swap-btn" onclick="swapMeal('breakfast')">
+    ↻ SWAP MEAL
+  </button>
+
+</div>
+
+<div class="meal-card-full">
+
+  <div class="meal-calories" id="lunchCalories">
+    640 kcal
+  </div>
+
+  <div class="meal-top">
+
+    <div class="meal-emoji" id="lunchEmoji">
+      🍗
+    </div>
+
+    <div class="meal-info">
+
+      <div class="meal-type">LUNCH</div>
+
+      <div class="meal-name" id="lunchName">
+        Chicken Rice Power Bowl
+      </div>
+
+      <div class="meal-desc" id="lunchDesc">
+        Grilled chicken, rice, vegetables and a light sauce.
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="meal-macros">
+
+    <span>
+      <strong id="lunchP">58g</strong> Protein
+    </span>
+
+    <span>
+      <strong id="lunchC">72g</strong> Carbs
+    </span>
+
+    <span>
+      <strong id="lunchF">14g</strong> Fat
+    </span>
+
+  </div>
+
+  <button class="swap-btn" onclick="swapMeal('lunch')">
+    ↻ SWAP MEAL
+  </button>
+
+</div>
+
+<div class="meal-card-full">
+
+  <div class="meal-calories" id="dinnerCalories">
+    710 kcal
+  </div>
+
+  <div class="meal-top">
+
+    <div class="meal-emoji" id="dinnerEmoji">
+      🥩
+    </div>
+
+    <div class="meal-info">
+
+      <div class="meal-type">DINNER</div>
+
+      <div class="meal-name" id="dinnerName">
+        Lean Beef & Sweet Potato
+      </div>
+
+      <div class="meal-desc" id="dinnerDesc">
+        Lean beef mince, roasted sweet potato and green vegetables.
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="meal-macros">
+
+    <span>
+      <strong id="dinnerP">60g</strong> Protein
+    </span>
+
+    <span>
+      <strong id="dinnerC">65g</strong> Carbs
+    </span>
+
+    <span>
+      <strong id="dinnerF">20g</strong> Fat
+    </span>
+
+  </div>
+
+  <button class="swap-btn" onclick="swapMeal('dinner')">
+    ↻ SWAP MEAL
+  </button>
+
+</div>
+
+<div class="meal-card-full">
+
+  <div class="meal-calories" id="snackCalories">
+    330 kcal
+  </div>
+
+  <div class="meal-top">
+
+    <div class="meal-emoji" id="snackEmoji">
+      🍓
+    </div>
+
+    <div class="meal-info">
+
+      <div class="meal-type">SNACK</div>
+
+      <div class="meal-name" id="snackName">
+        Greek Yoghurt Protein Bowl
+      </div>
+
+      <div class="meal-desc" id="snackDesc">
+        Greek yoghurt, berries and a small serving of nuts.
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="meal-macros">
+
+    <span>
+      <strong id="snackP">25g</strong> Protein
+    </span>
+
+    <span>
+      <strong id="snackC">25g</strong> Carbs
+    </span>
+
+    <span>
+      <strong id="snackF">12g</strong> Fat
+    </span>
+
+  </div>
+
+  <button class="swap-btn" onclick="swapMeal('snack')">
+    ↻ SWAP MEAL
+  </button>
+
+</div>
+
+<section class="shopping-card">
+
+  <div class="shopping-top">
+
+    <div class="shopping-title">
+      🛒 Weekly Shopping List
+    </div>
+
+    <div class="shopping-count" id="miniShoppingCount">
+      12 ITEMS
+    </div>
+
+  </div>
+
+  <div class="shopping-items" id="miniShoppingItems"></div>
+
+  <button class="shopping-btn" onclick="showShopping()">
+    OPEN & EDIT SHOPPING LIST
+  </button>
+
+</section>
+
+</section>
+
+
+<!-- SETUP -->
+
+<section id="setupScreen" class="screen">
+
+<button class="back-btn" onclick="showMeals()">
+  ← Back to Meal Plan
+</button>
+
+<div class="setup-header">
+
+  <div class="setup-kicker">
+    SHIFT FIT PERSONALISATION
+  </div>
+
+  <h1>Build Your Plan</h1>
+
+  <p>
+    Tell ShiftFit about you and we'll calculate your personalised calories and macros.
+  </p>
+
+</div>
+
+<section class="setup-card">
+
+<label class="setup-label">
+  YOUR GOAL
+</label>
+
+<div class="goal-grid">
+
+<button
+  class="goal-btn active"
+  data-goal="lose"
+  onclick="selectGoal(this)"
+>
+  <span>🔥</span>
+  Lose Weight
+</button>
+
+<button
+  class="goal-btn"
+  data-goal="maintain"
+  onclick="selectGoal(this)"
+>
+  <span>⚡</span>
+  Maintain
+</button>
+
+<button
+  class="goal-btn"
+  data-goal="gain"
+  onclick="selectGoal(this)"
+>
+  <span>💪</span>
+  Build Muscle
+</button>
+
+</div>
+
+</section>
+
+<section class="setup-card">
+
+<div class="setup-grid">
+
+<div>
+<label class="setup-label">AGE</label>
+<input
+  id="userAge"
+  class="setup-input"
+  type="number"
+  value="38"
+>
+</div>
+
+<div>
+<label class="setup-label">SEX</label>
+
+<select id="userSex" class="setup-input">
+  <option value="male">Male</option>
+  <option value="female">Female</option>
+</select>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="setup-card">
+
+<div class="setup-grid">
+
+<div>
+
+<label class="setup-label">
+  WEIGHT (KG)
+</label>
+
+<input
+  id="userWeight"
+  class="setup-input"
+  type="number"
+  step="0.1"
+  value="84"
+>
+
+</div>
+
+<div>
+
+<label class="setup-label">
+  HEIGHT (CM)
+</label>
+
+<input
+  id="userHeight"
+  class="setup-input"
+  type="number"
+  value="173"
+>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="setup-card">
+
+<label class="setup-label">
+  ACTIVITY LEVEL
+</label>
+
+<select id="userActivity" class="setup-input">
+
+<option value="1.2">
+  Low Activity
+</option>
+
+<option value="1.375">
+  Lightly Active
+</option>
+
+<option value="1.55" selected>
+  Moderately Active
+</option>
+
+<option value="1.725">
+  Very Active
+</option>
+
+<option value="1.9">
+  Extremely Active
+</option>
+
+</select>
+
+</section>
+
+<button class="generate-btn" onclick="generatePlan()">
+  ⚡ SAVE & GENERATE MY PLAN
+</button>
+
+</section>
+
+
+<!-- SHOPPING SCREEN -->
+
+<section id="shoppingScreen" class="screen">
+
+<button class="back-btn" onclick="showMeals()">
+  ← Back to Meal Plan
+</button>
+
+<div class="shopping-header">
+
+  <div class="shopping-kicker">
+    MONDAY – SUNDAY
+  </div>
+
+  <h1>Shopping List</h1>
+
+  <p>
+    Edit your weekly list, tick off what you've bought and add anything else you need.
+  </p>
+
+</div>
+
+<div class="shopping-summary">
+
+  <div class="shopping-stat">
+    <small>TOTAL ITEMS</small>
+    <strong id="shoppingTotal">0</strong>
+  </div>
+
+  <div class="shopping-stat">
+    <small>BOUGHT</small>
+    <strong id="shoppingBought">0</strong>
+  </div>
+
+</div>
+
+<div class="shopping-list-card">
+
+  <div class="shopping-list-title">
+    🛒 Your Weekly Basket
+  </div>
+
+  <div id="shoppingList"></div>
+
+</div>
+
+<div class="add-item-card">
+
+  <input
+    id="newShoppingItem"
+    class="add-item-input"
+    placeholder="Add an item..."
+  >
+
+  <button
+    class="add-item-btn"
+    onclick="addShoppingItem()"
+  >
+    + ADD
+  </button>
+
+</div>
+
+<button
+  class="clear-shop-btn"
+  onclick="resetShoppingList()"
+>
+  RESET SHOPPING LIST
+</button>
+
+
+<!-- BEST BASKET -->
+
+<section class="best-basket-card">
+
+  <div class="best-basket-top">
+
+    <div>
+
+      <div class="best-basket-kicker">
+        LIVE SUPERMARKET COMPARISON
+      </div>
+
+      <div class="best-basket-title">
+        🏆 Best Basket
+      </div>
+
+      <div class="best-basket-desc">
+        Compare your current shopping list across major UK supermarkets and find the cheapest complete basket.
+      </div>
+
+    </div>
+
+    <div class="best-basket-trophy">
+      🏆
+    </div>
+
+  </div>
+
+  <button
+    id="checkPricesButton"
+    class="basket-button"
+    onclick="checkBestBasket()"
+  >
     💷 CHECK LIVE PRICES
   </button>
 
-  <div id="basketStatus" class="basket-status"></div>
+  <div
+    id="basketStatus"
+    class="basket-status"
+  ></div>
 
-  <div id="basketResults" class="basket-results"></div>
+  <div
+    id="basketResults"
+    class="basket-results"
+  ></div>
+
 </section>
 
 </section>
 
 </div>
 
+
 <nav class="bottom-nav">
-<button class="nav-item active" id="homeNav" onclick="showHome()"><span class="nav-icon">⌂</span><span>Home</span></button>
-<button class="nav-item"><span class="nav-icon">▦</span><span>Calendar</span></button>
-<button class="nav-item" id="workoutNav" onclick="showWorkout()"><span class="nav-icon">🏋️</span><span>Workouts</span></button>
-<button class="nav-item" id="mealNav" onclick="showMeals()"><span class="nav-icon">🍽️</span><span>Meals</span></button>
-<button class="nav-item" id="moreNav" onclick="showSetup()"><span class="nav-icon">☰</span><span>More</span></button>
+
+<button
+  class="nav-item active"
+  id="homeNav"
+  onclick="showHome()"
+>
+  <span class="nav-icon">⌂</span>
+  <span>Home</span>
+</button>
+
+<button class="nav-item">
+  <span class="nav-icon">▦</span>
+  <span>Calendar</span>
+</button>
+
+<button
+  class="nav-item"
+  id="workoutNav"
+  onclick="showWorkout()"
+>
+  <span class="nav-icon">🏋️</span>
+  <span>Workouts</span>
+</button>
+
+<button
+  class="nav-item"
+  id="mealNav"
+  onclick="showMeals()"
+>
+  <span class="nav-icon">🍽️</span>
+  <span>Meals</span>
+</button>
+
+<button
+  class="nav-item"
+  id="moreNav"
+  onclick="showSetup()"
+>
+  <span class="nav-icon">☰</span>
+  <span>More</span>
+</button>
+
 </nav>
 
+
 <script>
+
 let selectedGoal="lose";
 let currentDay=0;
 
@@ -983,63 +2343,247 @@ const days=[
 ];
 
 const mealOptions={
+
   breakfast:[
-    {name:"Protein Oats & Berries",desc:"Oats, whey protein, Greek yoghurt and mixed berries.",emoji:"🥣"},
-    {name:"Egg & Avocado Bagel",desc:"Eggs, avocado and a toasted wholemeal bagel.",emoji:"🥯"},
-    {name:"Protein Pancake Stack",desc:"Protein pancakes topped with banana and Greek yoghurt.",emoji:"🥞"},
-    {name:"Breakfast Burrito",desc:"Eggs, chicken, beans and salsa in a warm wrap.",emoji:"🌯"},
-    {name:"Greek Yoghurt Granola Bowl",desc:"Greek yoghurt, granola, honey and fresh berries.",emoji:"🫐"},
-    {name:"Smoked Salmon Eggs",desc:"Eggs, smoked salmon and wholegrain toast.",emoji:"🍳"},
-    {name:"Peanut Butter Banana Toast",desc:"Wholegrain toast with peanut butter, banana and protein yoghurt.",emoji:"🍌"},
-    {name:"Chicken Breakfast Wrap",desc:"Chicken, scrambled egg and spinach in a wrap.",emoji:"🌯"}
+    {
+      name:"Protein Oats & Berries",
+      desc:"Oats, whey protein, Greek yoghurt and mixed berries.",
+      emoji:"🥣"
+    },
+    {
+      name:"Egg & Avocado Bagel",
+      desc:"Eggs, avocado and a toasted wholemeal bagel.",
+      emoji:"🥯"
+    },
+    {
+      name:"Protein Pancake Stack",
+      desc:"Protein pancakes topped with banana and Greek yoghurt.",
+      emoji:"🥞"
+    },
+    {
+      name:"Breakfast Burrito",
+      desc:"Eggs, chicken, beans and salsa in a warm wrap.",
+      emoji:"🌯"
+    },
+    {
+      name:"Greek Yoghurt Granola Bowl",
+      desc:"Greek yoghurt, granola, honey and fresh berries.",
+      emoji:"🫐"
+    },
+    {
+      name:"Smoked Salmon Eggs",
+      desc:"Eggs, smoked salmon and wholegrain toast.",
+      emoji:"🍳"
+    },
+    {
+      name:"Peanut Butter Banana Toast",
+      desc:"Wholegrain toast with peanut butter, banana and protein yoghurt.",
+      emoji:"🍌"
+    },
+    {
+      name:"Chicken Breakfast Wrap",
+      desc:"Chicken, scrambled egg and spinach in a wrap.",
+      emoji:"🌯"
+    }
   ],
+
   lunch:[
-    {name:"Chicken Rice Power Bowl",desc:"Grilled chicken, rice, vegetables and a light sauce.",emoji:"🍗"},
-    {name:"Turkey Pasta Bowl",desc:"Lean turkey mince, wholewheat pasta and tomato sauce.",emoji:"🍝"},
-    {name:"Chicken Wrap & Wedges",desc:"High-protein chicken wrap with seasoned potato wedges.",emoji:"🌯"},
-    {name:"Tuna Jacket Potato",desc:"Tuna, light mayo and a baked potato with salad.",emoji:"🥔"},
-    {name:"Beef Burrito Bowl",desc:"Lean beef, rice, beans, salsa and vegetables.",emoji:"🥣"},
-    {name:"Chicken Caesar Wrap",desc:"Chicken, lettuce, parmesan and light Caesar dressing.",emoji:"🌯"},
-    {name:"Salmon Pasta Salad",desc:"Salmon, pasta, spinach and a light dressing.",emoji:"🥗"},
-    {name:"Turkey & Sweet Potato Bowl",desc:"Lean turkey, roasted sweet potato and vegetables.",emoji:"🍠"}
+    {
+      name:"Chicken Rice Power Bowl",
+      desc:"Grilled chicken, rice, vegetables and a light sauce.",
+      emoji:"🍗"
+    },
+    {
+      name:"Turkey Pasta Bowl",
+      desc:"Lean turkey mince, wholewheat pasta and tomato sauce.",
+      emoji:"🍝"
+    },
+    {
+      name:"Chicken Wrap & Wedges",
+      desc:"High-protein chicken wrap with seasoned potato wedges.",
+      emoji:"🌯"
+    },
+    {
+      name:"Tuna Jacket Potato",
+      desc:"Tuna, light mayo and a baked potato with salad.",
+      emoji:"🥔"
+    },
+    {
+      name:"Beef Burrito Bowl",
+      desc:"Lean beef, rice, beans, salsa and vegetables.",
+      emoji:"🥣"
+    },
+    {
+      name:"Chicken Caesar Wrap",
+      desc:"Chicken, lettuce, parmesan and light Caesar dressing.",
+      emoji:"🌯"
+    },
+    {
+      name:"Salmon Pasta Salad",
+      desc:"Salmon, pasta, spinach and a light dressing.",
+      emoji:"🥗"
+    },
+    {
+      name:"Turkey & Sweet Potato Bowl",
+      desc:"Lean turkey, roasted sweet potato and vegetables.",
+      emoji:"🍠"
+    }
   ],
+
   dinner:[
-    {name:"Lean Beef & Sweet Potato",desc:"Lean beef mince, roasted sweet potato and green vegetables.",emoji:"🥩"},
-    {name:"Chicken Stir Fry",desc:"Chicken breast, rice noodles and fresh mixed vegetables.",emoji:"🍜"},
-    {name:"Salmon & Rice",desc:"Baked salmon, jasmine rice and roasted vegetables.",emoji:"🐟"},
-    {name:"Turkey Chilli",desc:"Lean turkey mince, kidney beans, rice and tomato sauce.",emoji:"🌶️"},
-    {name:"Chicken Curry & Rice",desc:"Chicken breast, curry sauce, vegetables and basmati rice.",emoji:"🍛"},
-    {name:"Steak & Potatoes",desc:"Lean steak, roasted potatoes and seasonal vegetables.",emoji:"🥩"},
-    {name:"Chicken Fajitas",desc:"Chicken, peppers, onions and wraps with salsa.",emoji:"🌮"},
-    {name:"High Protein Bolognese",desc:"Lean beef mince with pasta and rich tomato sauce.",emoji:"🍝"}
+    {
+      name:"Lean Beef & Sweet Potato",
+      desc:"Lean beef mince, roasted sweet potato and green vegetables.",
+      emoji:"🥩"
+    },
+    {
+      name:"Chicken Stir Fry",
+      desc:"Chicken breast, rice noodles and fresh mixed vegetables.",
+      emoji:"🍜"
+    },
+    {
+      name:"Salmon & Rice",
+      desc:"Baked salmon, jasmine rice and roasted vegetables.",
+      emoji:"🐟"
+    },
+    {
+      name:"Turkey Chilli",
+      desc:"Lean turkey mince, kidney beans, rice and tomato sauce.",
+      emoji:"🌶️"
+    },
+    {
+      name:"Chicken Curry & Rice",
+      desc:"Chicken breast, curry sauce, vegetables and basmati rice.",
+      emoji:"🍛"
+    },
+    {
+      name:"Steak & Potatoes",
+      desc:"Lean steak, roasted potatoes and seasonal vegetables.",
+      emoji:"🥩"
+    },
+    {
+      name:"Chicken Fajitas",
+      desc:"Chicken, peppers, onions and wraps with salsa.",
+      emoji:"🌮"
+    },
+    {
+      name:"High Protein Bolognese",
+      desc:"Lean beef mince with pasta and rich tomato sauce.",
+      emoji:"🍝"
+    }
   ],
+
   snack:[
-    {name:"Greek Yoghurt Protein Bowl",desc:"Greek yoghurt, berries and a small serving of nuts.",emoji:"🍓"},
-    {name:"Protein Shake & Banana",desc:"Whey protein shake with banana and peanut butter.",emoji:"🥤"},
-    {name:"Cottage Cheese Snack",desc:"Cottage cheese, crackers and fresh fruit.",emoji:"🧀"},
-    {name:"Protein Bar & Fruit",desc:"High-protein bar with a piece of fresh fruit.",emoji:"🍫"},
-    {name:"Turkey Rice Cakes",desc:"Turkey slices with rice cakes and light cream cheese.",emoji:"🍘"},
-    {name:"Boiled Eggs & Fruit",desc:"Protein-rich eggs served with fresh fruit.",emoji:"🥚"},
-    {name:"Chocolate Protein Pudding",desc:"Protein pudding topped with berries.",emoji:"🍮"},
-    {name:"Apple & Peanut Butter",desc:"Fresh apple with a measured serving of peanut butter.",emoji:"🍎"}
+    {
+      name:"Greek Yoghurt Protein Bowl",
+      desc:"Greek yoghurt, berries and a small serving of nuts.",
+      emoji:"🍓"
+    },
+    {
+      name:"Protein Shake & Banana",
+      desc:"Whey protein shake with banana and peanut butter.",
+      emoji:"🥤"
+    },
+    {
+      name:"Cottage Cheese Snack",
+      desc:"Cottage cheese, crackers and fresh fruit.",
+      emoji:"🧀"
+    },
+    {
+      name:"Protein Bar & Fruit",
+      desc:"High-protein bar with a piece of fresh fruit.",
+      emoji:"🍫"
+    },
+    {
+      name:"Turkey Rice Cakes",
+      desc:"Turkey slices with rice cakes and light cream cheese.",
+      emoji:"🍘"
+    },
+    {
+      name:"Boiled Eggs & Fruit",
+      desc:"Protein-rich eggs served with fresh fruit.",
+      emoji:"🥚"
+    },
+    {
+      name:"Chocolate Protein Pudding",
+      desc:"Protein pudding topped with berries.",
+      emoji:"🍮"
+    },
+    {
+      name:"Apple & Peanut Butter",
+      desc:"Fresh apple with a measured serving of peanut butter.",
+      emoji:"🍎"
+    }
   ]
+
 };
 
 let weeklyMeals=[
-  {breakfast:0,lunch:0,dinner:0,snack:0},
-  {breakfast:1,lunch:1,dinner:1,snack:1},
-  {breakfast:2,lunch:2,dinner:2,snack:2},
-  {breakfast:3,lunch:3,dinner:3,snack:3},
-  {breakfast:4,lunch:4,dinner:4,snack:4},
-  {breakfast:5,lunch:5,dinner:5,snack:5},
-  {breakfast:6,lunch:6,dinner:6,snack:6}
+  {
+    breakfast:0,
+    lunch:0,
+    dinner:0,
+    snack:0
+  },
+  {
+    breakfast:1,
+    lunch:1,
+    dinner:1,
+    snack:1
+  },
+  {
+    breakfast:2,
+    lunch:2,
+    dinner:2,
+    snack:2
+  },
+  {
+    breakfast:3,
+    lunch:3,
+    dinner:3,
+    snack:3
+  },
+  {
+    breakfast:4,
+    lunch:4,
+    dinner:4,
+    snack:4
+  },
+  {
+    breakfast:5,
+    lunch:5,
+    dinner:5,
+    snack:5
+  },
+  {
+    breakfast:6,
+    lunch:6,
+    dinner:6,
+    snack:6
+  }
 ];
 
 const defaultShoppingItems=[
-  "Chicken breast","Lean beef mince","Lean turkey mince","Salmon","Eggs",
-  "Greek yoghurt","Protein powder","Oats","Rice","Wholewheat pasta",
-  "Sweet potatoes","Potatoes","Mixed vegetables","Spinach","Mixed berries",
-  "Bananas","Avocado","Wholemeal wraps","Wholegrain bread","Rice cakes"
+  "Chicken breast",
+  "Lean beef mince",
+  "Lean turkey mince",
+  "Salmon",
+  "Eggs",
+  "Greek yoghurt",
+  "Protein powder",
+  "Oats",
+  "Rice",
+  "Wholewheat pasta",
+  "Sweet potatoes",
+  "Potatoes",
+  "Mixed vegetables",
+  "Spinach",
+  "Mixed berries",
+  "Bananas",
+  "Avocado",
+  "Wholemeal wraps",
+  "Wholegrain bread",
+  "Rice cakes"
 ];
 
 const basketRetailers=[
@@ -1062,113 +2606,240 @@ const retailerNames={
 
 let shoppingItems=[];
 
+
+/* NAVIGATION */
+
 function hideAllScreens(){
-  document.querySelectorAll(".screen").forEach(screen=>screen.classList.remove("active"));
+
+  document
+    .querySelectorAll(".screen")
+    .forEach(screen=>
+      screen.classList.remove("active")
+    );
+
 }
 
 function setNav(active){
-  document.querySelectorAll(".nav-item").forEach(item=>item.classList.remove("active"));
-  if(active==="home") document.getElementById("homeNav").classList.add("active");
-  if(active==="workout") document.getElementById("workoutNav").classList.add("active");
-  if(active==="meal") document.getElementById("mealNav").classList.add("active");
+
+  document
+    .querySelectorAll(".nav-item")
+    .forEach(item=>
+      item.classList.remove("active")
+    );
+
+  if(active==="home"){
+    document
+      .getElementById("homeNav")
+      .classList.add("active");
+  }
+
+  if(active==="workout"){
+    document
+      .getElementById("workoutNav")
+      .classList.add("active");
+  }
+
+  if(active==="meal"){
+    document
+      .getElementById("mealNav")
+      .classList.add("active");
+  }
+
 }
 
 function showHome(){
+
   hideAllScreens();
-  document.getElementById("homeScreen").classList.add("active");
+
+  document
+    .getElementById("homeScreen")
+    .classList.add("active");
+
   setNav("home");
+
   window.scrollTo(0,0);
+
 }
 
 function showWorkout(){
+
   hideAllScreens();
-  document.getElementById("workoutScreen").classList.add("active");
+
+  document
+    .getElementById("workoutScreen")
+    .classList.add("active");
+
   setNav("workout");
+
   updateWorkoutProgress();
+
   window.scrollTo(0,0);
+
 }
 
 function showMeals(){
+
   hideAllScreens();
-  document.getElementById("mealScreen").classList.add("active");
+
+  document
+    .getElementById("mealScreen")
+    .classList.add("active");
+
   setNav("meal");
+
   renderDays();
   renderCurrentDay();
+
   window.scrollTo(0,0);
+
 }
 
 function showSetup(){
+
   hideAllScreens();
-  document.getElementById("setupScreen").classList.add("active");
+
+  document
+    .getElementById("setupScreen")
+    .classList.add("active");
+
   setNav("");
+
   window.scrollTo(0,0);
+
 }
 
 function showShopping(){
+
   hideAllScreens();
-  document.getElementById("shoppingScreen").classList.add("active");
+
+  document
+    .getElementById("shoppingScreen")
+    .classList.add("active");
+
   setNav("");
+
   renderShoppingList();
+
   window.scrollTo(0,0);
+
 }
 
+
+/* WORKOUT */
+
 function toggleExercise(card){
+
   card.classList.toggle("completed");
+
   card.querySelector(".exercise-check").innerHTML=
-    card.classList.contains("completed")?"✓":"";
+    card.classList.contains("completed")
+      ?"✓"
+      :"";
+
   updateWorkoutProgress();
+
 }
 
 function updateWorkoutProgress(){
-  const exercises=document.querySelectorAll(".exercise-card");
-  const completed=document.querySelectorAll(".exercise-card.completed").length;
-  const total=exercises.length;
 
-  document.getElementById("workoutProgressText").textContent=
-    completed+" / "+total;
+  const exercises=
+    document.querySelectorAll(".exercise-card");
 
-  document.getElementById("workoutProgressFill").style.width=
-    (completed/total*100)+"%";
+  const completed=
+    document.querySelectorAll(
+      ".exercise-card.completed"
+    ).length;
 
-  const button=document.getElementById("finishButton");
+  const total=
+    exercises.length;
+
+  document
+    .getElementById("workoutProgressText")
+    .textContent=
+      completed+" / "+total;
+
+  document
+    .getElementById("workoutProgressFill")
+    .style.width=
+      (completed/total*100)+"%";
+
+  const button=
+    document.getElementById("finishButton");
 
   if(completed===total){
+
     button.disabled=false;
+
     button.classList.add("ready");
-    button.textContent="FINISH WORKOUT 🏆";
+
+    button.textContent=
+      "FINISH WORKOUT 🏆";
+
   }else{
+
     button.disabled=true;
+
     button.classList.remove("ready");
-    button.textContent="COMPLETE ALL EXERCISES";
+
+    button.textContent=
+      "COMPLETE ALL EXERCISES";
+
   }
+
 }
 
 function finishWorkout(){
-  alert("🏆 Workout complete! Great work!");
+
+  alert(
+    "🏆 Workout complete! Great work!"
+  );
+
   showHome();
+
 }
 
+
+/* MEALS */
+
 function renderDays(){
-  const selector=document.getElementById("daySelector");
+
+  const selector=
+    document.getElementById("daySelector");
+
   selector.innerHTML="";
 
   days.forEach((day,index)=>{
-    const btn=document.createElement("button");
 
-    btn.className="day-btn"+(index===currentDay?" active":"");
-    btn.innerHTML=day.name+"<strong>"+day.date+"</strong>";
+    const btn=
+      document.createElement("button");
+
+    btn.className=
+      "day-btn"+
+      (index===currentDay?" active":"");
+
+    btn.innerHTML=
+      day.name+
+      "<strong>"+
+      day.date+
+      "</strong>";
 
     btn.onclick=()=>{
+
       currentDay=index;
+
       renderDays();
       renderCurrentDay();
+
     };
 
     selector.appendChild(btn);
+
   });
+
 }
 
 function renderCurrentDay(){
+
   const dayNames=[
     "Monday",
     "Tuesday",
@@ -1179,66 +2850,147 @@ function renderCurrentDay(){
     "Sunday"
   ];
 
-  document.getElementById("mealDayTitle").textContent=
-    dayNames[currentDay]+"'s Meals";
+  document
+    .getElementById("mealDayTitle")
+    .textContent=
+      dayNames[currentDay]+"'s Meals";
 
-  ["breakfast","lunch","dinner","snack"].forEach(type=>{
-    const meal=mealOptions[type][weeklyMeals[currentDay][type]];
+  [
+    "breakfast",
+    "lunch",
+    "dinner",
+    "snack"
+  ].forEach(type=>{
 
-    document.getElementById(type+"Emoji").textContent=meal.emoji;
-    document.getElementById(type+"Name").textContent=meal.name;
-    document.getElementById(type+"Desc").textContent=meal.desc;
+    const meal=
+      mealOptions[type]
+        [weeklyMeals[currentDay][type]];
+
+    document
+      .getElementById(type+"Emoji")
+      .textContent=
+        meal.emoji;
+
+    document
+      .getElementById(type+"Name")
+      .textContent=
+        meal.name;
+
+    document
+      .getElementById(type+"Desc")
+      .textContent=
+        meal.desc;
+
   });
 
-  const saved=localStorage.getItem("shiftfitPlan");
+  const saved=
+    localStorage.getItem(
+      "shiftfitPlan"
+    );
 
   if(saved){
-    scaleMeals(JSON.parse(saved));
+
+    scaleMeals(
+      JSON.parse(saved)
+    );
+
   }
 
   updateMiniShopping();
+
 }
 
 function selectGoal(button){
-  document.querySelectorAll(".goal-btn")
-    .forEach(btn=>btn.classList.remove("active"));
+
+  document
+    .querySelectorAll(".goal-btn")
+    .forEach(btn=>
+      btn.classList.remove("active")
+    );
 
   button.classList.add("active");
-  selectedGoal=button.dataset.goal;
+
+  selectedGoal=
+    button.dataset.goal;
+
 }
 
 function generatePlan(){
-  const age=parseFloat(document.getElementById("userAge").value);
-  const weight=parseFloat(document.getElementById("userWeight").value);
-  const height=parseFloat(document.getElementById("userHeight").value);
-  const sex=document.getElementById("userSex").value;
-  const activity=parseFloat(document.getElementById("userActivity").value);
+
+  const age=
+    parseFloat(
+      document.getElementById("userAge").value
+    );
+
+  const weight=
+    parseFloat(
+      document.getElementById("userWeight").value
+    );
+
+  const height=
+    parseFloat(
+      document.getElementById("userHeight").value
+    );
+
+  const sex=
+    document.getElementById("userSex").value;
+
+  const activity=
+    parseFloat(
+      document.getElementById("userActivity").value
+    );
 
   if(!age||!weight||!height){
-    alert("Please enter your age, weight and height.");
+
+    alert(
+      "Please enter your age, weight and height."
+    );
+
     return;
   }
 
-  let bmr=sex==="male"
-    ?(10*weight)+(6.25*height)-(5*age)+5
-    :(10*weight)+(6.25*height)-(5*age)-161;
+  let bmr=
+    sex==="male"
+      ?(10*weight)+(6.25*height)-(5*age)+5
+      :(10*weight)+(6.25*height)-(5*age)-161;
 
-  const maintenance=bmr*activity;
+  const maintenance=
+    bmr*activity;
 
   let calories=
     selectedGoal==="lose"
-      ?Math.round(maintenance-400)
+      ?Math.round(
+        maintenance-400
+      )
       :selectedGoal==="gain"
-        ?Math.round(maintenance+300)
-        :Math.round(maintenance);
+        ?Math.round(
+          maintenance+300
+        )
+        :Math.round(
+          maintenance
+        );
 
-  const protein=Math.round(weight*2);
-  const fats=Math.round(weight*.8);
+  const protein=
+    Math.round(
+      weight*2
+    );
 
-  const carbs=Math.max(
-    0,
-    Math.round((calories-(protein*4)-(fats*9))/4)
-  );
+  const fats=
+    Math.round(
+      weight*.8
+    );
+
+  const carbs=
+    Math.max(
+      0,
+      Math.round(
+        (
+          calories-
+          (protein*4)-
+          (fats*9)
+        )/4
+      )
+    );
 
   const plan={
     age,
@@ -1260,365 +3012,681 @@ function generatePlan(){
 
   updatePlan(plan);
 
-  alert("⚡ Your personalised ShiftFit meal plan is ready!");
+  alert(
+    "⚡ Your personalised ShiftFit meal plan is ready!"
+  );
 
   showMeals();
+
 }
 
 function updatePlan(plan){
-  document.getElementById("homeCalories").textContent=
-    plan.calories.toLocaleString();
 
-  document.getElementById("homeProtein").textContent=
-    plan.protein+"g";
+  document
+    .getElementById("homeCalories")
+    .textContent=
+      plan.calories.toLocaleString();
 
-  document.getElementById("mealCalories").textContent=
-    plan.calories.toLocaleString();
+  document
+    .getElementById("homeProtein")
+    .textContent=
+      plan.protein+"g";
 
-  document.getElementById("mealProtein").textContent=
-    plan.protein+"g";
+  document
+    .getElementById("mealCalories")
+    .textContent=
+      plan.calories.toLocaleString();
 
-  document.getElementById("mealCarbs").textContent=
-    plan.carbs+"g";
+  document
+    .getElementById("mealProtein")
+    .textContent=
+      plan.protein+"g";
 
-  document.getElementById("mealFats").textContent=
-    plan.fats+"g";
+  document
+    .getElementById("mealCarbs")
+    .textContent=
+      plan.carbs+"g";
+
+  document
+    .getElementById("mealFats")
+    .textContent=
+      plan.fats+"g";
 
   if(plan.goal==="lose"){
-    document.getElementById("goalBadge").textContent="FAT LOSS";
 
-    document.getElementById("mealSubtitle").textContent=
-      "High-protein meals designed to help you lose fat while protecting muscle.";
+    document
+      .getElementById("goalBadge")
+      .textContent=
+        "FAT LOSS";
+
+    document
+      .getElementById("mealSubtitle")
+      .textContent=
+        "High-protein meals designed to help you lose fat while protecting muscle.";
+
   }
 
   if(plan.goal==="maintain"){
-    document.getElementById("goalBadge").textContent="MAINTAIN";
 
-    document.getElementById("mealSubtitle").textContent=
-      "Balanced meals designed to fuel your lifestyle and maintain your weight.";
+    document
+      .getElementById("goalBadge")
+      .textContent=
+        "MAINTAIN";
+
+    document
+      .getElementById("mealSubtitle")
+      .textContent=
+        "Balanced meals designed to fuel your lifestyle and maintain your weight.";
+
   }
 
   if(plan.goal==="gain"){
-    document.getElementById("goalBadge").textContent="BUILD MUSCLE";
 
-    document.getElementById("mealSubtitle").textContent=
-      "High-protein meals designed to support strength, recovery and muscle growth.";
+    document
+      .getElementById("goalBadge")
+      .textContent=
+        "BUILD MUSCLE";
+
+    document
+      .getElementById("mealSubtitle")
+      .textContent=
+        "High-protein meals designed to support strength, recovery and muscle growth.";
+
   }
 
   scaleMeals(plan);
+
 }
 
 function scaleMeals(plan){
+
   const mealCalories={
-    breakfast:Math.round(plan.calories*.24),
-    lunch:Math.round(plan.calories*.29),
-    dinner:Math.round(plan.calories*.32),
-    snack:Math.round(plan.calories*.15)
+
+    breakfast:
+      Math.round(
+        plan.calories*.24
+      ),
+
+    lunch:
+      Math.round(
+        plan.calories*.29
+      ),
+
+    dinner:
+      Math.round(
+        plan.calories*.32
+      ),
+
+    snack:
+      Math.round(
+        plan.calories*.15
+      )
+
   };
 
   const portions={
+
     breakfast:.25,
     lunch:.30,
     dinner:.32,
     snack:.13
+
   };
 
-  ["breakfast","lunch","dinner","snack"].forEach(type=>{
-    document.getElementById(type+"Calories").textContent=
-      mealCalories[type]+" kcal";
+  [
+    "breakfast",
+    "lunch",
+    "dinner",
+    "snack"
+  ].forEach(type=>{
 
-    document.getElementById(type+"P").textContent=
-      Math.round(plan.protein*portions[type])+"g";
+    document
+      .getElementById(type+"Calories")
+      .textContent=
+        mealCalories[type]+
+        " kcal";
 
-    document.getElementById(type+"C").textContent=
-      Math.round(plan.carbs*portions[type])+"g";
+    document
+      .getElementById(type+"P")
+      .textContent=
+        Math.round(
+          plan.protein*
+          portions[type]
+        )+"g";
 
-    document.getElementById(type+"F").textContent=
-      Math.round(plan.fats*portions[type])+"g";
+    document
+      .getElementById(type+"C")
+      .textContent=
+        Math.round(
+          plan.carbs*
+          portions[type]
+        )+"g";
+
+    document
+      .getElementById(type+"F")
+      .textContent=
+        Math.round(
+          plan.fats*
+          portions[type]
+        )+"g";
+
   });
+
 }
 
 function swapMeal(type){
+
   weeklyMeals[currentDay][type]=
-    (weeklyMeals[currentDay][type]+1)%mealOptions[type].length;
+    (
+      weeklyMeals[currentDay][type]+1
+    ) %
+    mealOptions[type].length;
 
   saveWeeklyMeals();
+
   renderCurrentDay();
+
 }
 
 function saveWeeklyMeals(){
+
   localStorage.setItem(
     "shiftfitWeeklyMeals",
-    JSON.stringify(weeklyMeals)
+    JSON.stringify(
+      weeklyMeals
+    )
   );
+
 }
 
 function loadWeeklyMeals(){
+
   const saved=
-    localStorage.getItem("shiftfitWeeklyMeals");
+    localStorage.getItem(
+      "shiftfitWeeklyMeals"
+    );
 
   if(saved){
+
     try{
-      weeklyMeals=JSON.parse(saved);
+
+      weeklyMeals=
+        JSON.parse(saved);
+
     }catch(error){
-      console.warn("Could not load saved meals.");
+
+      console.warn(
+        "Could not load saved meals."
+      );
+
     }
+
   }
+
 }
 
 function loadSavedPlan(){
+
   const saved=
-    localStorage.getItem("shiftfitPlan");
+    localStorage.getItem(
+      "shiftfitPlan"
+    );
 
   if(!saved) return;
 
   try{
-    const plan=JSON.parse(saved);
 
-    selectedGoal=plan.goal;
+    const plan=
+      JSON.parse(saved);
 
-    document.getElementById("userAge").value=plan.age;
-    document.getElementById("userWeight").value=plan.weight;
-    document.getElementById("userHeight").value=plan.height;
-    document.getElementById("userSex").value=plan.sex;
-    document.getElementById("userActivity").value=plan.activity;
+    selectedGoal=
+      plan.goal;
 
-    document.querySelectorAll(".goal-btn").forEach(btn=>{
-      btn.classList.toggle(
-        "active",
-        btn.dataset.goal===plan.goal
-      );
-    });
+    document
+      .getElementById("userAge")
+      .value=
+        plan.age;
+
+    document
+      .getElementById("userWeight")
+      .value=
+        plan.weight;
+
+    document
+      .getElementById("userHeight")
+      .value=
+        plan.height;
+
+    document
+      .getElementById("userSex")
+      .value=
+        plan.sex;
+
+    document
+      .getElementById("userActivity")
+      .value=
+        plan.activity;
+
+    document
+      .querySelectorAll(".goal-btn")
+      .forEach(btn=>{
+
+        btn.classList.toggle(
+          "active",
+          btn.dataset.goal===plan.goal
+        );
+
+      });
 
     updatePlan(plan);
 
   }catch(error){
-    console.warn("Could not load saved plan.");
+
+    console.warn(
+      "Could not load saved plan."
+    );
+
   }
+
 }
+
 
 /* SHOPPING LIST */
 
 function loadShoppingItems(){
+
   const saved=
-    localStorage.getItem("shiftfitShoppingItems");
+    localStorage.getItem(
+      "shiftfitShoppingItems"
+    );
 
   if(saved){
+
     try{
-      shoppingItems=JSON.parse(saved);
+
+      shoppingItems=
+        JSON.parse(saved);
+
     }catch(error){
+
       shoppingItems=[];
+
     }
+
   }
 
-  if(!Array.isArray(shoppingItems)||!shoppingItems.length){
+  if(
+    !Array.isArray(shoppingItems) ||
+    !shoppingItems.length
+  ){
+
     shoppingItems=
       defaultShoppingItems.map(name=>({
+
         name:name,
         qty:"1",
         checked:false
+
       }));
 
     saveShoppingItems();
+
   }
+
 }
 
 function saveShoppingItems(){
+
   localStorage.setItem(
     "shiftfitShoppingItems",
-    JSON.stringify(shoppingItems)
+    JSON.stringify(
+      shoppingItems
+    )
   );
+
 }
 
 function renderShoppingList(){
-  const list=document.getElementById("shoppingList");
+
+  const list=
+    document.getElementById(
+      "shoppingList"
+    );
 
   if(!list) return;
 
   list.innerHTML="";
 
-  shoppingItems.forEach((item,index)=>{
-    const row=document.createElement("div");
+  shoppingItems.forEach(
+    (item,index)=>{
 
-    row.className=
-      "shop-row"+(item.checked?" checked":"");
+      const row=
+        document.createElement(
+          "div"
+        );
 
-    row.innerHTML=`
-      <button class="shop-check" onclick="toggleShoppingItem(${index})">
-        ${item.checked?"✓":""}
-      </button>
+      row.className=
+        "shop-row"+
+        (
+          item.checked
+            ?" checked"
+            :""
+        );
 
-      <div class="shop-name">${escapeHtml(item.name)}</div>
+      row.innerHTML=`
 
-      <input
-        class="shop-qty"
-        type="number"
-        min="1"
-        step="1"
-        value="${escapeHtml(String(item.qty||1))}"
-        onchange="updateShoppingQty(${index},this.value)"
-      >
+        <button
+          class="shop-check"
+          onclick="toggleShoppingItem(${index})"
+        >
+          ${item.checked?"✓":""}
+        </button>
 
-      <button
-        class="delete-shop"
-        onclick="deleteShoppingItem(${index})"
-      >×</button>
-    `;
+        <div class="shop-name">
+          ${escapeHtml(item.name)}
+        </div>
 
-    list.appendChild(row);
-  });
+        <input
+          class="shop-qty"
+          type="number"
+          min="1"
+          step="1"
+          value="${escapeHtml(
+            String(item.qty||1)
+          )}"
+          onchange="updateShoppingQty(
+            ${index},
+            this.value
+          )"
+        >
+
+        <button
+          class="delete-shop"
+          onclick="deleteShoppingItem(${index})"
+        >
+          ×
+        </button>
+
+      `;
+
+      list.appendChild(row);
+
+    }
+  );
 
   const bought=
-    shoppingItems.filter(item=>item.checked).length;
+    shoppingItems.filter(
+      item=>item.checked
+    ).length;
 
-  document.getElementById("shoppingTotal").textContent=
-    shoppingItems.length;
+  document
+    .getElementById("shoppingTotal")
+    .textContent=
+      shoppingItems.length;
 
-  document.getElementById("shoppingBought").textContent=
-    bought;
+  document
+    .getElementById("shoppingBought")
+    .textContent=
+      bought;
 
   updateMiniShopping();
+
 }
 
 function toggleShoppingItem(index){
+
   shoppingItems[index].checked=
     !shoppingItems[index].checked;
 
   saveShoppingItems();
+
   renderShoppingList();
+
 }
 
 function updateShoppingQty(index,value){
-  let qty=parseInt(value,10);
 
-  if(!Number.isFinite(qty)||qty<1){
+  let qty=
+    parseInt(
+      value,
+      10
+    );
+
+  if(
+    !Number.isFinite(qty) ||
+    qty<1
+  ){
+
     qty=1;
+
   }
 
-  shoppingItems[index].qty=String(qty);
+  shoppingItems[index].qty=
+    String(qty);
 
   saveShoppingItems();
+
 }
 
 function deleteShoppingItem(index){
-  shoppingItems.splice(index,1);
+
+  shoppingItems.splice(
+    index,
+    1
+  );
 
   saveShoppingItems();
+
   renderShoppingList();
 
   clearBasketResults();
+
 }
 
 function addShoppingItem(){
-  const input=
-    document.getElementById("newShoppingItem");
 
-  const name=input.value.trim();
+  const input=
+    document.getElementById(
+      "newShoppingItem"
+    );
+
+  const name=
+    input.value.trim();
 
   if(!name) return;
 
   shoppingItems.push({
+
     name:name,
     qty:"1",
     checked:false
+
   });
 
   input.value="";
 
   saveShoppingItems();
+
   renderShoppingList();
 
   clearBasketResults();
+
 }
 
 function resetShoppingList(){
-  if(!confirm("Reset your shopping list?")) return;
+
+  if(
+    !confirm(
+      "Reset your shopping list?"
+    )
+  ) return;
 
   shoppingItems=
     defaultShoppingItems.map(name=>({
+
       name:name,
       qty:"1",
       checked:false
+
     }));
 
   saveShoppingItems();
+
   renderShoppingList();
 
   clearBasketResults();
+
 }
 
 function updateMiniShopping(){
+
   const container=
-    document.getElementById("miniShoppingItems");
+    document.getElementById(
+      "miniShoppingItems"
+    );
 
   if(!container) return;
 
   const preview=
-    shoppingItems.slice(0,12);
+    shoppingItems.slice(
+      0,
+      12
+    );
 
   container.innerHTML=
-    preview.map(item=>
-      `<div class="shopping-item">${escapeHtml(item.name)}</div>`
-    ).join("");
+    preview
+      .map(
+        item=>
+          `<div class="shopping-item">
+            ${escapeHtml(item.name)}
+          </div>`
+      )
+      .join("");
 
-  document.getElementById("miniShoppingCount").textContent=
-    shoppingItems.length+" ITEMS";
+  document
+    .getElementById(
+      "miniShoppingCount"
+    )
+    .textContent=
+      shoppingItems.length+
+      " ITEMS";
+
 }
+
 
 /* BEST BASKET */
 
 function escapeHtml(value){
+
   return String(value)
     .replace(/&/g,"&amp;")
     .replace(/</g,"&lt;")
     .replace(/>/g,"&gt;")
     .replace(/"/g,"&quot;")
     .replace(/'/g,"&#039;");
+
 }
 
 function getBasketItems(){
+
   return shoppingItems
-    .filter(item=>item && item.name)
+
+    .filter(
+      item=>
+        item &&
+        item.name
+    )
+
     .map(item=>({
-      name:String(item.name).trim(),
-      qty:Math.max(
-        1,
-        Number(item.qty)||1
-      )
+
+      name:
+        String(
+          item.name
+        ).trim(),
+
+      qty:
+        Math.max(
+          1,
+          Number(item.qty)||1
+        )
+
     }))
-    .filter(item=>item.name)
-    .slice(0,30);
+
+    .filter(
+      item=>
+        item.name
+    )
+
+    .slice(
+      0,
+      30
+    );
+
 }
 
 function clearBasketResults(){
+
   const results=
-    document.getElementById("basketResults");
+    document.getElementById(
+      "basketResults"
+    );
 
   const status=
-    document.getElementById("basketStatus");
+    document.getElementById(
+      "basketStatus"
+    );
 
   if(results){
+
     results.innerHTML="";
+
   }
 
   if(status){
-    status.className="basket-status";
+
+    status.className=
+      "basket-status";
+
     status.innerHTML="";
+
   }
+
 }
 
-function setBasketStatus(message,type=""){
+function setBasketStatus(
+  message,
+  type=""
+){
+
   const status=
-    document.getElementById("basketStatus");
+    document.getElementById(
+      "basketStatus"
+    );
 
   status.className=
-    "basket-status show"+(type?" "+type:"");
+    "basket-status show"+
+    (
+      type
+        ?" "+type
+        :""
+    );
 
-  status.textContent=message;
+  status.textContent=
+    message;
+
 }
 
 function formatMoney(value){
-  if(!Number.isFinite(Number(value))) return "—";
+
+  if(
+    !Number.isFinite(
+      Number(value)
+    )
+  ){
+
+    return "—";
+
+  }
 
   return new Intl.NumberFormat(
     "en-GB",
@@ -1626,16 +3694,27 @@ function formatMoney(value){
       style:"currency",
       currency:"GBP"
     }
-  ).format(Number(value));
+  ).format(
+    Number(value)
+  );
+
 }
 
 function formatCheckedTime(value){
+
   if(!value) return "";
 
-  const date=new Date(value);
+  const date=
+    new Date(value);
 
-  if(Number.isNaN(date.getTime())){
+  if(
+    Number.isNaN(
+      date.getTime()
+    )
+  ){
+
     return "";
+
   }
 
   return date.toLocaleString(
@@ -1647,21 +3726,28 @@ function formatCheckedTime(value){
       minute:"2-digit"
     }
   );
+
 }
+
 
 /*
  * BEST BASKET LIVE PRICE CHECK
  *
- * Starts the Apify job first.
- * Then polls the backend until the job finishes.
+ * This version exposes the actual
+ * Apify error returned by the backend.
  */
+
 async function checkBestBasket(){
 
   const button=
-    document.getElementById("checkPricesButton");
+    document.getElementById(
+      "checkPricesButton"
+    );
 
   const results=
-    document.getElementById("basketResults");
+    document.getElementById(
+      "basketResults"
+    );
 
   const items=
     getBasketItems();
@@ -1674,6 +3760,7 @@ async function checkBestBasket(){
     );
 
     return;
+
   }
 
   button.disabled=true;
@@ -1692,8 +3779,9 @@ async function checkBestBasket(){
 
     /*
      * STEP 1
-     * Start the Apify job.
+     * START APIFY
      */
+
     const startResponse=
       await fetch(
         "/api/best-basket",
@@ -1701,14 +3789,21 @@ async function checkBestBasket(){
           method:"POST",
 
           headers:{
-            "Content-Type":"application/json"
+            "Content-Type":
+              "application/json"
           },
 
-          body:JSON.stringify({
-            items:items,
-            retailers:basketRetailers
-          })
-        }
+          body:
+            JSON.stringify({
+
+              items:items,
+
+              retailers:
+                basketRetailers
+
+            })
+
+          }
       );
 
     let startData=null;
@@ -1723,18 +3818,40 @@ async function checkBestBasket(){
       throw new Error(
         "The price service returned an invalid response."
       );
+
     }
+
+    /*
+     * IMPORTANT:
+     * Show the actual provider message.
+     */
 
     if(!startResponse.ok){
 
-      if(
+      const providerMessage=
         startData &&
-        startData.message
-      ){
+        (
+          startData.providerMessage ||
+          startData.message ||
+          ""
+        );
+
+      const providerStatus=
+        startData &&
+        startData.providerStatus
+          ? " HTTP "+
+            startData.providerStatus
+          :"";
+
+      if(providerMessage){
 
         throw new Error(
-          startData.message
+          "Apify"+
+          providerStatus+
+          ": "+
+          providerMessage
         );
+
       }
 
       if(
@@ -1743,13 +3860,19 @@ async function checkBestBasket(){
       ){
 
         throw new Error(
-          startData.error.replaceAll("_"," ")
+          startData.error
+            .replaceAll(
+              "_",
+              " "
+            )
         );
+
       }
 
       throw new Error(
         "The live price service could not start."
       );
+
     }
 
     if(!startData.runId){
@@ -1757,6 +3880,7 @@ async function checkBestBasket(){
       throw new Error(
         "The price service did not return a run ID."
       );
+
     }
 
     const runId=
@@ -1764,8 +3888,9 @@ async function checkBestBasket(){
 
     /*
      * STEP 2
-     * Poll Apify until the job finishes.
+     * POLL APIFY
      */
+
     button.textContent=
       "⏳ CHECKING SUPERMARKETS...";
 
@@ -1774,37 +3899,51 @@ async function checkBestBasket(){
       ""
     );
 
-    const maxAttempts=40;
+    const maxAttempts=
+      40;
 
     let attempt=0;
 
-    while(attempt<maxAttempts){
+    while(
+      attempt<
+      maxAttempts
+    ){
 
       attempt++;
 
-      /*
-       * Wait 3 seconds between checks.
-       */
-      await new Promise(resolve=>
-        setTimeout(resolve,3000)
+      await new Promise(
+        resolve=>
+          setTimeout(
+            resolve,
+            3000
+          )
       );
 
       const queryItems=
         encodeURIComponent(
-          JSON.stringify(items)
+          JSON.stringify(
+            items
+          )
         );
 
       const queryRetailers=
         encodeURIComponent(
-          JSON.stringify(basketRetailers)
+          JSON.stringify(
+            basketRetailers
+          )
         );
 
       const pollResponse=
         await fetch(
           "/api/best-basket"+
-          "?runId="+encodeURIComponent(runId)+
-          "&items="+queryItems+
-          "&retailers="+queryRetailers
+          "?runId="+
+          encodeURIComponent(
+            runId
+          )+
+          "&items="+
+          queryItems+
+          "&retailers="+
+          queryRetailers
         );
 
       let pollData=null;
@@ -1819,18 +3958,39 @@ async function checkBestBasket(){
         throw new Error(
           "The price service returned an invalid polling response."
         );
+
       }
+
+      /*
+       * SHOW REAL POLLING ERRORS
+       */
 
       if(!pollResponse.ok){
 
-        if(
+        const providerMessage=
           pollData &&
-          pollData.message
-        ){
+          (
+            pollData.providerMessage ||
+            pollData.message ||
+            ""
+          );
+
+        const providerStatus=
+          pollData &&
+          pollData.providerStatus
+            ? " HTTP "+
+              pollData.providerStatus
+            :"";
+
+        if(providerMessage){
 
           throw new Error(
-            pollData.message
+            "Apify"+
+            providerStatus+
+            ": "+
+            providerMessage
           );
+
         }
 
         if(
@@ -1839,32 +3999,46 @@ async function checkBestBasket(){
         ){
 
           throw new Error(
-            pollData.error.replaceAll("_"," ")
+            pollData.error
+              .replaceAll(
+                "_",
+                " "
+              )
           );
+
         }
 
         throw new Error(
           "The live price service could not complete the request."
         );
+
       }
 
       /*
-       * Still running.
+       * STILL RUNNING
        */
+
       if(
-        pollData.status==="RUNNING"
+        pollData.status===
+        "RUNNING"
       ){
 
         const progress=
           Math.min(
             95,
             Math.round(
-              (attempt/maxAttempts)*100
+              (
+                attempt/
+                maxAttempts
+              )*
+              100
             )
           );
 
         button.textContent=
-          "⏳ CHECKING... "+progress+"%";
+          "⏳ CHECKING... "+
+          progress+
+          "%";
 
         setBasketStatus(
           pollData.statusMessage ||
@@ -1873,46 +4047,115 @@ async function checkBestBasket(){
         );
 
         continue;
+
       }
 
       /*
-       * Failed.
+       * FAILED
        */
+
       if(
-        pollData.status==="FAILED"
+        pollData.status===
+        "FAILED"
       ){
 
         throw new Error(
           pollData.message ||
-          "The supermarket price check failed."
+          "Apify failed to complete the price check."
         );
+
       }
 
       /*
-       * Finished successfully.
+       * SUCCESS
        */
+
       if(
-        pollData.status==="SUCCEEDED"
+        pollData.status===
+        "SUCCEEDED"
       ){
 
         button.textContent=
           "✅ PRICES FOUND";
 
-        renderBasketResults(
-          pollData
-        );
+        /*
+         * The current diagnostic backend
+         * returns rawResults. Show them clearly
+         * so we can inspect what Apify produced.
+         */
+
+        if(
+          Array.isArray(
+            pollData.rawResults
+          )
+        ){
+
+          setBasketStatus(
+            "Apify completed successfully and returned "+
+            pollData.rawResults.length+
+            " result rows. We can now connect those results to the basket.",
+            "success"
+          );
+
+          results.innerHTML=`
+
+            <div class="basket-results-header">
+
+              <div class="basket-results-title">
+                Live Data Received
+              </div>
+
+              <div class="basket-last-checked">
+                ${pollData.checkedAt
+                  ?escapeHtml(
+                    formatCheckedTime(
+                      pollData.checkedAt
+                    )
+                  )
+                  :""
+                }
+              </div>
+
+            </div>
+
+            <div class="basket-empty">
+
+              <strong>
+                ✅ Apify is working.
+              </strong>
+
+              <br><br>
+
+              ShiftFit received
+              <strong>
+                ${pollData.rawResults.length}
+              </strong>
+              supermarket result rows.
+
+              <br><br>
+
+              The next step is to map these live results into the Tesco, Sainsbury's, Asda, Morrisons, Waitrose and Aldi basket totals.
+
+            </div>
+
+          `;
+
+        }else{
+
+          renderBasketResults(
+            pollData
+          );
+
+        }
 
         return;
+
       }
 
     }
 
-    /*
-     * Apify took longer than the frontend
-     * is willing to wait.
-     */
     throw new Error(
-      "The supermarket comparison is taking longer than expected. Please try again in a moment."
+      "The supermarket comparison is taking longer than expected. Please try again."
     );
 
   }catch(error){
@@ -1922,6 +4165,10 @@ async function checkBestBasket(){
       error
     );
 
+    /*
+     * DISPLAY THE ACTUAL ERROR
+     */
+
     setBasketStatus(
       "We couldn't get live prices right now. "+
       error.message,
@@ -1929,10 +4176,25 @@ async function checkBestBasket(){
     );
 
     results.innerHTML=`
+
       <div class="basket-empty">
-        <strong>Price check failed.</strong><br>
-        Your shopping list is safe. Try the price check again in a moment.
+
+        <strong>
+          Price check failed.
+        </strong>
+
+        <br><br>
+
+        ${escapeHtml(
+          error.message
+        )}
+
+        <br><br>
+
+        Your shopping list is safe.
+
       </div>
+
     `;
 
   }finally{
@@ -1941,16 +4203,25 @@ async function checkBestBasket(){
 
     button.textContent=
       "💷 CHECK LIVE PRICES";
+
   }
+
 }
+
+
+/* BASKET RESULTS */
 
 function renderBasketResults(data){
 
   const results=
-    document.getElementById("basketResults");
+    document.getElementById(
+      "basketResults"
+    );
 
   const baskets=
-    Array.isArray(data.baskets)
+    Array.isArray(
+      data.baskets
+    )
       ?data.baskets
       :[];
 
@@ -1962,39 +4233,63 @@ function renderBasketResults(data){
     );
 
     results.innerHTML=`
+
       <div class="basket-empty">
+
         No usable supermarket results were returned for this shopping list.
+
       </div>
+
     `;
 
     return;
+
   }
 
   const best=
-    data.bestBasket || null;
+    data.bestBasket ||
+    null;
 
   const checkedAt=
-    formatCheckedTime(data.checkedAt);
+    formatCheckedTime(
+      data.checkedAt
+    );
 
   let html=`
+
     <div class="basket-results-header">
+
       <div class="basket-results-title">
         Supermarket Results
       </div>
 
       <div class="basket-last-checked">
-        ${checkedAt?"Checked "+escapeHtml(checkedAt):""}
+        ${
+          checkedAt
+            ?"Checked "+
+              escapeHtml(
+                checkedAt
+              )
+            :""
+        }
       </div>
+
     </div>
+
   `;
 
   if(best){
 
     setBasketStatus(
       "Best complete basket found: "+
-      getRetailerDisplayName(best.retailer)+
+      getRetailerDisplayName(
+        best.retailer
+      )+
       " at "+
-      formatMoney(best.total)+".",
+      formatMoney(
+        best.total
+      )+
+      ".",
       "success"
     );
 
@@ -2004,60 +4299,90 @@ function renderBasketResults(data){
       "No supermarket has every item available. Showing the best partial results below.",
       ""
     );
+
   }
 
-  baskets.forEach(basket=>{
+  baskets.forEach(
+    basket=>{
 
-    html+=renderRetailerCard(
-      basket,
-      best
-    );
+      html+=
+        renderRetailerCard(
+          basket,
+          best
+        );
 
-  });
+    }
+  );
 
   if(best){
 
     const nextBest=
-      baskets.find(basket=>
-        basket.retailer.toLowerCase()!==
-        String(best.retailer).toLowerCase() &&
-        basket.missing.length===0
+      baskets.find(
+        basket=>
+          basket.retailer
+            .toLowerCase()!==
+          String(
+            best.retailer
+          ).toLowerCase() &&
+          basket.missing.length===0
       );
 
     if(nextBest){
 
       const saving=
         Number(
-          (nextBest.total-best.total).toFixed(2)
+          (
+            nextBest.total-
+            best.total
+          ).toFixed(2)
         );
 
       if(saving>0){
 
         html+=`
+
           <div class="best-basket-saving">
+
             🏆 ShiftFit found a saving of
             ${formatMoney(saving)}
             versus the next cheapest complete basket.
+
           </div>
+
         `;
+
       }
+
     }
+
   }
 
-  results.innerHTML=html;
+  results.innerHTML=
+    html;
+
 }
 
-function renderRetailerCard(basket,best){
+function renderRetailerCard(
+  basket,
+  best
+){
 
   const retailerKey=
-    String(basket.retailer||"").toLowerCase();
+    String(
+      basket.retailer||""
+    ).toLowerCase();
 
   const retailerName=
-    getRetailerDisplayName(retailerKey);
+    getRetailerDisplayName(
+      retailerKey
+    );
 
   const isBest=
     best &&
-    String(best.retailer).toLowerCase()===retailerKey &&
+    String(
+      best.retailer
+    ).toLowerCase()===
+      retailerKey &&
     basket.missing.length===0;
 
   const incomplete=
@@ -2065,71 +4390,117 @@ function renderRetailerCard(basket,best){
 
   let itemsHtml="";
 
-  if(Array.isArray(basket.items)){
+  if(
+    Array.isArray(
+      basket.items
+    )
+  ){
 
     itemsHtml=
-      basket.items.map(item=>{
+      basket.items
+        .map(
+          item=>{
 
-        const productName=
-          item.product ||
-          item.name ||
-          item.item ||
-          "Matched product";
+            const productName=
+              item.product ||
+              item.name ||
+              item.item ||
+              "Matched product";
 
-        const qty=
-          Number(item.qty)||1;
+            const qty=
+              Number(
+                item.qty
+              )||1;
 
-        const lineTotal=
-          Number(item.lineTotal);
+            const lineTotal=
+              Number(
+                item.lineTotal
+              );
 
-        const price=
-          Number(item.price);
+            const price=
+              Number(
+                item.price
+              );
 
-        return `
-          <div class="basket-item">
+            return `
 
-            <div>
+              <div class="basket-item">
 
-              <div class="basket-item-name">
-                ${escapeHtml(item.item||"Item")} × ${qty}
+                <div>
+
+                  <div class="basket-item-name">
+                    ${escapeHtml(
+                      item.item||
+                      "Item"
+                    )}
+                    × ${qty}
+                  </div>
+
+                  <div class="basket-item-product">
+                    ${escapeHtml(
+                      productName
+                    )}
+
+                    ${
+                      item.pack
+                        ?" • "+
+                          escapeHtml(
+                            item.pack
+                          )
+                        :""
+                    }
+
+                  </div>
+
+                  ${
+                    item.url
+                      ?`
+
+                        <a
+                          class="basket-link"
+                          href="${escapeHtml(
+                            item.url
+                          )}"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          VIEW PRODUCT
+                        </a>
+
+                      `
+                      :""
+                  }
+
+                </div>
+
+                <div class="basket-item-price">
+
+                  ${
+                    Number.isFinite(
+                      lineTotal
+                    )
+                      ?formatMoney(
+                        lineTotal
+                      )
+                      :Number.isFinite(
+                        price
+                      )
+                        ?formatMoney(
+                          price
+                        )
+                        :"—"
+                  }
+
+                </div>
+
               </div>
 
-              <div class="basket-item-product">
-                ${escapeHtml(productName)}
-                ${item.pack?" • "+escapeHtml(item.pack):""}
-              </div>
+            `;
 
-              ${
-                item.url
-                ?`
-                  <a
-                    class="basket-link"
-                    href="${escapeHtml(item.url)}"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >VIEW PRODUCT</a>
-                `
-                :""
-              }
+          }
+        )
+        .join("");
 
-            </div>
-
-            <div class="basket-item-price">
-
-              ${
-                Number.isFinite(lineTotal)
-                  ?formatMoney(lineTotal)
-                  :Number.isFinite(price)
-                    ?formatMoney(price)
-                    :"—"
-              }
-
-            </div>
-
-          </div>
-        `;
-
-      }).join("");
   }
 
   let missingHtml="";
@@ -2137,19 +4508,30 @@ function renderRetailerCard(basket,best){
   if(incomplete){
 
     missingHtml=`
+
       <div class="basket-missing">
 
-        <strong>⚠ Missing from this basket</strong>
+        <strong>
+          ⚠ Missing from this basket
+        </strong>
 
-        ${basket.missing
-          .map(item=>escapeHtml(item))
-          .join(" • ")}
+        ${
+          basket.missing
+            .map(
+              item=>
+                escapeHtml(item)
+            )
+            .join(" • ")
+        }
 
       </div>
+
     `;
+
   }
 
   return `
+
     <div class="retailer-card ${
       isBest
         ?"retailer-best"
@@ -2160,12 +4542,20 @@ function renderRetailerCard(basket,best){
 
       ${
         isBest
-        ?`<div class="retailer-badge">🏆 CHEAPEST COMPLETE BASKET</div>`
-        :""
+          ?`
+
+            <div class="retailer-badge">
+              🏆 CHEAPEST COMPLETE BASKET
+            </div>
+
+          `
+          :""
       }
 
       <div class="retailer-name">
-        ${escapeHtml(retailerName)}
+        ${escapeHtml(
+          retailerName
+        )}
       </div>
 
       <div class="retailer-total-row">
@@ -2183,71 +4573,114 @@ function renderRetailerCard(basket,best){
           </div>
 
           <div class="retailer-total">
-            ${formatMoney(Number(basket.total))}
+
+            ${formatMoney(
+              Number(
+                basket.total
+              )
+            )}
+
           </div>
 
         </div>
 
         ${
           incomplete
-          ?`
-            <div class="retailer-missing-count">
-              ${basket.missing.length}
-              missing
-            </div>
-          `
-          :""
+            ?`
+
+              <div class="retailer-missing-count">
+                ${basket.missing.length}
+                missing
+              </div>
+
+            `
+            :""
         }
 
       </div>
 
       ${
         itemsHtml
-        ?`<div class="basket-items">${itemsHtml}</div>`
-        :""
+          ?`
+
+            <div class="basket-items">
+              ${itemsHtml}
+            </div>
+
+          `
+          :""
       }
 
       ${missingHtml}
 
     </div>
+
   `;
+
 }
 
-function getRetailerDisplayName(key){
+function getRetailerDisplayName(
+  key
+){
 
   const normalised=
-    String(key||"").toLowerCase().trim();
+    String(
+      key||""
+    )
+    .toLowerCase()
+    .trim();
 
-  return retailerNames[normalised] ||
-    String(key||"Supermarket");
+  return (
+    retailerNames[
+      normalised
+    ] ||
+    String(
+      key||
+      "Supermarket"
+    )
+  );
+
 }
 
-/* ENTER KEY FOR ADD ITEM */
 
-document.addEventListener("keydown",event=>{
+/* ENTER KEY */
 
-  if(
-    event.key==="Enter" &&
-    document.activeElement &&
-    document.activeElement.id==="newShoppingItem"
-  ){
+document.addEventListener(
+  "keydown",
+  event=>{
 
-    addShoppingItem();
+    if(
+      event.key==="Enter" &&
+      document.activeElement &&
+      document.activeElement.id===
+        "newShoppingItem"
+    ){
+
+      addShoppingItem();
+
+    }
 
   }
+);
 
-});
 
 /* START APP */
 
 loadWeeklyMeals();
+
 loadShoppingItems();
+
 loadSavedPlan();
+
 renderDays();
+
 renderCurrentDay();
+
 updateMiniShopping();
+
 updateWorkoutProgress();
 
 </script>
+
 </body>
 </html>
