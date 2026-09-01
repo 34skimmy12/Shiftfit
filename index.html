@@ -1649,7 +1649,14 @@ function formatCheckedTime(value){
   );
 }
 
+/*
+ * BEST BASKET LIVE PRICE CHECK
+ *
+ * Starts the Apify job first.
+ * Then polls the backend until the job finishes.
+ */
 async function checkBestBasket(){
+
   const button=
     document.getElementById("checkPricesButton");
 
@@ -1660,32 +1667,43 @@ async function checkBestBasket(){
     getBasketItems();
 
   if(!items.length){
+
     setBasketStatus(
       "Your shopping list is empty. Add some items first.",
       "error"
     );
+
     return;
   }
 
   button.disabled=true;
-  button.textContent="⏳ CHECKING LIVE PRICES...";
+
+  button.textContent=
+    "⏳ STARTING PRICE CHECK...";
 
   results.innerHTML="";
 
   setBasketStatus(
-    "Checking live supermarket prices. This can take a little while because ShiftFit is comparing multiple retailers.",
+    "Starting live supermarket comparison...",
     ""
   );
 
   try{
-    const response=
+
+    /*
+     * STEP 1
+     * Start the Apify job.
+     */
+    const startResponse=
       await fetch(
         "/api/best-basket",
         {
           method:"POST",
+
           headers:{
             "Content-Type":"application/json"
           },
+
           body:JSON.stringify({
             items:items,
             retailers:basketRetailers
@@ -1693,39 +1711,220 @@ async function checkBestBasket(){
         }
       );
 
-    let data=null;
+    let startData=null;
 
     try{
-      data=await response.json();
+
+      startData=
+        await startResponse.json();
+
     }catch(error){
+
       throw new Error(
         "The price service returned an invalid response."
       );
     }
 
-    if(!response.ok){
-      if(data && data.message){
-        throw new Error(data.message);
+    if(!startResponse.ok){
+
+      if(
+        startData &&
+        startData.message
+      ){
+
+        throw new Error(
+          startData.message
+        );
       }
 
-      if(data && data.error){
+      if(
+        startData &&
+        startData.error
+      ){
+
         throw new Error(
-          data.error.replaceAll("_"," ")
+          startData.error.replaceAll("_"," ")
         );
       }
 
       throw new Error(
-        "The live price service could not complete the request."
+        "The live price service could not start."
       );
     }
 
-    renderBasketResults(data);
+    if(!startData.runId){
 
-  }catch(error){
-    console.error("Best Basket error:",error);
+      throw new Error(
+        "The price service did not return a run ID."
+      );
+    }
+
+    const runId=
+      startData.runId;
+
+    /*
+     * STEP 2
+     * Poll Apify until the job finishes.
+     */
+    button.textContent=
+      "⏳ CHECKING SUPERMARKETS...";
 
     setBasketStatus(
-      "We couldn't get live prices right now. "+error.message,
+      "ShiftFit is checking Tesco, Sainsbury's, Asda, Morrisons, Waitrose and Aldi. This may take a little while.",
+      ""
+    );
+
+    const maxAttempts=40;
+
+    let attempt=0;
+
+    while(attempt<maxAttempts){
+
+      attempt++;
+
+      /*
+       * Wait 3 seconds between checks.
+       */
+      await new Promise(resolve=>
+        setTimeout(resolve,3000)
+      );
+
+      const queryItems=
+        encodeURIComponent(
+          JSON.stringify(items)
+        );
+
+      const queryRetailers=
+        encodeURIComponent(
+          JSON.stringify(basketRetailers)
+        );
+
+      const pollResponse=
+        await fetch(
+          "/api/best-basket"+
+          "?runId="+encodeURIComponent(runId)+
+          "&items="+queryItems+
+          "&retailers="+queryRetailers
+        );
+
+      let pollData=null;
+
+      try{
+
+        pollData=
+          await pollResponse.json();
+
+      }catch(error){
+
+        throw new Error(
+          "The price service returned an invalid polling response."
+        );
+      }
+
+      if(!pollResponse.ok){
+
+        if(
+          pollData &&
+          pollData.message
+        ){
+
+          throw new Error(
+            pollData.message
+          );
+        }
+
+        if(
+          pollData &&
+          pollData.error
+        ){
+
+          throw new Error(
+            pollData.error.replaceAll("_"," ")
+          );
+        }
+
+        throw new Error(
+          "The live price service could not complete the request."
+        );
+      }
+
+      /*
+       * Still running.
+       */
+      if(
+        pollData.status==="RUNNING"
+      ){
+
+        const progress=
+          Math.min(
+            95,
+            Math.round(
+              (attempt/maxAttempts)*100
+            )
+          );
+
+        button.textContent=
+          "⏳ CHECKING... "+progress+"%";
+
+        setBasketStatus(
+          pollData.statusMessage ||
+          "ShiftFit is comparing live supermarket prices...",
+          ""
+        );
+
+        continue;
+      }
+
+      /*
+       * Failed.
+       */
+      if(
+        pollData.status==="FAILED"
+      ){
+
+        throw new Error(
+          pollData.message ||
+          "The supermarket price check failed."
+        );
+      }
+
+      /*
+       * Finished successfully.
+       */
+      if(
+        pollData.status==="SUCCEEDED"
+      ){
+
+        button.textContent=
+          "✅ PRICES FOUND";
+
+        renderBasketResults(
+          pollData
+        );
+
+        return;
+      }
+
+    }
+
+    /*
+     * Apify took longer than the frontend
+     * is willing to wait.
+     */
+    throw new Error(
+      "The supermarket comparison is taking longer than expected. Please try again in a moment."
+    );
+
+  }catch(error){
+
+    console.error(
+      "Best Basket error:",
+      error
+    );
+
+    setBasketStatus(
+      "We couldn't get live prices right now. "+
+      error.message,
       "error"
     );
 
@@ -1737,12 +1936,16 @@ async function checkBestBasket(){
     `;
 
   }finally{
+
     button.disabled=false;
-    button.textContent="💷 CHECK LIVE PRICES";
+
+    button.textContent=
+      "💷 CHECK LIVE PRICES";
   }
 }
 
 function renderBasketResults(data){
+
   const results=
     document.getElementById("basketResults");
 
@@ -1752,6 +1955,7 @@ function renderBasketResults(data){
       :[];
 
   if(!baskets.length){
+
     setBasketStatus(
       "No supermarket price results were returned.",
       "error"
@@ -1785,6 +1989,7 @@ function renderBasketResults(data){
   `;
 
   if(best){
+
     setBasketStatus(
       "Best complete basket found: "+
       getRetailerDisplayName(best.retailer)+
@@ -1792,7 +1997,9 @@ function renderBasketResults(data){
       formatMoney(best.total)+".",
       "success"
     );
+
   }else{
+
     setBasketStatus(
       "No supermarket has every item available. Showing the best partial results below.",
       ""
@@ -1800,13 +2007,16 @@ function renderBasketResults(data){
   }
 
   baskets.forEach(basket=>{
+
     html+=renderRetailerCard(
       basket,
       best
     );
+
   });
 
   if(best){
+
     const nextBest=
       baskets.find(basket=>
         basket.retailer.toLowerCase()!==
@@ -1815,12 +2025,14 @@ function renderBasketResults(data){
       );
 
     if(nextBest){
+
       const saving=
         Number(
           (nextBest.total-best.total).toFixed(2)
         );
 
       if(saving>0){
+
         html+=`
           <div class="best-basket-saving">
             🏆 ShiftFit found a saving of
@@ -1836,6 +2048,7 @@ function renderBasketResults(data){
 }
 
 function renderRetailerCard(basket,best){
+
   const retailerKey=
     String(basket.retailer||"").toLowerCase();
 
@@ -1853,8 +2066,10 @@ function renderRetailerCard(basket,best){
   let itemsHtml="";
 
   if(Array.isArray(basket.items)){
+
     itemsHtml=
       basket.items.map(item=>{
+
         const productName=
           item.product ||
           item.name ||
@@ -1872,7 +2087,9 @@ function renderRetailerCard(basket,best){
 
         return `
           <div class="basket-item">
+
             <div>
+
               <div class="basket-item-name">
                 ${escapeHtml(item.item||"Item")} × ${qty}
               </div>
@@ -1894,9 +2111,11 @@ function renderRetailerCard(basket,best){
                 `
                 :""
               }
+
             </div>
 
             <div class="basket-item-price">
+
               ${
                 Number.isFinite(lineTotal)
                   ?formatMoney(lineTotal)
@@ -1904,21 +2123,28 @@ function renderRetailerCard(basket,best){
                     ?formatMoney(price)
                     :"—"
               }
+
             </div>
+
           </div>
         `;
+
       }).join("");
   }
 
   let missingHtml="";
 
   if(incomplete){
+
     missingHtml=`
       <div class="basket-missing">
+
         <strong>⚠ Missing from this basket</strong>
+
         ${basket.missing
           .map(item=>escapeHtml(item))
           .join(" • ")}
+
       </div>
     `;
   }
@@ -1943,18 +2169,23 @@ function renderRetailerCard(basket,best){
       </div>
 
       <div class="retailer-total-row">
+
         <div>
+
           <div class="retailer-total-label">
+
             ${
               incomplete
                 ?"CURRENT MATCHED TOTAL"
                 :"COMPLETE BASKET TOTAL"
             }
+
           </div>
 
           <div class="retailer-total">
             ${formatMoney(Number(basket.total))}
           </div>
+
         </div>
 
         ${
@@ -1967,6 +2198,7 @@ function renderRetailerCard(basket,best){
           `
           :""
         }
+
       </div>
 
       ${
@@ -1976,11 +2208,13 @@ function renderRetailerCard(basket,best){
       }
 
       ${missingHtml}
+
     </div>
   `;
 }
 
 function getRetailerDisplayName(key){
+
   const normalised=
     String(key||"").toLowerCase().trim();
 
@@ -1989,17 +2223,23 @@ function getRetailerDisplayName(key){
 }
 
 /* ENTER KEY FOR ADD ITEM */
+
 document.addEventListener("keydown",event=>{
+
   if(
     event.key==="Enter" &&
     document.activeElement &&
     document.activeElement.id==="newShoppingItem"
   ){
+
     addShoppingItem();
+
   }
+
 });
 
 /* START APP */
+
 loadWeeklyMeals();
 loadShoppingItems();
 loadSavedPlan();
@@ -2007,6 +2247,7 @@ renderDays();
 renderCurrentDay();
 updateMiniShopping();
 updateWorkoutProgress();
+
 </script>
 </body>
 </html>
