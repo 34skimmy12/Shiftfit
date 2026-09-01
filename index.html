@@ -35,6 +35,7 @@ body{
     linear-gradient(180deg,#070512,#050611 38%,#08061a 68%,#03040a);
   background-attachment:fixed;
 }
+
 body::before{
   content:"";
   position:fixed;
@@ -46,6 +47,7 @@ body::before{
     linear-gradient(90deg,rgba(124,92,255,.025) 1px,transparent 1px);
   background-size:52px 52px;
 }
+
 .app{
   width:100%;
   max-width:500px;
@@ -53,6 +55,7 @@ body::before{
   margin:auto;
   padding:22px 18px 110px;
 }
+
 button,input,select{font-family:inherit}
 button{cursor:pointer}
 .screen{display:none}
@@ -413,6 +416,270 @@ button{cursor:pointer}
   border-radius:12px;background:rgba(255,95,115,.08);color:#ff9baa;font-weight:900;
 }
 
+/* BEST BASKET */
+.best-basket-card{
+  margin-top:16px;
+  padding:18px;
+  border-radius:21px;
+  border:1px solid rgba(139,92,246,.45);
+  background:
+    radial-gradient(circle at 100% 0%,rgba(139,92,246,.22),transparent 40%),
+    linear-gradient(145deg,#171438,#0d1022);
+  box-shadow:0 14px 35px rgba(0,0,0,.25);
+}
+
+.best-basket-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.best-basket-kicker{
+  color:#bda8ff;
+  font-size:10px;
+  font-weight:950;
+  letter-spacing:2px;
+}
+
+.best-basket-title{
+  font-size:21px;
+  font-weight:950;
+  margin-top:4px;
+}
+
+.best-basket-desc{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.45;
+  margin-top:5px;
+}
+
+.best-basket-trophy{
+  width:47px;
+  height:47px;
+  min-width:47px;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:25px;
+  background:rgba(139,92,246,.16);
+  border:1px solid rgba(139,92,246,.28);
+}
+
+.basket-button{
+  width:100%;
+  margin-top:15px;
+  padding:14px;
+  border:none;
+  border-radius:13px;
+  color:white;
+  font-size:13px;
+  font-weight:950;
+  background:linear-gradient(135deg,#8b3cff,#5123c5);
+  box-shadow:0 8px 22px rgba(109,40,217,.25);
+}
+
+.basket-button:disabled{
+  opacity:.6;
+}
+
+.basket-status{
+  display:none;
+  margin-top:13px;
+  padding:12px;
+  border-radius:12px;
+  background:rgba(255,255,255,.045);
+  color:#bfc5d6;
+  font-size:12px;
+  line-height:1.45;
+}
+
+.basket-status.show{
+  display:block;
+}
+
+.basket-status.error{
+  color:#ff9baa;
+  border:1px solid rgba(255,95,115,.18);
+  background:rgba(255,95,115,.06);
+}
+
+.basket-status.success{
+  color:#72eeb1;
+  border:1px solid rgba(53,223,141,.18);
+  background:rgba(53,223,141,.06);
+}
+
+.basket-results{
+  margin-top:16px;
+}
+
+.basket-results-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:10px;
+}
+
+.basket-results-title{
+  font-size:15px;
+  font-weight:900;
+}
+
+.basket-last-checked{
+  color:#7f879b;
+  font-size:9px;
+  text-align:right;
+}
+
+.retailer-card{
+  position:relative;
+  padding:16px;
+  margin-bottom:11px;
+  border-radius:18px;
+  border:1px solid #293253;
+  background:linear-gradient(145deg,#151b31,#0c1122);
+}
+
+.retailer-card.retailer-best{
+  border-color:#56e8a1;
+  box-shadow:0 0 0 1px rgba(86,232,161,.12),0 12px 30px rgba(53,223,141,.08);
+}
+
+.retailer-card.retailer-incomplete{
+  border-color:rgba(255,148,31,.35);
+}
+
+.retailer-badge{
+  display:inline-block;
+  padding:5px 8px;
+  margin-bottom:9px;
+  border-radius:8px;
+  background:rgba(53,223,141,.12);
+  color:#70efb1;
+  font-size:9px;
+  font-weight:950;
+  letter-spacing:.7px;
+}
+
+.retailer-name{
+  font-size:17px;
+  font-weight:950;
+}
+
+.retailer-total-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:10px;
+  margin-top:9px;
+}
+
+.retailer-total-label{
+  color:var(--muted);
+  font-size:10px;
+  font-weight:800;
+}
+
+.retailer-total{
+  font-size:26px;
+  font-weight:950;
+}
+
+.retailer-missing-count{
+  color:#ffb25e;
+  font-size:10px;
+  font-weight:850;
+  text-align:right;
+}
+
+.basket-items{
+  margin-top:13px;
+  padding-top:12px;
+  border-top:1px solid rgba(255,255,255,.07);
+}
+
+.basket-item{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:10px;
+  padding:8px 0;
+  font-size:11px;
+}
+
+.basket-item-name{
+  color:#c7ccda;
+}
+
+.basket-item-price{
+  color:white;
+  font-weight:850;
+  text-align:right;
+}
+
+.basket-item-product{
+  color:#777f94;
+  font-size:9px;
+  margin-top:2px;
+}
+
+.basket-missing{
+  margin-top:12px;
+  padding:10px;
+  border-radius:10px;
+  background:rgba(255,148,31,.07);
+  color:#ffbd6b;
+  font-size:10px;
+  line-height:1.5;
+}
+
+.basket-missing strong{
+  display:block;
+  margin-bottom:4px;
+}
+
+.basket-refresh{
+  width:100%;
+  margin-top:8px;
+  padding:11px;
+  border:1px solid rgba(139,92,246,.3);
+  border-radius:11px;
+  background:rgba(109,40,217,.1);
+  color:#cdbdff;
+  font-size:11px;
+  font-weight:900;
+}
+
+.basket-empty{
+  padding:14px;
+  border-radius:13px;
+  background:rgba(255,255,255,.04);
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.5;
+}
+
+.best-basket-saving{
+  margin-top:11px;
+  padding:11px;
+  border-radius:11px;
+  background:rgba(53,223,141,.07);
+  color:#70efb1;
+  font-size:11px;
+  font-weight:850;
+}
+
+.basket-link{
+  display:inline-block;
+  margin-top:8px;
+  color:#bda8ff;
+  text-decoration:none;
+  font-size:10px;
+  font-weight:850;
+}
+
 /* NAV */
 .bottom-nav{
   position:fixed;z-index:20;bottom:0;left:50%;transform:translateX(-50%);
@@ -435,6 +702,7 @@ button{cursor:pointer}
   .meal-macros{gap:8px}
   .shop-row{grid-template-columns:25px 1fr 58px 25px;gap:7px}
   .shop-qty{width:58px}
+  .retailer-total{font-size:23px}
 }
 </style>
 </head>
@@ -664,6 +932,30 @@ button{cursor:pointer}
 </div>
 
 <button class="clear-shop-btn" onclick="resetShoppingList()">RESET SHOPPING LIST</button>
+
+<!-- BEST BASKET -->
+<section class="best-basket-card">
+  <div class="best-basket-top">
+    <div>
+      <div class="best-basket-kicker">LIVE SUPERMARKET COMPARISON</div>
+      <div class="best-basket-title">🏆 Best Basket</div>
+      <div class="best-basket-desc">
+        Compare your current shopping list across major UK supermarkets and find the cheapest complete basket.
+      </div>
+    </div>
+
+    <div class="best-basket-trophy">🏆</div>
+  </div>
+
+  <button id="checkPricesButton" class="basket-button" onclick="checkBestBasket()">
+    💷 CHECK LIVE PRICES
+  </button>
+
+  <div id="basketStatus" class="basket-status"></div>
+
+  <div id="basketResults" class="basket-results"></div>
+</section>
+
 </section>
 
 </div>
@@ -750,6 +1042,24 @@ const defaultShoppingItems=[
   "Bananas","Avocado","Wholemeal wraps","Wholegrain bread","Rice cakes"
 ];
 
+const basketRetailers=[
+  "tesco",
+  "sainsburys",
+  "asda",
+  "morrisons",
+  "waitrose",
+  "aldi"
+];
+
+const retailerNames={
+  tesco:"Tesco",
+  sainsburys:"Sainsbury's",
+  asda:"Asda",
+  morrisons:"Morrisons",
+  waitrose:"Waitrose",
+  aldi:"Aldi"
+};
+
 let shoppingItems=[];
 
 function hideAllScreens(){
@@ -764,33 +1074,48 @@ function setNav(active){
 }
 
 function showHome(){
-  hideAllScreens();document.getElementById("homeScreen").classList.add("active");
-  setNav("home");window.scrollTo(0,0);
+  hideAllScreens();
+  document.getElementById("homeScreen").classList.add("active");
+  setNav("home");
+  window.scrollTo(0,0);
 }
 
 function showWorkout(){
-  hideAllScreens();document.getElementById("workoutScreen").classList.add("active");
-  setNav("workout");window.scrollTo(0,0);
+  hideAllScreens();
+  document.getElementById("workoutScreen").classList.add("active");
+  setNav("workout");
+  updateWorkoutProgress();
+  window.scrollTo(0,0);
 }
 
 function showMeals(){
-  hideAllScreens();document.getElementById("mealScreen").classList.add("active");
-  setNav("meal");renderDays();renderCurrentDay();window.scrollTo(0,0);
+  hideAllScreens();
+  document.getElementById("mealScreen").classList.add("active");
+  setNav("meal");
+  renderDays();
+  renderCurrentDay();
+  window.scrollTo(0,0);
 }
 
 function showSetup(){
-  hideAllScreens();document.getElementById("setupScreen").classList.add("active");
-  setNav("");window.scrollTo(0,0);
+  hideAllScreens();
+  document.getElementById("setupScreen").classList.add("active");
+  setNav("");
+  window.scrollTo(0,0);
 }
 
 function showShopping(){
-  hideAllScreens();document.getElementById("shoppingScreen").classList.add("active");
-  setNav("");renderShoppingList();window.scrollTo(0,0);
+  hideAllScreens();
+  document.getElementById("shoppingScreen").classList.add("active");
+  setNav("");
+  renderShoppingList();
+  window.scrollTo(0,0);
 }
 
 function toggleExercise(card){
   card.classList.toggle("completed");
-  card.querySelector(".exercise-check").innerHTML=card.classList.contains("completed")?"✓":"";
+  card.querySelector(".exercise-check").innerHTML=
+    card.classList.contains("completed")?"✓":"";
   updateWorkoutProgress();
 }
 
@@ -798,13 +1123,23 @@ function updateWorkoutProgress(){
   const exercises=document.querySelectorAll(".exercise-card");
   const completed=document.querySelectorAll(".exercise-card.completed").length;
   const total=exercises.length;
-  document.getElementById("workoutProgressText").textContent=completed+" / "+total;
-  document.getElementById("workoutProgressFill").style.width=(completed/total*100)+"%";
+
+  document.getElementById("workoutProgressText").textContent=
+    completed+" / "+total;
+
+  document.getElementById("workoutProgressFill").style.width=
+    (completed/total*100)+"%";
+
   const button=document.getElementById("finishButton");
+
   if(completed===total){
-    button.disabled=false;button.classList.add("ready");button.textContent="FINISH WORKOUT 🏆";
+    button.disabled=false;
+    button.classList.add("ready");
+    button.textContent="FINISH WORKOUT 🏆";
   }else{
-    button.disabled=true;button.classList.remove("ready");button.textContent="COMPLETE ALL EXERCISES";
+    button.disabled=true;
+    button.classList.remove("ready");
+    button.textContent="COMPLETE ALL EXERCISES";
   }
 }
 
@@ -816,34 +1151,60 @@ function finishWorkout(){
 function renderDays(){
   const selector=document.getElementById("daySelector");
   selector.innerHTML="";
+
   days.forEach((day,index)=>{
     const btn=document.createElement("button");
+
     btn.className="day-btn"+(index===currentDay?" active":"");
     btn.innerHTML=day.name+"<strong>"+day.date+"</strong>";
-    btn.onclick=()=>{currentDay=index;renderDays();renderCurrentDay();};
+
+    btn.onclick=()=>{
+      currentDay=index;
+      renderDays();
+      renderCurrentDay();
+    };
+
     selector.appendChild(btn);
   });
 }
 
 function renderCurrentDay(){
-  const dayNames=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
-  document.getElementById("mealDayTitle").textContent=dayNames[currentDay]+"'s Meals";
+  const dayNames=[
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday"
+  ];
+
+  document.getElementById("mealDayTitle").textContent=
+    dayNames[currentDay]+"'s Meals";
 
   ["breakfast","lunch","dinner","snack"].forEach(type=>{
     const meal=mealOptions[type][weeklyMeals[currentDay][type]];
+
     document.getElementById(type+"Emoji").textContent=meal.emoji;
     document.getElementById(type+"Name").textContent=meal.name;
     document.getElementById(type+"Desc").textContent=meal.desc;
   });
 
   const saved=localStorage.getItem("shiftfitPlan");
-  if(saved) scaleMeals(JSON.parse(saved));
+
+  if(saved){
+    scaleMeals(JSON.parse(saved));
+  }
+
   updateMiniShopping();
 }
 
 function selectGoal(button){
-  document.querySelectorAll(".goal-btn").forEach(btn=>btn.classList.remove("active"));
-  button.classList.add("active");selectedGoal=button.dataset.goal;
+  document.querySelectorAll(".goal-btn")
+    .forEach(btn=>btn.classList.remove("active"));
+
+  button.classList.add("active");
+  selectedGoal=button.dataset.goal;
 }
 
 function generatePlan(){
@@ -853,47 +1214,95 @@ function generatePlan(){
   const sex=document.getElementById("userSex").value;
   const activity=parseFloat(document.getElementById("userActivity").value);
 
-  if(!age||!weight||!height){alert("Please enter your age, weight and height.");return;}
+  if(!age||!weight||!height){
+    alert("Please enter your age, weight and height.");
+    return;
+  }
 
   let bmr=sex==="male"
     ?(10*weight)+(6.25*height)-(5*age)+5
     :(10*weight)+(6.25*height)-(5*age)-161;
 
   const maintenance=bmr*activity;
-  let calories=selectedGoal==="lose"?Math.round(maintenance-400):
-               selectedGoal==="gain"?Math.round(maintenance+300):
-               Math.round(maintenance);
+
+  let calories=
+    selectedGoal==="lose"
+      ?Math.round(maintenance-400)
+      :selectedGoal==="gain"
+        ?Math.round(maintenance+300)
+        :Math.round(maintenance);
 
   const protein=Math.round(weight*2);
   const fats=Math.round(weight*.8);
-  const carbs=Math.max(0,Math.round((calories-(protein*4)-(fats*9))/4));
 
-  const plan={age,weight,height,sex,activity,goal:selectedGoal,calories,protein,carbs,fats};
-  localStorage.setItem("shiftfitPlan",JSON.stringify(plan));
+  const carbs=Math.max(
+    0,
+    Math.round((calories-(protein*4)-(fats*9))/4)
+  );
+
+  const plan={
+    age,
+    weight,
+    height,
+    sex,
+    activity,
+    goal:selectedGoal,
+    calories,
+    protein,
+    carbs,
+    fats
+  };
+
+  localStorage.setItem(
+    "shiftfitPlan",
+    JSON.stringify(plan)
+  );
+
   updatePlan(plan);
+
   alert("⚡ Your personalised ShiftFit meal plan is ready!");
+
   showMeals();
 }
 
 function updatePlan(plan){
-  document.getElementById("homeCalories").textContent=plan.calories.toLocaleString();
-  document.getElementById("homeProtein").textContent=plan.protein+"g";
-  document.getElementById("mealCalories").textContent=plan.calories.toLocaleString();
-  document.getElementById("mealProtein").textContent=plan.protein+"g";
-  document.getElementById("mealCarbs").textContent=plan.carbs+"g";
-  document.getElementById("mealFats").textContent=plan.fats+"g";
+  document.getElementById("homeCalories").textContent=
+    plan.calories.toLocaleString();
+
+  document.getElementById("homeProtein").textContent=
+    plan.protein+"g";
+
+  document.getElementById("mealCalories").textContent=
+    plan.calories.toLocaleString();
+
+  document.getElementById("mealProtein").textContent=
+    plan.protein+"g";
+
+  document.getElementById("mealCarbs").textContent=
+    plan.carbs+"g";
+
+  document.getElementById("mealFats").textContent=
+    plan.fats+"g";
 
   if(plan.goal==="lose"){
     document.getElementById("goalBadge").textContent="FAT LOSS";
-    document.getElementById("mealSubtitle").textContent="High-protein meals designed to help you lose fat while protecting muscle.";
+
+    document.getElementById("mealSubtitle").textContent=
+      "High-protein meals designed to help you lose fat while protecting muscle.";
   }
+
   if(plan.goal==="maintain"){
     document.getElementById("goalBadge").textContent="MAINTAIN";
-    document.getElementById("mealSubtitle").textContent="Balanced meals designed to fuel your lifestyle and maintain your weight.";
+
+    document.getElementById("mealSubtitle").textContent=
+      "Balanced meals designed to fuel your lifestyle and maintain your weight.";
   }
+
   if(plan.goal==="gain"){
     document.getElementById("goalBadge").textContent="BUILD MUSCLE";
-    document.getElementById("mealSubtitle").textContent="High-protein meals designed to support strength, recovery and muscle growth.";
+
+    document.getElementById("mealSubtitle").textContent=
+      "High-protein meals designed to support strength, recovery and muscle growth.";
   }
 
   scaleMeals(plan);
@@ -906,140 +1315,698 @@ function scaleMeals(plan){
     dinner:Math.round(plan.calories*.32),
     snack:Math.round(plan.calories*.15)
   };
-  const portions={breakfast:.25,lunch:.30,dinner:.32,snack:.13};
+
+  const portions={
+    breakfast:.25,
+    lunch:.30,
+    dinner:.32,
+    snack:.13
+  };
 
   ["breakfast","lunch","dinner","snack"].forEach(type=>{
-    document.getElementById(type+"Calories").textContent=mealCalories[type]+" kcal";
-    document.getElementById(type+"P").textContent=Math.round(plan.protein*portions[type])+"g";
-    document.getElementById(type+"C").textContent=Math.round(plan.carbs*portions[type])+"g";
-    document.getElementById(type+"F").textContent=Math.round(plan.fats*portions[type])+"g";
+    document.getElementById(type+"Calories").textContent=
+      mealCalories[type]+" kcal";
+
+    document.getElementById(type+"P").textContent=
+      Math.round(plan.protein*portions[type])+"g";
+
+    document.getElementById(type+"C").textContent=
+      Math.round(plan.carbs*portions[type])+"g";
+
+    document.getElementById(type+"F").textContent=
+      Math.round(plan.fats*portions[type])+"g";
   });
 }
 
 function swapMeal(type){
-  weeklyMeals[currentDay][type]=(weeklyMeals[currentDay][type]+1)%mealOptions[type].length;
+  weeklyMeals[currentDay][type]=
+    (weeklyMeals[currentDay][type]+1)%mealOptions[type].length;
+
   saveWeeklyMeals();
   renderCurrentDay();
 }
 
 function saveWeeklyMeals(){
-  localStorage.setItem("shiftfitWeeklyMeals",JSON.stringify(weeklyMeals));
+  localStorage.setItem(
+    "shiftfitWeeklyMeals",
+    JSON.stringify(weeklyMeals)
+  );
 }
 
 function loadWeeklyMeals(){
-  const saved=localStorage.getItem("shiftfitWeeklyMeals");
-  if(saved) weeklyMeals=JSON.parse(saved);
+  const saved=
+    localStorage.getItem("shiftfitWeeklyMeals");
+
+  if(saved){
+    try{
+      weeklyMeals=JSON.parse(saved);
+    }catch(error){
+      console.warn("Could not load saved meals.");
+    }
+  }
 }
 
 function loadSavedPlan(){
-  const saved=localStorage.getItem("shiftfitPlan");
+  const saved=
+    localStorage.getItem("shiftfitPlan");
+
   if(!saved) return;
 
-  const plan=JSON.parse(saved);
-  selectedGoal=plan.goal;
-  document.getElementById("userAge").value=plan.age;
-  document.getElementById("userWeight").value=plan.weight;
-  document.getElementById("userHeight").value=plan.height;
-  document.getElementById("userSex").value=plan.sex;
-  document.getElementById("userActivity").value=plan.activity;
+  try{
+    const plan=JSON.parse(saved);
 
-  document.querySelectorAll(".goal-btn").forEach(btn=>{
-    btn.classList.toggle("active",btn.dataset.goal===plan.goal);
-  });
+    selectedGoal=plan.goal;
 
-  updatePlan(plan);
+    document.getElementById("userAge").value=plan.age;
+    document.getElementById("userWeight").value=plan.weight;
+    document.getElementById("userHeight").value=plan.height;
+    document.getElementById("userSex").value=plan.sex;
+    document.getElementById("userActivity").value=plan.activity;
+
+    document.querySelectorAll(".goal-btn").forEach(btn=>{
+      btn.classList.toggle(
+        "active",
+        btn.dataset.goal===plan.goal
+      );
+    });
+
+    updatePlan(plan);
+
+  }catch(error){
+    console.warn("Could not load saved plan.");
+  }
 }
 
 /* SHOPPING LIST */
 
 function loadShoppingItems(){
-  const saved=localStorage.getItem("shiftfitShoppingItems");
+  const saved=
+    localStorage.getItem("shiftfitShoppingItems");
+
   if(saved){
-    shoppingItems=JSON.parse(saved);
-  }else{
-    shoppingItems=defaultShoppingItems.map(name=>({
-      name:name,qty:"1",checked:false
-    }));
+    try{
+      shoppingItems=JSON.parse(saved);
+    }catch(error){
+      shoppingItems=[];
+    }
+  }
+
+  if(!Array.isArray(shoppingItems)||!shoppingItems.length){
+    shoppingItems=
+      defaultShoppingItems.map(name=>({
+        name:name,
+        qty:"1",
+        checked:false
+      }));
+
     saveShoppingItems();
   }
 }
 
 function saveShoppingItems(){
-  localStorage.setItem("shiftfitShoppingItems",JSON.stringify(shoppingItems));
+  localStorage.setItem(
+    "shiftfitShoppingItems",
+    JSON.stringify(shoppingItems)
+  );
 }
 
 function renderShoppingList(){
   const list=document.getElementById("shoppingList");
+
+  if(!list) return;
+
   list.innerHTML="";
 
   shoppingItems.forEach((item,index)=>{
     const row=document.createElement("div");
-    row.className="shop-row"+(item.checked?" checked":"");
+
+    row.className=
+      "shop-row"+(item.checked?" checked":"");
+
     row.innerHTML=`
-      <button class="shop-check" onclick="toggleShoppingItem(${index})">${item.checked?"✓":""}</button>
-      <div class="shop-name">${item.name}</div>
-      <input class="shop-qty" value="${item.qty}" onchange="updateShoppingQty(${index},this.value)">
-      <button class="delete-shop" onclick="deleteShoppingItem(${index})">×</button>
+      <button class="shop-check" onclick="toggleShoppingItem(${index})">
+        ${item.checked?"✓":""}
+      </button>
+
+      <div class="shop-name">${escapeHtml(item.name)}</div>
+
+      <input
+        class="shop-qty"
+        type="number"
+        min="1"
+        step="1"
+        value="${escapeHtml(String(item.qty||1))}"
+        onchange="updateShoppingQty(${index},this.value)"
+      >
+
+      <button
+        class="delete-shop"
+        onclick="deleteShoppingItem(${index})"
+      >×</button>
     `;
+
     list.appendChild(row);
   });
 
-  const bought=shoppingItems.filter(item=>item.checked).length;
-  document.getElementById("shoppingTotal").textContent=shoppingItems.length;
-  document.getElementById("shoppingBought").textContent=bought;
+  const bought=
+    shoppingItems.filter(item=>item.checked).length;
+
+  document.getElementById("shoppingTotal").textContent=
+    shoppingItems.length;
+
+  document.getElementById("shoppingBought").textContent=
+    bought;
+
   updateMiniShopping();
 }
 
 function toggleShoppingItem(index){
-  shoppingItems[index].checked=!shoppingItems[index].checked;
+  shoppingItems[index].checked=
+    !shoppingItems[index].checked;
+
   saveShoppingItems();
   renderShoppingList();
 }
 
 function updateShoppingQty(index,value){
-  shoppingItems[index].qty=value||"1";
+  let qty=parseInt(value,10);
+
+  if(!Number.isFinite(qty)||qty<1){
+    qty=1;
+  }
+
+  shoppingItems[index].qty=String(qty);
+
   saveShoppingItems();
 }
 
 function deleteShoppingItem(index){
   shoppingItems.splice(index,1);
+
   saveShoppingItems();
   renderShoppingList();
+
+  clearBasketResults();
 }
 
 function addShoppingItem(){
-  const input=document.getElementById("newShoppingItem");
+  const input=
+    document.getElementById("newShoppingItem");
+
   const name=input.value.trim();
+
   if(!name) return;
 
-  shoppingItems.push({name:name,qty:"1",checked:false});
+  shoppingItems.push({
+    name:name,
+    qty:"1",
+    checked:false
+  });
+
   input.value="";
+
   saveShoppingItems();
   renderShoppingList();
+
+  clearBasketResults();
 }
 
 function resetShoppingList(){
   if(!confirm("Reset your shopping list?")) return;
-  shoppingItems=defaultShoppingItems.map(name=>({name:name,qty:"1",checked:false}));
+
+  shoppingItems=
+    defaultShoppingItems.map(name=>({
+      name:name,
+      qty:"1",
+      checked:false
+    }));
+
   saveShoppingItems();
   renderShoppingList();
+
+  clearBasketResults();
 }
 
 function updateMiniShopping(){
-  const container=document.getElementById("miniShoppingItems");
+  const container=
+    document.getElementById("miniShoppingItems");
+
   if(!container) return;
 
-  const preview=shoppingItems.slice(0,12);
-  container.innerHTML=preview.map(item=>`<div class="shopping-item">${item.name}</div>`).join("");
-  document.getElementById("miniShoppingCount").textContent=shoppingItems.length+" ITEMS";
+  const preview=
+    shoppingItems.slice(0,12);
+
+  container.innerHTML=
+    preview.map(item=>
+      `<div class="shopping-item">${escapeHtml(item.name)}</div>`
+    ).join("");
+
+  document.getElementById("miniShoppingCount").textContent=
+    shoppingItems.length+" ITEMS";
 }
 
+/* BEST BASKET */
+
+function escapeHtml(value){
+  return String(value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+function getBasketItems(){
+  return shoppingItems
+    .filter(item=>item && item.name)
+    .map(item=>({
+      name:String(item.name).trim(),
+      qty:Math.max(
+        1,
+        Number(item.qty)||1
+      )
+    }))
+    .filter(item=>item.name)
+    .slice(0,30);
+}
+
+function clearBasketResults(){
+  const results=
+    document.getElementById("basketResults");
+
+  const status=
+    document.getElementById("basketStatus");
+
+  if(results){
+    results.innerHTML="";
+  }
+
+  if(status){
+    status.className="basket-status";
+    status.innerHTML="";
+  }
+}
+
+function setBasketStatus(message,type=""){
+  const status=
+    document.getElementById("basketStatus");
+
+  status.className=
+    "basket-status show"+(type?" "+type:"");
+
+  status.textContent=message;
+}
+
+function formatMoney(value){
+  if(!Number.isFinite(Number(value))) return "—";
+
+  return new Intl.NumberFormat(
+    "en-GB",
+    {
+      style:"currency",
+      currency:"GBP"
+    }
+  ).format(Number(value));
+}
+
+function formatCheckedTime(value){
+  if(!value) return "";
+
+  const date=new Date(value);
+
+  if(Number.isNaN(date.getTime())){
+    return "";
+  }
+
+  return date.toLocaleString(
+    "en-GB",
+    {
+      day:"numeric",
+      month:"short",
+      hour:"2-digit",
+      minute:"2-digit"
+    }
+  );
+}
+
+async function checkBestBasket(){
+  const button=
+    document.getElementById("checkPricesButton");
+
+  const results=
+    document.getElementById("basketResults");
+
+  const items=
+    getBasketItems();
+
+  if(!items.length){
+    setBasketStatus(
+      "Your shopping list is empty. Add some items first.",
+      "error"
+    );
+    return;
+  }
+
+  button.disabled=true;
+  button.textContent="⏳ CHECKING LIVE PRICES...";
+
+  results.innerHTML="";
+
+  setBasketStatus(
+    "Checking live supermarket prices. This can take a little while because ShiftFit is comparing multiple retailers.",
+    ""
+  );
+
+  try{
+    const response=
+      await fetch(
+        "/api/best-basket",
+        {
+          method:"POST",
+          headers:{
+            "Content-Type":"application/json"
+          },
+          body:JSON.stringify({
+            items:items,
+            retailers:basketRetailers
+          })
+        }
+      );
+
+    let data=null;
+
+    try{
+      data=await response.json();
+    }catch(error){
+      throw new Error(
+        "The price service returned an invalid response."
+      );
+    }
+
+    if(!response.ok){
+      if(data && data.message){
+        throw new Error(data.message);
+      }
+
+      if(data && data.error){
+        throw new Error(
+          data.error.replaceAll("_"," ")
+        );
+      }
+
+      throw new Error(
+        "The live price service could not complete the request."
+      );
+    }
+
+    renderBasketResults(data);
+
+  }catch(error){
+    console.error("Best Basket error:",error);
+
+    setBasketStatus(
+      "We couldn't get live prices right now. "+error.message,
+      "error"
+    );
+
+    results.innerHTML=`
+      <div class="basket-empty">
+        <strong>Price check failed.</strong><br>
+        Your shopping list is safe. Try the price check again in a moment.
+      </div>
+    `;
+
+  }finally{
+    button.disabled=false;
+    button.textContent="💷 CHECK LIVE PRICES";
+  }
+}
+
+function renderBasketResults(data){
+  const results=
+    document.getElementById("basketResults");
+
+  const baskets=
+    Array.isArray(data.baskets)
+      ?data.baskets
+      :[];
+
+  if(!baskets.length){
+    setBasketStatus(
+      "No supermarket price results were returned.",
+      "error"
+    );
+
+    results.innerHTML=`
+      <div class="basket-empty">
+        No usable supermarket results were returned for this shopping list.
+      </div>
+    `;
+
+    return;
+  }
+
+  const best=
+    data.bestBasket || null;
+
+  const checkedAt=
+    formatCheckedTime(data.checkedAt);
+
+  let html=`
+    <div class="basket-results-header">
+      <div class="basket-results-title">
+        Supermarket Results
+      </div>
+
+      <div class="basket-last-checked">
+        ${checkedAt?"Checked "+escapeHtml(checkedAt):""}
+      </div>
+    </div>
+  `;
+
+  if(best){
+    setBasketStatus(
+      "Best complete basket found: "+
+      getRetailerDisplayName(best.retailer)+
+      " at "+
+      formatMoney(best.total)+".",
+      "success"
+    );
+  }else{
+    setBasketStatus(
+      "No supermarket has every item available. Showing the best partial results below.",
+      ""
+    );
+  }
+
+  baskets.forEach(basket=>{
+    html+=renderRetailerCard(
+      basket,
+      best
+    );
+  });
+
+  if(best){
+    const nextBest=
+      baskets.find(basket=>
+        basket.retailer.toLowerCase()!==
+        String(best.retailer).toLowerCase() &&
+        basket.missing.length===0
+      );
+
+    if(nextBest){
+      const saving=
+        Number(
+          (nextBest.total-best.total).toFixed(2)
+        );
+
+      if(saving>0){
+        html+=`
+          <div class="best-basket-saving">
+            🏆 ShiftFit found a saving of
+            ${formatMoney(saving)}
+            versus the next cheapest complete basket.
+          </div>
+        `;
+      }
+    }
+  }
+
+  results.innerHTML=html;
+}
+
+function renderRetailerCard(basket,best){
+  const retailerKey=
+    String(basket.retailer||"").toLowerCase();
+
+  const retailerName=
+    getRetailerDisplayName(retailerKey);
+
+  const isBest=
+    best &&
+    String(best.retailer).toLowerCase()===retailerKey &&
+    basket.missing.length===0;
+
+  const incomplete=
+    basket.missing.length>0;
+
+  let itemsHtml="";
+
+  if(Array.isArray(basket.items)){
+    itemsHtml=
+      basket.items.map(item=>{
+        const productName=
+          item.product ||
+          item.name ||
+          item.item ||
+          "Matched product";
+
+        const qty=
+          Number(item.qty)||1;
+
+        const lineTotal=
+          Number(item.lineTotal);
+
+        const price=
+          Number(item.price);
+
+        return `
+          <div class="basket-item">
+            <div>
+              <div class="basket-item-name">
+                ${escapeHtml(item.item||"Item")} × ${qty}
+              </div>
+
+              <div class="basket-item-product">
+                ${escapeHtml(productName)}
+                ${item.pack?" • "+escapeHtml(item.pack):""}
+              </div>
+
+              ${
+                item.url
+                ?`
+                  <a
+                    class="basket-link"
+                    href="${escapeHtml(item.url)}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >VIEW PRODUCT</a>
+                `
+                :""
+              }
+            </div>
+
+            <div class="basket-item-price">
+              ${
+                Number.isFinite(lineTotal)
+                  ?formatMoney(lineTotal)
+                  :Number.isFinite(price)
+                    ?formatMoney(price)
+                    :"—"
+              }
+            </div>
+          </div>
+        `;
+      }).join("");
+  }
+
+  let missingHtml="";
+
+  if(incomplete){
+    missingHtml=`
+      <div class="basket-missing">
+        <strong>⚠ Missing from this basket</strong>
+        ${basket.missing
+          .map(item=>escapeHtml(item))
+          .join(" • ")}
+      </div>
+    `;
+  }
+
+  return `
+    <div class="retailer-card ${
+      isBest
+        ?"retailer-best"
+        :incomplete
+          ?"retailer-incomplete"
+          :""
+    }">
+
+      ${
+        isBest
+        ?`<div class="retailer-badge">🏆 CHEAPEST COMPLETE BASKET</div>`
+        :""
+      }
+
+      <div class="retailer-name">
+        ${escapeHtml(retailerName)}
+      </div>
+
+      <div class="retailer-total-row">
+        <div>
+          <div class="retailer-total-label">
+            ${
+              incomplete
+                ?"CURRENT MATCHED TOTAL"
+                :"COMPLETE BASKET TOTAL"
+            }
+          </div>
+
+          <div class="retailer-total">
+            ${formatMoney(Number(basket.total))}
+          </div>
+        </div>
+
+        ${
+          incomplete
+          ?`
+            <div class="retailer-missing-count">
+              ${basket.missing.length}
+              missing
+            </div>
+          `
+          :""
+        }
+      </div>
+
+      ${
+        itemsHtml
+        ?`<div class="basket-items">${itemsHtml}</div>`
+        :""
+      }
+
+      ${missingHtml}
+    </div>
+  `;
+}
+
+function getRetailerDisplayName(key){
+  const normalised=
+    String(key||"").toLowerCase().trim();
+
+  return retailerNames[normalised] ||
+    String(key||"Supermarket");
+}
+
+/* ENTER KEY FOR ADD ITEM */
+document.addEventListener("keydown",event=>{
+  if(
+    event.key==="Enter" &&
+    document.activeElement &&
+    document.activeElement.id==="newShoppingItem"
+  ){
+    addShoppingItem();
+  }
+});
+
+/* START APP */
 loadWeeklyMeals();
 loadShoppingItems();
 loadSavedPlan();
 renderDays();
 renderCurrentDay();
 updateMiniShopping();
+updateWorkoutProgress();
 </script>
 </body>
 </html>
