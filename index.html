@@ -1030,6 +1030,79 @@ button{
 }
 
 
+/* SHIFT ENGINE */
+
+.shift-engine-card{
+  margin-top:18px;
+  padding:18px;
+  border-radius:21px;
+  border:1px solid rgba(139,92,246,.35);
+  background:linear-gradient(
+    145deg,
+    #171438,
+    #0d1022
+  );
+}
+
+.shift-engine-title{
+  font-size:17px;
+  font-weight:900;
+}
+
+.shift-engine-desc{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.45;
+  margin-top:5px;
+}
+
+.shift-options{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+  margin-top:14px;
+}
+
+.shift-option{
+  padding:13px 8px;
+  border-radius:13px;
+  border:1px solid #303a60;
+  background:#0d1326;
+  color:#aab1c5;
+  text-align:left;
+  font-size:11px;
+  font-weight:850;
+}
+
+.shift-option strong{
+  display:block;
+  color:white;
+  font-size:13px;
+  margin-bottom:3px;
+}
+
+.shift-option.active{
+  border-color:#936bff;
+  background:linear-gradient(
+    145deg,
+    #382070,
+    #17143a
+  );
+  color:#ddd2ff;
+  box-shadow:0 0 18px rgba(109,40,217,.18);
+}
+
+.current-shift{
+  margin-top:12px;
+  padding:10px 11px;
+  border-radius:10px;
+  background:rgba(53,223,141,.07);
+  color:#75e7b1;
+  font-size:11px;
+  font-weight:850;
+}
+
+
 /* SHOPPING */
 
 .shopping-card{
@@ -1761,12 +1834,18 @@ button{
       Today's Plan
     </div>
 
-    <div class="shift-badge">
+    <div
+      class="shift-badge"
+      id="homeShiftBadge"
+    >
       DAY SHIFT
     </div>
   </div>
 
-  <div class="shift-time-row">
+  <div
+    class="shift-time-row"
+    id="homeShiftTime"
+  >
     <span>▣</span>
     <span>06:00 – 18:00</span>
   </div>
@@ -2735,6 +2814,78 @@ button{
 
 </section>
 
+
+<!-- SHIFT ENGINE -->
+
+<section class="shift-engine-card">
+
+  <div class="shift-engine-title">
+    🕐 Your Work Shift
+  </div>
+
+  <div class="shift-engine-desc">
+    Tell ShiftFit when you work so we can build your training and nutrition around your shifts.
+  </div>
+
+  <div class="shift-options">
+
+    <button
+      class="shift-option"
+      data-shift="early"
+      onclick="selectShift(this)"
+    >
+      <strong>🌅 Early</strong>
+      05:00 – 13:00
+    </button>
+
+    <button
+      class="shift-option active"
+      data-shift="day"
+      onclick="selectShift(this)"
+    >
+      <strong>☀️ Day</strong>
+      06:00 – 18:00
+    </button>
+
+    <button
+      class="shift-option"
+      data-shift="late"
+      onclick="selectShift(this)"
+    >
+      <strong>🌆 Late</strong>
+      14:00 – 22:00
+    </button>
+
+    <button
+      class="shift-option"
+      data-shift="night"
+      onclick="selectShift(this)"
+    >
+      <strong>🌙 Night</strong>
+      22:00 – 06:00
+    </button>
+
+    <button
+      class="shift-option"
+      data-shift="rest"
+      onclick="selectShift(this)"
+    >
+      <strong>🛌 Rest Day</strong>
+      No work shift
+    </button>
+
+  </div>
+
+  <div
+    class="current-shift"
+    id="currentShiftDisplay"
+  >
+    Current shift: Day Shift • 06:00 – 18:00
+  </div>
+
+</section>
+
+
 <button
   class="generate-btn"
   onclick="generatePlan()"
@@ -2929,6 +3080,158 @@ button{
 let selectedGoal="lose";
 
 let currentDay=0;
+
+
+/* SHIFT ENGINE */
+
+let selectedShift="day";
+
+
+const shiftOptions={
+
+  early:{
+    name:"Early Shift",
+    time:"05:00 – 13:00"
+  },
+
+  day:{
+    name:"Day Shift",
+    time:"06:00 – 18:00"
+  },
+
+  late:{
+    name:"Late Shift",
+    time:"14:00 – 22:00"
+  },
+
+  night:{
+    name:"Night Shift",
+    time:"22:00 – 06:00"
+  },
+
+  rest:{
+    name:"Rest Day",
+    time:"No work shift"
+  }
+
+};
+
+
+function selectShift(button){
+
+  document
+    .querySelectorAll(".shift-option")
+    .forEach(
+      option=>
+        option.classList.remove("active")
+    );
+
+  button.classList.add("active");
+
+  selectedShift=
+    button.dataset.shift;
+
+  updateShiftDisplay();
+
+  localStorage.setItem(
+    "shiftfitShift",
+    selectedShift
+  );
+
+}
+
+
+function updateShiftDisplay(){
+
+  const display=
+    document.getElementById(
+      "currentShiftDisplay"
+    );
+
+  const homeBadge=
+    document.getElementById(
+      "homeShiftBadge"
+    );
+
+  const homeTime=
+    document.getElementById(
+      "homeShiftTime"
+    );
+
+  const shift=
+    shiftOptions[
+      selectedShift
+    ]||
+    shiftOptions.day;
+
+
+  if(display){
+
+    display.textContent=
+      "Current shift: "+
+      shift.name+
+      " • "+
+      shift.time;
+
+  }
+
+
+  if(homeBadge){
+
+    homeBadge.textContent=
+      shift.name.toUpperCase();
+
+  }
+
+
+  if(homeTime){
+
+    homeTime.innerHTML=
+      "<span>▣</span><span>"+
+      escapeHtml(
+        shift.time
+      )+
+      "</span>";
+
+  }
+
+}
+
+
+function loadSavedShift(){
+
+  const saved=
+    localStorage.getItem(
+      "shiftfitShift"
+    );
+
+  if(
+    saved &&
+    shiftOptions[saved]
+  ){
+
+    selectedShift=saved;
+
+  }
+
+
+  document
+    .querySelectorAll(".shift-option")
+    .forEach(
+      option=>{
+
+        option.classList.toggle(
+          "active",
+          option.dataset.shift===
+            selectedShift
+        );
+
+      }
+    );
+
+  updateShiftDisplay();
+
+}
 
 
 /* DAYS */
@@ -3280,6 +3583,8 @@ function showHome(){
 
   setNav("home");
 
+  updateShiftDisplay();
+
   window.scrollTo(0,0);
 
 }
@@ -3330,6 +3635,8 @@ function showSetup(){
     .classList.add("active");
 
   setNav("");
+
+  updateShiftDisplay();
 
   window.scrollTo(0,0);
 
@@ -3722,7 +4029,8 @@ function generatePlan(){
     calories,
     protein,
     carbs,
-    fats
+    fats,
+    shift:selectedShift
   };
 
   localStorage.setItem(
@@ -3730,7 +4038,14 @@ function generatePlan(){
     JSON.stringify(plan)
   );
 
+  localStorage.setItem(
+    "shiftfitShift",
+    selectedShift
+  );
+
   updatePlan(plan);
+
+  updateShiftDisplay();
 
   alert(
     "⚡ Your personalised ShiftFit meal plan is ready!"
@@ -4007,6 +4322,16 @@ function loadSavedPlan(){
     selectedGoal=
       plan.goal;
 
+    if(
+      plan.shift &&
+      shiftOptions[plan.shift]
+    ){
+
+      selectedShift=
+        plan.shift;
+
+    }
+
     document
       .getElementById(
         "userAge"
@@ -4263,12 +4588,6 @@ function updateShoppingQty(index,value){
     String(qty);
 
   saveShoppingItems();
-
-  /*
-   * Quantity changed.
-   * Any previous Best Basket calculation
-   * is now invalid and must be recalculated.
-   */
 
   clearBasketResults();
 
@@ -4651,11 +4970,6 @@ async function checkBestBasket(){
 
   try{
 
-    /*
-     * STEP 1
-     * START PRICE CHECK
-     */
-
     const startResponse=
       await fetch(
         "/api/best-basket",
@@ -4749,11 +5063,6 @@ async function checkBestBasket(){
     const runId=
       startData.runId;
 
-
-    /*
-     * STEP 2
-     * POLL SHIFT FIT API
-     */
 
     button.textContent=
       "⏳ BUILDING BASKET...";
@@ -4999,12 +5308,6 @@ function renderBasketResults(data){
   }
 
 
-  /*
-   * Sort complete supermarkets first.
-   * Complete baskets are sorted cheapest to most expensive.
-   * Incomplete baskets are placed underneath.
-   */
-
   const sortedSupermarkets=
     [...supermarkets].sort(
       (a,b)=>{
@@ -5065,11 +5368,6 @@ function renderBasketResults(data){
       }
     );
 
-
-  /*
-   * Only COMPLETE supermarkets qualify
-   * for cheapest / second / third ranking.
-   */
 
   const completeSupermarkets=
     sortedSupermarkets.filter(
@@ -5139,10 +5437,6 @@ function renderBasketResults(data){
   `;
 
 
-  /*
-   * DATABASE NOTICE
-   */
-
   html+=`
 
     <div class="basket-database-note">
@@ -5161,10 +5455,6 @@ function renderBasketResults(data){
 
   `;
 
-
-  /*
-   * MIXED BASKET
-   */
 
   if(
     mixedBasket &&
@@ -5214,10 +5504,6 @@ function renderBasketResults(data){
   }
 
 
-  /*
-   * SUPERMARKET CARDS
-   */
-
   sortedSupermarkets.forEach(
     basket=>{
 
@@ -5259,12 +5545,6 @@ function renderMixedBasket(
 
   items.forEach(
     (item,index)=>{
-
-      /*
-       * The backend supplies the original shopping
-       * item name. The original shopping list is
-       * also used as a safety fallback.
-       */
 
       const fallback=
         Array.isArray(
@@ -5308,11 +5588,6 @@ function renderMixedBasket(
         "";
 
 
-      /*
-       * Quantity is ALWAYS treated separately
-       * from the product name.
-       */
-
       const quantity=
         Math.max(
           1,
@@ -5330,14 +5605,6 @@ function renderMixedBasket(
           )||1
         );
 
-
-      /*
-       * Backend should provide total =
-       * unitPrice × quantity.
-       *
-       * This frontend also calculates the total
-       * if the backend only supplies unitPrice.
-       */
 
       const total=
         Number(
@@ -5512,11 +5779,6 @@ function renderRetailerCard(
     );
 
 
-  /*
-   * Support the new "missingItems" field
-   * and the older "missing" field.
-   */
-
   const missing=
     Array.isArray(
       basket.missingItems
@@ -5529,11 +5791,6 @@ function renderRetailerCard(
           ?basket.missing
           :[];
 
-
-  /*
-   * Support the new "matchedItems" field
-   * and the older "items" field.
-   */
 
   const basketItems=
     Array.isArray(
@@ -5551,11 +5808,6 @@ function renderRetailerCard(
   const complete=
     missing.length===0;
 
-
-  /*
-   * Find this supermarket's position
-   * amongst COMPLETE baskets only.
-   */
 
   const completeIndex=
     complete
@@ -5641,10 +5893,6 @@ function renderRetailerCard(
   }
 
 
-  /*
-   * INDIVIDUAL SUPERMARKET ITEMS
-   */
-
   let itemsHtml="";
 
 
@@ -5670,10 +5918,6 @@ function renderRetailerCard(
         "";
 
 
-      /*
-       * Quantity is kept separate from product name.
-       */
-
       const quantity=
         Math.max(
           1,
@@ -5698,11 +5942,6 @@ function renderRetailerCard(
           item.price
         );
 
-
-      /*
-       * Safety fallback:
-       * quantity × unit price
-       */
 
       const calculatedTotal=
         Number.isFinite(
@@ -5775,10 +6014,6 @@ function renderRetailerCard(
   );
 
 
-  /*
-   * MISSING ITEMS
-   */
-
   let missingHtml="";
 
 
@@ -5840,11 +6075,6 @@ function renderRetailerCard(
 
   }
 
-
-  /*
-   * SAVINGS COMPARED WITH CHEAPEST COMPLETE
-   * SUPERMARKET BASKET.
-   */
 
   let savingsHtml="";
 
@@ -6051,6 +6281,8 @@ loadWeeklyMeals();
 loadShoppingItems();
 
 loadSavedPlan();
+
+loadSavedShift();
 
 renderDays();
 
