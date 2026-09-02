@@ -1378,6 +1378,124 @@ button{
   text-align:right;
 }
 
+
+/* DATABASE NOTICE */
+
+.price-database-notice{
+  margin-top:12px;
+  padding:12px;
+  border-radius:12px;
+  border:1px solid rgba(139,92,246,.22);
+  background:rgba(139,92,246,.07);
+  color:#bdb4d9;
+  font-size:10px;
+  line-height:1.5;
+}
+
+.price-database-notice strong{
+  display:block;
+  color:#d5c9ff;
+  font-size:11px;
+  margin-bottom:3px;
+}
+
+
+/* MIXED BASKET */
+
+.mixed-basket-card{
+  position:relative;
+  margin-bottom:13px;
+  padding:17px;
+  border-radius:19px;
+  border:1px solid #56e8a1;
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(53,223,141,.14),
+      transparent 42%
+    ),
+    linear-gradient(
+      145deg,
+      #102a25,
+      #0d1725
+    );
+  box-shadow:
+    0 0 0 1px rgba(86,232,161,.08),
+    0 15px 35px rgba(53,223,141,.08);
+}
+
+.mixed-basket-badge{
+  display:inline-block;
+  padding:6px 9px;
+  border-radius:9px;
+  background:rgba(53,223,141,.12);
+  color:#70efb1;
+  font-size:9px;
+  font-weight:950;
+  letter-spacing:.8px;
+}
+
+.mixed-basket-title{
+  font-size:20px;
+  font-weight:950;
+  margin-top:10px;
+}
+
+.mixed-basket-desc{
+  color:#aeb9bd;
+  font-size:11px;
+  line-height:1.5;
+  margin-top:5px;
+}
+
+.mixed-basket-total-label{
+  color:#91a5a1;
+  font-size:10px;
+  font-weight:850;
+  margin-top:15px;
+}
+
+.mixed-basket-total{
+  color:#73efb3;
+  font-size:32px;
+  font-weight:950;
+  margin-top:2px;
+}
+
+.mixed-basket-items{
+  margin-top:14px;
+  padding-top:12px;
+  border-top:1px solid rgba(255,255,255,.08);
+}
+
+.mixed-basket-item{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:9px;
+  padding:8px 0;
+  font-size:11px;
+}
+
+.mixed-item-name{
+  color:#d2d8da;
+  font-weight:750;
+}
+
+.mixed-item-source{
+  color:#7e9c91;
+  font-size:9px;
+  margin-top:2px;
+}
+
+.mixed-item-price{
+  color:#fff;
+  font-weight:900;
+  text-align:right;
+}
+
+
+/* RETAILER CARDS */
+
 .retailer-card{
   position:relative;
   padding:16px;
@@ -1414,8 +1532,18 @@ button{
   letter-spacing:.7px;
 }
 
+.retailer-badge.second-best{
+  background:rgba(139,92,246,.12);
+  color:#c9b7ff;
+}
+
+.retailer-badge.incomplete{
+  background:rgba(255,148,31,.10);
+  color:#ffbd6b;
+}
+
 .retailer-name{
-  font-size:17px;
+  font-size:20px;
   font-weight:950;
 }
 
@@ -1434,7 +1562,7 @@ button{
 }
 
 .retailer-total{
-  font-size:26px;
+  font-size:29px;
   font-weight:950;
 }
 
@@ -1443,6 +1571,17 @@ button{
   font-size:10px;
   font-weight:850;
   text-align:right;
+}
+
+.retailer-saving{
+  margin-top:9px;
+  color:#70efb1;
+  font-size:10px;
+  font-weight:850;
+}
+
+.retailer-saving.expensive{
+  color:#a7aec0;
 }
 
 .basket-items{
@@ -1473,6 +1612,7 @@ button{
   color:#777f94;
   font-size:9px;
   margin-top:2px;
+  line-height:1.4;
 }
 
 .basket-missing{
@@ -2732,7 +2872,7 @@ button{
     <div>
 
       <div class="best-basket-kicker">
-        SUPERMARKET PRICE COMPARISON
+        SHIFT FIT PRICE DATABASE
       </div>
 
       <div class="best-basket-title">
@@ -4620,10 +4760,6 @@ async function checkBestBasket(){
     /*
      * STEP 2
      * POLL SHIFT FIT API
-     *
-     * The new backend normally completes
-     * immediately because it uses the local
-     * ShiftFit price database.
      */
 
     button.textContent=
@@ -4841,7 +4977,7 @@ async function checkBestBasket(){
 
 
 /* =========================================================
-   RENDER NEW PRICE DATABASE RESULTS
+   RENDER BEST BASKET RESULTS
    ========================================================= */
 
 function renderBasketResults(data){
@@ -4894,6 +5030,88 @@ function renderBasketResults(data){
     );
 
 
+  /*
+   * SORT COMPLETE BASKETS BY PRICE
+   *
+   * Complete baskets first.
+   * Cheapest complete basket first.
+   * Incomplete baskets after them.
+   */
+
+  const sortedSupermarkets=
+    [...supermarkets].sort(
+      (a,b)=>{
+
+        const aMissing=
+          Array.isArray(a.missing)
+            ?a.missing.length
+            :0;
+
+        const bMissing=
+          Array.isArray(b.missing)
+            ?b.missing.length
+            :0;
+
+        const aComplete=
+          aMissing===0;
+
+        const bComplete=
+          bMissing===0;
+
+        if(
+          aComplete &&
+          !bComplete
+        ){
+
+          return -1;
+
+        }
+
+        if(
+          !aComplete &&
+          bComplete
+        ){
+
+          return 1;
+
+        }
+
+        return(
+          Number(a.total)||Infinity
+        )-
+        (
+          Number(b.total)||Infinity
+        );
+
+      }
+    );
+
+
+  const completeBaskets=
+    sortedSupermarkets.filter(
+      basket=>
+        Array.isArray(
+          basket.missing
+        )
+          ?
+            basket.missing.length===0
+          :
+            true
+    );
+
+
+  const cheapestComplete=
+    completeBaskets.length
+      ?completeBaskets[0]
+      :null;
+
+
+  const secondCheapestComplete=
+    completeBaskets.length>1
+      ?completeBaskets[1]
+      :null;
+
+
   let html=`
 
     <div class="basket-results-header">
@@ -4921,7 +5139,27 @@ function renderBasketResults(data){
 
 
   /*
-   * MIXED BASKET RESULT
+   * DATABASE NOTICE
+   */
+
+  html+=`
+
+    <div class="price-database-notice">
+
+      <strong>
+        🗄️ ShiftFit Price Database
+      </strong>
+
+      These are seeded database prices for development.
+      They are not live supermarket prices yet.
+
+    </div>
+
+  `;
+
+
+  /*
+   * MIXED BASKET
    */
 
   if(
@@ -4943,30 +5181,10 @@ function renderBasketResults(data){
     );
 
 
-    html+=`
-
-      <div class="best-basket-saving">
-
-        🏆 Cheapest mixed basket
-
-        <br><br>
-
-        ShiftFit can build the cheapest
-        possible combination of products
-        across the supermarkets.
-
-        <br><br>
-
-        <strong>
-          Total:
-          ${formatMoney(
-            mixedBasket.total
-          )}
-        </strong>
-
-      </div>
-
-    `;
+    html+=
+      renderMixedBasket(
+        mixedBasket
+      );
 
   }else{
 
@@ -4979,15 +5197,18 @@ function renderBasketResults(data){
 
 
   /*
-   * RETAILER CARDS
+   * SUPERMARKETS
    */
 
-  supermarkets.forEach(
-    basket=>{
+  sortedSupermarkets.forEach(
+    (basket,index)=>{
 
       html+=
         renderRetailerCard(
-          basket
+          basket,
+          cheapestComplete,
+          secondCheapestComplete,
+          index
         );
 
     }
@@ -5001,11 +5222,193 @@ function renderBasketResults(data){
 
 
 /* =========================================================
+   MIXED BASKET
+   ========================================================= */
+
+function renderMixedBasket(
+  mixedBasket
+){
+
+  const items=
+    Array.isArray(
+      mixedBasket.items
+    )
+      ?mixedBasket.items
+      :[];
+
+
+  let itemsHtml="";
+
+
+  items.forEach(
+    item=>{
+
+      const itemName=
+        item.item ||
+        item.name ||
+        "Item";
+
+
+      const retailer=
+        item.retailerName ||
+        getRetailerDisplayName(
+          item.retailer
+        );
+
+
+      const product=
+        item.productName ||
+        item.product ||
+        "Matched product";
+
+
+      const pack=
+        item.packSize ||
+        item.pack ||
+        "";
+
+
+      const quantity=
+        Number(
+          item.quantity ??
+          item.qty
+        )||1;
+
+
+      const total=
+        Number(
+          item.total ??
+          item.lineTotal
+        );
+
+
+      itemsHtml+=`
+
+        <div class="mixed-basket-item">
+
+          <div>
+
+            <div class="mixed-item-name">
+
+              ${escapeHtml(
+                itemName
+              )}
+
+              × ${quantity}
+
+            </div>
+
+            <div class="mixed-item-source">
+
+              ${escapeHtml(
+                retailer
+              )}
+
+              •
+
+              ${escapeHtml(
+                product
+              )}
+
+              ${
+                pack
+                  ?" • "+
+                    escapeHtml(
+                      pack
+                    )
+                  :""
+              }
+
+            </div>
+
+          </div>
+
+          <div class="mixed-item-price">
+
+            ${
+              Number.isFinite(
+                total
+              )
+                ?
+                  formatMoney(
+                    total
+                  )
+                :
+                  "—"
+            }
+
+          </div>
+
+        </div>
+
+      `;
+
+    }
+  );
+
+
+  return `
+
+    <div class="mixed-basket-card">
+
+      <div class="mixed-basket-badge">
+        🏆 CHEAPEST POSSIBLE COMBINATION
+      </div>
+
+      <div class="mixed-basket-title">
+        Best Mixed Basket
+      </div>
+
+      <div class="mixed-basket-desc">
+
+        ShiftFit selects the cheapest
+        available product for each item
+        across the supermarkets.
+
+      </div>
+
+      <div class="mixed-basket-total-label">
+        TOTAL
+      </div>
+
+      <div class="mixed-basket-total">
+
+        ${formatMoney(
+          mixedBasket.total
+        )}
+
+      </div>
+
+      ${
+        itemsHtml
+          ?`
+
+            <div class="mixed-basket-items">
+
+              ${itemsHtml}
+
+            </div>
+
+          `
+          :""
+      }
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
    RETAILER CARD
    ========================================================= */
 
 function renderRetailerCard(
-  basket
+  basket,
+  cheapestComplete,
+  secondCheapestComplete,
+  index
 ){
 
   const retailerKey=
@@ -5048,10 +5451,84 @@ function renderRetailerCard(
     missing.length===0;
 
 
+  const isCheapest=
+    complete &&
+    cheapestComplete &&
+    retailerKey===
+      String(
+        cheapestComplete.retailer ||
+        ""
+      ).toLowerCase();
+
+
+  const isSecondCheapest=
+    complete &&
+    secondCheapestComplete &&
+    retailerKey===
+      String(
+        secondCheapestComplete.retailer ||
+        ""
+      ).toLowerCase();
+
+
   const cardClass=
     complete
       ?"retailer-best"
       :"retailer-incomplete";
+
+
+  let badgeHtml="";
+
+
+  if(isCheapest){
+
+    badgeHtml=`
+
+      <div class="retailer-badge">
+
+        🏆 CHEAPEST COMPLETE BASKET
+
+      </div>
+
+    `;
+
+  }else if(isSecondCheapest){
+
+    badgeHtml=`
+
+      <div class="retailer-badge second-best">
+
+        🥈 SECOND CHEAPEST
+
+      </div>
+
+    `;
+
+  }else if(!complete){
+
+    badgeHtml=`
+
+      <div class="retailer-badge incomplete">
+
+        ⚠ INCOMPLETE BASKET
+
+      </div>
+
+    `;
+
+  }else{
+
+    badgeHtml=`
+
+      <div class="retailer-badge">
+
+        ✓ COMPLETE BASKET
+
+      </div>
+
+    `;
+
+  }
 
 
   let itemsHtml="";
@@ -5062,39 +5539,40 @@ function renderRetailerCard(
 
       const itemName=
         item.item ||
+        item.name ||
         "Item";
 
 
       const productName=
-        item.product ||
         item.productName ||
+        item.product ||
         "Matched product";
 
 
       const pack=
-        item.pack ||
         item.packSize ||
+        item.pack ||
         "";
 
 
       const quantity=
         Number(
-          item.qty ??
-          item.quantity
+          item.quantity ??
+          item.qty
         )||1;
 
 
       const lineTotal=
         Number(
-          item.lineTotal ??
-          item.total
+          item.total ??
+          item.lineTotal
         );
 
 
       const unitPrice=
         Number(
-          item.price ??
-          item.unitPrice
+          item.unitPrice ??
+          item.price
         );
 
 
@@ -5184,7 +5662,12 @@ function renderRetailerCard(
           .map(
             item=>
               escapeHtml(
-                item
+                typeof item==="string"
+                  ?item
+                  :
+                    item.name ||
+                    item.item ||
+                    "Item"
               )
           )
           .join(" • ")
@@ -5197,21 +5680,99 @@ function renderRetailerCard(
   }
 
 
+  let savingHtml="";
+
+
+  if(
+    complete &&
+    cheapestComplete &&
+    !isCheapest &&
+    Number.isFinite(
+      Number(
+        cheapestComplete.total
+      )
+    ) &&
+    Number.isFinite(
+      total
+    )
+  ){
+
+    const difference=
+      total-
+      Number(
+        cheapestComplete.total
+      );
+
+
+    if(difference>0){
+
+      savingHtml=`
+
+        <div class="retailer-saving expensive">
+
+          £{
+            ""
+          }
+
+          £${difference.toFixed(2)}
+          more than ${escapeHtml(
+            cheapestComplete.retailerName ||
+            getRetailerDisplayName(
+              cheapestComplete.retailer
+            )
+          )}
+
+        </div>
+
+      `;
+
+    }
+
+  }
+
+
+  if(
+    isCheapest &&
+    secondCheapestComplete &&
+    Number.isFinite(
+      Number(
+        secondCheapestComplete.total
+      )
+    )
+  ){
+
+    const saving=
+      Number(
+        secondCheapestComplete.total
+      )-
+      total;
+
+
+    if(saving>0){
+
+      savingHtml=`
+
+        <div class="retailer-saving">
+
+          💰 Save ${formatMoney(
+            saving
+          )}
+          vs the next cheapest complete basket
+
+        </div>
+
+      `;
+
+    }
+
+  }
+
+
   return `
 
     <div class="retailer-card ${cardClass}">
 
-      ${
-        complete
-          ?`
-
-            <div class="retailer-badge">
-              🏆 COMPLETE BASKET
-            </div>
-
-          `
-          :""
-      }
+      ${badgeHtml}
 
 
       <div class="retailer-name">
@@ -5266,6 +5827,9 @@ function renderRetailerCard(
         }
 
       </div>
+
+
+      ${savingHtml}
 
 
       ${
