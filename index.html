@@ -20,7 +20,10 @@
   --red:#ff5f73;
 }
 
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent
+}
 
 html{
   background:#03030a;
@@ -33,10 +36,29 @@ body{
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   overflow-x:hidden;
   background:
-    radial-gradient(ellipse at 50% -18%,rgba(111,45,255,.42),rgba(63,25,150,.18) 24%,transparent 52%),
-    radial-gradient(ellipse at -15% 28%,rgba(0,174,255,.13),transparent 34%),
-    radial-gradient(ellipse at 112% 42%,rgba(139,45,255,.22),transparent 38%),
-    linear-gradient(180deg,#070512,#050611 38%,#08061a 68%,#03040a);
+    radial-gradient(
+      ellipse at 50% -18%,
+      rgba(111,45,255,.42),
+      rgba(63,25,150,.18) 24%,
+      transparent 52%
+    ),
+    radial-gradient(
+      ellipse at -15% 28%,
+      rgba(0,174,255,.13),
+      transparent 34%
+    ),
+    radial-gradient(
+      ellipse at 112% 42%,
+      rgba(139,45,255,.22),
+      transparent 38%
+    ),
+    linear-gradient(
+      180deg,
+      #070512,
+      #050611 38%,
+      #08061a 68%,
+      #03040a
+    );
   background-attachment:fixed;
 }
 
@@ -47,8 +69,15 @@ body::before{
   pointer-events:none;
   z-index:-1;
   background:
-    linear-gradient(rgba(124,92,255,.025) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(124,92,255,.025) 1px,transparent 1px);
+    linear-gradient(
+      rgba(124,92,255,.025) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(124,92,255,.025) 1px,
+      transparent 1px
+    );
   background-size:52px 52px;
 }
 
@@ -60,7 +89,9 @@ body::before{
   padding:22px 18px 110px;
 }
 
-button,input,select{
+button,
+input,
+select{
   font-family:inherit;
 }
 
@@ -76,6 +107,7 @@ button{
   display:block;
 }
 
+
 /* HEADER */
 
 .home-header{
@@ -85,7 +117,8 @@ button{
   margin-bottom:25px;
 }
 
-.menu-btn,.profile-btn{
+.menu-btn,
+.profile-btn{
   width:48px;
   height:48px;
   border:none;
@@ -127,6 +160,7 @@ button{
   font-size:25px;
 }
 
+
 /* HOME */
 
 .user-row{
@@ -141,9 +175,21 @@ button{
   height:54px;
   border-radius:50%;
   background:
-    radial-gradient(circle at 50% 35%,#6176a6 0 13%,transparent 14%),
-    radial-gradient(circle at 50% 90%,#293653 0 34%,transparent 35%),
-    linear-gradient(135deg,#2a3454,#11182c);
+    radial-gradient(
+      circle at 50% 35%,
+      #6176a6 0 13%,
+      transparent 14%
+    ),
+    radial-gradient(
+      circle at 50% 90%,
+      #293653 0 34%,
+      transparent 35%
+    ),
+    linear-gradient(
+      135deg,
+      #2a3454,
+      #11182c
+    );
   border:2px solid #6d49d7;
   box-shadow:0 0 12px rgba(109,40,217,.55);
 }
@@ -159,13 +205,22 @@ button{
   margin-top:3px;
 }
 
-.today-plan,.meal-summary{
+.today-plan,
+.meal-summary{
   padding:20px;
   border-radius:22px;
   border:1px solid #303a60;
   background:
-    radial-gradient(circle at 100% 0%,rgba(88,70,255,.24),transparent 35%),
-    linear-gradient(145deg,#151b36,#0c1123);
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(88,70,255,.24),
+      transparent 35%
+    ),
+    linear-gradient(
+      145deg,
+      #151b36,
+      #0c1123
+    );
   box-shadow:0 15px 40px rgba(0,0,0,.35);
 }
 
@@ -181,7 +236,11 @@ button{
 }
 
 .shift-badge{
-  background:linear-gradient(135deg,#ff9c26,#f47b12);
+  background:linear-gradient(
+    135deg,
+    #ff9c26,
+    #f47b12
+  );
   color:#251307;
   padding:7px 15px;
   border-radius:10px;
@@ -250,14 +309,30 @@ button{
 
 .workout-card{
   background:
-    radial-gradient(circle at 100% 0%,rgba(47,222,139,.13),transparent 38%),
-    linear-gradient(145deg,#102329,#0a1520);
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(47,222,139,.13),
+      transparent 38%
+    ),
+    linear-gradient(
+      145deg,
+      #102329,
+      #0a1520
+    );
 }
 
 .meal-card{
   background:
-    radial-gradient(circle at 100% 0%,rgba(109,91,255,.25),transparent 40%),
-    linear-gradient(145deg,#171e47,#0d1125);
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(109,91,255,.25),
+      transparent 40%
+    ),
+    linear-gradient(
+      145deg,
+      #171e47,
+      #0d1125
+    );
 }
 
 .action-icon{
@@ -294,7 +369,11 @@ button{
   border-radius:9px;
   font-size:12px;
   font-weight:850;
-  background:linear-gradient(135deg,#8b3cff,#5123c5);
+  background:linear-gradient(
+    135deg,
+    #8b3cff,
+    #5123c5
+  );
 }
 
 .progress-card{
@@ -302,7 +381,11 @@ button{
   padding:17px;
   border-radius:20px;
   border:1px solid #293253;
-  background:linear-gradient(145deg,#11162a,#0a0e1d);
+  background:linear-gradient(
+    145deg,
+    #11162a,
+    #0a0e1d
+  );
 }
 
 .progress-title{
@@ -322,7 +405,11 @@ button{
   height:94px;
   min-width:94px;
   border-radius:50%;
-  background:conic-gradient(var(--green) 0deg 281deg,#1b2740 281deg);
+  background:
+    conic-gradient(
+      var(--green) 0deg 281deg,
+      #1b2740 281deg
+    );
   display:flex;
   align-items:center;
   justify-content:center;
@@ -387,7 +474,11 @@ button{
   padding:13px;
   border-radius:18px;
   border:1px solid rgba(133,86,255,.55);
-  background:linear-gradient(135deg,#1b1041,#11162a);
+  background:linear-gradient(
+    135deg,
+    #1b1041,
+    #11162a
+  );
 }
 
 .ai-bot{
@@ -398,7 +489,11 @@ button{
   align-items:center;
   justify-content:center;
   font-size:31px;
-  background:radial-gradient(circle,#7455f4,#26135e);
+  background:radial-gradient(
+    circle,
+    #7455f4,
+    #26135e
+  );
 }
 
 .ai-content{
@@ -421,6 +516,7 @@ button{
   color:#d6c6ff;
 }
 
+
 /* GENERIC */
 
 .back-btn{
@@ -432,24 +528,34 @@ button{
   padding:5px 0 20px;
 }
 
-.workout-day,.meal-kicker,.setup-kicker,.shopping-kicker{
+.workout-day,
+.meal-kicker,
+.setup-kicker,
+.shopping-kicker{
   color:#c5b5ff;
   font-size:12px;
   font-weight:950;
   letter-spacing:4px;
 }
 
-.workout-header h1,.meal-header h1,.setup-header h1,.shopping-header h1{
+.workout-header h1,
+.meal-header h1,
+.setup-header h1,
+.shopping-header h1{
   margin:9px 0 8px;
   font-size:39px;
   letter-spacing:-1.5px;
 }
 
-.workout-header p,.meal-header p,.setup-header p,.shopping-header p{
+.workout-header p,
+.meal-header p,
+.setup-header p,
+.shopping-header p{
   color:var(--muted);
   font-size:16px;
   line-height:1.5;
 }
+
 
 /* WORKOUT */
 
@@ -482,7 +588,11 @@ button{
   margin-bottom:12px;
   border-radius:20px;
   border:1px solid #293253;
-  background:linear-gradient(145deg,#151b31,#0c1122);
+  background:linear-gradient(
+    145deg,
+    #151b31,
+    #0c1122
+  );
 }
 
 .exercise-card.completed{
@@ -548,7 +658,12 @@ button{
 .progress-fill{
   width:0%;
   height:100%;
-  background:linear-gradient(90deg,#7c3aed,#9b87ff,#5cd8b3);
+  background:linear-gradient(
+    90deg,
+    #7c3aed,
+    #9b87ff,
+    #5cd8b3
+  );
   transition:.3s;
 }
 
@@ -565,8 +680,13 @@ button{
 
 .finish-button.ready{
   opacity:1;
-  background:linear-gradient(135deg,#7c3aed,#4f46e5);
+  background:linear-gradient(
+    135deg,
+    #7c3aed,
+    #4f46e5
+  );
 }
+
 
 /* MEALS */
 
@@ -605,7 +725,11 @@ button{
 }
 
 .day-btn.active{
-  background:linear-gradient(135deg,#7c3aed,#5123c5);
+  background:linear-gradient(
+    135deg,
+    #7c3aed,
+    #5123c5
+  );
   border-color:#986cff;
   color:#e6ddff;
 }
@@ -687,7 +811,11 @@ button{
   margin-bottom:12px;
   border-radius:20px;
   border:1px solid #293253;
-  background:linear-gradient(145deg,#151b31,#0c1122);
+  background:linear-gradient(
+    145deg,
+    #151b31,
+    #0c1122
+  );
 }
 
 .meal-card-full::after{
@@ -799,6 +927,7 @@ button{
   font-weight:900;
 }
 
+
 /* SETUP */
 
 .setup-header{
@@ -810,7 +939,11 @@ button{
   margin-bottom:15px;
   border-radius:21px;
   border:1px solid #293253;
-  background:linear-gradient(145deg,#151b31,#0c1122);
+  background:linear-gradient(
+    145deg,
+    #151b31,
+    #0c1122
+  );
 }
 
 .setup-label{
@@ -870,7 +1003,11 @@ button{
 
 .goal-btn.active{
   border-color:#936bff;
-  background:linear-gradient(145deg,#382070,#17143a);
+  background:linear-gradient(
+    145deg,
+    #382070,
+    #17143a
+  );
   color:white;
   box-shadow:0 0 20px rgba(109,40,217,.2);
 }
@@ -884,9 +1021,14 @@ button{
   color:white;
   font-size:15px;
   font-weight:950;
-  background:linear-gradient(135deg,#8b3cff,#5123c5);
+  background:linear-gradient(
+    135deg,
+    #8b3cff,
+    #5123c5
+  );
   box-shadow:0 8px 25px rgba(109,40,217,.28);
 }
+
 
 /* SHOPPING */
 
@@ -895,7 +1037,11 @@ button{
   margin-top:20px;
   border-radius:21px;
   border:1px solid rgba(53,223,141,.24);
-  background:linear-gradient(145deg,#10251f,#0b1818);
+  background:linear-gradient(
+    145deg,
+    #10251f,
+    #0b1818
+  );
 }
 
 .shopping-top{
@@ -941,7 +1087,11 @@ button{
   color:#07150f;
   font-size:12px;
   font-weight:950;
-  background:linear-gradient(135deg,#56e8a1,#25ba73);
+  background:linear-gradient(
+    135deg,
+    #56e8a1,
+    #25ba73
+  );
 }
 
 .shopping-summary{
@@ -955,7 +1105,11 @@ button{
   padding:15px;
   border-radius:17px;
   border:1px solid #293253;
-  background:linear-gradient(145deg,#151b31,#0c1122);
+  background:linear-gradient(
+    145deg,
+    #151b31,
+    #0c1122
+  );
 }
 
 .shopping-stat small{
@@ -975,7 +1129,11 @@ button{
   border:1px solid #293253;
   border-radius:20px;
   overflow:hidden;
-  background:linear-gradient(145deg,#151b31,#0c1122);
+  background:linear-gradient(
+    145deg,
+    #151b31,
+    #0c1122
+  );
 }
 
 .shopping-list-title{
@@ -1070,7 +1228,11 @@ button{
   border-radius:12px;
   color:white;
   font-weight:950;
-  background:linear-gradient(135deg,#8b3cff,#5123c5);
+  background:linear-gradient(
+    135deg,
+    #8b3cff,
+    #5123c5
+  );
 }
 
 .clear-shop-btn{
@@ -1084,6 +1246,7 @@ button{
   font-weight:900;
 }
 
+
 /* BEST BASKET */
 
 .best-basket-card{
@@ -1092,8 +1255,16 @@ button{
   border-radius:21px;
   border:1px solid rgba(139,92,246,.45);
   background:
-    radial-gradient(circle at 100% 0%,rgba(139,92,246,.22),transparent 40%),
-    linear-gradient(145deg,#171438,#0d1022);
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(139,92,246,.22),
+      transparent 40%
+    ),
+    linear-gradient(
+      145deg,
+      #171438,
+      #0d1022
+    );
   box-shadow:0 14px 35px rgba(0,0,0,.25);
 }
 
@@ -1146,7 +1317,11 @@ button{
   color:white;
   font-size:13px;
   font-weight:950;
-  background:linear-gradient(135deg,#8b3cff,#5123c5);
+  background:linear-gradient(
+    135deg,
+    #8b3cff,
+    #5123c5
+  );
   box-shadow:0 8px 22px rgba(109,40,217,.25);
 }
 
@@ -1209,12 +1384,18 @@ button{
   margin-bottom:11px;
   border-radius:18px;
   border:1px solid #293253;
-  background:linear-gradient(145deg,#151b31,#0c1122);
+  background:linear-gradient(
+    145deg,
+    #151b31,
+    #0c1122
+  );
 }
 
 .retailer-card.retailer-best{
   border-color:#56e8a1;
-  box-shadow:0 0 0 1px rgba(86,232,161,.12),0 12px 30px rgba(53,223,141,.08);
+  box-shadow:
+    0 0 0 1px rgba(86,232,161,.12),
+    0 12px 30px rgba(53,223,141,.08);
 }
 
 .retailer-card.retailer-incomplete{
@@ -1340,14 +1521,6 @@ button{
   font-weight:850;
 }
 
-.basket-link{
-  display:inline-block;
-  margin-top:8px;
-  color:#bda8ff;
-  text-decoration:none;
-  font-size:10px;
-  font-weight:850;
-}
 
 /* NAV */
 
@@ -1363,7 +1536,9 @@ button{
   background:rgba(5,6,18,.94);
   backdrop-filter:blur(22px);
   border-top:1px solid rgba(139,92,246,.15);
-  padding:10px 4px calc(10px + env(safe-area-inset-bottom));
+  padding:10px 4px calc(
+    10px + env(safe-area-inset-bottom)
+  );
 }
 
 .nav-item{
@@ -1387,6 +1562,7 @@ button{
   text-shadow:0 0 12px rgba(139,92,246,.45);
 }
 
+
 @media(max-width:360px){
 
   .app{
@@ -1407,7 +1583,8 @@ button{
   }
 
   .shop-row{
-    grid-template-columns:25px 1fr 58px 25px;
+    grid-template-columns:
+      25px 1fr 58px 25px;
     gap:7px;
   }
 
@@ -1418,6 +1595,7 @@ button{
   .retailer-total{
     font-size:23px;
   }
+
 }
 </style>
 </head>
@@ -1425,6 +1603,7 @@ button{
 <body>
 
 <div class="app">
+
 
 <!-- HOME -->
 
@@ -1442,7 +1621,12 @@ button{
     <span class="logo-fit">FIT</span>
   </div>
 
-  <button class="profile-btn" onclick="showSetup()">⚙</button>
+  <button
+    class="profile-btn"
+    onclick="showSetup()"
+  >
+    ⚙
+  </button>
 
 </header>
 
@@ -1452,7 +1636,9 @@ button{
 
   <div>
     <div class="user-name">Andrew</div>
-    <div class="user-level">Level 1 • ShiftFit Member</div>
+    <div class="user-level">
+      Level 1 • ShiftFit Member
+    </div>
   </div>
 
 </div>
@@ -1460,8 +1646,13 @@ button{
 <section class="today-plan">
 
   <div class="plan-top">
-    <div class="plan-heading">Today's Plan</div>
-    <div class="shift-badge">DAY SHIFT</div>
+    <div class="plan-heading">
+      Today's Plan
+    </div>
+
+    <div class="shift-badge">
+      DAY SHIFT
+    </div>
   </div>
 
   <div class="shift-time-row">
@@ -1473,20 +1664,38 @@ button{
 
     <div class="plan-stat">
       <div class="stat-icon">🔥</div>
-      <div class="plan-stat-label">Calories</div>
-      <div class="plan-stat-value" id="homeCalories">2,200</div>
+      <div class="plan-stat-label">
+        Calories
+      </div>
+      <div
+        class="plan-stat-value"
+        id="homeCalories"
+      >
+        2,200
+      </div>
     </div>
 
     <div class="plan-stat">
       <div class="stat-icon">🏋️</div>
-      <div class="plan-stat-label">Protein</div>
-      <div class="plan-stat-value" id="homeProtein">180g</div>
+      <div class="plan-stat-label">
+        Protein
+      </div>
+      <div
+        class="plan-stat-value"
+        id="homeProtein"
+      >
+        180g
+      </div>
     </div>
 
     <div class="plan-stat">
       <div class="stat-icon">💧</div>
-      <div class="plan-stat-label">Water</div>
-      <div class="plan-stat-value">2.5L</div>
+      <div class="plan-stat-label">
+        Water
+      </div>
+      <div class="plan-stat-value">
+        2.5L
+      </div>
     </div>
 
   </div>
@@ -1495,62 +1704,88 @@ button{
 
 <div class="action-grid">
 
-  <section class="action-card workout-card">
+<section class="action-card workout-card">
 
-    <div class="action-icon">🏋️</div>
-    <div class="action-label">WORKOUT</div>
-    <div class="action-title">Push Day</div>
-    <div class="action-desc">5 exercises • 60 mins</div>
+  <div class="action-icon">🏋️</div>
+  <div class="action-label">WORKOUT</div>
+  <div class="action-title">Push Day</div>
+  <div class="action-desc">
+    5 exercises • 60 mins
+  </div>
 
-    <button class="action-button" onclick="showWorkout()">
-      Start Workout
-    </button>
+  <button
+    class="action-button"
+    onclick="showWorkout()"
+  >
+    Start Workout
+  </button>
 
-  </section>
+</section>
 
-  <section class="action-card meal-card">
+<section class="action-card meal-card">
 
-    <div class="action-icon">🍽️</div>
-    <div class="action-label">MEALS</div>
-    <div class="action-title">High Protein</div>
-    <div class="action-desc">Personalised for you</div>
+  <div class="action-icon">🍽️</div>
+  <div class="action-label">MEALS</div>
+  <div class="action-title">High Protein</div>
+  <div class="action-desc">
+    Personalised for you
+  </div>
 
-    <button class="action-button" onclick="showMeals()">
-      View Plan
-    </button>
+  <button
+    class="action-button"
+    onclick="showMeals()"
+  >
+    View Plan
+  </button>
 
-  </section>
+</section>
 
 </div>
 
 <section class="progress-card">
 
-  <div class="progress-title">Weekly Progress</div>
+  <div class="progress-title">
+    Weekly Progress
+  </div>
 
   <div class="progress-content">
 
     <div class="progress-ring">
-      <div class="progress-inner">78%</div>
+      <div class="progress-inner">
+        78%
+      </div>
     </div>
 
     <div class="progress-info">
 
       <div class="progress-row">
-        <span class="progress-row-label">Workouts</span>
-        <span class="progress-row-value">5/6</span>
-      </div>
-
-      <div class="progress-row">
-        <span class="progress-row-label">Calories</span>
-        <span class="progress-row-value on-track">
-          <span class="dot"></span>On Track
+        <span class="progress-row-label">
+          Workouts
+        </span>
+        <span class="progress-row-value">
+          5/6
         </span>
       </div>
 
       <div class="progress-row">
-        <span class="progress-row-label">Protein</span>
+        <span class="progress-row-label">
+          Calories
+        </span>
+
         <span class="progress-row-value on-track">
-          <span class="dot"></span>On Track
+          <span class="dot"></span>
+          On Track
+        </span>
+      </div>
+
+      <div class="progress-row">
+        <span class="progress-row-label">
+          Protein
+        </span>
+
+        <span class="progress-row-value on-track">
+          <span class="dot"></span>
+          On Track
         </span>
       </div>
 
@@ -1565,8 +1800,13 @@ button{
   <div class="ai-bot">🤖</div>
 
   <div class="ai-content">
-    <div class="ai-title">ShiftFit AI Coach</div>
-    <div class="ai-text">Your personal fitness coach. Ask me anything.</div>
+    <div class="ai-title">
+      ShiftFit AI Coach
+    </div>
+
+    <div class="ai-text">
+      Your personal fitness coach. Ask me anything.
+    </div>
   </div>
 
   <div class="ai-arrow">›</div>
@@ -1580,13 +1820,18 @@ button{
 
 <section id="workoutScreen" class="screen">
 
-<button class="back-btn" onclick="showHome()">
+<button
+  class="back-btn"
+  onclick="showHome()"
+>
   ← Back to Home
 </button>
 
 <div class="workout-header">
 
-  <div class="workout-day">TODAY'S WORKOUT</div>
+  <div class="workout-day">
+    TODAY'S WORKOUT
+  </div>
 
   <h1>Push Day</h1>
 
@@ -1619,69 +1864,130 @@ button{
 
   <div class="workout-progress-top">
     <span>WORKOUT PROGRESS</span>
-    <span id="workoutProgressText">0 / 5</span>
+    <span id="workoutProgressText">
+      0 / 5
+    </span>
   </div>
 
   <div class="progress-bar">
-    <div class="progress-fill" id="workoutProgressFill"></div>
+    <div
+      class="progress-fill"
+      id="workoutProgressFill"
+    ></div>
   </div>
 
 </div>
 
-<div class="exercise-card" onclick="toggleExercise(this)">
+
+<div
+  class="exercise-card"
+  onclick="toggleExercise(this)"
+>
   <div class="exercise-check"></div>
+
   <div class="exercise-content">
-    <div class="exercise-name">1. Bench Press</div>
-    <div class="exercise-sets">4 sets × 8–10 reps</div>
+    <div class="exercise-name">
+      1. Bench Press
+    </div>
+
+    <div class="exercise-sets">
+      4 sets × 8–10 reps
+    </div>
+
     <div class="exercise-tip">
       Control the weight and keep your shoulders stable.
     </div>
   </div>
 </div>
 
-<div class="exercise-card" onclick="toggleExercise(this)">
+
+<div
+  class="exercise-card"
+  onclick="toggleExercise(this)"
+>
   <div class="exercise-check"></div>
+
   <div class="exercise-content">
-    <div class="exercise-name">2. Incline Dumbbell Press</div>
-    <div class="exercise-sets">4 sets × 10–12 reps</div>
+    <div class="exercise-name">
+      2. Incline Dumbbell Press
+    </div>
+
+    <div class="exercise-sets">
+      4 sets × 10–12 reps
+    </div>
+
     <div class="exercise-tip">
       Keep the movement controlled.
     </div>
   </div>
 </div>
 
-<div class="exercise-card" onclick="toggleExercise(this)">
+
+<div
+  class="exercise-card"
+  onclick="toggleExercise(this)"
+>
   <div class="exercise-check"></div>
+
   <div class="exercise-content">
-    <div class="exercise-name">3. Shoulder Press</div>
-    <div class="exercise-sets">3 sets × 8–12 reps</div>
+    <div class="exercise-name">
+      3. Shoulder Press
+    </div>
+
+    <div class="exercise-sets">
+      3 sets × 8–12 reps
+    </div>
+
     <div class="exercise-tip">
       Brace your core and press smoothly.
     </div>
   </div>
 </div>
 
-<div class="exercise-card" onclick="toggleExercise(this)">
+
+<div
+  class="exercise-card"
+  onclick="toggleExercise(this)"
+>
   <div class="exercise-check"></div>
+
   <div class="exercise-content">
-    <div class="exercise-name">4. Tricep Dips</div>
-    <div class="exercise-sets">3 sets × 12–15 reps</div>
+    <div class="exercise-name">
+      4. Tricep Dips
+    </div>
+
+    <div class="exercise-sets">
+      3 sets × 12–15 reps
+    </div>
+
     <div class="exercise-tip">
       Keep control throughout the movement.
     </div>
   </div>
 </div>
 
-<div class="exercise-card" onclick="toggleExercise(this)">
+
+<div
+  class="exercise-card"
+  onclick="toggleExercise(this)"
+>
   <div class="exercise-check"></div>
+
   <div class="exercise-content">
-    <div class="exercise-name">5. Chest Flyes</div>
-    <div class="exercise-sets">3 sets × 12–15 reps</div>
+    <div class="exercise-name">
+      5. Chest Flyes
+    </div>
+
+    <div class="exercise-sets">
+      3 sets × 12–15 reps
+    </div>
+
     <div class="exercise-tip">
       Use a controlled stretch and squeeze.
     </div>
   </div>
 </div>
+
 
 <button
   id="finishButton"
@@ -1699,13 +2005,18 @@ button{
 
 <section id="mealScreen" class="screen">
 
-<button class="back-btn" onclick="showHome()">
+<button
+  class="back-btn"
+  onclick="showHome()"
+>
   ← Back to Home
 </button>
 
 <div class="meal-header">
 
-  <div class="meal-kicker">YOUR NUTRITION</div>
+  <div class="meal-kicker">
+    YOUR NUTRITION
+  </div>
 
   <h1>Meal Plan</h1>
 
@@ -1715,22 +2026,39 @@ button{
 
 </div>
 
-<div class="day-selector" id="daySelector"></div>
+<div
+  class="day-selector"
+  id="daySelector"
+></div>
 
 <section class="meal-summary">
 
   <div class="summary-top">
 
     <div>
-      <div class="summary-label">DAILY TARGET</div>
+
+      <div class="summary-label">
+        DAILY TARGET
+      </div>
 
       <div class="summary-calories">
-        <span id="mealCalories">2,200</span>
-        <span>kcal</span>
+
+        <span id="mealCalories">
+          2,200
+        </span>
+
+        <span>
+          kcal
+        </span>
+
       </div>
+
     </div>
 
-    <div class="summary-badge" id="goalBadge">
+    <div
+      class="summary-badge"
+      id="goalBadge"
+    >
       FAT LOSS
     </div>
 
@@ -1740,52 +2068,79 @@ button{
 
     <div class="macro-box">
       <span>PROTEIN</span>
-      <strong id="mealProtein">180g</strong>
+      <strong id="mealProtein">
+        180g
+      </strong>
     </div>
 
     <div class="macro-box">
       <span>CARBS</span>
-      <strong id="mealCarbs">220g</strong>
+      <strong id="mealCarbs">
+        220g
+      </strong>
     </div>
 
     <div class="macro-box">
       <span>FATS</span>
-      <strong id="mealFats">67g</strong>
+      <strong id="mealFats">
+        67g
+      </strong>
     </div>
 
   </div>
 
-  <button class="edit-plan-btn" onclick="showSetup()">
+  <button
+    class="edit-plan-btn"
+    onclick="showSetup()"
+  >
     ⚙ EDIT MY PERSONAL PLAN
   </button>
 
 </section>
 
-<div class="meal-section-title" id="mealDayTitle">
+<div
+  class="meal-section-title"
+  id="mealDayTitle"
+>
   Monday's Meals
 </div>
 
+
 <div class="meal-card-full">
 
-  <div class="meal-calories" id="breakfastCalories">
+  <div
+    class="meal-calories"
+    id="breakfastCalories"
+  >
     520 kcal
   </div>
 
   <div class="meal-top">
 
-    <div class="meal-emoji" id="breakfastEmoji">
+    <div
+      class="meal-emoji"
+      id="breakfastEmoji"
+    >
       🥣
     </div>
 
     <div class="meal-info">
 
-      <div class="meal-type">BREAKFAST</div>
+      <div class="meal-type">
+        BREAKFAST
+      </div>
 
-      <div class="meal-name" id="breakfastName">
+      <div
+        class="meal-name"
+        id="breakfastName"
+      >
         Protein Oats & Berries
       </div>
 
-      <div class="meal-desc" id="breakfastDesc">
+      <div
+        class="meal-desc"
+        id="breakfastDesc"
+      >
         Oats, whey protein, Greek yoghurt and mixed berries.
       </div>
 
@@ -1796,46 +2151,73 @@ button{
   <div class="meal-macros">
 
     <span>
-      <strong id="breakfastP">45g</strong> Protein
+      <strong id="breakfastP">
+        45g
+      </strong>
+      Protein
     </span>
 
     <span>
-      <strong id="breakfastC">58g</strong> Carbs
+      <strong id="breakfastC">
+        58g
+      </strong>
+      Carbs
     </span>
 
     <span>
-      <strong id="breakfastF">12g</strong> Fat
+      <strong id="breakfastF">
+        12g
+      </strong>
+      Fat
     </span>
 
   </div>
 
-  <button class="swap-btn" onclick="swapMeal('breakfast')">
+  <button
+    class="swap-btn"
+    onclick="swapMeal('breakfast')"
+  >
     ↻ SWAP MEAL
   </button>
 
 </div>
 
+
 <div class="meal-card-full">
 
-  <div class="meal-calories" id="lunchCalories">
+  <div
+    class="meal-calories"
+    id="lunchCalories"
+  >
     640 kcal
   </div>
 
   <div class="meal-top">
 
-    <div class="meal-emoji" id="lunchEmoji">
+    <div
+      class="meal-emoji"
+      id="lunchEmoji"
+    >
       🍗
     </div>
 
     <div class="meal-info">
 
-      <div class="meal-type">LUNCH</div>
+      <div class="meal-type">
+        LUNCH
+      </div>
 
-      <div class="meal-name" id="lunchName">
+      <div
+        class="meal-name"
+        id="lunchName"
+      >
         Chicken Rice Power Bowl
       </div>
 
-      <div class="meal-desc" id="lunchDesc">
+      <div
+        class="meal-desc"
+        id="lunchDesc"
+      >
         Grilled chicken, rice, vegetables and a light sauce.
       </div>
 
@@ -1846,46 +2228,73 @@ button{
   <div class="meal-macros">
 
     <span>
-      <strong id="lunchP">58g</strong> Protein
+      <strong id="lunchP">
+        58g
+      </strong>
+      Protein
     </span>
 
     <span>
-      <strong id="lunchC">72g</strong> Carbs
+      <strong id="lunchC">
+        72g
+      </strong>
+      Carbs
     </span>
 
     <span>
-      <strong id="lunchF">14g</strong> Fat
+      <strong id="lunchF">
+        14g
+      </strong>
+      Fat
     </span>
 
   </div>
 
-  <button class="swap-btn" onclick="swapMeal('lunch')">
+  <button
+    class="swap-btn"
+    onclick="swapMeal('lunch')"
+  >
     ↻ SWAP MEAL
   </button>
 
 </div>
 
+
 <div class="meal-card-full">
 
-  <div class="meal-calories" id="dinnerCalories">
+  <div
+    class="meal-calories"
+    id="dinnerCalories"
+  >
     710 kcal
   </div>
 
   <div class="meal-top">
 
-    <div class="meal-emoji" id="dinnerEmoji">
+    <div
+      class="meal-emoji"
+      id="dinnerEmoji"
+    >
       🥩
     </div>
 
     <div class="meal-info">
 
-      <div class="meal-type">DINNER</div>
+      <div class="meal-type">
+        DINNER
+      </div>
 
-      <div class="meal-name" id="dinnerName">
+      <div
+        class="meal-name"
+        id="dinnerName"
+      >
         Lean Beef & Sweet Potato
       </div>
 
-      <div class="meal-desc" id="dinnerDesc">
+      <div
+        class="meal-desc"
+        id="dinnerDesc"
+      >
         Lean beef mince, roasted sweet potato and green vegetables.
       </div>
 
@@ -1896,46 +2305,73 @@ button{
   <div class="meal-macros">
 
     <span>
-      <strong id="dinnerP">60g</strong> Protein
+      <strong id="dinnerP">
+        60g
+      </strong>
+      Protein
     </span>
 
     <span>
-      <strong id="dinnerC">65g</strong> Carbs
+      <strong id="dinnerC">
+        65g
+      </strong>
+      Carbs
     </span>
 
     <span>
-      <strong id="dinnerF">20g</strong> Fat
+      <strong id="dinnerF">
+        20g
+      </strong>
+      Fat
     </span>
 
   </div>
 
-  <button class="swap-btn" onclick="swapMeal('dinner')">
+  <button
+    class="swap-btn"
+    onclick="swapMeal('dinner')"
+  >
     ↻ SWAP MEAL
   </button>
 
 </div>
 
+
 <div class="meal-card-full">
 
-  <div class="meal-calories" id="snackCalories">
+  <div
+    class="meal-calories"
+    id="snackCalories"
+  >
     330 kcal
   </div>
 
   <div class="meal-top">
 
-    <div class="meal-emoji" id="snackEmoji">
+    <div
+      class="meal-emoji"
+      id="snackEmoji"
+    >
       🍓
     </div>
 
     <div class="meal-info">
 
-      <div class="meal-type">SNACK</div>
+      <div class="meal-type">
+        SNACK
+      </div>
 
-      <div class="meal-name" id="snackName">
+      <div
+        class="meal-name"
+        id="snackName"
+      >
         Greek Yoghurt Protein Bowl
       </div>
 
-      <div class="meal-desc" id="snackDesc">
+      <div
+        class="meal-desc"
+        id="snackDesc"
+      >
         Greek yoghurt, berries and a small serving of nuts.
       </div>
 
@@ -1946,24 +2382,37 @@ button{
   <div class="meal-macros">
 
     <span>
-      <strong id="snackP">25g</strong> Protein
+      <strong id="snackP">
+        25g
+      </strong>
+      Protein
     </span>
 
     <span>
-      <strong id="snackC">25g</strong> Carbs
+      <strong id="snackC">
+        25g
+      </strong>
+      Carbs
     </span>
 
     <span>
-      <strong id="snackF">12g</strong> Fat
+      <strong id="snackF">
+        12g
+      </strong>
+      Fat
     </span>
 
   </div>
 
-  <button class="swap-btn" onclick="swapMeal('snack')">
+  <button
+    class="swap-btn"
+    onclick="swapMeal('snack')"
+  >
     ↻ SWAP MEAL
   </button>
 
 </div>
+
 
 <section class="shopping-card">
 
@@ -1973,15 +2422,24 @@ button{
       🛒 Weekly Shopping List
     </div>
 
-    <div class="shopping-count" id="miniShoppingCount">
-      12 ITEMS
+    <div
+      class="shopping-count"
+      id="miniShoppingCount"
+    >
+      20 ITEMS
     </div>
 
   </div>
 
-  <div class="shopping-items" id="miniShoppingItems"></div>
+  <div
+    class="shopping-items"
+    id="miniShoppingItems"
+  ></div>
 
-  <button class="shopping-btn" onclick="showShopping()">
+  <button
+    class="shopping-btn"
+    onclick="showShopping()"
+  >
     OPEN & EDIT SHOPPING LIST
   </button>
 
@@ -1994,7 +2452,10 @@ button{
 
 <section id="setupScreen" class="screen">
 
-<button class="back-btn" onclick="showMeals()">
+<button
+  class="back-btn"
+  onclick="showMeals()"
+>
   ← Back to Meal Plan
 </button>
 
@@ -2056,21 +2517,39 @@ button{
 <div class="setup-grid">
 
 <div>
-<label class="setup-label">AGE</label>
+
+<label class="setup-label">
+  AGE
+</label>
+
 <input
   id="userAge"
   class="setup-input"
   type="number"
   value="38"
 >
+
 </div>
 
 <div>
-<label class="setup-label">SEX</label>
 
-<select id="userSex" class="setup-input">
-  <option value="male">Male</option>
-  <option value="female">Female</option>
+<label class="setup-label">
+  SEX
+</label>
+
+<select
+  id="userSex"
+  class="setup-input"
+>
+
+<option value="male">
+  Male
+</option>
+
+<option value="female">
+  Female
+</option>
+
 </select>
 
 </div>
@@ -2124,7 +2603,10 @@ button{
   ACTIVITY LEVEL
 </label>
 
-<select id="userActivity" class="setup-input">
+<select
+  id="userActivity"
+  class="setup-input"
+>
 
 <option value="1.2">
   Low Activity
@@ -2134,7 +2616,10 @@ button{
   Lightly Active
 </option>
 
-<option value="1.55" selected>
+<option
+  value="1.55"
+  selected
+>
   Moderately Active
 </option>
 
@@ -2150,7 +2635,10 @@ button{
 
 </section>
 
-<button class="generate-btn" onclick="generatePlan()">
+<button
+  class="generate-btn"
+  onclick="generatePlan()"
+>
   ⚡ SAVE & GENERATE MY PLAN
 </button>
 
@@ -2161,7 +2649,10 @@ button{
 
 <section id="shoppingScreen" class="screen">
 
-<button class="back-btn" onclick="showMeals()">
+<button
+  class="back-btn"
+  onclick="showMeals()"
+>
   ← Back to Meal Plan
 </button>
 
@@ -2183,12 +2674,16 @@ button{
 
   <div class="shopping-stat">
     <small>TOTAL ITEMS</small>
-    <strong id="shoppingTotal">0</strong>
+    <strong id="shoppingTotal">
+      0
+    </strong>
   </div>
 
   <div class="shopping-stat">
     <small>BOUGHT</small>
-    <strong id="shoppingBought">0</strong>
+    <strong id="shoppingBought">
+      0
+    </strong>
   </div>
 
 </div>
@@ -2237,7 +2732,7 @@ button{
     <div>
 
       <div class="best-basket-kicker">
-        LIVE SUPERMARKET COMPARISON
+        SUPERMARKET PRICE COMPARISON
       </div>
 
       <div class="best-basket-title">
@@ -2245,7 +2740,7 @@ button{
       </div>
 
       <div class="best-basket-desc">
-        Compare your current shopping list across major UK supermarkets and find the cheapest complete basket.
+        Compare your shopping list across Tesco, Sainsbury's, Asda, Morrisons, Waitrose and Aldi.
       </div>
 
     </div>
@@ -2261,7 +2756,7 @@ button{
     class="basket-button"
     onclick="checkBestBasket()"
   >
-    💷 CHECK LIVE PRICES
+    💷 CHECK PRICES
   </button>
 
   <div
@@ -2280,6 +2775,8 @@ button{
 
 </div>
 
+
+<!-- NAV -->
 
 <nav class="bottom-nav">
 
@@ -2330,7 +2827,11 @@ button{
 <script>
 
 let selectedGoal="lose";
+
 let currentDay=0;
+
+
+/* DAYS */
 
 const days=[
   {name:"MON",date:"25"},
@@ -2341,6 +2842,9 @@ const days=[
   {name:"SAT",date:"30"},
   {name:"SUN",date:"31"}
 ];
+
+
+/* MEAL OPTIONS */
 
 const mealOptions={
 
@@ -2518,6 +3022,9 @@ const mealOptions={
 
 };
 
+
+/* WEEKLY MEALS */
+
 let weeklyMeals=[
   {
     breakfast:0,
@@ -2563,6 +3070,9 @@ let weeklyMeals=[
   }
 ];
 
+
+/* SHOPPING ITEMS */
+
 const defaultShoppingItems=[
   "Chicken breast",
   "Lean beef mince",
@@ -2586,6 +3096,7 @@ const defaultShoppingItems=[
   "Rice cakes"
 ];
 
+
 const basketRetailers=[
   "tesco",
   "sainsburys",
@@ -2594,6 +3105,7 @@ const basketRetailers=[
   "waitrose",
   "aldi"
 ];
+
 
 const retailerNames={
   tesco:"Tesco",
@@ -2604,6 +3116,7 @@ const retailerNames={
   aldi:"Aldi"
 };
 
+
 let shoppingItems=[];
 
 
@@ -2613,39 +3126,49 @@ function hideAllScreens(){
 
   document
     .querySelectorAll(".screen")
-    .forEach(screen=>
-      screen.classList.remove("active")
+    .forEach(
+      screen=>
+        screen.classList.remove("active")
     );
 
 }
+
 
 function setNav(active){
 
   document
     .querySelectorAll(".nav-item")
-    .forEach(item=>
-      item.classList.remove("active")
+    .forEach(
+      item=>
+        item.classList.remove("active")
     );
 
   if(active==="home"){
+
     document
       .getElementById("homeNav")
       .classList.add("active");
+
   }
 
   if(active==="workout"){
+
     document
       .getElementById("workoutNav")
       .classList.add("active");
+
   }
 
   if(active==="meal"){
+
     document
       .getElementById("mealNav")
       .classList.add("active");
+
   }
 
 }
+
 
 function showHome(){
 
@@ -2660,6 +3183,7 @@ function showHome(){
   window.scrollTo(0,0);
 
 }
+
 
 function showWorkout(){
 
@@ -2677,6 +3201,7 @@ function showWorkout(){
 
 }
 
+
 function showMeals(){
 
   hideAllScreens();
@@ -2688,11 +3213,13 @@ function showMeals(){
   setNav("meal");
 
   renderDays();
+
   renderCurrentDay();
 
   window.scrollTo(0,0);
 
 }
+
 
 function showSetup(){
 
@@ -2707,6 +3234,7 @@ function showSetup(){
   window.scrollTo(0,0);
 
 }
+
 
 function showShopping(){
 
@@ -2731,7 +3259,9 @@ function toggleExercise(card){
 
   card.classList.toggle("completed");
 
-  card.querySelector(".exercise-check").innerHTML=
+  card.querySelector(
+    ".exercise-check"
+  ).innerHTML=
     card.classList.contains("completed")
       ?"✓"
       :"";
@@ -2740,10 +3270,13 @@ function toggleExercise(card){
 
 }
 
+
 function updateWorkoutProgress(){
 
   const exercises=
-    document.querySelectorAll(".exercise-card");
+    document.querySelectorAll(
+      ".exercise-card"
+    );
 
   const completed=
     document.querySelectorAll(
@@ -2753,18 +3286,38 @@ function updateWorkoutProgress(){
   const total=
     exercises.length;
 
-  document
-    .getElementById("workoutProgressText")
-    .textContent=
+  const progressText=
+    document.getElementById(
+      "workoutProgressText"
+    );
+
+  const progressFill=
+    document.getElementById(
+      "workoutProgressFill"
+    );
+
+  if(progressText){
+
+    progressText.textContent=
       completed+" / "+total;
 
-  document
-    .getElementById("workoutProgressFill")
-    .style.width=
-      (completed/total*100)+"%";
+  }
+
+  if(progressFill){
+
+    progressFill.style.width=
+      total
+        ?(completed/total*100)+"%"
+        :"0%";
+
+  }
 
   const button=
-    document.getElementById("finishButton");
+    document.getElementById(
+      "finishButton"
+    );
+
+  if(!button) return;
 
   if(completed===total){
 
@@ -2788,6 +3341,7 @@ function updateWorkoutProgress(){
 
 }
 
+
 function finishWorkout(){
 
   alert(
@@ -2804,39 +3358,53 @@ function finishWorkout(){
 function renderDays(){
 
   const selector=
-    document.getElementById("daySelector");
+    document.getElementById(
+      "daySelector"
+    );
+
+  if(!selector) return;
 
   selector.innerHTML="";
 
-  days.forEach((day,index)=>{
+  days.forEach(
+    (day,index)=>{
 
-    const btn=
-      document.createElement("button");
+      const btn=
+        document.createElement(
+          "button"
+        );
 
-    btn.className=
-      "day-btn"+
-      (index===currentDay?" active":"");
+      btn.className=
+        "day-btn"+
+        (
+          index===currentDay
+            ?" active"
+            :""
+        );
 
-    btn.innerHTML=
-      day.name+
-      "<strong>"+
-      day.date+
-      "</strong>";
+      btn.innerHTML=
+        day.name+
+        "<strong>"+
+        day.date+
+        "</strong>";
 
-    btn.onclick=()=>{
+      btn.onclick=()=>{
 
-      currentDay=index;
+        currentDay=index;
 
-      renderDays();
-      renderCurrentDay();
+        renderDays();
 
-    };
+        renderCurrentDay();
 
-    selector.appendChild(btn);
+      };
 
-  });
+      selector.appendChild(btn);
+
+    }
+  );
 
 }
+
 
 function renderCurrentDay(){
 
@@ -2850,38 +3418,54 @@ function renderCurrentDay(){
     "Sunday"
   ];
 
-  document
-    .getElementById("mealDayTitle")
-    .textContent=
-      dayNames[currentDay]+"'s Meals";
+  const title=
+    document.getElementById(
+      "mealDayTitle"
+    );
+
+  if(title){
+
+    title.textContent=
+      dayNames[currentDay]+
+      "'s Meals";
+
+  }
 
   [
     "breakfast",
     "lunch",
     "dinner",
     "snack"
-  ].forEach(type=>{
+  ].forEach(
+    type=>{
 
-    const meal=
-      mealOptions[type]
+      const meal=
+        mealOptions[type]
         [weeklyMeals[currentDay][type]];
 
-    document
-      .getElementById(type+"Emoji")
-      .textContent=
-        meal.emoji;
+      document
+        .getElementById(
+          type+"Emoji"
+        )
+        .textContent=
+          meal.emoji;
 
-    document
-      .getElementById(type+"Name")
-      .textContent=
-        meal.name;
+      document
+        .getElementById(
+          type+"Name"
+        )
+        .textContent=
+          meal.name;
 
-    document
-      .getElementById(type+"Desc")
-      .textContent=
-        meal.desc;
+      document
+        .getElementById(
+          type+"Desc"
+        )
+        .textContent=
+          meal.desc;
 
-  });
+    }
+  );
 
   const saved=
     localStorage.getItem(
@@ -2890,9 +3474,19 @@ function renderCurrentDay(){
 
   if(saved){
 
-    scaleMeals(
-      JSON.parse(saved)
-    );
+    try{
+
+      scaleMeals(
+        JSON.parse(saved)
+      );
+
+    }catch(error){
+
+      console.warn(
+        "Could not scale saved meals."
+      );
+
+    }
 
   }
 
@@ -2900,12 +3494,14 @@ function renderCurrentDay(){
 
 }
 
+
 function selectGoal(button){
 
   document
     .querySelectorAll(".goal-btn")
-    .forEach(btn=>
-      btn.classList.remove("active")
+    .forEach(
+      btn=>
+        btn.classList.remove("active")
     );
 
   button.classList.add("active");
@@ -2915,60 +3511,84 @@ function selectGoal(button){
 
 }
 
+
 function generatePlan(){
 
   const age=
     parseFloat(
-      document.getElementById("userAge").value
+      document.getElementById(
+        "userAge"
+      ).value
     );
 
   const weight=
     parseFloat(
-      document.getElementById("userWeight").value
+      document.getElementById(
+        "userWeight"
+      ).value
     );
 
   const height=
     parseFloat(
-      document.getElementById("userHeight").value
+      document.getElementById(
+        "userHeight"
+      ).value
     );
 
   const sex=
-    document.getElementById("userSex").value;
+    document.getElementById(
+      "userSex"
+    ).value;
 
   const activity=
     parseFloat(
-      document.getElementById("userActivity").value
+      document.getElementById(
+        "userActivity"
+      ).value
     );
 
-  if(!age||!weight||!height){
+  if(!age || !weight || !height){
 
     alert(
       "Please enter your age, weight and height."
     );
 
     return;
+
   }
 
   let bmr=
     sex==="male"
-      ?(10*weight)+(6.25*height)-(5*age)+5
-      :(10*weight)+(6.25*height)-(5*age)-161;
+      ?
+        (10*weight)+
+        (6.25*height)-
+        (5*age)+
+        5
+      :
+        (10*weight)+
+        (6.25*height)-
+        (5*age)-
+        161;
 
   const maintenance=
     bmr*activity;
 
   let calories=
     selectedGoal==="lose"
-      ?Math.round(
-        maintenance-400
-      )
-      :selectedGoal==="gain"
-        ?Math.round(
-          maintenance+300
+      ?
+        Math.round(
+          maintenance-400
         )
-        :Math.round(
-          maintenance
-        );
+      :
+        selectedGoal==="gain"
+          ?
+            Math.round(
+              maintenance+300
+            )
+          :
+            Math.round(
+              maintenance
+            );
 
   const protein=
     Math.round(
@@ -3020,75 +3640,103 @@ function generatePlan(){
 
 }
 
+
 function updatePlan(plan){
 
   document
-    .getElementById("homeCalories")
+    .getElementById(
+      "homeCalories"
+    )
     .textContent=
       plan.calories.toLocaleString();
 
   document
-    .getElementById("homeProtein")
+    .getElementById(
+      "homeProtein"
+    )
     .textContent=
       plan.protein+"g";
 
   document
-    .getElementById("mealCalories")
+    .getElementById(
+      "mealCalories"
+    )
     .textContent=
       plan.calories.toLocaleString();
 
   document
-    .getElementById("mealProtein")
+    .getElementById(
+      "mealProtein"
+    )
     .textContent=
       plan.protein+"g";
 
   document
-    .getElementById("mealCarbs")
+    .getElementById(
+      "mealCarbs"
+    )
     .textContent=
       plan.carbs+"g";
 
   document
-    .getElementById("mealFats")
+    .getElementById(
+      "mealFats"
+    )
     .textContent=
       plan.fats+"g";
+
 
   if(plan.goal==="lose"){
 
     document
-      .getElementById("goalBadge")
+      .getElementById(
+        "goalBadge"
+      )
       .textContent=
         "FAT LOSS";
 
     document
-      .getElementById("mealSubtitle")
+      .getElementById(
+        "mealSubtitle"
+      )
       .textContent=
         "High-protein meals designed to help you lose fat while protecting muscle.";
 
   }
 
+
   if(plan.goal==="maintain"){
 
     document
-      .getElementById("goalBadge")
+      .getElementById(
+        "goalBadge"
+      )
       .textContent=
         "MAINTAIN";
 
     document
-      .getElementById("mealSubtitle")
+      .getElementById(
+        "mealSubtitle"
+      )
       .textContent=
         "Balanced meals designed to fuel your lifestyle and maintain your weight.";
 
   }
 
+
   if(plan.goal==="gain"){
 
     document
-      .getElementById("goalBadge")
+      .getElementById(
+        "goalBadge"
+      )
       .textContent=
         "BUILD MUSCLE";
 
     document
-      .getElementById("mealSubtitle")
+      .getElementById(
+        "mealSubtitle"
+      )
       .textContent=
         "High-protein meals designed to support strength, recovery and muscle growth.";
 
@@ -3097,6 +3745,7 @@ function updatePlan(plan){
   scaleMeals(plan);
 
 }
+
 
 function scaleMeals(plan){
 
@@ -3124,6 +3773,7 @@ function scaleMeals(plan){
 
   };
 
+
   const portions={
 
     breakfast:.25,
@@ -3133,46 +3783,58 @@ function scaleMeals(plan){
 
   };
 
+
   [
     "breakfast",
     "lunch",
     "dinner",
     "snack"
-  ].forEach(type=>{
+  ].forEach(
+    type=>{
 
-    document
-      .getElementById(type+"Calories")
-      .textContent=
-        mealCalories[type]+
-        " kcal";
+      document
+        .getElementById(
+          type+"Calories"
+        )
+        .textContent=
+          mealCalories[type]+
+          " kcal";
 
-    document
-      .getElementById(type+"P")
-      .textContent=
-        Math.round(
-          plan.protein*
-          portions[type]
-        )+"g";
+      document
+        .getElementById(
+          type+"P"
+        )
+        .textContent=
+          Math.round(
+            plan.protein*
+            portions[type]
+          )+"g";
 
-    document
-      .getElementById(type+"C")
-      .textContent=
-        Math.round(
-          plan.carbs*
-          portions[type]
-        )+"g";
+      document
+        .getElementById(
+          type+"C"
+        )
+        .textContent=
+          Math.round(
+            plan.carbs*
+            portions[type]
+          )+"g";
 
-    document
-      .getElementById(type+"F")
-      .textContent=
-        Math.round(
-          plan.fats*
-          portions[type]
-        )+"g";
+      document
+        .getElementById(
+          type+"F"
+        )
+        .textContent=
+          Math.round(
+            plan.fats*
+            portions[type]
+          )+"g";
 
-  });
+    }
+  );
 
 }
+
 
 function swapMeal(type){
 
@@ -3188,6 +3850,7 @@ function swapMeal(type){
 
 }
 
+
 function saveWeeklyMeals(){
 
   localStorage.setItem(
@@ -3198,6 +3861,7 @@ function saveWeeklyMeals(){
   );
 
 }
+
 
 function loadWeeklyMeals(){
 
@@ -3225,6 +3889,7 @@ function loadWeeklyMeals(){
 
 }
 
+
 function loadSavedPlan(){
 
   const saved=
@@ -3243,40 +3908,55 @@ function loadSavedPlan(){
       plan.goal;
 
     document
-      .getElementById("userAge")
+      .getElementById(
+        "userAge"
+      )
       .value=
         plan.age;
 
     document
-      .getElementById("userWeight")
+      .getElementById(
+        "userWeight"
+      )
       .value=
         plan.weight;
 
     document
-      .getElementById("userHeight")
+      .getElementById(
+        "userHeight"
+      )
       .value=
         plan.height;
 
     document
-      .getElementById("userSex")
+      .getElementById(
+        "userSex"
+      )
       .value=
         plan.sex;
 
     document
-      .getElementById("userActivity")
+      .getElementById(
+        "userActivity"
+      )
       .value=
         plan.activity;
 
     document
-      .querySelectorAll(".goal-btn")
-      .forEach(btn=>{
+      .querySelectorAll(
+        ".goal-btn"
+      )
+      .forEach(
+        btn=>{
 
-        btn.classList.toggle(
-          "active",
-          btn.dataset.goal===plan.goal
-        );
+          btn.classList.toggle(
+            "active",
+            btn.dataset.goal===
+              plan.goal
+          );
 
-      });
+        }
+      );
 
     updatePlan(plan);
 
@@ -3291,7 +3971,7 @@ function loadSavedPlan(){
 }
 
 
-/* SHOPPING LIST */
+/* SHOPPING */
 
 function loadShoppingItems(){
 
@@ -3316,24 +3996,29 @@ function loadShoppingItems(){
   }
 
   if(
-    !Array.isArray(shoppingItems) ||
+    !Array.isArray(
+      shoppingItems
+    ) ||
     !shoppingItems.length
   ){
 
     shoppingItems=
-      defaultShoppingItems.map(name=>({
+      defaultShoppingItems.map(
+        name=>({
 
-        name:name,
-        qty:"1",
-        checked:false
+          name:name,
+          qty:"1",
+          checked:false
 
-      }));
+        })
+      );
 
     saveShoppingItems();
 
   }
 
 }
+
 
 function saveShoppingItems(){
 
@@ -3345,6 +4030,7 @@ function saveShoppingItems(){
   );
 
 }
+
 
 function renderShoppingList(){
 
@@ -3392,7 +4078,9 @@ function renderShoppingList(){
           min="1"
           step="1"
           value="${escapeHtml(
-            String(item.qty||1)
+            String(
+              item.qty||1
+            )
           )}"
           onchange="updateShoppingQty(
             ${index},
@@ -3414,24 +4102,33 @@ function renderShoppingList(){
     }
   );
 
+
   const bought=
     shoppingItems.filter(
       item=>item.checked
     ).length;
 
+
   document
-    .getElementById("shoppingTotal")
+    .getElementById(
+      "shoppingTotal"
+    )
     .textContent=
       shoppingItems.length;
 
+
   document
-    .getElementById("shoppingBought")
+    .getElementById(
+      "shoppingBought"
+    )
     .textContent=
       bought;
+
 
   updateMiniShopping();
 
 }
+
 
 function toggleShoppingItem(index){
 
@@ -3443,6 +4140,7 @@ function toggleShoppingItem(index){
   renderShoppingList();
 
 }
+
 
 function updateShoppingQty(index,value){
 
@@ -3468,6 +4166,7 @@ function updateShoppingQty(index,value){
 
 }
 
+
 function deleteShoppingItem(index){
 
   shoppingItems.splice(
@@ -3482,6 +4181,7 @@ function deleteShoppingItem(index){
   clearBasketResults();
 
 }
+
 
 function addShoppingItem(){
 
@@ -3513,6 +4213,7 @@ function addShoppingItem(){
 
 }
 
+
 function resetShoppingList(){
 
   if(
@@ -3522,13 +4223,15 @@ function resetShoppingList(){
   ) return;
 
   shoppingItems=
-    defaultShoppingItems.map(name=>({
+    defaultShoppingItems.map(
+      name=>({
 
-      name:name,
-      qty:"1",
-      checked:false
+        name:name,
+        qty:"1",
+        checked:false
 
-    }));
+      })
+    );
 
   saveShoppingItems();
 
@@ -3537,6 +4240,7 @@ function resetShoppingList(){
   clearBasketResults();
 
 }
+
 
 function updateMiniShopping(){
 
@@ -3563,29 +4267,51 @@ function updateMiniShopping(){
       )
       .join("");
 
-  document
-    .getElementById(
+
+  const count=
+    document.getElementById(
       "miniShoppingCount"
-    )
-    .textContent=
+    );
+
+  if(count){
+
+    count.textContent=
       shoppingItems.length+
       " ITEMS";
+
+  }
 
 }
 
 
-/* BEST BASKET */
+/* HELPERS */
 
 function escapeHtml(value){
 
   return String(value)
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
 
 }
+
 
 function getBasketItems(){
 
@@ -3597,20 +4323,24 @@ function getBasketItems(){
         item.name
     )
 
-    .map(item=>({
+    .map(
+      item=>({
 
-      name:
-        String(
-          item.name
-        ).trim(),
+        name:
+          String(
+            item.name
+          ).trim(),
 
-      qty:
-        Math.max(
-          1,
-          Number(item.qty)||1
-        )
+        qty:
+          Math.max(
+            1,
+            Number(
+              item.qty
+            )||1
+          )
 
-    }))
+      })
+    )
 
     .filter(
       item=>
@@ -3623,6 +4353,7 @@ function getBasketItems(){
     );
 
 }
+
 
 function clearBasketResults(){
 
@@ -3653,6 +4384,7 @@ function clearBasketResults(){
 
 }
 
+
 function setBasketStatus(
   message,
   type=""
@@ -3662,6 +4394,8 @@ function setBasketStatus(
     document.getElementById(
       "basketStatus"
     );
+
+  if(!status) return;
 
   status.className=
     "basket-status show"+
@@ -3676,11 +4410,15 @@ function setBasketStatus(
 
 }
 
+
 function formatMoney(value){
+
+  const number=
+    Number(value);
 
   if(
     !Number.isFinite(
-      Number(value)
+      number
     )
   ){
 
@@ -3695,10 +4433,11 @@ function formatMoney(value){
       currency:"GBP"
     }
   ).format(
-    Number(value)
+    number
   );
 
 }
+
 
 function formatCheckedTime(value){
 
@@ -3730,12 +4469,10 @@ function formatCheckedTime(value){
 }
 
 
-/*
- * BEST BASKET LIVE PRICE CHECK
- *
- * This version exposes the actual
- * Apify error returned by the backend.
- */
+/* =========================================================
+   BEST BASKET
+   SHIFT FIT PRICE DATABASE
+   ========================================================= */
 
 async function checkBestBasket(){
 
@@ -3752,6 +4489,7 @@ async function checkBestBasket(){
   const items=
     getBasketItems();
 
+
   if(!items.length){
 
     setBasketStatus(
@@ -3763,23 +4501,26 @@ async function checkBestBasket(){
 
   }
 
+
   button.disabled=true;
 
   button.textContent=
-    "⏳ STARTING PRICE CHECK...";
+    "⏳ CHECKING PRICES...";
 
   results.innerHTML="";
 
+
   setBasketStatus(
-    "Starting live supermarket comparison...",
+    "ShiftFit is comparing your basket across six UK supermarkets...",
     ""
   );
+
 
   try{
 
     /*
      * STEP 1
-     * START APIFY
+     * START PRICE CHECK
      */
 
     const startResponse=
@@ -3806,14 +4547,27 @@ async function checkBestBasket(){
           }
       );
 
+
+    const startText=
+      await startResponse.text();
+
+
     let startData=null;
+
 
     try{
 
       startData=
-        await startResponse.json();
+        startText
+          ?JSON.parse(startText)
+          :null;
 
     }catch(error){
+
+      console.error(
+        "Invalid POST response:",
+        startText
+      );
 
       throw new Error(
         "The price service returned an invalid response."
@@ -3821,88 +4575,65 @@ async function checkBestBasket(){
 
     }
 
-    /*
-     * IMPORTANT:
-     * Show the actual provider message.
-     */
 
     if(!startResponse.ok){
 
-      const providerMessage=
+      throw new Error(
         startData &&
         (
-          startData.providerMessage ||
           startData.message ||
-          ""
-        );
-
-      const providerStatus=
-        startData &&
-        startData.providerStatus
-          ? " HTTP "+
-            startData.providerStatus
-          :"";
-
-      if(providerMessage){
-
-        throw new Error(
-          "Apify"+
-          providerStatus+
-          ": "+
-          providerMessage
-        );
-
-      }
-
-      if(
-        startData &&
-        startData.error
-      ){
-
-        throw new Error(
           startData.error
-            .replaceAll(
-              "_",
-              " "
+        )
+          ?
+            (
+              startData.message ||
+              startData.error
             )
-        );
-
-      }
-
-      throw new Error(
-        "The live price service could not start."
+          :
+            "The price service could not start."
       );
 
     }
 
-    if(!startData.runId){
+
+    if(
+      !startData ||
+      !startData.runId
+    ){
+
+      console.error(
+        "Unexpected start response:",
+        startData
+      );
 
       throw new Error(
-        "The price service did not return a run ID."
+        "The price service did not return a valid run ID."
       );
 
     }
+
 
     const runId=
       startData.runId;
 
+
     /*
      * STEP 2
-     * POLL APIFY
+     * POLL SHIFT FIT API
+     *
+     * The new backend normally completes
+     * immediately because it uses the local
+     * ShiftFit price database.
      */
 
     button.textContent=
-      "⏳ CHECKING SUPERMARKETS...";
+      "⏳ BUILDING BASKET...";
 
-    setBasketStatus(
-      "ShiftFit is checking Tesco, Sainsbury's, Asda, Morrisons, Waitrose and Aldi. This may take a little while.",
-      ""
-    );
 
-    const maxAttempts=
-      40;
+    const maxAttempts=10;
 
     let attempt=0;
+
 
     while(
       attempt<
@@ -3911,27 +4642,6 @@ async function checkBestBasket(){
 
       attempt++;
 
-      await new Promise(
-        resolve=>
-          setTimeout(
-            resolve,
-            3000
-          )
-      );
-
-      const queryItems=
-        encodeURIComponent(
-          JSON.stringify(
-            items
-          )
-        );
-
-      const queryRetailers=
-        encodeURIComponent(
-          JSON.stringify(
-            basketRetailers
-          )
-        );
 
       const pollResponse=
         await fetch(
@@ -3939,83 +4649,60 @@ async function checkBestBasket(){
           "?runId="+
           encodeURIComponent(
             runId
-          )+
-          "&items="+
-          queryItems+
-          "&retailers="+
-          queryRetailers
+          )
         );
 
+
+      const pollText=
+        await pollResponse.text();
+
+
       let pollData=null;
+
 
       try{
 
         pollData=
-          await pollResponse.json();
+          pollText
+            ?JSON.parse(pollText)
+            :null;
 
       }catch(error){
 
+        console.error(
+          "Invalid GET response:",
+          pollText
+        );
+
         throw new Error(
-          "The price service returned an invalid polling response."
+          "The price service returned an invalid response."
         );
 
       }
 
-      /*
-       * SHOW REAL POLLING ERRORS
-       */
 
       if(!pollResponse.ok){
 
-        const providerMessage=
+        throw new Error(
           pollData &&
           (
-            pollData.providerMessage ||
             pollData.message ||
-            ""
-          );
-
-        const providerStatus=
-          pollData &&
-          pollData.providerStatus
-            ? " HTTP "+
-              pollData.providerStatus
-            :"";
-
-        if(providerMessage){
-
-          throw new Error(
-            "Apify"+
-            providerStatus+
-            ": "+
-            providerMessage
-          );
-
-        }
-
-        if(
-          pollData &&
-          pollData.error
-        ){
-
-          throw new Error(
             pollData.error
-              .replaceAll(
-                "_",
-                " "
+          )
+            ?
+              (
+                pollData.message ||
+                pollData.error
               )
-          );
-
-        }
-
-        throw new Error(
-          "The live price service could not complete the request."
+            :
+              "The price service could not complete the request."
         );
 
       }
 
+
       /*
-       * STILL RUNNING
+       * RUNNING
        */
 
       if(
@@ -4023,32 +4710,27 @@ async function checkBestBasket(){
         "RUNNING"
       ){
 
-        const progress=
-          Math.min(
-            95,
-            Math.round(
-              (
-                attempt/
-                maxAttempts
-              )*
-              100
-            )
-          );
-
         button.textContent=
-          "⏳ CHECKING... "+
-          progress+
-          "%";
+          "⏳ CHECKING...";
 
         setBasketStatus(
           pollData.statusMessage ||
-          "ShiftFit is comparing live supermarket prices...",
+          "ShiftFit is comparing supermarket prices...",
           ""
+        );
+
+        await new Promise(
+          resolve=>
+            setTimeout(
+              resolve,
+              700
+            )
         );
 
         continue;
 
       }
+
 
       /*
        * FAILED
@@ -4061,10 +4743,11 @@ async function checkBestBasket(){
 
         throw new Error(
           pollData.message ||
-          "Apify failed to complete the price check."
+          "The supermarket price check failed."
         );
 
       }
+
 
       /*
        * SUCCESS
@@ -4078,85 +4761,34 @@ async function checkBestBasket(){
         button.textContent=
           "✅ PRICES FOUND";
 
-        /*
-         * The current diagnostic backend
-         * returns rawResults. Show them clearly
-         * so we can inspect what Apify produced.
-         */
 
-        if(
-          Array.isArray(
-            pollData.rawResults
-          )
-        ){
+        renderBasketResults(
+          pollData
+        );
 
-          setBasketStatus(
-            "Apify completed successfully and returned "+
-            pollData.rawResults.length+
-            " result rows. We can now connect those results to the basket.",
-            "success"
-          );
-
-          results.innerHTML=`
-
-            <div class="basket-results-header">
-
-              <div class="basket-results-title">
-                Live Data Received
-              </div>
-
-              <div class="basket-last-checked">
-                ${pollData.checkedAt
-                  ?escapeHtml(
-                    formatCheckedTime(
-                      pollData.checkedAt
-                    )
-                  )
-                  :""
-                }
-              </div>
-
-            </div>
-
-            <div class="basket-empty">
-
-              <strong>
-                ✅ Apify is working.
-              </strong>
-
-              <br><br>
-
-              ShiftFit received
-              <strong>
-                ${pollData.rawResults.length}
-              </strong>
-              supermarket result rows.
-
-              <br><br>
-
-              The next step is to map these live results into the Tesco, Sainsbury's, Asda, Morrisons, Waitrose and Aldi basket totals.
-
-            </div>
-
-          `;
-
-        }else{
-
-          renderBasketResults(
-            pollData
-          );
-
-        }
 
         return;
 
       }
 
+
+      console.error(
+        "Unexpected price response:",
+        pollData
+      );
+
+
+      throw new Error(
+        "The price service returned an unexpected response."
+      );
+
     }
 
+
     throw new Error(
-      "The supermarket comparison is taking longer than expected. Please try again."
+      "The supermarket comparison took too long. Please try again."
     );
+
 
   }catch(error){
 
@@ -4165,15 +4797,13 @@ async function checkBestBasket(){
       error
     );
 
-    /*
-     * DISPLAY THE ACTUAL ERROR
-     */
 
     setBasketStatus(
-      "We couldn't get live prices right now. "+
+      "We couldn't get supermarket prices right now. "+
       error.message,
       "error"
     );
+
 
     results.innerHTML=`
 
@@ -4197,19 +4827,22 @@ async function checkBestBasket(){
 
     `;
 
+
   }finally{
 
     button.disabled=false;
 
     button.textContent=
-      "💷 CHECK LIVE PRICES";
+      "💷 CHECK PRICES";
 
   }
 
 }
 
 
-/* BASKET RESULTS */
+/* =========================================================
+   RENDER NEW PRICE DATABASE RESULTS
+   ========================================================= */
 
 function renderBasketResults(data){
 
@@ -4218,25 +4851,28 @@ function renderBasketResults(data){
       "basketResults"
     );
 
-  const baskets=
+
+  const supermarkets=
     Array.isArray(
-      data.baskets
+      data.supermarkets
     )
-      ?data.baskets
+      ?data.supermarkets
       :[];
 
-  if(!baskets.length){
+
+  if(!supermarkets.length){
 
     setBasketStatus(
-      "No supermarket price results were returned.",
+      "No supermarket results were returned for this basket.",
       "error"
     );
+
 
     results.innerHTML=`
 
       <div class="basket-empty">
 
-        No usable supermarket results were returned for this shopping list.
+        No supermarket results were returned.
 
       </div>
 
@@ -4246,14 +4882,17 @@ function renderBasketResults(data){
 
   }
 
-  const best=
-    data.bestBasket ||
+
+  const mixedBasket=
+    data.mixedBasket ||
     null;
+
 
   const checkedAt=
     formatCheckedTime(
       data.checkedAt
     );
+
 
   let html=`
 
@@ -4264,6 +4903,7 @@ function renderBasketResults(data){
       </div>
 
       <div class="basket-last-checked">
+
         ${
           checkedAt
             ?"Checked "+
@@ -4272,240 +4912,265 @@ function renderBasketResults(data){
               )
             :""
         }
+
       </div>
 
     </div>
 
   `;
 
-  if(best){
+
+  /*
+   * MIXED BASKET RESULT
+   */
+
+  if(
+    mixedBasket &&
+    Number.isFinite(
+      Number(
+        mixedBasket.total
+      )
+    )
+  ){
 
     setBasketStatus(
-      "Best complete basket found: "+
-      getRetailerDisplayName(
-        best.retailer
-      )+
-      " at "+
+      "🏆 Cheapest mixed basket: "+
       formatMoney(
-        best.total
+        mixedBasket.total
       )+
       ".",
       "success"
     );
 
+
+    html+=`
+
+      <div class="best-basket-saving">
+
+        🏆 Cheapest mixed basket
+
+        <br><br>
+
+        ShiftFit can build the cheapest
+        possible combination of products
+        across the supermarkets.
+
+        <br><br>
+
+        <strong>
+          Total:
+          ${formatMoney(
+            mixedBasket.total
+          )}
+        </strong>
+
+      </div>
+
+    `;
+
   }else{
 
     setBasketStatus(
-      "No supermarket has every item available. Showing the best partial results below.",
-      ""
+      "Price comparison complete.",
+      "success"
     );
 
   }
 
-  baskets.forEach(
+
+  /*
+   * RETAILER CARDS
+   */
+
+  supermarkets.forEach(
     basket=>{
 
       html+=
         renderRetailerCard(
-          basket,
-          best
+          basket
         );
 
     }
   );
 
-  if(best){
-
-    const nextBest=
-      baskets.find(
-        basket=>
-          basket.retailer
-            .toLowerCase()!==
-          String(
-            best.retailer
-          ).toLowerCase() &&
-          basket.missing.length===0
-      );
-
-    if(nextBest){
-
-      const saving=
-        Number(
-          (
-            nextBest.total-
-            best.total
-          ).toFixed(2)
-        );
-
-      if(saving>0){
-
-        html+=`
-
-          <div class="best-basket-saving">
-
-            🏆 ShiftFit found a saving of
-            ${formatMoney(saving)}
-            versus the next cheapest complete basket.
-
-          </div>
-
-        `;
-
-      }
-
-    }
-
-  }
 
   results.innerHTML=
     html;
 
 }
 
+
+/* =========================================================
+   RETAILER CARD
+   ========================================================= */
+
 function renderRetailerCard(
-  basket,
-  best
+  basket
 ){
 
   const retailerKey=
     String(
-      basket.retailer||""
+      basket.retailer ||
+      ""
     ).toLowerCase();
 
+
   const retailerName=
+    basket.retailerName ||
     getRetailerDisplayName(
       retailerKey
     );
 
-  const isBest=
-    best &&
-    String(
-      best.retailer
-    ).toLowerCase()===
-      retailerKey &&
-    basket.missing.length===0;
 
-  const incomplete=
-    basket.missing.length>0;
+  const total=
+    Number(
+      basket.total
+    );
 
-  let itemsHtml="";
 
-  if(
+  const missing=
+    Array.isArray(
+      basket.missing
+    )
+      ?basket.missing
+      :[];
+
+
+  const basketItems=
     Array.isArray(
       basket.items
     )
-  ){
+      ?basket.items
+      :[];
 
-    itemsHtml=
-      basket.items
-        .map(
-          item=>{
 
-            const productName=
-              item.product ||
-              item.name ||
-              item.item ||
-              "Matched product";
+  const complete=
+    missing.length===0;
 
-            const qty=
-              Number(
-                item.qty
-              )||1;
 
-            const lineTotal=
-              Number(
-                item.lineTotal
-              );
+  const cardClass=
+    complete
+      ?"retailer-best"
+      :"retailer-incomplete";
 
-            const price=
-              Number(
-                item.price
-              );
 
-            return `
+  let itemsHtml="";
 
-              <div class="basket-item">
 
-                <div>
+  basketItems.forEach(
+    item=>{
 
-                  <div class="basket-item-name">
-                    ${escapeHtml(
-                      item.item||
-                      "Item"
-                    )}
-                    × ${qty}
-                  </div>
+      const itemName=
+        item.item ||
+        "Item";
 
-                  <div class="basket-item-product">
-                    ${escapeHtml(
-                      productName
-                    )}
 
-                    ${
-                      item.pack
-                        ?" • "+
-                          escapeHtml(
-                            item.pack
-                          )
-                        :""
-                    }
+      const productName=
+        item.product ||
+        item.productName ||
+        "Matched product";
 
-                  </div>
 
-                  ${
-                    item.url
-                      ?`
+      const pack=
+        item.pack ||
+        item.packSize ||
+        "";
 
-                        <a
-                          class="basket-link"
-                          href="${escapeHtml(
-                            item.url
-                          )}"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          VIEW PRODUCT
-                        </a>
 
-                      `
-                      :""
-                  }
+      const quantity=
+        Number(
+          item.qty ??
+          item.quantity
+        )||1;
 
-                </div>
 
-                <div class="basket-item-price">
+      const lineTotal=
+        Number(
+          item.lineTotal ??
+          item.total
+        );
 
-                  ${
-                    Number.isFinite(
-                      lineTotal
+
+      const unitPrice=
+        Number(
+          item.price ??
+          item.unitPrice
+        );
+
+
+      itemsHtml+=`
+
+        <div class="basket-item">
+
+          <div>
+
+            <div class="basket-item-name">
+
+              ${escapeHtml(
+                itemName
+              )}
+
+              × ${quantity}
+
+            </div>
+
+
+            <div class="basket-item-product">
+
+              ${escapeHtml(
+                productName
+              )}
+
+              ${
+                pack
+                  ?" • "+
+                    escapeHtml(
+                      pack
                     )
-                      ?formatMoney(
-                        lineTotal
+                  :""
+              }
+
+            </div>
+
+          </div>
+
+
+          <div class="basket-item-price">
+
+            ${
+              Number.isFinite(
+                lineTotal
+              )
+                ?
+                  formatMoney(
+                    lineTotal
+                  )
+                :
+                  Number.isFinite(
+                    unitPrice
+                  )
+                    ?
+                      formatMoney(
+                        unitPrice
                       )
-                      :Number.isFinite(
-                        price
-                      )
-                        ?formatMoney(
-                          price
-                        )
-                        :"—"
-                  }
+                    :
+                      "—"
+            }
 
-                </div>
+          </div>
 
-              </div>
+        </div>
 
-            `;
+      `;
 
-          }
-        )
-        .join("");
+    }
+  );
 
-  }
 
   let missingHtml="";
 
-  if(incomplete){
+
+  if(missing.length){
 
     missingHtml=`
 
@@ -4515,13 +5180,14 @@ function renderRetailerCard(
           ⚠ Missing from this basket
         </strong>
 
-        ${
-          basket.missing
-            .map(
-              item=>
-                escapeHtml(item)
-            )
-            .join(" • ")
+        ${missing
+          .map(
+            item=>
+              escapeHtml(
+                item
+              )
+          )
+          .join(" • ")
         }
 
       </div>
@@ -4530,33 +5196,32 @@ function renderRetailerCard(
 
   }
 
+
   return `
 
-    <div class="retailer-card ${
-      isBest
-        ?"retailer-best"
-        :incomplete
-          ?"retailer-incomplete"
-          :""
-    }">
+    <div class="retailer-card ${cardClass}">
 
       ${
-        isBest
+        complete
           ?`
 
             <div class="retailer-badge">
-              🏆 CHEAPEST COMPLETE BASKET
+              🏆 COMPLETE BASKET
             </div>
 
           `
           :""
       }
 
+
       <div class="retailer-name">
+
         ${escapeHtml(
           retailerName
         )}
+
       </div>
+
 
       <div class="retailer-total-row">
 
@@ -4565,32 +5230,35 @@ function renderRetailerCard(
           <div class="retailer-total-label">
 
             ${
-              incomplete
-                ?"CURRENT MATCHED TOTAL"
-                :"COMPLETE BASKET TOTAL"
+              complete
+                ?"COMPLETE BASKET TOTAL"
+                :"MATCHED ITEMS TOTAL"
             }
 
           </div>
 
+
           <div class="retailer-total">
 
             ${formatMoney(
-              Number(
-                basket.total
-              )
+              total
             )}
 
           </div>
 
         </div>
 
+
         ${
-          incomplete
+          missing.length
             ?`
 
               <div class="retailer-missing-count">
-                ${basket.missing.length}
+
+                ${missing.length}
+
                 missing
+
               </div>
 
             `
@@ -4599,17 +5267,21 @@ function renderRetailerCard(
 
       </div>
 
+
       ${
         itemsHtml
           ?`
 
             <div class="basket-items">
+
               ${itemsHtml}
+
             </div>
 
           `
           :""
       }
+
 
       ${missingHtml}
 
@@ -4619,21 +5291,26 @@ function renderRetailerCard(
 
 }
 
+
+/* RETAILER NAME */
+
 function getRetailerDisplayName(
   key
 ){
 
   const normalised=
     String(
-      key||""
+      key||
+      ""
     )
     .toLowerCase()
     .trim();
 
-  return (
+
+  return(
     retailerNames[
       normalised
-    ] ||
+    ]||
     String(
       key||
       "Supermarket"
