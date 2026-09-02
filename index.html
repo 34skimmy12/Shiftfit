@@ -4265,8 +4265,9 @@ function updateShoppingQty(index,value){
   saveShoppingItems();
 
   /*
-   * A quantity change means the old
-   * Best Basket result is no longer valid.
+   * Quantity changed.
+   * Any previous Best Basket calculation
+   * is now invalid and must be recalculated.
    */
 
   clearBasketResults();
@@ -5260,9 +5261,9 @@ function renderMixedBasket(
     (item,index)=>{
 
       /*
-       * Backend now supplies item.item.
-       * The original shopping list is also used
-       * as a safety fallback.
+       * The backend supplies the original shopping
+       * item name. The original shopping list is
+       * also used as a safety fallback.
        */
 
       const fallback=
@@ -5307,6 +5308,11 @@ function renderMixedBasket(
         "";
 
 
+      /*
+       * Quantity is ALWAYS treated separately
+       * from the product name.
+       */
+
       const quantity=
         Math.max(
           1,
@@ -5324,6 +5330,14 @@ function renderMixedBasket(
           )||1
         );
 
+
+      /*
+       * Backend should provide total =
+       * unitPrice × quantity.
+       *
+       * This frontend also calculates the total
+       * if the backend only supplies unitPrice.
+       */
 
       const total=
         Number(
@@ -5499,10 +5513,8 @@ function renderRetailerCard(
 
 
   /*
-   * NEW BACKEND FIELD:
-   * missingItems
-   *
-   * Keep support for the old "missing" field too.
+   * Support the new "missingItems" field
+   * and the older "missing" field.
    */
 
   const missing=
@@ -5519,10 +5531,8 @@ function renderRetailerCard(
 
 
   /*
-   * NEW BACKEND FIELD:
-   * matchedItems
-   *
-   * Keep support for the old "items" field too.
+   * Support the new "matchedItems" field
+   * and the older "items" field.
    */
 
   const basketItems=
@@ -5661,8 +5671,7 @@ function renderRetailerCard(
 
 
       /*
-       * Quantity is displayed separately
-       * from the product name.
+       * Quantity is kept separate from product name.
        */
 
       const quantity=
