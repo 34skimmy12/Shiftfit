@@ -1,470 +1,473 @@
-export default async function handler(req, res) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+import { supermarkets, findProducts } from "./price-database.js";
 
-  if (req.method === "OPTIONS") {
-    return res.status(200).json({ ok: true });
-  }
+function clean(value) {
+  return String(value ?? "").trim();
+}
 
-  try {
-    // ---------------------------------------------------------
-    // RETAILERS
-    // ---------------------------------------------------------
-    const retailers = {
-      tesco: "Tesco",
-      sainsburys: "Sainsbury's",
-      asda: "Asda",
-      morrisons: "Morrisons",
-      waitrose: "Waitrose",
-      aldi: "Aldi"
-    };
+function normaliseQuantity(value) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return 1;
+  return Math.max(1, Math.round(number));
+}
 
-    // ---------------------------------------------------------
-    // NORMALISE TEXT
-    // ---------------------------------------------------------
-    function clean(value) {
-      return String(value || "")
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, " ")
-        .trim();
-    }
+function normaliseItems(items) {
+  if (!Array.isArray(items)) return [];
 
-    // ---------------------------------------------------------
-    // SEED PRICE DATABASE
-    //
-    // These are NOT live prices.
-    // They are controlled ShiftFit seed prices.
-    // ---------------------------------------------------------
-    const basePrices = {
-      "chicken breast": 5.50,
-      "lean beef mince": 5.75,
-      "lean turkey mince": 5.25,
-      "salmon": 6.50,
-      "eggs": 2.50,
-      "greek yoghurt": 2.00,
-      "oats": 1.50,
-      "rice": 2.00,
-      "wholewheat pasta": 1.50,
-      "sweet potatoes": 2.00,
-      "potatoes": 1.75,
-      "mixed vegetables": 2.00,
-      "spinach": 1.50,
-      "mixed berries": 3.00,
-      "bananas": 1.50,
-      "avocado": 2.00,
-      "wholemeal wraps": 1.75,
-      "wholegrain bread": 1.50,
-      "rice cakes": 1.50,
-      "protein powder": 20.00
-    };
-
-    const retailerMultipliers = {
-      tesco: 1.00,
-      sainsburys: 1.04,
-      asda: 0.96,
-      morrisons: 0.98,
-      waitrose: 1.22,
-      aldi: 0.88
-    };
-
-    const packSizes = {
-      "chicken breast": "1kg",
-      "lean beef mince": "500g",
-      "lean turkey mince": "500g",
-      "salmon": "400g",
-      "eggs": "12 pack",
-      "greek yoghurt": "500g",
-      "oats": "1kg",
-      "rice": "1kg",
-      "wholewheat pasta": "500g",
-      "sweet potatoes": "1kg",
-      "potatoes": "2.5kg",
-      "mixed vegetables": "1kg",
-      "spinach": "240g",
-      "mixed berries": "500g",
-      "bananas": "1kg",
-      "avocado": "2 pack",
-      "wholemeal wraps": "8 pack",
-      "wholegrain bread": "800g",
-      "rice cakes": "130g",
-      "protein powder": "1kg"
-    };
-
-    // ---------------------------------------------------------
-    // FIND THE CLOSEST PRODUCT
-    // ---------------------------------------------------------
-    function findProduct(itemName, retailerId) {
-      const query = clean(itemName);
-
-      let bestMatch = null;
-      let bestScore = 0;
-
-      for (const productName of Object.keys(basePrices)) {
-        const cleanedProduct = clean(productName);
-
-        let score = 0;
-
-        if (query === cleanedProduct) {
-          score = 100;
-        } else if (
-          query.includes(cleanedProduct) ||
-          cleanedProduct.includes(query)
-        ) {
-          score = 80;
-        } else {
-          const queryWords = query.split(" ");
-          const productWords = cleanedProduct.split(" ");
-
-          for (const word of queryWords) {
-            if (word.length > 2 && productWords.includes(word)) {
-              score += 20;
-            }
-          }
-        }
-
-        if (score > bestScore) {
-          bestScore = score;
-          bestMatch = productName;
-        }
+  return items
+    .map((item) => {
+      if (typeof item === "string") {
+        return {
+          name: clean(item),
+          qty: 1
+        };
       }
 
-      if (!bestMatch || bestScore < 20) {
-        return null;
-      }
+      if (!item || typeof item !== "object") return null;
 
-      const base = basePrices[bestMatch];
-      const multiplier = retailerMultipliers[retailerId] || 1;
+      const name = clean(
+        item.name ??
+        item.item ??
+        item.query ??
+        item.productName
+      );
 
-      // Small deterministic retailer variation
-      const price = Math.round(base * multiplier * 100) / 100;
+      if (!name) return null;
 
       return {
-        productId:
-          retailerId + "-" + clean(bestMatch).replace(/\s+/g, "-"),
-
-        retailer: retailerId,
-        retailerName: retailers[retailerId],
-
-        productName: bestMatch,
-        packSize: packSizes[bestMatch] || "standard pack",
-
-        price,
-
-        updatedAt: "2026-09-02",
-
-        available: true
+        name,
+        qty: normaliseQuantity(
+          item.qty ??
+          item.quantity ??
+          1
+        )
       };
-    }
+    })
+    .filter(Boolean)
+    .slice(0, 30);
+}
 
-    // ---------------------------------------------------------
-    // POST = CREATE PRICE CHECK
-    // ---------------------------------------------------------
+function normaliseRetailers(retailers) {
+  if (!Array.isArray(retailers)) {
+    return Object.keys(supermarkets);
+  }
+
+  const valid = retailers
+    .map(clean)
+    .filter((id) => supermarkets[id]);
+
+  return valid.length ? [...new Set(valid)] : Object.keys(supermarkets);
+}
+
+function encodeRun(payload) {
+  return Buffer
+    .from(JSON.stringify(payload), "utf8")
+    .toString("base64url");
+}
+
+function decodeRun(runId) {
+  try {
+    return JSON.parse(
+      Buffer
+        .from(runId, "base64url")
+        .toString("utf8")
+    );
+  } catch {
+    return null;
+  }
+}
+
+export default async function handler(req, res) {
+  try {
+    /*
+     * ---------------------------------------------------------
+     * START A BEST BASKET CHECK
+     * ---------------------------------------------------------
+     */
     if (req.method === "POST") {
       const body = req.body || {};
 
-      const items = Array.isArray(body.items)
-        ? body.items
-            .map(item => {
-              if (typeof item === "string") {
-                return {
-                  name: item,
-                  quantity: 1
-                };
-              }
-
-              return {
-                name: item.name || item.item || item.product || "",
-                quantity: Number(item.quantity) || 1
-              };
-            })
-            .filter(item => item.name)
-        : [];
-
-      const retailerIds = Array.isArray(body.retailers)
-        ? body.retailers.filter(id => retailers[id])
-        : Object.keys(retailers);
+      const items = normaliseItems(body.items);
+      const retailers = normaliseRetailers(body.retailers);
 
       if (!items.length) {
         return res.status(400).json({
-          error: "NO_ITEMS",
-          message: "No shopping items were supplied."
+          status: "FAILED",
+          error: "No shopping items were supplied."
         });
       }
 
-      if (!retailerIds.length) {
-        return res.status(400).json({
-          error: "NO_RETAILERS",
-          message: "No supermarkets were supplied."
-        });
-      }
-
-      const payload = {
+      const runId = encodeRun({
         items,
-        retailers: retailerIds,
+        retailers,
         createdAt: new Date().toISOString()
-      };
-
-      // Safe base64 run ID.
-      const runId = Buffer
-        .from(JSON.stringify(payload), "utf8")
-        .toString("base64")
-        .replace(/\+/g, "-")
-        .replace(/\//g, "_")
-        .replace(/=+$/, "");
+      });
 
       return res.status(202).json({
         status: "RUNNING",
         runId,
         items,
-        retailers: retailerIds,
-        startedAt: payload.createdAt
+        retailers,
+        startedAt: new Date().toISOString()
       });
     }
 
-    // ---------------------------------------------------------
-    // GET = RETURN PRICE RESULTS
-    // ---------------------------------------------------------
+    /*
+     * ---------------------------------------------------------
+     * GET RESULTS
+     * ---------------------------------------------------------
+     */
     if (req.method === "GET") {
-      const runId = req.query && req.query.runId;
+      const runId = clean(req.query?.runId);
 
       if (!runId) {
         return res.status(400).json({
-          error: "NO_RUN_ID",
-          message: "A runId is required."
+          status: "FAILED",
+          error: "Missing runId."
         });
       }
 
-      let decoded;
+      const payload = decodeRun(runId);
 
-      try {
-        let value = String(runId)
-          .replace(/-/g, "+")
-          .replace(/_/g, "/");
-
-        while (value.length % 4 !== 0) {
-          value += "=";
-        }
-
-        decoded = JSON.parse(
-          Buffer.from(value, "base64").toString("utf8")
-        );
-      } catch (decodeError) {
+      if (!payload) {
         return res.status(400).json({
-          error: "INVALID_RUN_ID",
-          message: "The price check ID could not be read."
+          status: "FAILED",
+          error: "Invalid runId."
         });
       }
 
-      const items = Array.isArray(decoded.items)
-        ? decoded.items
-        : [];
+      const items = normaliseItems(payload.items);
+      const retailers = normaliseRetailers(payload.retailers);
 
-      const retailerIds = Array.isArray(decoded.retailers)
-        ? decoded.retailers
-        : Object.keys(retailers);
+      if (!items.length) {
+        return res.status(400).json({
+          status: "FAILED",
+          error: "No shopping items were supplied."
+        });
+      }
 
-      // -------------------------------------------------------
-      // BUILD RESULTS
-      // -------------------------------------------------------
-      const itemResults = [];
-      const rawResults = [];
+      /*
+       * ---------------------------------------------------------
+       * BUILD SUPERMARKET RESULTS
+       * ---------------------------------------------------------
+       */
 
-      for (const item of items) {
-        const choices = [];
+      const supermarketResults = [];
 
-        for (const retailerId of retailerIds) {
-          const product = findProduct(item.name, retailerId);
+      /*
+       * Every requested shopping item is checked against
+       * every selected supermarket.
+       */
+      for (const retailerId of retailers) {
+        const retailer = supermarkets[retailerId];
+
+        if (!retailer) continue;
+
+        let total = 0;
+        const matchedItems = [];
+        const missingItems = [];
+
+        for (const requestedItem of items) {
+          const matches = findProducts(
+            requestedItem.name,
+            [retailerId]
+          );
+
+          const product = matches?.[0];
 
           if (!product) {
+            missingItems.push({
+              item: requestedItem.name,
+              quantity: requestedItem.qty
+            });
+
             continue;
           }
 
-          const quantity = Math.max(
-            1,
-            Number(item.quantity) || 1
+          const unitPrice = Number(product.price) || 0;
+          const quantity = requestedItem.qty;
+
+          /*
+           * IMPORTANT:
+           * Quantity affects the line total.
+           *
+           * Example:
+           * Chicken breast £4.84 × 2 = £9.68
+           */
+          const lineTotal = unitPrice * quantity;
+
+          total += lineTotal;
+
+          matchedItems.push({
+            item: requestedItem.name,
+            quantity,
+            qty: quantity,
+
+            retailer: retailerId,
+            retailerName: retailer.name,
+
+            productId: product.id,
+            productName: product.name,
+            packSize: product.packSize,
+
+            unitPrice,
+            price: unitPrice,
+
+            total: Number(lineTotal.toFixed(2)),
+            lineTotal: Number(lineTotal.toFixed(2)),
+
+            updatedAt: product.updatedAt || null,
+            available: true
+          });
+        }
+
+        supermarketResults.push({
+          retailer: retailerId,
+          retailerName: retailer.name,
+
+          total: Number(total.toFixed(2)),
+
+          matchedItems,
+          missingItems,
+
+          complete: missingItems.length === 0,
+
+          itemCount: matchedItems.length,
+          requestedItemCount: items.length,
+          missingCount: missingItems.length
+        });
+      }
+
+      /*
+       * ---------------------------------------------------------
+       * CHEAPEST COMPLETE SUPERMARKET
+       * ---------------------------------------------------------
+       */
+
+      const completeSupermarkets = supermarketResults
+        .filter((basket) => basket.complete)
+        .sort((a, b) => a.total - b.total);
+
+      const cheapestComplete =
+        completeSupermarkets[0] || null;
+
+      const secondCheapestComplete =
+        completeSupermarkets[1] || null;
+
+      /*
+       * ---------------------------------------------------------
+       * MIXED BASKET
+       *
+       * Find the cheapest available supermarket for EACH
+       * individual shopping item.
+       * ---------------------------------------------------------
+       */
+
+      const mixedBasketItems = [];
+
+      for (const requestedItem of items) {
+        const choices = [];
+
+        for (const retailerId of retailers) {
+          const retailer = supermarkets[retailerId];
+
+          if (!retailer) continue;
+
+          const matches = findProducts(
+            requestedItem.name,
+            [retailerId]
           );
 
-          const total =
-            Math.round(product.price * quantity * 100) / 100;
+          const product = matches?.[0];
 
-          const result = {
+          if (!product) continue;
+
+          const unitPrice = Number(product.price) || 0;
+          const quantity = requestedItem.qty;
+          const lineTotal = unitPrice * quantity;
+
+          choices.push({
+            item: requestedItem.name,
+            quantity,
+            qty: quantity,
+
             retailer: retailerId,
-            retailerName: retailers[retailerId],
+            retailerName: retailer.name,
 
-            productId: product.productId,
-            productName: product.productName,
-
+            productId: product.id,
+            productName: product.name,
             packSize: product.packSize,
 
-            unitPrice: product.price,
-            quantity,
-            total,
+            unitPrice,
+            price: unitPrice,
 
-            updatedAt: product.updatedAt,
+            total: Number(lineTotal.toFixed(2)),
+            lineTotal: Number(lineTotal.toFixed(2)),
+
+            updatedAt: product.updatedAt || null,
             available: true
-          };
-
-          choices.push(result);
-
-          rawResults.push({
-            item: item.name,
-            query: item.name,
-
-            retailer: retailerId,
-            retailerName: retailers[retailerId],
-
-            productName: product.productName,
-            packSize: product.packSize,
-
-            price: product.price,
-            quantity,
-            total,
-
-            available: true,
-            updatedAt: product.updatedAt
           });
         }
 
         choices.sort((a, b) => a.total - b.total);
 
-        itemResults.push({
-          item: item.name,
-          quantity: Math.max(
-            1,
-            Number(item.quantity) || 1
-          ),
-          choices,
-          cheapest: choices.length ? choices[0] : null
-        });
-      }
-
-      // -------------------------------------------------------
-      // MIXED BASKET
-      // -------------------------------------------------------
-      let mixedTotal = 0;
-      const mixedItems = [];
-
-      for (const itemResult of itemResults) {
-        if (itemResult.cheapest) {
-          mixedTotal += itemResult.cheapest.total;
-
-          mixedItems.push(itemResult.cheapest);
+        if (choices.length) {
+          mixedBasketItems.push(choices[0]);
         }
       }
 
-      mixedTotal = Math.round(mixedTotal * 100) / 100;
-
-      // -------------------------------------------------------
-      // SUPERMARKET TOTALS
-      // -------------------------------------------------------
-      const supermarketResults = [];
-
-      for (const retailerId of retailerIds) {
-        let total = 0;
-        let found = 0;
-
-        for (const itemResult of itemResults) {
-          const choice = itemResult.choices.find(
-            item => item.retailer === retailerId
-          );
-
-          if (choice) {
-            total += choice.total;
-            found++;
-          }
-        }
-
-        total = Math.round(total * 100) / 100;
-
-        supermarketResults.push({
-          retailer: retailerId,
-          retailerName: retailers[retailerId],
-
-          total,
-
-          itemsFound: found,
-          totalItems: items.length,
-
-          completeness:
-            items.length > 0
-              ? Math.round((found / items.length) * 100)
-              : 0,
-
-          complete: found === items.length
-        });
-      }
-
-      supermarketResults.sort(
-        (a, b) => a.total - b.total
+      const mixedBasketTotal = mixedBasketItems.reduce(
+        (sum, item) => sum + item.total,
+        0
       );
 
-      // -------------------------------------------------------
-      // FINAL RESPONSE
-      // -------------------------------------------------------
+      /*
+       * ---------------------------------------------------------
+       * RAW RESULTS
+       *
+       * Useful later when we connect this to real/live pricing.
+       * ---------------------------------------------------------
+       */
+
+      const rawResults = [];
+
+      for (const basket of supermarketResults) {
+        for (const item of basket.matchedItems) {
+          rawResults.push({
+            item: item.item,
+            query: item.item,
+
+            retailer: item.retailer,
+            retailerName: item.retailerName,
+
+            productId: item.productId,
+            productName: item.productName,
+            packSize: item.packSize,
+
+            price: item.unitPrice,
+            unitPrice: item.unitPrice,
+
+            quantity: item.quantity,
+            qty: item.quantity,
+
+            total: item.total,
+            lineTotal: item.lineTotal,
+
+            available: item.available,
+            updatedAt: item.updatedAt
+          });
+        }
+      }
+
+      /*
+       * ---------------------------------------------------------
+       * SUMMARY
+       * ---------------------------------------------------------
+       */
+
+      const savings =
+        cheapestComplete &&
+        mixedBasketTotal < cheapestComplete.total
+          ? Number(
+              (cheapestComplete.total - mixedBasketTotal)
+                .toFixed(2)
+            )
+          : 0;
+
+      const checkedAt = new Date().toISOString();
+
       return res.status(200).json({
         status: "SUCCEEDED",
 
         source: "ShiftFit Price Database",
 
-        // Important:
-        // These are seed prices, NOT live supermarket prices.
+        /*
+         * These prices are seeded database values.
+         * They are NOT live supermarket prices.
+         */
         live: false,
         seeded: true,
 
-        checkedAt: new Date().toISOString(),
+        checkedAt,
 
         items,
-        retailers: retailerIds,
+        retailers,
 
         productsFound: rawResults.length,
 
         summary: {
-          cheapestSupermarket:
-            supermarketResults.length
-              ? supermarketResults[0]
-              : null,
+          requestedItems: items.length,
 
-          mixedBasketTotal: mixedTotal,
+          completeSupermarkets:
+            completeSupermarkets.length,
 
-          potentialSaving:
-            supermarketResults.length
-              ? Math.round(
-                  (
-                    supermarketResults[supermarketResults.length - 1].total -
-                    mixedTotal
-                  ) * 100
-                ) / 100
-              : 0
+          cheapestCompleteSupermarket:
+            cheapestComplete?.retailer || null,
+
+          cheapestCompleteSupermarketName:
+            cheapestComplete?.retailerName || null,
+
+          cheapestCompleteTotal:
+            cheapestComplete?.total ?? null,
+
+          secondCheapestSupermarket:
+            secondCheapestComplete?.retailer || null,
+
+          secondCheapestSupermarketName:
+            secondCheapestComplete?.retailerName || null,
+
+          secondCheapestTotal:
+            secondCheapestComplete?.total ?? null,
+
+          mixedBasketTotal:
+            Number(mixedBasketTotal.toFixed(2)),
+
+          potentialSavings: savings
         },
 
-        mixedBasket: {
-          total: mixedTotal,
-          items: mixedItems
-        },
-
+        /*
+         * Full supermarket comparison.
+         */
         supermarkets: supermarketResults,
 
-        itemResults,
+        /*
+         * Cheapest product for each individual item.
+         */
+        mixedBasket: {
+          total: Number(mixedBasketTotal.toFixed(2)),
+          items: mixedBasketItems
+        },
 
+        /*
+         * Detailed item-by-item database results.
+         */
+        itemResults: supermarketResults.flatMap(
+          (basket) => basket.matchedItems
+        ),
+
+        /*
+         * Raw rows retained for future live-price integration.
+         */
         rawResults
       });
     }
 
+    /*
+     * ---------------------------------------------------------
+     * METHOD NOT SUPPORTED
+     * ---------------------------------------------------------
+     */
+
     return res.status(405).json({
-      error: "METHOD_NOT_ALLOWED"
+      status: "FAILED",
+      error: "Method not allowed."
     });
 
   } catch (error) {
-    console.error("ShiftFit Best Basket error:", error);
+    console.error("Best Basket error:", error);
 
     return res.status(500).json({
-      error: "INTERNAL_SERVER_ERROR",
-      message: "The Best Basket price service crashed.",
-      details:
-        process.env.NODE_ENV === "development"
-          ? String(error.message || error)
-          : undefined
+      status: "FAILED",
+      error: error?.message || "Best Basket failed."
     });
   }
 }
