@@ -1,1213 +1,470 @@
-/*
- * ShiftFit Price Database
- *
- * This is the internal price layer for Best Basket.
- *
- * Each product contains:
- * - id
- * - supermarket
- * - name
- * - category
- * - pack size
- * - price
- * - currency
- * - updatedAt
- *
- * Prices here are SEED DATA for development.
- * They are not represented as live supermarket prices.
- */
+export default async function handler(req, res) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-const UPDATED_AT = "2026-09-02";
-
-export const supermarkets = {
-  tesco: {
-    id: "tesco",
-    name: "Tesco"
-  },
-
-  sainsburys: {
-    id: "sainsburys",
-    name: "Sainsbury's"
-  },
-
-  asda: {
-    id: "asda",
-    name: "Asda"
-  },
-
-  morrisons: {
-    id: "morrisons",
-    name: "Morrisons"
-  },
-
-  waitrose: {
-    id: "waitrose",
-    name: "Waitrose"
-  },
-
-  aldi: {
-    id: "aldi",
-    name: "Aldi"
+  if (req.method === "OPTIONS") {
+    return res.status(200).json({ ok: true });
   }
-};
 
-/*
- * Seed products.
- *
- * Prices are deliberately kept in one central structure so that
- * future price imports can replace/update these records without
- * changing the Best Basket calculation engine.
- */
+  try {
+    // ---------------------------------------------------------
+    // RETAILERS
+    // ---------------------------------------------------------
+    const retailers = {
+      tesco: "Tesco",
+      sainsburys: "Sainsbury's",
+      asda: "Asda",
+      morrisons: "Morrisons",
+      waitrose: "Waitrose",
+      aldi: "Aldi"
+    };
 
-export const products = [
-  // CHICKEN
-  {
-    id: "chicken-breast-tesco",
-    retailer: "tesco",
-    name: "Chicken breast",
-    category: "meat",
-    packSize: "1kg",
-    price: 8.50,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "chicken-breast-sainsburys",
-    retailer: "sainsburys",
-    name: "Chicken breast",
-    category: "meat",
-    packSize: "1kg",
-    price: 8.00,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "chicken-breast-asda",
-    retailer: "asda",
-    name: "Chicken breast",
-    category: "meat",
-    packSize: "1kg",
-    price: 7.75,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "chicken-breast-morrisons",
-    retailer: "morrisons",
-    name: "Chicken breast",
-    category: "meat",
-    packSize: "1kg",
-    price: 8.00,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "chicken-breast-waitrose",
-    retailer: "waitrose",
-    name: "Chicken breast",
-    category: "meat",
-    packSize: "1kg",
-    price: 10.00,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "chicken-breast-aldi",
-    retailer: "aldi",
-    name: "Chicken breast",
-    category: "meat",
-    packSize: "1kg",
-    price: 7.49,
-    updatedAt: UPDATED_AT
-  },
-
-  // LEAN BEEF MINCE
-  {
-    id: "beef-mince-tesco",
-    retailer: "tesco",
-    name: "Lean beef mince",
-    category: "meat",
-    packSize: "500g",
-    price: 5.50,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "beef-mince-sainsburys",
-    retailer: "sainsburys",
-    name: "Lean beef mince",
-    category: "meat",
-    packSize: "500g",
-    price: 5.25,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "beef-mince-asda",
-    retailer: "asda",
-    name: "Lean beef mince",
-    category: "meat",
-    packSize: "500g",
-    price: 5.00,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "beef-mince-morrisons",
-    retailer: "morrisons",
-    name: "Lean beef mince",
-    category: "meat",
-    packSize: "500g",
-    price: 5.25,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "beef-mince-waitrose",
-    retailer: "waitrose",
-    name: "Lean beef mince",
-    category: "meat",
-    packSize: "500g",
-    price: 6.50,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "beef-mince-aldi",
-    retailer: "aldi",
-    name: "Lean beef mince",
-    category: "meat",
-    packSize: "500g",
-    price: 4.49,
-    updatedAt: UPDATED_AT
-  },
-
-  // TURKEY
-  {
-    id: "turkey-tesco",
-    retailer: "tesco",
-    name: "Lean turkey mince",
-    category: "meat",
-    packSize: "500g",
-    price: 4.75,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "turkey-sainsburys",
-    retailer: "sainsburys",
-    name: "Lean turkey mince",
-    category: "meat",
-    packSize: "500g",
-    price: 4.50,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "turkey-asda",
-    retailer: "asda",
-    name: "Lean turkey mince",
-    category: "meat",
-    packSize: "500g",
-    price: 4.25,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "turkey-morrisons",
-    retailer: "morrisons",
-    name: "Lean turkey mince",
-    category: "meat",
-    packSize: "500g",
-    price: 4.50,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "turkey-waitrose",
-    retailer: "waitrose",
-    name: "Lean turkey mince",
-    category: "meat",
-    packSize: "500g",
-    price: 5.50,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "turkey-aldi",
-    retailer: "aldi",
-    name: "Lean turkey mince",
-    category: "meat",
-    packSize: "500g",
-    price: 3.99,
-    updatedAt: UPDATED_AT
-  },
-
-  // SALMON
-  {
-    id: "salmon-tesco",
-    retailer: "tesco",
-    name: "Salmon",
-    category: "fish",
-    packSize: "300g",
-    price: 5.50,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "salmon-sainsburys",
-    retailer: "sainsburys",
-    name: "Salmon",
-    category: "fish",
-    packSize: "300g",
-    price: 5.50,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "salmon-asda",
-    retailer: "asda",
-    name: "Salmon",
-    category: "fish",
-    packSize: "300g",
-    price: 5.00,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "salmon-morrisons",
-    retailer: "morrisons",
-    name: "Salmon",
-    category: "fish",
-    packSize: "300g",
-    price: 5.25,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "salmon-waitrose",
-    retailer: "waitrose",
-    name: "Salmon",
-    category: "fish",
-    packSize: "300g",
-    price: 6.50,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "salmon-aldi",
-    retailer: "aldi",
-    name: "Salmon",
-    category: "fish",
-    packSize: "300g",
-    price: 4.49,
-    updatedAt: UPDATED_AT
-  },
-
-  // EGGS
-  {
-    id: "eggs-tesco",
-    retailer: "tesco",
-    name: "Eggs",
-    category: "dairy",
-    packSize: "12",
-    price: 2.75,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "eggs-sainsburys",
-    retailer: "sainsburys",
-    name: "Eggs",
-    category: "dairy",
-    packSize: "12",
-    price: 2.70,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "eggs-asda",
-    retailer: "asda",
-    name: "Eggs",
-    category: "dairy",
-    packSize: "12",
-    price: 2.50,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "eggs-morrisons",
-    retailer: "morrisons",
-    name: "Eggs",
-    category: "dairy",
-    packSize: "12",
-    price: 2.65,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "eggs-waitrose",
-    retailer: "waitrose",
-    name: "Eggs",
-    category: "dairy",
-    packSize: "12",
-    price: 3.50,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "eggs-aldi",
-    retailer: "aldi",
-    name: "Eggs",
-    category: "dairy",
-    packSize: "12",
-    price: 2.29,
-    updatedAt: UPDATED_AT
-  },
-
-  // GREEK YOGHURT
-  {
-    id: "yoghurt-tesco",
-    retailer: "tesco",
-    name: "Greek yoghurt",
-    category: "dairy",
-    packSize: "500g",
-    price: 1.90,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "yoghurt-sainsburys",
-    retailer: "sainsburys",
-    name: "Greek yoghurt",
-    category: "dairy",
-    packSize: "500g",
-    price: 1.85,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "yoghurt-asda",
-    retailer: "asda",
-    name: "Greek yoghurt",
-    category: "dairy",
-    packSize: "500g",
-    price: 1.80,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "yoghurt-morrisons",
-    retailer: "morrisons",
-    name: "Greek yoghurt",
-    category: "dairy",
-    packSize: "500g",
-    price: 1.85,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "yoghurt-waitrose",
-    retailer: "waitrose",
-    name: "Greek yoghurt",
-    category: "dairy",
-    packSize: "500g",
-    price: 2.50,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "yoghurt-aldi",
-    retailer: "aldi",
-    name: "Greek yoghurt",
-    category: "dairy",
-    packSize: "500g",
-    price: 1.49,
-    updatedAt: UPDATED_AT
-  },
-
-  // OATS
-  {
-    id: "oats-tesco",
-    retailer: "tesco",
-    name: "Oats",
-    category: "grains",
-    packSize: "1kg",
-    price: 1.70,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "oats-sainsburys",
-    retailer: "sainsburys",
-    name: "Oats",
-    category: "grains",
-    packSize: "1kg",
-    price: 1.65,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "oats-asda",
-    retailer: "asda",
-    name: "Oats",
-    category: "grains",
-    packSize: "1kg",
-    price: 1.50,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "oats-morrisons",
-    retailer: "morrisons",
-    name: "Oats",
-    category: "grains",
-    packSize: "1kg",
-    price: 1.55,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "oats-waitrose",
-    retailer: "waitrose",
-    name: "Oats",
-    category: "grains",
-    packSize: "1kg",
-    price: 2.20,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "oats-aldi",
-    retailer: "aldi",
-    name: "Oats",
-    category: "grains",
-    packSize: "1kg",
-    price: 1.29,
-    updatedAt: UPDATED_AT
-  },
-
-  // RICE
-  {
-    id: "rice-tesco",
-    retailer: "tesco",
-    name: "Rice",
-    category: "grains",
-    packSize: "1kg",
-    price: 2.00,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "rice-sainsburys",
-    retailer: "sainsburys",
-    name: "Rice",
-    category: "grains",
-    packSize: "1kg",
-    price: 1.90,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "rice-asda",
-    retailer: "asda",
-    name: "Rice",
-    category: "grains",
-    packSize: "1kg",
-    price: 1.80,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "rice-morrisons",
-    retailer: "morrisons",
-    name: "Rice",
-    category: "grains",
-    packSize: "1kg",
-    price: 1.85,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "rice-waitrose",
-    retailer: "waitrose",
-    name: "Rice",
-    category: "grains",
-    packSize: "1kg",
-    price: 2.50,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "rice-aldi",
-    retailer: "aldi",
-    name: "Rice",
-    category: "grains",
-    packSize: "1kg",
-    price: 1.49,
-    updatedAt: UPDATED_AT
-  },
-
-  // PASTA
-  {
-    id: "pasta-tesco",
-    retailer: "tesco",
-    name: "Wholewheat pasta",
-    category: "grains",
-    packSize: "500g",
-    price: 1.30,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "pasta-sainsburys",
-    retailer: "sainsburys",
-    name: "Wholewheat pasta",
-    category: "grains",
-    packSize: "500g",
-    price: 1.25,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "pasta-asda",
-    retailer: "asda",
-    name: "Wholewheat pasta",
-    category: "grains",
-    packSize: "500g",
-    price: 1.20,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "pasta-morrisons",
-    retailer: "morrisons",
-    name: "Wholewheat pasta",
-    category: "grains",
-    packSize: "500g",
-    price: 1.25,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "pasta-waitrose",
-    retailer: "waitrose",
-    name: "Wholewheat pasta",
-    category: "grains",
-    packSize: "500g",
-    price: 1.70,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "pasta-aldi",
-    retailer: "aldi",
-    name: "Wholewheat pasta",
-    category: "grains",
-    packSize: "500g",
-    price: 0.99,
-    updatedAt: UPDATED_AT
-  },
-
-  // SWEET POTATOES
-  {
-    id: "sweet-potatoes-tesco",
-    retailer: "tesco",
-    name: "Sweet potatoes",
-    category: "vegetables",
-    packSize: "1kg",
-    price: 2.00,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "sweet-potatoes-sainsburys",
-    retailer: "sainsburys",
-    name: "Sweet potatoes",
-    category: "vegetables",
-    packSize: "1kg",
-    price: 1.90,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "sweet-potatoes-asda",
-    retailer: "asda",
-    name: "Sweet potatoes",
-    category: "vegetables",
-    packSize: "1kg",
-    price: 1.75,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "sweet-potatoes-morrisons",
-    retailer: "morrisons",
-    name: "Sweet potatoes",
-    category: "vegetables",
-    packSize: "1kg",
-    price: 1.80,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "sweet-potatoes-waitrose",
-    retailer: "waitrose",
-    name: "Sweet potatoes",
-    category: "vegetables",
-    packSize: "1kg",
-    price: 2.50,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "sweet-potatoes-aldi",
-    retailer: "aldi",
-    name: "Sweet potatoes",
-    category: "vegetables",
-    packSize: "1kg",
-    price: 1.49,
-    updatedAt: UPDATED_AT
-  },
-
-  // POTATOES
-  {
-    id: "potatoes-tesco",
-    retailer: "tesco",
-    name: "Potatoes",
-    category: "vegetables",
-    packSize: "2.5kg",
-    price: 2.50,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "potatoes-sainsburys",
-    retailer: "sainsburys",
-    name: "Potatoes",
-    category: "vegetables",
-    packSize: "2.5kg",
-    price: 2.40,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "potatoes-asda",
-    retailer: "asda",
-    name: "Potatoes",
-    category: "vegetables",
-    packSize: "2.5kg",
-    price: 2.25,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "potatoes-morrisons",
-    retailer: "morrisons",
-    name: "Potatoes",
-    category: "vegetables",
-    packSize: "2.5kg",
-    price: 2.30,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "potatoes-waitrose",
-    retailer: "waitrose",
-    name: "Potatoes",
-    category: "vegetables",
-    packSize: "2.5kg",
-    price: 3.00,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "potatoes-aldi",
-    retailer: "aldi",
-    name: "Potatoes",
-    category: "vegetables",
-    packSize: "2.5kg",
-    price: 1.79,
-    updatedAt: UPDATED_AT
-  },
-
-  // VEGETABLES
-  {
-    id: "vegetables-tesco",
-    retailer: "tesco",
-    name: "Mixed vegetables",
-    category: "vegetables",
-    packSize: "1kg",
-    price: 2.20,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "vegetables-sainsburys",
-    retailer: "sainsburys",
-    name: "Mixed vegetables",
-    category: "vegetables",
-    packSize: "1kg",
-    price: 2.00,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "vegetables-asda",
-    retailer: "asda",
-    name: "Mixed vegetables",
-    category: "vegetables",
-    packSize: "1kg",
-    price: 1.80,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "vegetables-morrisons",
-    retailer: "morrisons",
-    name: "Mixed vegetables",
-    category: "vegetables",
-    packSize: "1kg",
-    price: 1.90,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "vegetables-waitrose",
-    retailer: "waitrose",
-    name: "Mixed vegetables",
-    category: "vegetables",
-    packSize: "1kg",
-    price: 2.75,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "vegetables-aldi",
-    retailer: "aldi",
-    name: "Mixed vegetables",
-    category: "vegetables",
-    packSize: "1kg",
-    price: 1.49,
-    updatedAt: UPDATED_AT
-  },
-
-  // SPINACH
-  {
-    id: "spinach-tesco",
-    retailer: "tesco",
-    name: "Spinach",
-    category: "vegetables",
-    packSize: "200g",
-    price: 1.50,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "spinach-sainsburys",
-    retailer: "sainsburys",
-    name: "Spinach",
-    category: "vegetables",
-    packSize: "200g",
-    price: 1.45,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "spinach-asda",
-    retailer: "asda",
-    name: "Spinach",
-    category: "vegetables",
-    packSize: "200g",
-    price: 1.30,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "spinach-morrisons",
-    retailer: "morrisons",
-    name: "Spinach",
-    category: "vegetables",
-    packSize: "200g",
-    price: 1.35,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "spinach-waitrose",
-    retailer: "waitrose",
-    name: "Spinach",
-    category: "vegetables",
-    packSize: "200g",
-    price: 1.80,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "spinach-aldi",
-    retailer: "aldi",
-    name: "Spinach",
-    category: "vegetables",
-    packSize: "200g",
-    price: 1.19,
-    updatedAt: UPDATED_AT
-  },
-
-  // BERRIES
-  {
-    id: "berries-tesco",
-    retailer: "tesco",
-    name: "Mixed berries",
-    category: "fruit",
-    packSize: "500g",
-    price: 3.50,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "berries-sainsburys",
-    retailer: "sainsburys",
-    name: "Mixed berries",
-    category: "fruit",
-    packSize: "500g",
-    price: 3.25,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "berries-asda",
-    retailer: "asda",
-    name: "Mixed berries",
-    category: "fruit",
-    packSize: "500g",
-    price: 3.00,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "berries-morrisons",
-    retailer: "morrisons",
-    name: "Mixed berries",
-    category: "fruit",
-    packSize: "500g",
-    price: 3.20,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "berries-waitrose",
-    retailer: "waitrose",
-    name: "Mixed berries",
-    category: "fruit",
-    packSize: "500g",
-    price: 4.25,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "berries-aldi",
-    retailer: "aldi",
-    name: "Mixed berries",
-    category: "fruit",
-    packSize: "500g",
-    price: 2.69,
-    updatedAt: UPDATED_AT
-  },
-
-  // BANANAS
-  {
-    id: "bananas-tesco",
-    retailer: "tesco",
-    name: "Bananas",
-    category: "fruit",
-    packSize: "1kg",
-    price: 1.20,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "bananas-sainsburys",
-    retailer: "sainsburys",
-    name: "Bananas",
-    category: "fruit",
-    packSize: "1kg",
-    price: 1.15,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "bananas-asda",
-    retailer: "asda",
-    name: "Bananas",
-    category: "fruit",
-    packSize: "1kg",
-    price: 1.10,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "bananas-morrisons",
-    retailer: "morrisons",
-    name: "Bananas",
-    category: "fruit",
-    packSize: "1kg",
-    price: 1.15,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "bananas-waitrose",
-    retailer: "waitrose",
-    name: "Bananas",
-    category: "fruit",
-    packSize: "1kg",
-    price: 1.50,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "bananas-aldi",
-    retailer: "aldi",
-    name: "Bananas",
-    category: "fruit",
-    packSize: "1kg",
-    price: 0.99,
-    updatedAt: UPDATED_AT
-  },
-
-  // AVOCADO
-  {
-    id: "avocado-tesco",
-    retailer: "tesco",
-    name: "Avocado",
-    category: "fruit",
-    packSize: "2",
-    price: 1.80,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "avocado-sainsburys",
-    retailer: "sainsburys",
-    name: "Avocado",
-    category: "fruit",
-    packSize: "2",
-    price: 1.75,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "avocado-asda",
-    retailer: "asda",
-    name: "Avocado",
-    category: "fruit",
-    packSize: "2",
-    price: 1.60,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "avocado-morrisons",
-    retailer: "morrisons",
-    name: "Avocado",
-    category: "fruit",
-    packSize: "2",
-    price: 1.70,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "avocado-waitrose",
-    retailer: "waitrose",
-    name: "Avocado",
-    category: "fruit",
-    packSize: "2",
-    price: 2.20,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "avocado-aldi",
-    retailer: "aldi",
-    name: "Avocado",
-    category: "fruit",
-    packSize: "2",
-    price: 1.49,
-    updatedAt: UPDATED_AT
-  },
-
-  // WRAPS
-  {
-    id: "wraps-tesco",
-    retailer: "tesco",
-    name: "Wholemeal wraps",
-    category: "bakery",
-    packSize: "8",
-    price: 1.50,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "wraps-sainsburys",
-    retailer: "sainsburys",
-    name: "Wholemeal wraps",
-    category: "bakery",
-    packSize: "8",
-    price: 1.45,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "wraps-asda",
-    retailer: "asda",
-    name: "Wholemeal wraps",
-    category: "bakery",
-    packSize: "8",
-    price: 1.30,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "wraps-morrisons",
-    retailer: "morrisons",
-    name: "Wholemeal wraps",
-    category: "bakery",
-    packSize: "8",
-    price: 1.35,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "wraps-waitrose",
-    retailer: "waitrose",
-    name: "Wholemeal wraps",
-    category: "bakery",
-    packSize: "8",
-    price: 1.80,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "wraps-aldi",
-    retailer: "aldi",
-    name: "Wholemeal wraps",
-    category: "bakery",
-    packSize: "8",
-    price: 1.19,
-    updatedAt: UPDATED_AT
-  },
-
-  // BREAD
-  {
-    id: "bread-tesco",
-    retailer: "tesco",
-    name: "Wholegrain bread",
-    category: "bakery",
-    packSize: "800g",
-    price: 1.60,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "bread-sainsburys",
-    retailer: "sainsburys",
-    name: "Wholegrain bread",
-    category: "bakery",
-    packSize: "800g",
-    price: 1.55,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "bread-asda",
-    retailer: "asda",
-    name: "Wholegrain bread",
-    category: "bakery",
-    packSize: "800g",
-    price: 1.45,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "bread-morrisons",
-    retailer: "morrisons",
-    name: "Wholegrain bread",
-    category: "bakery",
-    packSize: "800g",
-    price: 1.50,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "bread-waitrose",
-    retailer: "waitrose",
-    name: "Wholegrain bread",
-    category: "bakery",
-    packSize: "800g",
-    price: 2.20,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "bread-aldi",
-    retailer: "aldi",
-    name: "Wholegrain bread",
-    category: "bakery",
-    packSize: "800g",
-    price: 1.29,
-    updatedAt: UPDATED_AT
-  },
-
-  // RICE CAKES
-  {
-    id: "rice-cakes-tesco",
-    retailer: "tesco",
-    name: "Rice cakes",
-    category: "snacks",
-    packSize: "130g",
-    price: 1.20,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "rice-cakes-sainsburys",
-    retailer: "sainsburys",
-    name: "Rice cakes",
-    category: "snacks",
-    packSize: "130g",
-    price: 1.15,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "rice-cakes-asda",
-    retailer: "asda",
-    name: "Rice cakes",
-    category: "snacks",
-    packSize: "130g",
-    price: 1.10,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "rice-cakes-morrisons",
-    retailer: "morrisons",
-    name: "Rice cakes",
-    category: "snacks",
-    packSize: "130g",
-    price: 1.15,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "rice-cakes-waitrose",
-    retailer: "waitrose",
-    name: "Rice cakes",
-    category: "snacks",
-    packSize: "130g",
-    price: 1.50,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "rice-cakes-aldi",
-    retailer: "aldi",
-    name: "Rice cakes",
-    category: "snacks",
-    packSize: "130g",
-    price: 0.89,
-    updatedAt: UPDATED_AT
-  },
-
-  // PROTEIN POWDER
-  {
-    id: "protein-tesco",
-    retailer: "tesco",
-    name: "Protein powder",
-    category: "supplements",
-    packSize: "1kg",
-    price: 24.00,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "protein-sainsburys",
-    retailer: "sainsburys",
-    name: "Protein powder",
-    category: "supplements",
-    packSize: "1kg",
-    price: 24.00,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "protein-asda",
-    retailer: "asda",
-    name: "Protein powder",
-    category: "supplements",
-    packSize: "1kg",
-    price: 22.00,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "protein-morrisons",
-    retailer: "morrisons",
-    name: "Protein powder",
-    category: "supplements",
-    packSize: "1kg",
-    price: 23.00,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "protein-waitrose",
-    retailer: "waitrose",
-    name: "Protein powder",
-    category: "supplements",
-    packSize: "1kg",
-    price: 27.00,
-    updatedAt: UPDATED_AT
-  },
-  {
-    id: "protein-aldi",
-    retailer: "aldi",
-    name: "Protein powder",
-    category: "supplements",
-    packSize: "1kg",
-    price: 19.99,
-    updatedAt: UPDATED_AT
-  }
-];
-
-export function clean(value) {
-  return String(value || "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, " ")
-    .trim();
-}
-
-export function findProducts(itemName, retailerIds = []) {
-  const query = clean(itemName);
-
-  const allowed =
-    Array.isArray(retailerIds) &&
-    retailerIds.length
-      ? new Set(retailerIds)
-      : new Set(Object.keys(supermarkets));
-
-  return products.filter(product => {
-    if (!allowed.has(product.retailer)) {
-      return false;
+    // ---------------------------------------------------------
+    // NORMALISE TEXT
+    // ---------------------------------------------------------
+    function clean(value) {
+      return String(value || "")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, " ")
+        .trim();
     }
 
-    const productName = clean(product.name);
+    // ---------------------------------------------------------
+    // SEED PRICE DATABASE
+    //
+    // These are NOT live prices.
+    // They are controlled ShiftFit seed prices.
+    // ---------------------------------------------------------
+    const basePrices = {
+      "chicken breast": 5.50,
+      "lean beef mince": 5.75,
+      "lean turkey mince": 5.25,
+      "salmon": 6.50,
+      "eggs": 2.50,
+      "greek yoghurt": 2.00,
+      "oats": 1.50,
+      "rice": 2.00,
+      "wholewheat pasta": 1.50,
+      "sweet potatoes": 2.00,
+      "potatoes": 1.75,
+      "mixed vegetables": 2.00,
+      "spinach": 1.50,
+      "mixed berries": 3.00,
+      "bananas": 1.50,
+      "avocado": 2.00,
+      "wholemeal wraps": 1.75,
+      "wholegrain bread": 1.50,
+      "rice cakes": 1.50,
+      "protein powder": 20.00
+    };
 
-    return (
-      productName === query ||
-      productName.includes(query) ||
-      query.includes(productName)
-    );
-  });
+    const retailerMultipliers = {
+      tesco: 1.00,
+      sainsburys: 1.04,
+      asda: 0.96,
+      morrisons: 0.98,
+      waitrose: 1.22,
+      aldi: 0.88
+    };
+
+    const packSizes = {
+      "chicken breast": "1kg",
+      "lean beef mince": "500g",
+      "lean turkey mince": "500g",
+      "salmon": "400g",
+      "eggs": "12 pack",
+      "greek yoghurt": "500g",
+      "oats": "1kg",
+      "rice": "1kg",
+      "wholewheat pasta": "500g",
+      "sweet potatoes": "1kg",
+      "potatoes": "2.5kg",
+      "mixed vegetables": "1kg",
+      "spinach": "240g",
+      "mixed berries": "500g",
+      "bananas": "1kg",
+      "avocado": "2 pack",
+      "wholemeal wraps": "8 pack",
+      "wholegrain bread": "800g",
+      "rice cakes": "130g",
+      "protein powder": "1kg"
+    };
+
+    // ---------------------------------------------------------
+    // FIND THE CLOSEST PRODUCT
+    // ---------------------------------------------------------
+    function findProduct(itemName, retailerId) {
+      const query = clean(itemName);
+
+      let bestMatch = null;
+      let bestScore = 0;
+
+      for (const productName of Object.keys(basePrices)) {
+        const cleanedProduct = clean(productName);
+
+        let score = 0;
+
+        if (query === cleanedProduct) {
+          score = 100;
+        } else if (
+          query.includes(cleanedProduct) ||
+          cleanedProduct.includes(query)
+        ) {
+          score = 80;
+        } else {
+          const queryWords = query.split(" ");
+          const productWords = cleanedProduct.split(" ");
+
+          for (const word of queryWords) {
+            if (word.length > 2 && productWords.includes(word)) {
+              score += 20;
+            }
+          }
+        }
+
+        if (score > bestScore) {
+          bestScore = score;
+          bestMatch = productName;
+        }
+      }
+
+      if (!bestMatch || bestScore < 20) {
+        return null;
+      }
+
+      const base = basePrices[bestMatch];
+      const multiplier = retailerMultipliers[retailerId] || 1;
+
+      // Small deterministic retailer variation
+      const price = Math.round(base * multiplier * 100) / 100;
+
+      return {
+        productId:
+          retailerId + "-" + clean(bestMatch).replace(/\s+/g, "-"),
+
+        retailer: retailerId,
+        retailerName: retailers[retailerId],
+
+        productName: bestMatch,
+        packSize: packSizes[bestMatch] || "standard pack",
+
+        price,
+
+        updatedAt: "2026-09-02",
+
+        available: true
+      };
+    }
+
+    // ---------------------------------------------------------
+    // POST = CREATE PRICE CHECK
+    // ---------------------------------------------------------
+    if (req.method === "POST") {
+      const body = req.body || {};
+
+      const items = Array.isArray(body.items)
+        ? body.items
+            .map(item => {
+              if (typeof item === "string") {
+                return {
+                  name: item,
+                  quantity: 1
+                };
+              }
+
+              return {
+                name: item.name || item.item || item.product || "",
+                quantity: Number(item.quantity) || 1
+              };
+            })
+            .filter(item => item.name)
+        : [];
+
+      const retailerIds = Array.isArray(body.retailers)
+        ? body.retailers.filter(id => retailers[id])
+        : Object.keys(retailers);
+
+      if (!items.length) {
+        return res.status(400).json({
+          error: "NO_ITEMS",
+          message: "No shopping items were supplied."
+        });
+      }
+
+      if (!retailerIds.length) {
+        return res.status(400).json({
+          error: "NO_RETAILERS",
+          message: "No supermarkets were supplied."
+        });
+      }
+
+      const payload = {
+        items,
+        retailers: retailerIds,
+        createdAt: new Date().toISOString()
+      };
+
+      // Safe base64 run ID.
+      const runId = Buffer
+        .from(JSON.stringify(payload), "utf8")
+        .toString("base64")
+        .replace(/\+/g, "-")
+        .replace(/\//g, "_")
+        .replace(/=+$/, "");
+
+      return res.status(202).json({
+        status: "RUNNING",
+        runId,
+        items,
+        retailers: retailerIds,
+        startedAt: payload.createdAt
+      });
+    }
+
+    // ---------------------------------------------------------
+    // GET = RETURN PRICE RESULTS
+    // ---------------------------------------------------------
+    if (req.method === "GET") {
+      const runId = req.query && req.query.runId;
+
+      if (!runId) {
+        return res.status(400).json({
+          error: "NO_RUN_ID",
+          message: "A runId is required."
+        });
+      }
+
+      let decoded;
+
+      try {
+        let value = String(runId)
+          .replace(/-/g, "+")
+          .replace(/_/g, "/");
+
+        while (value.length % 4 !== 0) {
+          value += "=";
+        }
+
+        decoded = JSON.parse(
+          Buffer.from(value, "base64").toString("utf8")
+        );
+      } catch (decodeError) {
+        return res.status(400).json({
+          error: "INVALID_RUN_ID",
+          message: "The price check ID could not be read."
+        });
+      }
+
+      const items = Array.isArray(decoded.items)
+        ? decoded.items
+        : [];
+
+      const retailerIds = Array.isArray(decoded.retailers)
+        ? decoded.retailers
+        : Object.keys(retailers);
+
+      // -------------------------------------------------------
+      // BUILD RESULTS
+      // -------------------------------------------------------
+      const itemResults = [];
+      const rawResults = [];
+
+      for (const item of items) {
+        const choices = [];
+
+        for (const retailerId of retailerIds) {
+          const product = findProduct(item.name, retailerId);
+
+          if (!product) {
+            continue;
+          }
+
+          const quantity = Math.max(
+            1,
+            Number(item.quantity) || 1
+          );
+
+          const total =
+            Math.round(product.price * quantity * 100) / 100;
+
+          const result = {
+            retailer: retailerId,
+            retailerName: retailers[retailerId],
+
+            productId: product.productId,
+            productName: product.productName,
+
+            packSize: product.packSize,
+
+            unitPrice: product.price,
+            quantity,
+            total,
+
+            updatedAt: product.updatedAt,
+            available: true
+          };
+
+          choices.push(result);
+
+          rawResults.push({
+            item: item.name,
+            query: item.name,
+
+            retailer: retailerId,
+            retailerName: retailers[retailerId],
+
+            productName: product.productName,
+            packSize: product.packSize,
+
+            price: product.price,
+            quantity,
+            total,
+
+            available: true,
+            updatedAt: product.updatedAt
+          });
+        }
+
+        choices.sort((a, b) => a.total - b.total);
+
+        itemResults.push({
+          item: item.name,
+          quantity: Math.max(
+            1,
+            Number(item.quantity) || 1
+          ),
+          choices,
+          cheapest: choices.length ? choices[0] : null
+        });
+      }
+
+      // -------------------------------------------------------
+      // MIXED BASKET
+      // -------------------------------------------------------
+      let mixedTotal = 0;
+      const mixedItems = [];
+
+      for (const itemResult of itemResults) {
+        if (itemResult.cheapest) {
+          mixedTotal += itemResult.cheapest.total;
+
+          mixedItems.push(itemResult.cheapest);
+        }
+      }
+
+      mixedTotal = Math.round(mixedTotal * 100) / 100;
+
+      // -------------------------------------------------------
+      // SUPERMARKET TOTALS
+      // -------------------------------------------------------
+      const supermarketResults = [];
+
+      for (const retailerId of retailerIds) {
+        let total = 0;
+        let found = 0;
+
+        for (const itemResult of itemResults) {
+          const choice = itemResult.choices.find(
+            item => item.retailer === retailerId
+          );
+
+          if (choice) {
+            total += choice.total;
+            found++;
+          }
+        }
+
+        total = Math.round(total * 100) / 100;
+
+        supermarketResults.push({
+          retailer: retailerId,
+          retailerName: retailers[retailerId],
+
+          total,
+
+          itemsFound: found,
+          totalItems: items.length,
+
+          completeness:
+            items.length > 0
+              ? Math.round((found / items.length) * 100)
+              : 0,
+
+          complete: found === items.length
+        });
+      }
+
+      supermarketResults.sort(
+        (a, b) => a.total - b.total
+      );
+
+      // -------------------------------------------------------
+      // FINAL RESPONSE
+      // -------------------------------------------------------
+      return res.status(200).json({
+        status: "SUCCEEDED",
+
+        source: "ShiftFit Price Database",
+
+        // Important:
+        // These are seed prices, NOT live supermarket prices.
+        live: false,
+        seeded: true,
+
+        checkedAt: new Date().toISOString(),
+
+        items,
+        retailers: retailerIds,
+
+        productsFound: rawResults.length,
+
+        summary: {
+          cheapestSupermarket:
+            supermarketResults.length
+              ? supermarketResults[0]
+              : null,
+
+          mixedBasketTotal: mixedTotal,
+
+          potentialSaving:
+            supermarketResults.length
+              ? Math.round(
+                  (
+                    supermarketResults[supermarketResults.length - 1].total -
+                    mixedTotal
+                  ) * 100
+                ) / 100
+              : 0
+        },
+
+        mixedBasket: {
+          total: mixedTotal,
+          items: mixedItems
+        },
+
+        supermarkets: supermarketResults,
+
+        itemResults,
+
+        rawResults
+      });
+    }
+
+    return res.status(405).json({
+      error: "METHOD_NOT_ALLOWED"
+    });
+
+  } catch (error) {
+    console.error("ShiftFit Best Basket error:", error);
+
+    return res.status(500).json({
+      error: "INTERNAL_SERVER_ERROR",
+      message: "The Best Basket price service crashed.",
+      details:
+        process.env.NODE_ENV === "development"
+          ? String(error.message || error)
+          : undefined
+    });
+  }
 }
