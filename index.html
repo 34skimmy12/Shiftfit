@@ -4265,10 +4265,8 @@ function updateShoppingQty(index,value){
   saveShoppingItems();
 
   /*
-   * IMPORTANT:
-   * Quantity changes invalidate the previous
-   * Best Basket result. The next price check
-   * will use the new quantity.
+   * A quantity change means the old
+   * Best Basket result is no longer valid.
    */
 
   clearBasketResults();
@@ -4440,11 +4438,6 @@ function getBasketItems(){
             item.name
           ).trim(),
 
-        /*
-         * Quantity is deliberately converted
-         * to a number here so the backend receives
-         * the actual requested number of packs.
-         */
         qty:
           Math.max(
             1,
@@ -4870,6 +4863,7 @@ async function checkBestBasket(){
 
         throw new Error(
           pollData.message ||
+          pollData.error ||
           "The supermarket price check failed."
         );
 
@@ -5005,8 +4999,9 @@ function renderBasketResults(data){
 
 
   /*
-   * Sort complete supermarkets by total.
-   * Incomplete baskets go underneath complete ones.
+   * Sort complete supermarkets first.
+   * Complete baskets are sorted cheapest to most expensive.
+   * Incomplete baskets are placed underneath.
    */
 
   const sortedSupermarkets=
@@ -5014,20 +5009,50 @@ function renderBasketResults(data){
       (a,b)=>{
 
         const aMissing=
-          Array.isArray(a.missing)
-            ?a.missing.length
-            :0;
+          Array.isArray(
+            a.missingItems
+          )
+            ?a.missingItems.length
+            :
+              Array.isArray(
+                a.missing
+              )
+                ?a.missing.length
+                :0;
+
 
         const bMissing=
-          Array.isArray(b.missing)
-            ?b.missing.length
-            :0;
+          Array.isArray(
+            b.missingItems
+          )
+            ?b.missingItems.length
+            :
+              Array.isArray(
+                b.missing
+              )
+                ?b.missing.length
+                :0;
 
-        if(aMissing===0 && bMissing>0)
+
+        if(
+          aMissing===0 &&
+          bMissing>0
+        ){
+
           return -1;
 
-        if(aMissing>0 && bMissing===0)
+        }
+
+
+        if(
+          aMissing>0 &&
+          bMissing===0
+        ){
+
           return 1;
+
+        }
+
 
         return(
           Number(a.total)||0
@@ -5040,11 +5065,31 @@ function renderBasketResults(data){
     );
 
 
+  /*
+   * Only COMPLETE supermarkets qualify
+   * for cheapest / second / third ranking.
+   */
+
   const completeSupermarkets=
     sortedSupermarkets.filter(
-      basket=>
-        !Array.isArray(basket.missing) ||
-        basket.missing.length===0
+      basket=>{
+
+        const missing=
+          Array.isArray(
+            basket.missingItems
+          )
+            ?basket.missingItems
+            :
+              Array.isArray(
+                basket.missing
+              )
+                ?basket.missing
+                :[];
+
+
+        return missing.length===0;
+
+      }
     );
 
 
@@ -5097,30 +5142,23 @@ function renderBasketResults(data){
    * DATABASE NOTICE
    */
 
-  if(
-    data.seeded===true ||
-    data.live===false
-  ){
+  html+=`
 
-    html+=`
+    <div class="basket-database-note">
 
-      <div class="basket-database-note">
+      <strong>
+        ShiftFit Price Database
+      </strong>
 
-        <strong>
-          ShiftFit Price Database
-        </strong>
+      <br>
 
-        <br>
+      These are seeded database prices for testing
+      and comparison. They are <strong>not live
+      supermarket prices yet.</strong>
 
-        These are seeded database prices for testing
-        and comparison. They are <strong>not live
-        supermarket prices yet.</strong>
+    </div>
 
-      </div>
-
-    `;
-
-  }
+  `;
 
 
   /*
@@ -5148,7 +5186,8 @@ function renderBasketResults(data){
 
     html+=
       renderMixedBasket(
-        mixedBasket
+        mixedBasket,
+        data.items
       );
 
   }else if(
@@ -5179,7 +5218,7 @@ function renderBasketResults(data){
    */
 
   sortedSupermarkets.forEach(
-    (basket,index)=>{
+    basket=>{
 
       html+=
         renderRetailerCard(
@@ -5202,7 +5241,8 @@ function renderBasketResults(data){
    ========================================================= */
 
 function renderMixedBasket(
-  mixedBasket
+  mixedBasket,
+  originalItems=[]
 ){
 
   const items=
@@ -5217,17 +5257,34 @@ function renderMixedBasket(
 
 
   items.forEach(
-    item=>{
+    (item,index)=>{
 
       /*
-       * The backend may call this field
-       * item, name or query depending on version.
+       * Backend now supplies item.item.
+       * The original shopping list is also used
+       * as a safety fallback.
        */
+
+      const fallback=
+        Array.isArray(
+          originalItems
+        )
+          ?originalItems[index]
+          :null;
+
 
       const itemName=
         item.item ||
         item.name ||
         item.query ||
+        (
+          fallback &&
+          (
+            fallback.name ||
+            fallback.item ||
+            fallback.query
+          )
+        ) ||
         "Shopping item";
 
 
@@ -5256,6 +5313,13 @@ function renderMixedBasket(
           Number(
             item.quantity ??
             item.qty ??
+            (
+              fallback &&
+              (
+                fallback.quantity ??
+                fallback.qty
+              )
+            ) ??
             1
           )||1
         );
@@ -5276,11 +5340,15 @@ function renderMixedBasket(
 
 
       const shownTotal=
-        Number.isFinite(total)
+        Number.isFinite(
+          total
+        )
           ?total
-          :Number.isFinite(unitPrice)
-            ?unitPrice*quantity
-            :NaN;
+          :Number.isFinite(
+              unitPrice
+            )
+              ?unitPrice*quantity
+              :NaN;
 
 
       itemsHtml+=`
@@ -5430,20 +5498,44 @@ function renderRetailerCard(
     );
 
 
+  /*
+   * NEW BACKEND FIELD:
+   * missingItems
+   *
+   * Keep support for the old "missing" field too.
+   */
+
   const missing=
     Array.isArray(
-      basket.missing
+      basket.missingItems
     )
-      ?basket.missing
-      :[];
+      ?basket.missingItems
+      :
+        Array.isArray(
+          basket.missing
+        )
+          ?basket.missing
+          :[];
 
+
+  /*
+   * NEW BACKEND FIELD:
+   * matchedItems
+   *
+   * Keep support for the old "items" field too.
+   */
 
   const basketItems=
     Array.isArray(
-      basket.items
+      basket.matchedItems
     )
-      ?basket.items
-      :[];
+      ?basket.matchedItems
+      :
+        Array.isArray(
+          basket.items
+        )
+          ?basket.items
+          :[];
 
 
   const complete=
@@ -5451,8 +5543,8 @@ function renderRetailerCard(
 
 
   /*
-   * Find this retailer's position among
-   * complete baskets only.
+   * Find this supermarket's position
+   * amongst COMPLETE baskets only.
    */
 
   const completeIndex=
@@ -5539,16 +5631,15 @@ function renderRetailerCard(
   }
 
 
+  /*
+   * INDIVIDUAL SUPERMARKET ITEMS
+   */
+
   let itemsHtml="";
 
 
   basketItems.forEach(
     item=>{
-
-      /*
-       * IMPORTANT:
-       * Correctly read the new backend fields.
-       */
 
       const itemName=
         item.item ||
@@ -5568,6 +5659,11 @@ function renderRetailerCard(
         item.pack ||
         "";
 
+
+      /*
+       * Quantity is displayed separately
+       * from the product name.
+       */
 
       const quantity=
         Math.max(
@@ -5596,8 +5692,7 @@ function renderRetailerCard(
 
       /*
        * Safety fallback:
-       * if the backend gives a unit price but
-       * not a line total, calculate quantity × unit.
+       * quantity × unit price
        */
 
       const calculatedTotal=
@@ -5671,6 +5766,10 @@ function renderRetailerCard(
   );
 
 
+  /*
+   * MISSING ITEMS
+   */
+
   let missingHtml="";
 
 
@@ -5686,8 +5785,9 @@ function renderRetailerCard(
 
         ${missing
           .map(
-            item=>
-              escapeHtml(
+            item=>{
+
+              const name=
                 typeof item==="string"
                   ?item
                   :(
@@ -5695,8 +5795,32 @@ function renderRetailerCard(
                     item.name ||
                     item.query ||
                     "Item"
-                  )
-              )
+                  );
+
+
+              const quantity=
+                typeof item==="object"
+                  ?Number(
+                      item.quantity ??
+                      item.qty ??
+                      0
+                    )
+                  :0;
+
+
+              return(
+                escapeHtml(
+                  name
+                )+
+                (
+                  quantity>0
+                    ?" × "+
+                      quantity
+                    :""
+                )
+              );
+
+            }
           )
           .join(" • ")
         }
@@ -5709,25 +5833,24 @@ function renderRetailerCard(
 
 
   /*
-   * Savings compared with the cheapest
-   * complete supermarket basket.
+   * SAVINGS COMPARED WITH CHEAPEST COMPLETE
+   * SUPERMARKET BASKET.
    */
 
   let savingsHtml="";
 
 
-  if(
-    complete &&
+  const cheapest=
     cheapestCompleteForCards(
       completeSupermarkets
-    )!==null &&
+    );
+
+
+  if(
+    complete &&
+    cheapest!==null &&
     !isBest
   ){
-
-    const cheapest=
-      cheapestCompleteForCards(
-        completeSupermarkets
-      );
 
     const difference=
       total-cheapest;
@@ -5759,6 +5882,7 @@ function renderRetailerCard(
           )}
 
           more than
+
           <strong>
             ${escapeHtml(
               cheapestName
