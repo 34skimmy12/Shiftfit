@@ -1,473 +1,1329 @@
 import { supermarkets, findProducts } from "./price-database.js";
 
-function clean(value) {
-  return String(value ?? "").trim();
-}
-
-function normaliseQuantity(value) {
-  const number = Number(value);
-  if (!Number.isFinite(number)) return 1;
-  return Math.max(1, Math.round(number));
-}
-
-function normaliseItems(items) {
-  if (!Array.isArray(items)) return [];
-
-  return items
-    .map((item) => {
-      if (typeof item === "string") {
-        return {
-          name: clean(item),
-          qty: 1
-        };
-      }
-
-      if (!item || typeof item !== "object") return null;
-
-      const name = clean(
-        item.name ??
-        item.item ??
-        item.query ??
-        item.productName
-      );
-
-      if (!name) return null;
-
-      return {
-        name,
-        qty: normaliseQuantity(
-          item.qty ??
-          item.quantity ??
-          1
-        )
-      };
-    })
-    .filter(Boolean)
-    .slice(0, 30);
-}
-
-function normaliseRetailers(retailers) {
-  if (!Array.isArray(retailers)) {
-    return Object.keys(supermarkets);
-  }
-
-  const valid = retailers
-    .map(clean)
-    .filter((id) => supermarkets[id]);
-
-  return valid.length ? [...new Set(valid)] : Object.keys(supermarkets);
-}
-
-function encodeRun(payload) {
-  return Buffer
-    .from(JSON.stringify(payload), "utf8")
-    .toString("base64url");
-}
-
-function decodeRun(runId) {
-  try {
-    return JSON.parse(
-      Buffer
-        .from(runId, "base64url")
-        .toString("utf8")
-    );
-  } catch {
-    return null;
-  }
-}
-
 export default async function handler(req, res) {
+
+  /*
+   * =========================================================
+   * SHIFT FIT — BEST BASKET
+   * Shift Fit Price Database
+   *
+   * Flow:
+   * Shopping List
+   *      ↓
+   * POST /api/best-basket
+   *      ↓
+   * runId
+   *      ↓
+   * GET /api/best-basket?runId=...
+   *      ↓
+   * Supermarket comparison
+   *      ↓
+   * Cheapest complete basket
+   *      ↓
+   * Cheapest mixed basket
+   *
+   * IMPORTANT:
+   * Quantity is calculated as:
+   *
+   * unit price × quantity = line total
+   * =========================================================
+   */
+
   try {
+
     /*
-     * ---------------------------------------------------------
-     * START A BEST BASKET CHECK
-     * ---------------------------------------------------------
+     * =======================================================
+     * POST
+     * Start a basket comparison
+     * =======================================================
      */
+
     if (req.method === "POST") {
-      const body = req.body || {};
 
-      const items = normaliseItems(body.items);
-      const retailers = normaliseRetailers(body.retailers);
+      const body =
+        req.body && typeof req.body === "object"
+          ? req.body
+          : {};
 
-      if (!items.length) {
-        return res.status(400).json({
-          status: "FAILED",
-          error: "No shopping items were supplied."
-        });
-      }
-
-      const runId = encodeRun({
-        items,
-        retailers,
-        createdAt: new Date().toISOString()
-      });
-
-      return res.status(202).json({
-        status: "RUNNING",
-        runId,
-        items,
-        retailers,
-        startedAt: new Date().toISOString()
-      });
-    }
-
-    /*
-     * ---------------------------------------------------------
-     * GET RESULTS
-     * ---------------------------------------------------------
-     */
-    if (req.method === "GET") {
-      const runId = clean(req.query?.runId);
-
-      if (!runId) {
-        return res.status(400).json({
-          status: "FAILED",
-          error: "Missing runId."
-        });
-      }
-
-      const payload = decodeRun(runId);
-
-      if (!payload) {
-        return res.status(400).json({
-          status: "FAILED",
-          error: "Invalid runId."
-        });
-      }
-
-      const items = normaliseItems(payload.items);
-      const retailers = normaliseRetailers(payload.retailers);
-
-      if (!items.length) {
-        return res.status(400).json({
-          status: "FAILED",
-          error: "No shopping items were supplied."
-        });
-      }
 
       /*
-       * ---------------------------------------------------------
+       * -------------------------------------------------------
+       * NORMALISE SHOPPING ITEMS
+       * -------------------------------------------------------
+       *
+       * Supports:
+       *
+       * { name:"Chicken breast", qty:2 }
+       *
+       * or
+       *
+       * { item:"Chicken breast", quantity:2 }
+       *
+       * or
+       *
+       * { query:"Chicken breast", qty:2 }
+       */
+
+      const rawItems =
+        Array.isArray(body.items)
+          ? body.items
+          : [];
+
+
+      const items =
+        rawItems
+          .map((item) => {
+
+            if (typeof item === "string") {
+
+              return {
+                name: item.trim(),
+                qty: 1
+              };
+
+            }
+
+
+            if (!item || typeof item !== "object") {
+
+              return null;
+
+            }
+
+
+            const name =
+              String(
+                item.name ??
+                item.item ??
+                item.query ??
+                ""
+              ).trim();
+
+
+            let qty =
+              Number(
+                item.qty ??
+                item.quantity ??
+                1
+              );
+
+
+            if (
+              !Number.isFinite(qty) ||
+              qty < 1
+            ) {
+
+              qty = 1;
+
+            }
+
+
+            qty =
+              Math.max(
+                1,
+                Math.floor(qty)
+              );
+
+
+            return {
+              name,
+              qty
+            };
+
+          })
+          .filter(
+            item =>
+              item &&
+              item.name
+          )
+          .slice(0, 30);
+
+
+      /*
+       * -------------------------------------------------------
+       * NORMALISE RETAILERS
+       * -------------------------------------------------------
+       */
+
+      const requestedRetailers =
+        Array.isArray(body.retailers)
+          ? body.retailers
+          : Object.keys(supermarkets);
+
+
+      const retailers =
+        requestedRetailers
+          .map(
+            retailer =>
+              String(
+                retailer
+              )
+              .toLowerCase()
+              .trim()
+          )
+          .filter(
+            retailer =>
+              retailer &&
+              supermarkets[retailer]
+          );
+
+
+      /*
+       * -------------------------------------------------------
+       * VALIDATION
+       * -------------------------------------------------------
+       */
+
+      if (!items.length) {
+
+        return res.status(400).json({
+
+          status: "FAILED",
+
+          error:
+            "Your shopping list is empty.",
+
+          message:
+            "Add at least one shopping item before checking prices."
+
+        });
+
+      }
+
+
+      if (!retailers.length) {
+
+        return res.status(400).json({
+
+          status: "FAILED",
+
+          error:
+            "No valid supermarkets were supplied.",
+
+          message:
+            "Please select at least one supermarket."
+
+        });
+
+      }
+
+
+      /*
+       * -------------------------------------------------------
+       * CREATE RUN ID
+       * -------------------------------------------------------
+       *
+       * We keep the existing POST → runId → GET architecture.
+       */
+
+      const runPayload = {
+
+        items,
+
+        retailers,
+
+        createdAt:
+          new Date().toISOString()
+
+      };
+
+
+      const runId =
+        Buffer
+          .from(
+            JSON.stringify(runPayload),
+            "utf8"
+          )
+          .toString("base64url");
+
+
+      /*
+       * -------------------------------------------------------
+       * RETURN RUNNING RESPONSE
+       * -------------------------------------------------------
+       */
+
+      return res.status(202).json({
+
+        status: "RUNNING",
+
+        runId,
+
+        items,
+
+        retailers,
+
+        startedAt:
+          runPayload.createdAt,
+
+        statusMessage:
+          "ShiftFit is calculating your supermarket basket."
+
+      });
+
+    }
+
+
+    /*
+     * =======================================================
+     * GET
+     * Complete a basket comparison
+     * =======================================================
+     */
+
+    if (req.method === "GET") {
+
+      const runId =
+        req.query &&
+        req.query.runId
+          ? String(req.query.runId)
+          : "";
+
+
+      if (!runId) {
+
+        return res.status(400).json({
+
+          status: "FAILED",
+
+          error:
+            "Missing runId.",
+
+          message:
+            "The basket comparison ID was not supplied."
+
+        });
+
+      }
+
+
+      /*
+       * -------------------------------------------------------
+       * DECODE RUN
+       * -------------------------------------------------------
+       */
+
+      let runData;
+
+
+      try {
+
+        runData =
+          JSON.parse(
+            Buffer
+              .from(
+                runId,
+                "base64url"
+              )
+              .toString("utf8")
+          );
+
+      } catch (error) {
+
+        return res.status(400).json({
+
+          status: "FAILED",
+
+          error:
+            "Invalid runId.",
+
+          message:
+            "The basket comparison ID could not be read."
+
+        });
+
+      }
+
+
+      const items =
+        Array.isArray(runData.items)
+          ? runData.items
+          : [];
+
+
+      const retailers =
+        Array.isArray(runData.retailers)
+          ? runData.retailers
+          : [];
+
+
+      /*
+       * =======================================================
        * BUILD SUPERMARKET RESULTS
-       * ---------------------------------------------------------
+       * =======================================================
        */
 
       const supermarketResults = [];
 
+
       /*
-       * Every requested shopping item is checked against
-       * every selected supermarket.
+       * Keep every individual item result.
+       *
+       * This is useful for:
+       *
+       * - supermarket cards
+       * - mixed basket
+       * - debugging
+       * - future live pricing
        */
-      for (const retailerId of retailers) {
-        const retailer = supermarkets[retailerId];
 
-        if (!retailer) continue;
+      const allItemResults = [];
 
-        let total = 0;
-        const matchedItems = [];
-        const missingItems = [];
 
-        for (const requestedItem of items) {
-          const matches = findProducts(
-            requestedItem.name,
-            [retailerId]
-          );
+      for (
+        const retailerId
+        of retailers
+      ) {
 
-          const product = matches?.[0];
+        const retailer =
+          supermarkets[retailerId];
 
-          if (!product) {
-            missingItems.push({
-              item: requestedItem.name,
-              quantity: requestedItem.qty
-            });
 
-            continue;
-          }
+        if (!retailer) {
 
-          const unitPrice = Number(product.price) || 0;
-          const quantity = requestedItem.qty;
+          continue;
 
-          /*
-           * IMPORTANT:
-           * Quantity affects the line total.
-           *
-           * Example:
-           * Chicken breast £4.84 × 2 = £9.68
-           */
-          const lineTotal = unitPrice * quantity;
-
-          total += lineTotal;
-
-          matchedItems.push({
-            item: requestedItem.name,
-            quantity,
-            qty: quantity,
-
-            retailer: retailerId,
-            retailerName: retailer.name,
-
-            productId: product.id,
-            productName: product.name,
-            packSize: product.packSize,
-
-            unitPrice,
-            price: unitPrice,
-
-            total: Number(lineTotal.toFixed(2)),
-            lineTotal: Number(lineTotal.toFixed(2)),
-
-            updatedAt: product.updatedAt || null,
-            available: true
-          });
         }
 
-        supermarketResults.push({
-          retailer: retailerId,
-          retailerName: retailer.name,
 
-          total: Number(total.toFixed(2)),
+        const retailerName =
+          retailer.name ||
+          retailerId;
+
+
+        let supermarketTotal = 0;
+
+        const matchedItems = [];
+
+        const missingItems = [];
+
+
+        /*
+         * -----------------------------------------------------
+         * CHECK EVERY SHOPPING ITEM
+         * -----------------------------------------------------
+         */
+
+        for (
+          const requestedItem
+          of items
+        ) {
+
+          const itemName =
+            String(
+              requestedItem.name
+            ).trim();
+
+
+          const quantity =
+            Math.max(
+              1,
+              Math.floor(
+                Number(
+                  requestedItem.qty
+                ) || 1
+              )
+            );
+
+
+          /*
+           * Search this retailer only.
+           */
+
+          const matches =
+            findProducts(
+              itemName,
+              [retailerId]
+            );
+
+
+          /*
+           * ---------------------------------------------------
+           * ITEM NOT FOUND
+           * ---------------------------------------------------
+           */
+
+          if (
+            !Array.isArray(matches) ||
+            !matches.length
+          ) {
+
+            missingItems.push({
+
+              item:
+                itemName,
+
+              quantity
+
+            });
+
+
+            allItemResults.push({
+
+              item:
+                itemName,
+
+              query:
+                itemName,
+
+              quantity,
+
+              qty:
+                quantity,
+
+              retailer:
+                retailerId,
+
+              retailerName,
+
+              available:
+                false,
+
+              productName:
+                null,
+
+              packSize:
+                null,
+
+              unitPrice:
+                null,
+
+              total:
+                0,
+
+              updatedAt:
+                null
+
+            });
+
+
+            continue;
+
+          }
+
+
+          /*
+           * ---------------------------------------------------
+           * CHOOSE CHEAPEST MATCH
+           * ---------------------------------------------------
+           */
+
+          const product =
+            [...matches]
+              .filter(
+                match =>
+                  Number.isFinite(
+                    Number(
+                      match.price
+                    )
+                  )
+              )
+              .sort(
+                (a,b) =>
+                  Number(a.price) -
+                  Number(b.price)
+              )[0];
+
+
+          if (!product) {
+
+            missingItems.push({
+
+              item:
+                itemName,
+
+              quantity
+
+            });
+
+
+            allItemResults.push({
+
+              item:
+                itemName,
+
+              query:
+                itemName,
+
+              quantity,
+
+              qty:
+                quantity,
+
+              retailer:
+                retailerId,
+
+              retailerName,
+
+              available:
+                false,
+
+              productName:
+                null,
+
+              packSize:
+                null,
+
+              unitPrice:
+                null,
+
+              total:
+                0,
+
+              updatedAt:
+                null
+
+            });
+
+
+            continue;
+
+          }
+
+
+          /*
+           * ---------------------------------------------------
+           * PRICE CALCULATION
+           * ---------------------------------------------------
+           *
+           * THIS IS THE IMPORTANT PART.
+           *
+           * Example:
+           *
+           * Chicken breast = £7.99
+           * Quantity = 2
+           *
+           * £7.99 × 2 = £15.98
+           */
+
+          const unitPrice =
+            Number(
+              product.price
+            );
+
+
+          const lineTotal =
+            unitPrice *
+            quantity;
+
+
+          supermarketTotal +=
+            lineTotal;
+
+
+          /*
+           * ---------------------------------------------------
+           * BUILD MATCHED ITEM
+           * ---------------------------------------------------
+           */
+
+          const matchedItem = {
+
+            item:
+              itemName,
+
+            name:
+              itemName,
+
+            query:
+              itemName,
+
+            quantity,
+
+            qty:
+              quantity,
+
+            retailer:
+              retailerId,
+
+            retailerName,
+
+            productId:
+              product.id ??
+              null,
+
+            productName:
+              product.name ??
+              product.productName ??
+              itemName,
+
+            product:
+              product.name ??
+              product.productName ??
+              itemName,
+
+            packSize:
+              product.packSize ??
+              product.pack ??
+              "",
+
+            pack:
+              product.packSize ??
+              product.pack ??
+              "",
+
+            unitPrice,
+
+            price:
+              unitPrice,
+
+            total:
+              lineTotal,
+
+            lineTotal:
+              lineTotal,
+
+            updatedAt:
+              product.updatedAt ??
+              null,
+
+            available:
+              true
+
+          };
+
+
+          matchedItems.push(
+            matchedItem
+          );
+
+
+          allItemResults.push(
+            matchedItem
+          );
+
+        }
+
+
+        /*
+         * -----------------------------------------------------
+         * SUPERMARKET RESULT
+         * -----------------------------------------------------
+         */
+
+        supermarketResults.push({
+
+          retailer:
+            retailerId,
+
+          retailerName,
+
+          total:
+            Number(
+              supermarketTotal.toFixed(2)
+            ),
 
           matchedItems,
+
+          items:
+            matchedItems,
+
           missingItems,
 
-          complete: missingItems.length === 0,
+          missing:
+            missingItems,
 
-          itemCount: matchedItems.length,
-          requestedItemCount: items.length,
-          missingCount: missingItems.length
+          complete:
+            missingItems.length===0,
+
+          requestedItemCount:
+            items.length,
+
+          matchedItemCount:
+            matchedItems.length,
+
+          missingItemCount:
+            missingItems.length
+
         });
+
       }
 
+
       /*
-       * ---------------------------------------------------------
-       * CHEAPEST COMPLETE SUPERMARKET
-       * ---------------------------------------------------------
+       * =======================================================
+       * SORT SUPERMARKETS
+       * =======================================================
+       *
+       * Complete baskets are compared against each other.
+       *
+       * Incomplete baskets are still returned but don't win.
        */
 
-      const completeSupermarkets = supermarketResults
-        .filter((basket) => basket.complete)
-        .sort((a, b) => a.total - b.total);
+      const sortedSupermarkets =
+        [...supermarketResults]
+          .sort(
+            (a,b) => {
 
-      const cheapestComplete =
-        completeSupermarkets[0] || null;
+              if (
+                a.complete &&
+                !b.complete
+              ) {
 
-      const secondCheapestComplete =
-        completeSupermarkets[1] || null;
+                return -1;
+
+              }
+
+
+              if (
+                !a.complete &&
+                b.complete
+              ) {
+
+                return 1;
+
+              }
+
+
+              return (
+                Number(a.total) -
+                Number(b.total)
+              );
+
+            }
+          );
+
 
       /*
-       * ---------------------------------------------------------
+       * =======================================================
+       * COMPLETE SUPERMARKETS
+       * =======================================================
+       */
+
+      const completeSupermarkets =
+        sortedSupermarkets
+          .filter(
+            basket =>
+              basket.complete
+          );
+
+
+      const cheapestComplete =
+        completeSupermarkets.length
+          ? completeSupermarkets[0]
+          : null;
+
+
+      const secondComplete =
+        completeSupermarkets.length > 1
+          ? completeSupermarkets[1]
+          : null;
+
+
+      const cheapestCompleteTotal =
+        cheapestComplete
+          ? Number(
+              cheapestComplete.total
+            )
+          : null;
+
+
+      /*
+       * =======================================================
        * MIXED BASKET
+       * =======================================================
        *
-       * Find the cheapest available supermarket for EACH
-       * individual shopping item.
-       * ---------------------------------------------------------
+       * For every shopping item:
+       *
+       * 1. Look across ALL supermarkets.
+       * 2. Find the cheapest available product.
+       * 3. Multiply by requested quantity.
+       * 4. Add it to the mixed basket.
        */
 
       const mixedBasketItems = [];
 
-      for (const requestedItem of items) {
-        const choices = [];
 
-        for (const retailerId of retailers) {
-          const retailer = supermarkets[retailerId];
+      let mixedBasketTotal = 0;
 
-          if (!retailer) continue;
 
-          const matches = findProducts(
-            requestedItem.name,
-            [retailerId]
+      for (
+        const requestedItem
+        of items
+      ) {
+
+        const itemName =
+          String(
+            requestedItem.name
+          ).trim();
+
+
+        const quantity =
+          Math.max(
+            1,
+            Math.floor(
+              Number(
+                requestedItem.qty
+              ) || 1
+            )
           );
 
-          const product = matches?.[0];
 
-          if (!product) continue;
+        /*
+         * Find every available result
+         * for this specific item.
+         */
 
-          const unitPrice = Number(product.price) || 0;
-          const quantity = requestedItem.qty;
-          const lineTotal = unitPrice * quantity;
+        const choices =
+          allItemResults
+            .filter(
+              result =>
+                result.available === true &&
+                String(
+                  result.item
+                ).toLowerCase() ===
+                itemName.toLowerCase()
+            );
 
-          choices.push({
-            item: requestedItem.name,
+
+        /*
+         * -----------------------------------------------------
+         * NO AVAILABLE PRODUCT
+         * -----------------------------------------------------
+         */
+
+        if (!choices.length) {
+
+          mixedBasketItems.push({
+
+            item:
+              itemName,
+
+            name:
+              itemName,
+
+            query:
+              itemName,
+
             quantity,
-            qty: quantity,
 
-            retailer: retailerId,
-            retailerName: retailer.name,
+            qty:
+              quantity,
 
-            productId: product.id,
-            productName: product.name,
-            packSize: product.packSize,
+            available:
+              false,
 
+            retailer:
+              null,
+
+            retailerName:
+              null,
+
+            productId:
+              null,
+
+            productName:
+              null,
+
+            packSize:
+              null,
+
+            unitPrice:
+              null,
+
+            total:
+              0,
+
+            updatedAt:
+              null
+
+          });
+
+
+          continue;
+
+        }
+
+
+        /*
+         * -----------------------------------------------------
+         * CHEAPEST PRODUCT
+         * -----------------------------------------------------
+         */
+
+        const cheapest =
+          [...choices]
+            .sort(
+              (a,b) =>
+                Number(a.unitPrice) -
+                Number(b.unitPrice)
+            )[0];
+
+
+        /*
+         * IMPORTANT:
+         *
+         * The quantity is taken from the ORIGINAL
+         * shopping list.
+         *
+         * We don't trust a retailer response to decide
+         * how many the customer wanted.
+         */
+
+        const unitPrice =
+          Number(
+            cheapest.unitPrice
+          );
+
+
+        const total =
+          unitPrice *
+          quantity;
+
+
+        mixedBasketTotal +=
+          total;
+
+
+        /*
+         * -----------------------------------------------------
+         * MIXED ITEM
+         * -----------------------------------------------------
+         */
+
+        mixedBasketItems.push({
+
+          item:
+            itemName,
+
+          name:
+            itemName,
+
+          query:
+            itemName,
+
+          quantity,
+
+          qty:
+            quantity,
+
+          retailer:
+            cheapest.retailer,
+
+          retailerName:
+            cheapest.retailerName,
+
+          productId:
+            cheapest.productId,
+
+          productName:
+            cheapest.productName,
+
+          product:
+            cheapest.productName,
+
+          packSize:
+            cheapest.packSize,
+
+          pack:
+            cheapest.packSize,
+
+          unitPrice,
+
+          price:
             unitPrice,
-            price: unitPrice,
 
-            total: Number(lineTotal.toFixed(2)),
-            lineTotal: Number(lineTotal.toFixed(2)),
+          total,
 
-            updatedAt: product.updatedAt || null,
-            available: true
-          });
-        }
+          lineTotal:
+            total,
 
-        choices.sort((a, b) => a.total - b.total);
+          updatedAt:
+            cheapest.updatedAt,
 
-        if (choices.length) {
-          mixedBasketItems.push(choices[0]);
-        }
+          available:
+            true
+
+        });
+
       }
 
-      const mixedBasketTotal = mixedBasketItems.reduce(
-        (sum, item) => sum + item.total,
-        0
-      );
+
+      mixedBasketTotal =
+        Number(
+          mixedBasketTotal.toFixed(2)
+        );
+
 
       /*
-       * ---------------------------------------------------------
-       * RAW RESULTS
-       *
-       * Useful later when we connect this to real/live pricing.
-       * ---------------------------------------------------------
+       * =======================================================
+       * MIXED BASKET SAVINGS
+       * =======================================================
        */
 
-      const rawResults = [];
+      let potentialSavings = null;
 
-      for (const basket of supermarketResults) {
-        for (const item of basket.matchedItems) {
-          rawResults.push({
-            item: item.item,
-            query: item.item,
 
-            retailer: item.retailer,
-            retailerName: item.retailerName,
+      if (
+        cheapestCompleteTotal !== null
+      ) {
 
-            productId: item.productId,
-            productName: item.productName,
-            packSize: item.packSize,
+        potentialSavings =
+          Number(
+            (
+              cheapestCompleteTotal -
+              mixedBasketTotal
+            ).toFixed(2)
+          );
 
-            price: item.unitPrice,
-            unitPrice: item.unitPrice,
-
-            quantity: item.quantity,
-            qty: item.quantity,
-
-            total: item.total,
-            lineTotal: item.lineTotal,
-
-            available: item.available,
-            updatedAt: item.updatedAt
-          });
-        }
       }
 
+
       /*
-       * ---------------------------------------------------------
+       * =======================================================
        * SUMMARY
-       * ---------------------------------------------------------
+       * =======================================================
        */
 
-      const savings =
-        cheapestComplete &&
-        mixedBasketTotal < cheapestComplete.total
-          ? Number(
-              (cheapestComplete.total - mixedBasketTotal)
-                .toFixed(2)
-            )
-          : 0;
+      const completeCount =
+        completeSupermarkets.length;
 
-      const checkedAt = new Date().toISOString();
+
+      const incompleteCount =
+        supermarketResults.length -
+        completeCount;
+
+
+      /*
+       * =======================================================
+       * RAW RESULTS
+       * =======================================================
+       *
+       * Useful for debugging and future development.
+       */
+
+      const rawResults =
+        allItemResults.map(
+          result => ({
+
+            item:
+              result.item,
+
+            query:
+              result.query,
+
+            retailer:
+              result.retailer,
+
+            retailerName:
+              result.retailerName,
+
+            productId:
+              result.productId,
+
+            productName:
+              result.productName,
+
+            packSize:
+              result.packSize,
+
+            price:
+              result.unitPrice,
+
+            unitPrice:
+              result.unitPrice,
+
+            quantity:
+              result.quantity,
+
+            qty:
+              result.quantity,
+
+            total:
+              result.total,
+
+            available:
+              result.available,
+
+            updatedAt:
+              result.updatedAt
+
+          })
+        );
+
+
+      /*
+       * =======================================================
+       * FINAL RESPONSE
+       * =======================================================
+       */
 
       return res.status(200).json({
-        status: "SUCCEEDED",
 
-        source: "ShiftFit Price Database",
+        status:
+          "SUCCEEDED",
 
-        /*
-         * These prices are seeded database values.
-         * They are NOT live supermarket prices.
-         */
-        live: false,
-        seeded: true,
+        source:
+          "ShiftFit Price Database",
 
-        checkedAt,
+        live:
+          false,
+
+        seeded:
+          true,
+
+        checkedAt:
+          new Date().toISOString(),
 
         items,
+
         retailers,
 
-        productsFound: rawResults.length,
+        productsFound:
+          allItemResults.filter(
+            result =>
+              result.available
+          ).length,
 
         summary: {
-          requestedItems: items.length,
+
+          requestedItems:
+            items.length,
 
           completeSupermarkets:
-            completeSupermarkets.length,
+            completeCount,
+
+          incompleteSupermarkets:
+            incompleteCount,
 
           cheapestCompleteSupermarket:
-            cheapestComplete?.retailer || null,
+            cheapestComplete
+              ? cheapestComplete.retailerName
+              : null,
 
-          cheapestCompleteSupermarketName:
-            cheapestComplete?.retailerName || null,
+          cheapestCompleteTotal,
 
-          cheapestCompleteTotal:
-            cheapestComplete?.total ?? null,
+          secondCheapestCompleteSupermarket:
+            secondComplete
+              ? secondComplete.retailerName
+              : null,
 
-          secondCheapestSupermarket:
-            secondCheapestComplete?.retailer || null,
-
-          secondCheapestSupermarketName:
-            secondCheapestComplete?.retailerName || null,
-
-          secondCheapestTotal:
-            secondCheapestComplete?.total ?? null,
+          secondCheapestCompleteTotal:
+            secondComplete
+              ? Number(
+                  secondComplete.total
+                )
+              : null,
 
           mixedBasketTotal:
-            Number(mixedBasketTotal.toFixed(2)),
+            mixedBasketTotal,
 
-          potentialSavings: savings
+          potentialSavings
+
         },
 
         /*
-         * Full supermarket comparison.
+         * -----------------------------------------------------
+         * CHEAPEST MIXED BASKET
+         * -----------------------------------------------------
          */
-        supermarkets: supermarketResults,
 
-        /*
-         * Cheapest product for each individual item.
-         */
         mixedBasket: {
-          total: Number(mixedBasketTotal.toFixed(2)),
-          items: mixedBasketItems
+
+          total:
+            mixedBasketTotal,
+
+          items:
+            mixedBasketItems,
+
+          itemCount:
+            mixedBasketItems.length,
+
+          availableItemCount:
+            mixedBasketItems.filter(
+              item =>
+                item.available
+            ).length,
+
+          missingItemCount:
+            mixedBasketItems.filter(
+              item =>
+                !item.available
+            ).length
+
         },
 
         /*
-         * Detailed item-by-item database results.
+         * -----------------------------------------------------
+         * SUPERMARKET RESULTS
+         * -----------------------------------------------------
          */
-        itemResults: supermarketResults.flatMap(
-          (basket) => basket.matchedItems
-        ),
+
+        supermarkets:
+          sortedSupermarkets,
 
         /*
-         * Raw rows retained for future live-price integration.
+         * -----------------------------------------------------
+         * ALL ITEM RESULTS
+         * -----------------------------------------------------
          */
+
+        itemResults:
+          allItemResults,
+
+        /*
+         * -----------------------------------------------------
+         * RAW DATA
+         * -----------------------------------------------------
+         */
+
         rawResults
+
       });
+
     }
 
+
     /*
-     * ---------------------------------------------------------
+     * =======================================================
      * METHOD NOT SUPPORTED
-     * ---------------------------------------------------------
+     * =======================================================
      */
 
     return res.status(405).json({
-      status: "FAILED",
-      error: "Method not allowed."
+
+      status:
+        "FAILED",
+
+      error:
+        "Method not allowed.",
+
+      message:
+        "Use POST to start a price check or GET with a runId to retrieve it."
+
     });
+
 
   } catch (error) {
-    console.error("Best Basket error:", error);
+
+    /*
+     * =======================================================
+     * GLOBAL ERROR HANDLER
+     * =======================================================
+     */
+
+    console.error(
+      "ShiftFit Best Basket Error:",
+      error
+    );
+
 
     return res.status(500).json({
-      status: "FAILED",
-      error: error?.message || "Best Basket failed."
+
+      status:
+        "FAILED",
+
+      error:
+        "Best Basket failed.",
+
+      message:
+        error &&
+        error.message
+          ? error.message
+          : "An unexpected error occurred while calculating the basket."
+
     });
+
   }
+
 }
