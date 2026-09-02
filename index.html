@@ -1378,123 +1378,108 @@ button{
   text-align:right;
 }
 
-
-/* DATABASE NOTICE */
-
-.price-database-notice{
-  margin-top:12px;
-  padding:12px;
+.basket-database-note{
+  margin-bottom:12px;
+  padding:11px 12px;
   border-radius:12px;
-  border:1px solid rgba(139,92,246,.22);
-  background:rgba(139,92,246,.07);
-  color:#bdb4d9;
+  border:1px solid rgba(139,92,246,.2);
+  background:rgba(139,92,246,.08);
+  color:#c7b9ee;
   font-size:10px;
   line-height:1.5;
 }
 
-.price-database-notice strong{
-  display:block;
-  color:#d5c9ff;
-  font-size:11px;
-  margin-bottom:3px;
+.basket-database-note strong{
+  color:#dfd5ff;
 }
 
-
-/* MIXED BASKET */
-
 .mixed-basket-card{
-  position:relative;
-  margin-bottom:13px;
+  margin-bottom:14px;
   padding:17px;
   border-radius:19px;
-  border:1px solid #56e8a1;
+  border:1px solid rgba(53,223,141,.55);
   background:
     radial-gradient(
       circle at 100% 0%,
-      rgba(53,223,141,.14),
+      rgba(53,223,141,.13),
       transparent 42%
     ),
     linear-gradient(
       145deg,
-      #102a25,
-      #0d1725
+      #10342b,
+      #0c1e22
     );
-  box-shadow:
-    0 0 0 1px rgba(86,232,161,.08),
-    0 15px 35px rgba(53,223,141,.08);
+  box-shadow:0 0 0 1px rgba(53,223,141,.08);
 }
 
 .mixed-basket-badge{
   display:inline-block;
-  padding:6px 9px;
+  padding:6px 10px;
   border-radius:9px;
   background:rgba(53,223,141,.12);
   color:#70efb1;
   font-size:9px;
   font-weight:950;
-  letter-spacing:.8px;
+  letter-spacing:1px;
 }
 
 .mixed-basket-title{
-  font-size:20px;
-  font-weight:950;
   margin-top:10px;
+  font-size:22px;
+  font-weight:950;
 }
 
 .mixed-basket-desc{
-  color:#aeb9bd;
-  font-size:11px;
+  color:#aeb9ba;
+  font-size:12px;
   line-height:1.5;
-  margin-top:5px;
+  margin-top:6px;
 }
 
 .mixed-basket-total-label{
-  color:#91a5a1;
+  color:#aeb9ba;
   font-size:10px;
   font-weight:850;
-  margin-top:15px;
+  margin-top:17px;
 }
 
 .mixed-basket-total{
-  color:#73efb3;
-  font-size:32px;
-  font-weight:950;
+  color:#62efad;
+  font-size:38px;
+  font-weight:1000;
   margin-top:2px;
 }
 
 .mixed-basket-items{
-  margin-top:14px;
-  padding-top:12px;
-  border-top:1px solid rgba(255,255,255,.08);
+  margin-top:15px;
+  padding-top:13px;
+  border-top:1px solid rgba(255,255,255,.09);
 }
 
 .mixed-basket-item{
   display:grid;
   grid-template-columns:1fr auto;
-  gap:9px;
-  padding:8px 0;
-  font-size:11px;
+  gap:10px;
+  padding:9px 0;
 }
 
 .mixed-item-name{
-  color:#d2d8da;
-  font-weight:750;
+  font-size:12px;
+  font-weight:850;
 }
 
-.mixed-item-source{
-  color:#7e9c91;
+.mixed-item-product{
+  color:#849291;
   font-size:9px;
-  margin-top:2px;
+  line-height:1.4;
+  margin-top:3px;
 }
 
 .mixed-item-price{
-  color:#fff;
-  font-weight:900;
   text-align:right;
+  font-size:12px;
+  font-weight:950;
 }
-
-
-/* RETAILER CARDS */
 
 .retailer-card{
   position:relative;
@@ -1532,18 +1517,18 @@ button{
   letter-spacing:.7px;
 }
 
-.retailer-badge.second-best{
+.retailer-badge.second{
   background:rgba(139,92,246,.12);
-  color:#c9b7ff;
+  color:#c7b5ff;
 }
 
-.retailer-badge.incomplete{
-  background:rgba(255,148,31,.10);
-  color:#ffbd6b;
+.retailer-badge.third{
+  background:rgba(255,148,31,.12);
+  color:#ffc078;
 }
 
 .retailer-name{
-  font-size:20px;
+  font-size:24px;
   font-weight:950;
 }
 
@@ -1562,8 +1547,9 @@ button{
 }
 
 .retailer-total{
-  font-size:29px;
+  font-size:32px;
   font-weight:950;
+  margin-top:2px;
 }
 
 .retailer-missing-count{
@@ -1573,15 +1559,18 @@ button{
   text-align:right;
 }
 
-.retailer-saving{
-  margin-top:9px;
-  color:#70efb1;
-  font-size:10px;
-  font-weight:850;
+.basket-savings{
+  margin-top:11px;
+  padding:10px 11px;
+  border-radius:10px;
+  background:rgba(139,92,246,.07);
+  color:#bcb0d7;
+  font-size:11px;
+  font-weight:800;
 }
 
-.retailer-saving.expensive{
-  color:#a7aec0;
+.basket-savings strong{
+  color:#e3dbf4;
 }
 
 .basket-items{
@@ -1600,6 +1589,7 @@ button{
 
 .basket-item-name{
   color:#c7ccda;
+  font-weight:750;
 }
 
 .basket-item-price{
@@ -1612,7 +1602,6 @@ button{
   color:#777f94;
   font-size:9px;
   margin-top:2px;
-  line-height:1.4;
 }
 
 .basket-missing{
@@ -1630,18 +1619,6 @@ button{
   margin-bottom:4px;
 }
 
-.basket-refresh{
-  width:100%;
-  margin-top:8px;
-  padding:11px;
-  border:1px solid rgba(139,92,246,.3);
-  border-radius:11px;
-  background:rgba(109,40,217,.1);
-  color:#cdbdff;
-  font-size:11px;
-  font-weight:900;
-}
-
 .basket-empty{
   padding:14px;
   border-radius:13px;
@@ -1649,16 +1626,6 @@ button{
   color:var(--muted);
   font-size:12px;
   line-height:1.5;
-}
-
-.best-basket-saving{
-  margin-top:11px;
-  padding:11px;
-  border-radius:11px;
-  background:rgba(53,223,141,.07);
-  color:#70efb1;
-  font-size:11px;
-  font-weight:850;
 }
 
 
@@ -1733,7 +1700,11 @@ button{
   }
 
   .retailer-total{
-    font-size:23px;
+    font-size:27px;
+  }
+
+  .retailer-name{
+    font-size:21px;
   }
 
 }
@@ -2018,7 +1989,6 @@ button{
 
 </div>
 
-
 <div
   class="exercise-card"
   onclick="toggleExercise(this)"
@@ -2039,7 +2009,6 @@ button{
     </div>
   </div>
 </div>
-
 
 <div
   class="exercise-card"
@@ -2062,7 +2031,6 @@ button{
   </div>
 </div>
 
-
 <div
   class="exercise-card"
   onclick="toggleExercise(this)"
@@ -2083,7 +2051,6 @@ button{
     </div>
   </div>
 </div>
-
 
 <div
   class="exercise-card"
@@ -2106,7 +2073,6 @@ button{
   </div>
 </div>
 
-
 <div
   class="exercise-card"
   onclick="toggleExercise(this)"
@@ -2127,7 +2093,6 @@ button{
     </div>
   </div>
 </div>
-
 
 <button
   id="finishButton"
@@ -2245,7 +2210,6 @@ button{
   Monday's Meals
 </div>
 
-
 <div class="meal-card-full">
 
   <div
@@ -2321,7 +2285,6 @@ button{
   </button>
 
 </div>
-
 
 <div class="meal-card-full">
 
@@ -2399,7 +2362,6 @@ button{
 
 </div>
 
-
 <div class="meal-card-full">
 
   <div
@@ -2476,7 +2438,6 @@ button{
 
 </div>
 
-
 <div class="meal-card-full">
 
   <div
@@ -2552,7 +2513,6 @@ button{
   </button>
 
 </div>
-
 
 <section class="shopping-card">
 
@@ -4304,6 +4264,15 @@ function updateShoppingQty(index,value){
 
   saveShoppingItems();
 
+  /*
+   * IMPORTANT:
+   * Quantity changes invalidate the previous
+   * Best Basket result. The next price check
+   * will use the new quantity.
+   */
+
+  clearBasketResults();
+
 }
 
 
@@ -4471,12 +4440,19 @@ function getBasketItems(){
             item.name
           ).trim(),
 
+        /*
+         * Quantity is deliberately converted
+         * to a number here so the backend receives
+         * the actual requested number of packs.
+         */
         qty:
           Math.max(
             1,
-            Number(
-              item.qty
-            )||1
+            Math.floor(
+              Number(
+                item.qty
+              )||1
+            )
           )
 
       })
@@ -4609,6 +4585,29 @@ function formatCheckedTime(value){
 }
 
 
+function getRetailerDisplayName(key){
+
+  const normalised=
+    String(
+      key||
+      ""
+    )
+    .toLowerCase()
+    .trim();
+
+  return(
+    retailerNames[
+      normalised
+    ]||
+    String(
+      key||
+      "Supermarket"
+    )
+  );
+
+}
+
+
 /* =========================================================
    BEST BASKET
    SHIFT FIT PRICE DATABASE
@@ -4651,7 +4650,7 @@ async function checkBestBasket(){
 
 
   setBasketStatus(
-    "ShiftFit is comparing your basket across six UK supermarkets...",
+    "ShiftFit is calculating your basket quantities across six UK supermarkets...",
     ""
   );
 
@@ -4837,10 +4836,6 @@ async function checkBestBasket(){
       }
 
 
-      /*
-       * RUNNING
-       */
-
       if(
         pollData.status===
         "RUNNING"
@@ -4868,10 +4863,6 @@ async function checkBestBasket(){
       }
 
 
-      /*
-       * FAILED
-       */
-
       if(
         pollData.status===
         "FAILED"
@@ -4885,10 +4876,6 @@ async function checkBestBasket(){
       }
 
 
-      /*
-       * SUCCESS
-       */
-
       if(
         pollData.status===
         "SUCCEEDED"
@@ -4897,11 +4884,9 @@ async function checkBestBasket(){
         button.textContent=
           "✅ PRICES FOUND";
 
-
         renderBasketResults(
           pollData
         );
-
 
         return;
 
@@ -4935,7 +4920,7 @@ async function checkBestBasket(){
 
 
     setBasketStatus(
-      "We couldn't get supermarket prices right now. "+
+      "We couldn't calculate the supermarket basket right now. "+
       error.message,
       "error"
     );
@@ -4977,7 +4962,7 @@ async function checkBestBasket(){
 
 
 /* =========================================================
-   RENDER BEST BASKET RESULTS
+   RENDER PRICE DATABASE RESULTS
    ========================================================= */
 
 function renderBasketResults(data){
@@ -5019,23 +5004,9 @@ function renderBasketResults(data){
   }
 
 
-  const mixedBasket=
-    data.mixedBasket ||
-    null;
-
-
-  const checkedAt=
-    formatCheckedTime(
-      data.checkedAt
-    );
-
-
   /*
-   * SORT COMPLETE BASKETS BY PRICE
-   *
-   * Complete baskets first.
-   * Cheapest complete basket first.
-   * Incomplete baskets after them.
+   * Sort complete supermarkets by total.
+   * Incomplete baskets go underneath complete ones.
    */
 
   const sortedSupermarkets=
@@ -5052,64 +5023,48 @@ function renderBasketResults(data){
             ?b.missing.length
             :0;
 
-        const aComplete=
-          aMissing===0;
-
-        const bComplete=
-          bMissing===0;
-
-        if(
-          aComplete &&
-          !bComplete
-        ){
-
+        if(aMissing===0 && bMissing>0)
           return -1;
 
-        }
-
-        if(
-          !aComplete &&
-          bComplete
-        ){
-
+        if(aMissing>0 && bMissing===0)
           return 1;
 
-        }
-
         return(
-          Number(a.total)||Infinity
+          Number(a.total)||0
         )-
         (
-          Number(b.total)||Infinity
+          Number(b.total)||0
         );
 
       }
     );
 
 
-  const completeBaskets=
+  const completeSupermarkets=
     sortedSupermarkets.filter(
       basket=>
-        Array.isArray(
-          basket.missing
-        )
-          ?
-            basket.missing.length===0
-          :
-            true
+        !Array.isArray(basket.missing) ||
+        basket.missing.length===0
     );
 
 
   const cheapestComplete=
-    completeBaskets.length
-      ?completeBaskets[0]
+    completeSupermarkets.length
+      ?Number(
+          completeSupermarkets[0].total
+        )
       :null;
 
 
-  const secondCheapestComplete=
-    completeBaskets.length>1
-      ?completeBaskets[1]
-      :null;
+  const mixedBasket=
+    data.mixedBasket ||
+    null;
+
+
+  const checkedAt=
+    formatCheckedTime(
+      data.checkedAt
+    );
 
 
   let html=`
@@ -5142,20 +5097,30 @@ function renderBasketResults(data){
    * DATABASE NOTICE
    */
 
-  html+=`
+  if(
+    data.seeded===true ||
+    data.live===false
+  ){
 
-    <div class="price-database-notice">
+    html+=`
 
-      <strong>
-        🗄️ ShiftFit Price Database
-      </strong>
+      <div class="basket-database-note">
 
-      These are seeded database prices for development.
-      They are not live supermarket prices yet.
+        <strong>
+          ShiftFit Price Database
+        </strong>
 
-    </div>
+        <br>
 
-  `;
+        These are seeded database prices for testing
+        and comparison. They are <strong>not live
+        supermarket prices yet.</strong>
+
+      </div>
+
+    `;
+
+  }
 
 
   /*
@@ -5186,6 +5151,19 @@ function renderBasketResults(data){
         mixedBasket
       );
 
+  }else if(
+    cheapestComplete!==null
+  ){
+
+    setBasketStatus(
+      "🏆 Cheapest complete supermarket basket: "+
+      formatMoney(
+        cheapestComplete
+      )+
+      ".",
+      "success"
+    );
+
   }else{
 
     setBasketStatus(
@@ -5197,7 +5175,7 @@ function renderBasketResults(data){
 
 
   /*
-   * SUPERMARKETS
+   * SUPERMARKET CARDS
    */
 
   sortedSupermarkets.forEach(
@@ -5206,9 +5184,7 @@ function renderBasketResults(data){
       html+=
         renderRetailerCard(
           basket,
-          cheapestComplete,
-          secondCheapestComplete,
-          index
+          completeSupermarkets
         );
 
     }
@@ -5243,36 +5219,46 @@ function renderMixedBasket(
   items.forEach(
     item=>{
 
+      /*
+       * The backend may call this field
+       * item, name or query depending on version.
+       */
+
       const itemName=
         item.item ||
         item.name ||
-        "Item";
+        item.query ||
+        "Shopping item";
 
 
-      const retailer=
+      const productName=
+        item.productName ||
+        item.product ||
+        "Matched product";
+
+
+      const retailerName=
         item.retailerName ||
         getRetailerDisplayName(
           item.retailer
         );
 
 
-      const product=
-        item.productName ||
-        item.product ||
-        "Matched product";
-
-
-      const pack=
+      const packSize=
         item.packSize ||
         item.pack ||
         "";
 
 
       const quantity=
-        Number(
-          item.quantity ??
-          item.qty
-        )||1;
+        Math.max(
+          1,
+          Number(
+            item.quantity ??
+            item.qty ??
+            1
+          )||1
+        );
 
 
       const total=
@@ -5280,6 +5266,21 @@ function renderMixedBasket(
           item.total ??
           item.lineTotal
         );
+
+
+      const unitPrice=
+        Number(
+          item.unitPrice ??
+          item.price
+        );
+
+
+      const shownTotal=
+        Number.isFinite(total)
+          ?total
+          :Number.isFinite(unitPrice)
+            ?unitPrice*quantity
+            :NaN;
 
 
       itemsHtml+=`
@@ -5298,23 +5299,26 @@ function renderMixedBasket(
 
             </div>
 
-            <div class="mixed-item-source">
+            <div class="mixed-item-product">
 
               ${escapeHtml(
-                retailer
-              )}
-
-              •
-
-              ${escapeHtml(
-                product
+                retailerName
               )}
 
               ${
-                pack
-                  ?" • "+
+                productName
+                  ?" · "+
                     escapeHtml(
-                      pack
+                      productName
+                    )
+                  :""
+              }
+
+              ${
+                packSize
+                  ?" · "+
+                    escapeHtml(
+                      packSize
                     )
                   :""
               }
@@ -5327,14 +5331,12 @@ function renderMixedBasket(
 
             ${
               Number.isFinite(
-                total
+                shownTotal
               )
-                ?
-                  formatMoney(
-                    total
+                ?formatMoney(
+                    shownTotal
                   )
-                :
-                  "—"
+                :"—"
             }
 
           </div>
@@ -5361,9 +5363,8 @@ function renderMixedBasket(
 
       <div class="mixed-basket-desc">
 
-        ShiftFit selects the cheapest
-        available product for each item
-        across the supermarkets.
+        ShiftFit selects the cheapest available
+        product for each item across the supermarkets.
 
       </div>
 
@@ -5406,9 +5407,7 @@ function renderMixedBasket(
 
 function renderRetailerCard(
   basket,
-  cheapestComplete,
-  secondCheapestComplete,
-  index
+  completeSupermarkets
 ){
 
   const retailerKey=
@@ -5451,79 +5450,88 @@ function renderRetailerCard(
     missing.length===0;
 
 
-  const isCheapest=
-    complete &&
-    cheapestComplete &&
-    retailerKey===
-      String(
-        cheapestComplete.retailer ||
-        ""
-      ).toLowerCase();
+  /*
+   * Find this retailer's position among
+   * complete baskets only.
+   */
 
-
-  const isSecondCheapest=
-    complete &&
-    secondCheapestComplete &&
-    retailerKey===
-      String(
-        secondCheapestComplete.retailer ||
-        ""
-      ).toLowerCase();
-
-
-  const cardClass=
+  const completeIndex=
     complete
-      ?"retailer-best"
-      :"retailer-incomplete";
+      ?completeSupermarkets.findIndex(
+          item=>
+            String(
+              item.retailer
+            ).toLowerCase()===
+            retailerKey
+        )
+      :-1;
+
+
+  const isBest=
+    completeIndex===0;
+
+
+  const isSecond=
+    completeIndex===1;
+
+
+  const isThird=
+    completeIndex===2;
+
+
+  let cardClass="";
+
+
+  if(isBest){
+
+    cardClass="retailer-best";
+
+  }else if(!complete){
+
+    cardClass="retailer-incomplete";
+
+  }
 
 
   let badgeHtml="";
 
 
-  if(isCheapest){
+  if(isBest){
 
     badgeHtml=`
 
       <div class="retailer-badge">
-
-        🏆 CHEAPEST COMPLETE BASKET
-
+        🥇 CHEAPEST COMPLETE BASKET
       </div>
 
     `;
 
-  }else if(isSecondCheapest){
+  }else if(isSecond){
 
     badgeHtml=`
 
-      <div class="retailer-badge second-best">
-
+      <div class="retailer-badge second">
         🥈 SECOND CHEAPEST
-
       </div>
 
     `;
 
-  }else if(!complete){
+  }else if(isThird){
 
     badgeHtml=`
 
-      <div class="retailer-badge incomplete">
-
-        ⚠ INCOMPLETE BASKET
-
+      <div class="retailer-badge third">
+        🥉 THIRD CHEAPEST
       </div>
 
     `;
 
-  }else{
+  }else if(complete){
 
     badgeHtml=`
 
       <div class="retailer-badge">
-
         ✓ COMPLETE BASKET
-
       </div>
 
     `;
@@ -5537,10 +5545,16 @@ function renderRetailerCard(
   basketItems.forEach(
     item=>{
 
+      /*
+       * IMPORTANT:
+       * Correctly read the new backend fields.
+       */
+
       const itemName=
         item.item ||
         item.name ||
-        "Item";
+        item.query ||
+        "Shopping item";
 
 
       const productName=
@@ -5556,10 +5570,14 @@ function renderRetailerCard(
 
 
       const quantity=
-        Number(
-          item.quantity ??
-          item.qty
-        )||1;
+        Math.max(
+          1,
+          Number(
+            item.quantity ??
+            item.qty ??
+            1
+          )||1
+        );
 
 
       const lineTotal=
@@ -5574,6 +5592,24 @@ function renderRetailerCard(
           item.unitPrice ??
           item.price
         );
+
+
+      /*
+       * Safety fallback:
+       * if the backend gives a unit price but
+       * not a line total, calculate quantity × unit.
+       */
+
+      const calculatedTotal=
+        Number.isFinite(
+          lineTotal
+        )
+          ?lineTotal
+          :Number.isFinite(
+              unitPrice
+            )
+              ?unitPrice*quantity
+              :NaN;
 
 
       itemsHtml+=`
@@ -5617,22 +5653,12 @@ function renderRetailerCard(
 
             ${
               Number.isFinite(
-                lineTotal
+                calculatedTotal
               )
-                ?
-                  formatMoney(
-                    lineTotal
+                ?formatMoney(
+                    calculatedTotal
                   )
-                :
-                  Number.isFinite(
-                    unitPrice
-                  )
-                    ?
-                      formatMoney(
-                        unitPrice
-                      )
-                    :
-                      "—"
+                :"—"
             }
 
           </div>
@@ -5664,10 +5690,12 @@ function renderRetailerCard(
               escapeHtml(
                 typeof item==="string"
                   ?item
-                  :
-                    item.name ||
+                  :(
                     item.item ||
+                    item.name ||
+                    item.query ||
                     "Item"
+                  )
               )
           )
           .join(" • ")
@@ -5680,84 +5708,62 @@ function renderRetailerCard(
   }
 
 
-  let savingHtml="";
+  /*
+   * Savings compared with the cheapest
+   * complete supermarket basket.
+   */
+
+  let savingsHtml="";
 
 
   if(
     complete &&
-    cheapestComplete &&
-    !isCheapest &&
-    Number.isFinite(
-      Number(
-        cheapestComplete.total
-      )
-    ) &&
-    Number.isFinite(
-      total
-    )
+    cheapestCompleteForCards(
+      completeSupermarkets
+    )!==null &&
+    !isBest
   ){
 
-    const difference=
-      total-
-      Number(
-        cheapestComplete.total
+    const cheapest=
+      cheapestCompleteForCards(
+        completeSupermarkets
       );
 
+    const difference=
+      total-cheapest;
 
-    if(difference>0){
 
-      savingHtml=`
+    if(
+      Number.isFinite(
+        difference
+      ) &&
+      difference>0.001
+    ){
 
-        <div class="retailer-saving expensive">
+      const cheapestName=
+        completeSupermarkets[0] &&
+        (
+          completeSupermarkets[0].retailerName ||
+          getRetailerDisplayName(
+            completeSupermarkets[0].retailer
+          )
+        );
 
-          £{
-            ""
-          }
 
-          £${difference.toFixed(2)}
-          more than ${escapeHtml(
-            cheapestComplete.retailerName ||
-            getRetailerDisplayName(
-              cheapestComplete.retailer
-            )
+      savingsHtml=`
+
+        <div class="basket-savings">
+
+          ${formatMoney(
+            difference
           )}
 
-        </div>
-
-      `;
-
-    }
-
-  }
-
-
-  if(
-    isCheapest &&
-    secondCheapestComplete &&
-    Number.isFinite(
-      Number(
-        secondCheapestComplete.total
-      )
-    )
-  ){
-
-    const saving=
-      Number(
-        secondCheapestComplete.total
-      )-
-      total;
-
-
-    if(saving>0){
-
-      savingHtml=`
-
-        <div class="retailer-saving">
-
-          💰 Save ${formatMoney(
-            saving
-          )}
-          vs the next cheapest complete basket
+          more than
+          <strong>
+            ${escapeHtml(
+              cheapestName
+            )}
+          </strong>
 
         </div>
 
@@ -5773,7 +5779,6 @@ function renderRetailerCard(
     <div class="retailer-card ${cardClass}">
 
       ${badgeHtml}
-
 
       <div class="retailer-name">
 
@@ -5829,7 +5834,7 @@ function renderRetailerCard(
       </div>
 
 
-      ${savingHtml}
+      ${savingsHtml}
 
 
       ${
@@ -5856,30 +5861,31 @@ function renderRetailerCard(
 }
 
 
-/* RETAILER NAME */
-
-function getRetailerDisplayName(
-  key
+function cheapestCompleteForCards(
+  completeSupermarkets
 ){
 
-  const normalised=
-    String(
-      key||
-      ""
-    )
-    .toLowerCase()
-    .trim();
+  if(
+    !Array.isArray(
+      completeSupermarkets
+    ) ||
+    !completeSupermarkets.length
+  ){
+
+    return null;
+
+  }
 
 
-  return(
-    retailerNames[
-      normalised
-    ]||
-    String(
-      key||
-      "Supermarket"
-    )
-  );
+  const value=
+    Number(
+      completeSupermarkets[0].total
+    );
+
+
+  return Number.isFinite(value)
+    ?value
+    :null;
 
 }
 
