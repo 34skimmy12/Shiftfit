@@ -557,6 +557,314 @@ button{
 }
 
 
+
+/* CALENDAR */
+
+let calendarSelectedDate = new Date();
+
+
+function startOfWeek(date){
+
+  const result =
+    new Date(date);
+
+  const day =
+    result.getDay();
+
+  const diff =
+    day===0
+      ?-6
+      :1-day;
+
+  result.setDate(
+    result.getDate()+diff
+  );
+
+  result.setHours(
+    0,0,0,0
+  );
+
+  return result;
+
+}
+
+
+function formatCalendarDate(date){
+
+  return date.toLocaleDateString(
+    "en-GB",
+    {
+      day:"numeric",
+      month:"short"
+    }
+  );
+
+}
+
+
+function getCalendarDayIndex(date){
+
+  const monday =
+    startOfWeek(
+      new Date()
+    );
+
+  const selected =
+    new Date(date);
+
+  selected.setHours(
+    0,0,0,0
+  );
+
+  return Math.max(
+    0,
+    Math.min(
+      6,
+      Math.round(
+        (
+          selected-monday
+        )/
+        86400000
+      )
+    )
+  );
+
+}
+
+
+function selectCalendarDate(date){
+
+  calendarSelectedDate =
+    new Date(date);
+
+  renderCalendar();
+
+}
+
+
+function renderCalendar(){
+
+  const week =
+    document.getElementById(
+      "calendarWeek"
+    );
+
+  const schedule =
+    document.getElementById(
+      "calendarSchedule"
+    );
+
+  const title =
+    document.getElementById(
+      "calendarDayTitle"
+    );
+
+  if(!week || !schedule || !title) return;
+
+  const monday =
+    startOfWeek(
+      new Date()
+    );
+
+  const today =
+    new Date();
+
+  today.setHours(
+    0,0,0,0
+  );
+
+  week.innerHTML="";
+
+  for(let i=0;i<7;i++){
+
+    const date =
+      new Date(monday);
+
+    date.setDate(
+      monday.getDate()+i
+    );
+
+    const dayName =
+      date
+        .toLocaleDateString(
+          "en-GB",
+          {weekday:"short"}
+        )
+        .toUpperCase();
+
+    const isToday =
+      date.getTime()===
+      today.getTime();
+
+    const isSelected =
+      date.toDateString()===
+      calendarSelectedDate.toDateString();
+
+    const button =
+      document.createElement(
+        "button"
+      );
+
+    button.type="button";
+
+    button.className =
+      "calendar-day"+
+      (isSelected?" active":"")+
+      (isToday?" today":"");
+
+    button.innerHTML=`
+      <div class="calendar-day-name">${dayName}</div>
+      <div class="calendar-day-number">${date.getDate()}</div>
+      ${isToday?'<div class="calendar-today-dot"></div>':''}
+    `;
+
+    button.onclick=function(){
+
+      selectCalendarDate(
+        date
+      );
+
+    };
+
+    week.appendChild(
+      button
+    );
+
+  }
+
+  const selected =
+    new Date(
+      calendarSelectedDate
+    );
+
+  const selectedName =
+    selected.toLocaleDateString(
+      "en-GB",
+      {weekday:"long"}
+    );
+
+  const isToday =
+    selected.toDateString()===
+    today.toDateString();
+
+  title.textContent =
+    isToday
+      ?"Today's Schedule"
+      :selectedName+"'s Schedule";
+
+  const shift =
+    getCurrentShift();
+
+  const workout =
+    getCurrentWorkoutSchedule();
+
+  const dayIndex =
+    getCalendarDayIndex(
+      selected
+    );
+
+  const meals =
+    weeklyMeals[dayIndex]||
+    weeklyMeals[0];
+
+  const mealData = [
+    {
+      type:"BREAKFAST",
+      name:mealOptions.breakfast[meals.breakfast].name,
+      emoji:mealOptions.breakfast[meals.breakfast].emoji,
+      calories:mealOptions.breakfast[meals.breakfast].calories
+    },
+    {
+      type:"LUNCH",
+      name:mealOptions.lunch[meals.lunch].name,
+      emoji:mealOptions.lunch[meals.lunch].emoji,
+      calories:mealOptions.lunch[meals.lunch].calories
+    },
+    {
+      type:"DINNER",
+      name:mealOptions.dinner[meals.dinner].name,
+      emoji:mealOptions.dinner[meals.dinner].emoji,
+      calories:mealOptions.dinner[meals.dinner].calories
+    }
+  ];
+
+  const shiftCard = `
+    <div class="calendar-card">
+      <div class="calendar-card-top">
+        <div class="calendar-card-icon">🕐</div>
+        <div>
+          <div class="calendar-card-label">WORK SHIFT</div>
+          <div class="calendar-card-title">${shift.name}</div>
+          <div class="calendar-card-detail">
+            ${shift.time}
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  const workoutCard = `
+    <div class="calendar-card">
+      <div class="calendar-card-top">
+        <div class="calendar-card-icon">🏋️</div>
+        <div>
+          <div class="calendar-card-label">TRAINING</div>
+          <div class="calendar-card-title">
+            ${selectedShift==="rest"?"Recovery Day":"Push Day"}
+          </div>
+          <div class="calendar-card-detail">
+            ${workout.description}
+          </div>
+        </div>
+      </div>
+      <div class="calendar-time">
+        ${workout.time}
+      </div>
+      <div class="calendar-actions">
+        <button
+          class="calendar-action-btn primary"
+          onclick="showWorkout()"
+        >
+          OPEN WORKOUT
+        </button>
+        <button
+          class="calendar-action-btn"
+          onclick="showMeals()"
+        >
+          VIEW MEALS
+        </button>
+      </div>
+    </div>
+  `;
+
+  const mealCards =
+    mealData.map(
+      meal=>`
+        <div class="calendar-card">
+          <div class="calendar-card-top">
+            <div class="calendar-card-icon">${meal.emoji}</div>
+            <div>
+              <div class="calendar-card-label">${meal.type}</div>
+              <div class="calendar-card-title">${meal.name}</div>
+              <div class="calendar-card-detail">
+                ${meal.calories} kcal
+              </div>
+            </div>
+          </div>
+        </div>
+      `
+    ).join("");
+
+  schedule.innerHTML =
+    shiftCard+
+    workoutCard+
+    `<div class="calendar-section-title">Meals</div>`+
+    mealCards;
+
+}
+
+
+
 /* WORKOUT */
 
 .workout-stats{
@@ -1882,6 +2190,166 @@ button{
   color:var(--muted);
   font-size:12px;
   line-height:1.5;
+}
+
+
+
+/* CALENDAR */
+
+.calendar-header{
+  margin-bottom:18px;
+}
+
+.calendar-header h1{
+  margin:9px 0 8px;
+  font-size:39px;
+  letter-spacing:-1.5px;
+}
+
+.calendar-header p{
+  color:var(--muted);
+  font-size:16px;
+  line-height:1.5;
+}
+
+.calendar-week{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:7px;
+  margin-top:18px;
+  overflow:hidden;
+}
+
+.calendar-day{
+  min-width:0;
+  border:1px solid #303a60;
+  border-radius:15px;
+  padding:10px 3px;
+  background:#10162a;
+  color:#aab1c5;
+  text-align:center;
+}
+
+.calendar-day.active{
+  border-color:#8b5cf6;
+  background:linear-gradient(145deg,#24145a,#14152f);
+  color:white;
+  box-shadow:0 8px 24px rgba(109,40,217,.25);
+}
+
+.calendar-day.today{
+  box-shadow:0 0 0 1px rgba(53,223,141,.45);
+}
+
+.calendar-day-name{
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.7px;
+}
+
+.calendar-day-number{
+  font-size:18px;
+  font-weight:950;
+  margin-top:5px;
+}
+
+.calendar-today-dot{
+  width:5px;
+  height:5px;
+  margin:5px auto 0;
+  border-radius:50%;
+  background:var(--green);
+}
+
+.calendar-section-title{
+  margin:22px 0 10px;
+  font-size:17px;
+  font-weight:900;
+}
+
+.calendar-card{
+  padding:17px;
+  margin-top:12px;
+  border-radius:20px;
+  border:1px solid #293253;
+  background:linear-gradient(145deg,#11162b,#0a0f20);
+}
+
+.calendar-card-top{
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+}
+
+.calendar-card-icon{
+  width:44px;
+  height:44px;
+  min-width:44px;
+  border-radius:13px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  background:rgba(139,92,246,.14);
+}
+
+.calendar-card-label{
+  color:#9fa7bb;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:1.3px;
+}
+
+.calendar-card-title{
+  margin-top:4px;
+  font-size:18px;
+  font-weight:900;
+}
+
+.calendar-card-detail{
+  color:#b7bdcd;
+  font-size:12px;
+  line-height:1.5;
+  margin-top:4px;
+}
+
+.calendar-time{
+  margin-top:12px;
+  color:#75e7b1;
+  font-size:12px;
+  font-weight:900;
+}
+
+.calendar-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+  margin-top:13px;
+}
+
+.calendar-action-btn{
+  border:1px solid rgba(139,92,246,.5);
+  background:rgba(109,40,217,.12);
+  color:#d7c9ff;
+  padding:11px 8px;
+  border-radius:11px;
+  font-size:11px;
+  font-weight:900;
+}
+
+.calendar-action-btn.primary{
+  background:linear-gradient(135deg,#8b3cff,#5123c5);
+  color:white;
+}
+
+.calendar-empty{
+  padding:18px;
+  border-radius:18px;
+  border:1px dashed #303a60;
+  color:#aab1c5;
+  font-size:13px;
+  line-height:1.5;
+  background:rgba(255,255,255,.025);
 }
 
 
@@ -3231,6 +3699,51 @@ button{
 </section>
 
 
+
+<!-- CALENDAR -->
+
+<section id="calendarScreen" class="screen">
+
+<button
+  class="back-btn"
+  onclick="showHome()"
+>
+  ← Back to Home
+</button>
+
+<div class="calendar-header">
+
+  <div class="shopping-kicker">
+    YOUR SHIFT WEEK
+  </div>
+
+  <h1>Calendar</h1>
+
+  <p>
+    See your shifts, workouts and meals together so you know what's coming next.
+  </p>
+
+</div>
+
+<div
+  class="calendar-week"
+  id="calendarWeek"
+></div>
+
+<div
+  class="calendar-section-title"
+  id="calendarDayTitle"
+>
+  Today's Schedule
+</div>
+
+<div
+  id="calendarSchedule"
+></div>
+
+</section>
+
+
 <!-- SHOPPING SCREEN -->
 
 <section id="shoppingScreen" class="screen">
@@ -3392,7 +3905,11 @@ button{
   <span>Home</span>
 </button>
 
-<button class="nav-item">
+<button
+  class="nav-item"
+  id="calendarNav"
+  onclick="showCalendar()"
+>
   <span class="nav-icon">▦</span>
   <span>Calendar</span>
 </button>
@@ -4517,6 +5034,14 @@ function setNav(active){
 
   }
 
+  if(active==="calendar"){
+
+    document
+      .getElementById("calendarNav")
+      .classList.add("active");
+
+  }
+
 }
 
 
@@ -4569,6 +5094,23 @@ function showMeals(){
   renderDays();
 
   renderCurrentDay();
+
+  window.scrollTo(0,0);
+
+}
+
+
+function showCalendar(){
+
+  hideAllScreens();
+
+  document
+    .getElementById("calendarScreen")
+    .classList.add("active");
+
+  setNav("calendar");
+
+  renderCalendar();
 
   window.scrollTo(0,0);
 
