@@ -2270,111 +2270,52 @@ button{
   transform:translateY(0);
 }
 
-/* ShiftFit v41 — centred workout log modal */
-.workout-set-modal{
+/* ShiftFit v41 — fixed centred workout log modal */
+#workoutSetModal{
   position:fixed !important;
   inset:0 !important;
-  z-index:9999 !important;
+  z-index:10010 !important;
   display:none;
   align-items:center !important;
   justify-content:center !important;
   padding:18px !important;
+  box-sizing:border-box !important;
   background:rgba(2,4,14,.72) !important;
   backdrop-filter:blur(8px);
   -webkit-backdrop-filter:blur(8px);
 }
-.workout-set-modal.open{
-  display:flex !important;
+#workoutSetModal .modal-card{
+  width:min(100%,420px) !important;
+  max-height:calc(100dvh - 36px) !important;
+  overflow:auto !important;
+  box-sizing:border-box !important;
+  padding:20px !important;
+  border:1px solid #303a60 !important;
+  border-radius:22px !important;
+  background:linear-gradient(180deg,#141a34,#0b1023) !important;
+  box-shadow:0 24px 70px rgba(0,0,0,.48) !important;
+  position:relative !important;
 }
-.workout-set-dialog{
-  width:min(100%,420px);
-  max-height:calc(100dvh - 36px);
-  overflow:auto;
-  padding:20px;
-  border:1px solid var(--border);
-  border-radius:22px;
-  background:linear-gradient(180deg,#141a34,#0b1023);
-  box-shadow:0 24px 70px rgba(0,0,0,.48);
+#workoutSetModal .modal-close{
+  position:absolute !important;
+  top:10px !important;
+  right:10px !important;
+  z-index:2 !important;
+  width:34px !important;
+  height:34px !important;
+  min-height:34px !important;
+  border-radius:50% !important;
 }
-.workout-set-dialog .modal-kicker{
-  color:#aab1c5;
-  font-size:9px;
-  font-weight:900;
-  letter-spacing:.16em;
-  margin-bottom:7px;
-}
-.workout-set-dialog h2{
-  margin:0;
-  color:var(--text);
-  font-size:24px;
-  line-height:1.1;
-}
-.workout-set-dialog .modal-subtitle{
-  margin:8px 0 18px;
-  color:var(--muted);
-  font-size:12px;
-  line-height:1.35;
-}
-.workout-set-fields{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
-.workout-set-field label{
-  display:block;
-  margin-bottom:6px;
-  color:#8f98b0;
-  font-size:8px;
-  font-weight:900;
-  letter-spacing:.13em;
-}
-.workout-set-field input{
-  width:100%;
-  box-sizing:border-box;
-  min-height:54px;
-  padding:0 14px;
-  border:1px solid var(--border);
-  border-radius:13px;
-  background:#070c1d;
-  color:var(--text);
-  font-size:19px;
-  font-weight:800;
-  outline:none;
-}
-.workout-set-field input:focus{
-  border-color:#8b5cf6;
-  box-shadow:0 0 0 3px rgba(139,92,246,.16);
-}
-.workout-set-actions{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:9px;
-  margin-top:16px;
-}
-.workout-set-actions button{
-  min-height:50px;
-  border-radius:12px;
-  font-size:11px;
-  font-weight:900;
-  letter-spacing:.1em;
-}
-.workout-set-cancel{
-  border:1px solid var(--border);
-  background:#11172c;
-  color:var(--muted);
-}
-.workout-set-save{
-  border:1px solid #8b5cf6;
-  background:linear-gradient(135deg,#7c3aed,#5123c5);
-  color:#fff;
+#workoutSetModal .workout-log-modal-target{
+  padding-right:34px;
 }
 @media(max-width:390px){
-  .workout-set-dialog{
-    padding:17px;
-    border-radius:19px;
+  #workoutSetModal{
+    padding:14px !important;
   }
-  .workout-set-dialog h2{
-    font-size:21px;
+  #workoutSetModal .modal-card{
+    padding:17px !important;
+    border-radius:19px !important;
   }
 }
 
@@ -10750,7 +10691,7 @@ function renderWorkoutDay(){
                 <button
                   type="button"
                   class="workout-log-btn"
-                  data-workout-log-exercise="${index}"
+                  onclick="openWorkoutSetModal(${index})"
                 >
                   + LOG SET
                 </button>
@@ -10930,23 +10871,6 @@ function openWorkoutSetModal(index){
   setTimeout(()=>{
     if(reps) reps.focus();
   },50);
-  const modal =
-    document.getElementById("workoutSetModal");
-
-  if(modal){
-    modal.classList.add("open");
-    modal.setAttribute("aria-hidden","false");
-
-    const weightInput =
-      document.getElementById("workoutSetWeight");
-
-    if(weightInput){
-      setTimeout(
-        ()=>weightInput.focus(),
-        80
-      );
-    }
-  }
 }
 
 function closeWorkoutSetModal(){
@@ -10962,13 +10886,6 @@ function closeWorkoutSetModal(){
 
   workoutSetModalExercise =
     null;
-  const modal =
-    document.getElementById("workoutSetModal");
-
-  if(modal){
-    modal.classList.remove("open");
-    modal.setAttribute("aria-hidden","true");
-  }
 }
 
 function saveWorkoutSet(){
@@ -11070,35 +10987,6 @@ function deleteWorkoutSet(event,exerciseIndex,setIndex){
   saveWorkoutLogs();
   renderWorkoutDay();
 }
-
-document.addEventListener(
-  "click",
-  function(event){
-
-    const button =
-      event.target.closest(
-        ".workout-log-btn[data-workout-log-exercise]"
-      );
-
-    if(!button){
-      return;
-    }
-
-    event.preventDefault();
-    event.stopPropagation();
-
-    const index =
-      Number(
-        button.dataset.workoutLogExercise
-      );
-
-    if(Number.isInteger(index)){
-      openWorkoutSetModal(index);
-    }
-
-  },
-  true
-);
 
 function showWorkoutLogNotice(title,text){
 
@@ -18580,50 +18468,23 @@ scheduleCalendarEventNotifications();
 </script>
 
 
-
-<div id="workoutSetModal" class="workout-set-modal" aria-hidden="true">
-  <div class="workout-set-dialog" role="dialog" aria-modal="true" aria-labelledby="workoutSetModalTitle">
+<div id="workoutSetModal" class="modal-overlay" style="display:none;" onclick="if(event.target===this) closeWorkoutSetModal()">
+  <div class="modal-card">
+    <button class="modal-close" type="button" onclick="closeWorkoutSetModal()">×</button>
     <div class="modal-kicker">WORKOUT LOG</div>
-    <h2 id="workoutSetModalTitle">Log Set 1</h2>
-    <div id="workoutSetModalSubtitle" class="modal-subtitle">Enter the weight and reps you completed.</div>
+    <h2 id="workoutSetModalTitle">Log Set</h2>
+    <p id="workoutSetModalTarget" class="workout-log-modal-target"></p>
 
-    <div class="workout-set-fields">
-      <div class="workout-set-field">
-        <label for="workoutSetWeight">WEIGHT (KG)</label>
-        <input
-          id="workoutSetWeight"
-          type="number"
-          inputmode="decimal"
-          min="0"
-          step="0.5"
-          placeholder="e.g. 40"
-        >
+    <div class="workout-log-fields">
+      <div class="workout-log-field">
+        <label>WEIGHT (KG)</label>
+        <input id="workoutSetWeight" type="number" inputmode="decimal" min="0" step="0.5" placeholder="e.g. 40">
       </div>
-
-      <div class="workout-set-field">
-        <label for="workoutSetReps">REPS</label>
-        <input
-          id="workoutSetReps"
-          type="number"
-          inputmode="numeric"
-          min="1"
-          step="1"
-          placeholder="e.g. 10"
-        >
+      <div class="workout-log-field">
+        <label>REPS</label>
+        <input id="workoutSetReps" type="number" inputmode="numeric" min="1" step="1" placeholder="e.g. 10">
       </div>
     </div>
-
-    <div class="workout-set-actions">
-      <button type="button" class="workout-set-cancel" onclick="closeWorkoutSetModal()">
-        CANCEL
-      </button>
-      <button type="button" class="workout-set-save" onclick="saveWorkoutSet()">
-        SAVE SET
-      </button>
-    </div>
-  </div>
-</div>
-
 
     <div class="workout-log-actions">
       <button type="button" class="workout-log-cancel" onclick="closeWorkoutSetModal()">CANCEL</button>
@@ -18634,7 +18495,7 @@ scheduleCalendarEventNotifications();
 
 
 <script id="shiftfit-workout-logging-init">
-/* ShiftFit v41 workout logging button fix is initialized lazily by renderWorkoutDay(). */
+/* ShiftFit v40 workout logging is initialized lazily by renderWorkoutDay(). */
 </script>
 
 </body>
