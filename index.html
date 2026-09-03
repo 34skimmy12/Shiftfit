@@ -2803,6 +2803,134 @@ button{
 }
 </style>
 
+
+<style id="shiftfit-polish-v2">
+/* Calendar day actions: use one consistent ShiftFit button treatment */
+#calendarDayScreen .calendar-day-actions{
+  display:grid !important;
+  grid-template-columns:1fr !important;
+  gap:10px !important;
+  margin-top:12px !important;
+}
+#calendarDayScreen .calendar-action-btn,
+#calendarDayScreen .calendar-action-btn.primary{
+  width:100% !important;
+  min-height:44px !important;
+  box-sizing:border-box !important;
+  border-radius:14px !important;
+  border:0 !important;
+  padding:11px 14px !important;
+  background:linear-gradient(135deg,#8b3cff,#5123c5) !important;
+  color:#fff !important;
+  font-size:12px !important;
+  font-weight:950 !important;
+}
+
+/* Compact workout screen for phone-sized displays */
+#workoutScreen .workout-stats{
+  gap:8px !important;
+  margin:14px 0 16px !important;
+}
+#workoutScreen .workout-stat{
+  padding:10px 5px !important;
+  border-radius:14px !important;
+}
+#workoutScreen .workout-stat small{
+  font-size:8px !important;
+  margin-bottom:4px !important;
+}
+#workoutScreen .workout-stat strong{
+  font-size:17px !important;
+}
+#workoutScreen .workout-progress{
+  margin:15px 0 !important;
+}
+#workoutScreen .exercise-card{
+  gap:11px !important;
+  padding:12px !important;
+  margin-bottom:9px !important;
+  border-radius:17px !important;
+}
+#workoutScreen .exercise-check{
+  width:38px !important;
+  height:38px !important;
+  min-width:38px !important;
+  border-radius:11px !important;
+  font-size:21px !important;
+}
+#workoutScreen .exercise-name{
+  font-size:16px !important;
+}
+#workoutScreen .exercise-sets{
+  font-size:12px !important;
+  margin-top:4px !important;
+}
+#workoutScreen .exercise-tip{
+  font-size:11px !important;
+  line-height:1.3 !important;
+  margin-top:6px !important;
+}
+#workoutScreen .finish-button{
+  padding:13px !important;
+  border-radius:14px !important;
+}
+
+/* Always make today's Meal Plan date visibly identifiable.
+   The selected date remains purple; today gets a distinct outline/dot. */
+.day-btn.today{
+  border-color:#75e7b1 !important;
+  box-shadow:0 0 0 1px rgba(117,231,177,.35) !important;
+  position:relative !important;
+}
+.day-btn.today::after{
+  content:"" !important;
+  position:absolute !important;
+  top:6px !important;
+  right:7px !important;
+  width:6px !important;
+  height:6px !important;
+  border-radius:50% !important;
+  background:#75e7b1 !important;
+}
+.day-btn.active.today{
+  border-color:#75e7b1 !important;
+  box-shadow:0 0 0 2px rgba(117,231,177,.28) !important;
+}
+
+/* Completion notice: same in-app banner treatment as the other ShiftFit notices */
+#shiftfitWorkoutNotice{
+  position:fixed !important;
+  left:20px !important;
+  right:20px !important;
+  bottom:92px !important;
+  z-index:9999 !important;
+  padding:16px 18px !important;
+  border:1px solid rgba(139,92,246,.55) !important;
+  border-radius:18px !important;
+  background:rgba(17,22,43,.97) !important;
+  box-shadow:0 14px 40px rgba(0,0,0,.45) !important;
+  backdrop-filter:blur(14px) !important;
+  transform:translateY(18px) !important;
+  opacity:0 !important;
+  pointer-events:none !important;
+  transition:opacity .22s ease,transform .22s ease !important;
+}
+#shiftfitWorkoutNotice.show{
+  opacity:1 !important;
+  transform:translateY(0) !important;
+}
+#shiftfitWorkoutNotice .shiftfit-plan-notice-title{
+  color:#fff !important;
+  font-size:15px !important;
+  font-weight:950 !important;
+}
+#shiftfitWorkoutNotice .shiftfit-plan-notice-text{
+  color:#aab1c5 !important;
+  font-size:13px !important;
+  margin-top:4px !important;
+}
+</style>
+
 </head>
 
 <body>
@@ -6170,7 +6298,7 @@ function showCalendarDay(date){
 
   const workoutButton =
     selectedShiftKey==="rest"
-      ?`<button class="calendar-action-btn" onclick="showWorkout()">OPEN RECOVERY</button>`
+      ?`<button class="calendar-action-btn primary" onclick="showWorkout()">OPEN RECOVERY</button>`
       :`<button class="calendar-action-btn primary" onclick="showWorkout()">OPEN WORKOUT</button>`;
 
   const mealRows =
@@ -6228,7 +6356,7 @@ function showCalendarDay(date){
 
       <div class="calendar-day-actions">
         <button
-          class="calendar-action-btn"
+          class="calendar-action-btn primary"
           onclick="showMeals(calendarSelectedDate)"
         >
           VIEW MEAL PLAN
@@ -6629,11 +6757,60 @@ function updateWorkoutProgress(){
 }
 
 
+function showWorkoutSuccess(){
+
+  let notice =
+    document.getElementById(
+      "shiftfitWorkoutNotice"
+    );
+
+  if(!notice){
+
+    notice =
+      document.createElement("div");
+
+    notice.id =
+      "shiftfitWorkoutNotice";
+
+    notice.innerHTML = `
+      <div class="shiftfit-plan-notice-title">
+        🏆 Workout complete!
+      </div>
+      <div class="shiftfit-plan-notice-text">
+        Great work. Your workout has been completed.
+      </div>
+    `;
+
+    document.body.appendChild(
+      notice
+    );
+
+  }
+
+  notice.classList.remove("show");
+
+  void notice.offsetWidth;
+
+  notice.classList.add("show");
+
+  clearTimeout(
+    window.shiftfitWorkoutNoticeTimer
+  );
+
+  window.shiftfitWorkoutNoticeTimer =
+    setTimeout(
+      function(){
+        notice.classList.remove("show");
+      },
+      2600
+    );
+
+}
+
+
 function finishWorkout(){
 
-  alert(
-    "🏆 Workout complete! Great work!"
-  );
+  showWorkoutSuccess();
 
   showHome();
 
@@ -6712,11 +6889,21 @@ function renderDays(){
           "button"
         );
 
+      const todayIndex =
+        new Date().getDay()===0
+          ?6
+          :new Date().getDay()-1;
+
       btn.className=
         "day-btn"+
         (
           index===currentDay
             ?" active"
+            :""
+        )+
+        (
+          index===todayIndex
+            ?" today"
             :""
         );
 
@@ -7442,40 +7629,28 @@ function scaleMeals(plan){
   };
 
   /*
-   * Each meal keeps its own nutrition profile.
-   * The selected meal's profile changes when it is swapped.
-   * Profiles are then proportionally scaled to the user's
-   * daily target so the four meal cards still add up to
-   * the personalised plan.
+   * Each meal owns its nutrition profile.
+   * When a meal is swapped, its calories, protein,
+   * carbs and fats all come from that new profile.
+   *
+   * One common scale factor is used for every nutrient
+   * so the macro numbers remain internally consistent
+   * with the meal calories instead of scaling each macro
+   * independently.
    */
 
   const totalCalories =
     Object.values(selected)
       .reduce(
-        (sum,meal)=>sum+meal.calories,
+        (sum,meal)=>sum+Number(meal.calories||0),
         0
       );
 
-  const totalProtein =
-    Object.values(selected)
-      .reduce(
-        (sum,meal)=>sum+meal.protein,
-        0
-      );
-
-  const totalCarbs =
-    Object.values(selected)
-      .reduce(
-        (sum,meal)=>sum+meal.carbs,
-        0
-      );
-
-  const totalFats =
-    Object.values(selected)
-      .reduce(
-        (sum,meal)=>sum+meal.fats,
-        0
-      );
+  const calorieScale =
+    totalCalories>0 &&
+    Number.isFinite(Number(plan.calories))
+      ? Number(plan.calories)/totalCalories
+      : 1;
 
   [
     "breakfast",
@@ -7484,68 +7659,72 @@ function scaleMeals(plan){
     "snack"
   ].forEach(type=>{
 
-    const meal=selected[type];
+    const meal =
+      selected[type];
 
     const calories =
-      totalCalories
-        ? Math.round(
-            meal.calories/
-            totalCalories*
-            plan.calories
-          )
-        : 0;
+      Math.round(
+        Number(meal.calories||0)*
+        calorieScale
+      );
 
     const protein =
-      totalProtein
-        ? Math.round(
-            meal.protein/
-            totalProtein*
-            plan.protein
-          )
-        : 0;
+      Math.round(
+        Number(meal.protein||0)*
+        calorieScale
+      );
 
     const carbs =
-      totalCarbs
-        ? Math.round(
-            meal.carbs/
-            totalCarbs*
-            plan.carbs
-          )
-        : 0;
+      Math.round(
+        Number(meal.carbs||0)*
+        calorieScale
+      );
 
     const fats =
-      totalFats
-        ? Math.round(
-            meal.fats/
-            totalFats*
-            plan.fats
-          )
-        : 0;
+      Math.round(
+        Number(meal.fats||0)*
+        calorieScale
+      );
 
-    document
-      .getElementById(type+"Calories")
-      .textContent=
+    const caloriesEl =
+      document.getElementById(
+        type+"Calories"
+      );
+
+    const pEl =
+      document.getElementById(
+        type+"P"
+      );
+
+    const cEl =
+      document.getElementById(
+        type+"C"
+      );
+
+    const fEl =
+      document.getElementById(
+        type+"F"
+      );
+
+    if(caloriesEl)
+      caloriesEl.textContent =
         calories+" kcal";
 
-    document
-      .getElementById(type+"P")
-      .textContent=
+    if(pEl)
+      pEl.textContent =
         protein+"g";
 
-    document
-      .getElementById(type+"C")
-      .textContent=
+    if(cEl)
+      cEl.textContent =
         carbs+"g";
 
-    document
-      .getElementById(type+"F")
-      .textContent=
+    if(fEl)
+      fEl.textContent =
         fats+"g";
 
   });
 
 }
-
 
 function swapMeal(type){
 
