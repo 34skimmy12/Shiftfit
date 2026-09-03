@@ -4113,6 +4113,129 @@ button{
 }
 </style>
 
+
+<style id="calendar-events-v16-final-layout">
+/* Compact, tidy Add Event modal for iPhone */
+#calendarEventModal .calendar-event-inline-fields{
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
+  gap:10px !important;
+}
+
+#calendarEventModal .calendar-event-inline-fields input{
+  height:56px !important;
+  min-height:56px !important;
+  max-height:56px !important;
+  margin-top:5px !important;
+  padding:0 12px !important;
+  border-radius:11px !important;
+  font-size:16px !important;
+  line-height:1 !important;
+}
+
+#calendarEventModal .calendar-event-notification-row{
+  width:100% !important;
+  height:auto !important;
+  min-height:0 !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:stretch !important;
+  gap:8px !important;
+  margin:0 0 10px !important;
+  padding:0 !important;
+  border:0 !important;
+  background:transparent !important;
+}
+
+#calendarEventModal .calendar-event-notify-toggle{
+  width:100% !important;
+  height:56px !important;
+  min-height:56px !important;
+  box-sizing:border-box !important;
+  margin:0 !important;
+  padding:0 12px !important;
+  border-radius:11px !important;
+}
+
+#calendarEventModal .calendar-event-notify-toggle input{
+  width:20px !important;
+  height:20px !important;
+  flex:0 0 20px !important;
+}
+
+#calendarEventModal .calendar-event-reminder-field{
+  width:100% !important;
+  min-width:0 !important;
+  margin:0 !important;
+}
+
+#calendarEventModal .calendar-event-reminder-field select{
+  width:100% !important;
+  height:56px !important;
+  min-height:56px !important;
+  box-sizing:border-box !important;
+  margin-top:5px !important;
+  padding:0 12px !important;
+  border-radius:11px !important;
+  font-size:16px !important;
+}
+
+#calendarEventModal #calendarEventNotes{
+  width:100% !important;
+  height:82px !important;
+  min-height:82px !important;
+  box-sizing:border-box !important;
+  margin-top:5px !important;
+  padding:12px !important;
+  border-radius:11px !important;
+  font-size:16px !important;
+  resize:none !important;
+}
+
+#calendarEventModal .calendar-event-form-actions{
+  grid-template-columns:1fr !important;
+  gap:8px !important;
+  margin-top:10px !important;
+}
+
+#calendarEventModal .calendar-event-form-actions button{
+  width:100% !important;
+  height:50px !important;
+  min-height:50px !important;
+  padding:0 12px !important;
+  border-radius:11px !important;
+  box-sizing:border-box !important;
+}
+
+@media(max-width:390px){
+  #calendarEventModal{
+    max-height:calc(100vh - 24px) !important;
+    overflow-y:auto !important;
+  }
+
+  #calendarEventModal .calendar-event-inline-fields{
+    gap:8px !important;
+  }
+
+  #calendarEventModal .calendar-event-inline-fields input,
+  #calendarEventModal .calendar-event-notify-toggle,
+  #calendarEventModal .calendar-event-reminder-field select{
+    height:54px !important;
+    min-height:54px !important;
+    max-height:54px !important;
+  }
+
+  #calendarEventModal #calendarEventNotes{
+    height:76px !important;
+    min-height:76px !important;
+  }
+
+  #calendarEventModal .calendar-event-form-actions button{
+    height:48px !important;
+    min-height:48px !important;
+  }
+}
+</style>
+
 </head>
 
 <body>
