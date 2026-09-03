@@ -1899,8 +1899,24 @@ button{
   <div class="action-icon">🏋️</div>
   <div class="action-label">WORKOUT</div>
   <div class="action-title">Push Day</div>
-  <div class="action-desc">
-    5 exercises • 60 mins
+
+  <div
+    class="action-desc"
+    id="homeWorkoutDescription"
+  >
+    Train after your day shift when your workday is finished.
+  </div>
+
+  <div
+    id="homeWorkoutSchedule"
+    style="
+      color:#75e7b1;
+      font-size:11px;
+      font-weight:900;
+      margin-top:8px;
+    "
+  >
+    19:00 – 21:00
   </div>
 
   <button
@@ -2028,6 +2044,18 @@ button{
   <p>
     Build strength and muscle with your personalised workout.
   </p>
+
+  <div
+    id="workoutScheduleText"
+    style="
+      margin-top:10px;
+      color:#75e7b1;
+      font-size:12px;
+      font-weight:900;
+    "
+  >
+    Best workout window: 19:00 – 21:00
+  </div>
 
 </div>
 
@@ -3117,6 +3145,48 @@ const shiftOptions={
 };
 
 
+/* SHIFT-BASED WORKOUT SCHEDULE */
+
+const workoutSchedule={
+
+  early:{
+    time:"15:00 – 17:00",
+    label:"Best workout window",
+    description:
+      "Train after your early shift so you can recover properly before your next shift."
+  },
+
+  day:{
+    time:"19:00 – 21:00",
+    label:"Best workout window",
+    description:
+      "Train after your day shift when your workday is finished."
+  },
+
+  late:{
+    time:"10:00 – 12:00",
+    label:"Best workout window",
+    description:
+      "Train before your late shift while you have the most energy."
+  },
+
+  night:{
+    time:"15:00 – 17:00",
+    label:"Best workout window",
+    description:
+      "Train after waking and before your night shift."
+  },
+
+  rest:{
+    time:"Recovery Day",
+    label:"No workout scheduled",
+    description:
+      "Use today for recovery, mobility and preparation for your next shift."
+  }
+
+};
+
+
 function selectShift(button){
 
   document
@@ -3158,11 +3228,32 @@ function updateShiftDisplay(){
       "homeShiftTime"
     );
 
+  const workoutDesc=
+    document.getElementById(
+      "homeWorkoutDescription"
+    );
+
+  const workoutScheduleText=
+    document.getElementById(
+      "homeWorkoutSchedule"
+    );
+
+  const workoutHeader=
+    document.getElementById(
+      "workoutScheduleText"
+    );
+
   const shift=
     shiftOptions[
       selectedShift
     ]||
     shiftOptions.day;
+
+  const schedule=
+    workoutSchedule[
+      selectedShift
+    ]||
+    workoutSchedule.day;
 
 
   if(display){
@@ -3192,6 +3283,32 @@ function updateShiftDisplay(){
         shift.time
       )+
       "</span>";
+
+  }
+
+
+  if(workoutDesc){
+
+    workoutDesc.textContent=
+      schedule.description;
+
+  }
+
+
+  if(workoutScheduleText){
+
+    workoutScheduleText.textContent=
+      schedule.time;
+
+  }
+
+
+  if(workoutHeader){
+
+    workoutHeader.textContent=
+      schedule.label+
+      ": "+
+      schedule.time;
 
   }
 
@@ -3601,6 +3718,8 @@ function showWorkout(){
   setNav("workout");
 
   updateWorkoutProgress();
+
+  updateShiftDisplay();
 
   window.scrollTo(0,0);
 
