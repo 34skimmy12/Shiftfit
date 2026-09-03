@@ -3220,6 +3220,18 @@ button{
 }
 </style>
 
+
+<style id="today-tracker-home-placement">
+.today-plan .today-tracker{
+  margin:18px 0 0 !important;
+  border-radius:20px !important;
+  background:rgba(255,255,255,.025) !important;
+}
+.today-plan .today-tracker-head h2{
+  font-size:20px !important;
+}
+</style>
+
 </head>
 
 <body>
@@ -3231,62 +3243,7 @@ button{
 
 <section id="homeScreen" class="screen active">
 
-<!-- SHIFT FIT TODAY'S PLAN TRACKER -->
-<div class="today-tracker" id="todayTracker">
 
-  <div class="today-tracker-head">
-    <div>
-      <div class="today-tracker-kicker">TODAY'S PLAN</div>
-      <h2>Track your day</h2>
-    </div>
-    <div class="today-water-badge" id="todayWaterBadge">💧 0 / 8</div>
-  </div>
-
-  <div class="today-macro-grid">
-    <div class="today-macro">
-      <span>CALORIES</span>
-      <strong id="todayCaloriesRemaining">0</strong>
-      <small>remaining</small>
-    </div>
-    <div class="today-macro">
-      <span>PROTEIN</span>
-      <strong id="todayProteinRemaining">0g</strong>
-      <small>remaining</small>
-    </div>
-    <div class="today-macro">
-      <span>CARBS</span>
-      <strong id="todayCarbsRemaining">0g</strong>
-      <small>remaining</small>
-    </div>
-    <div class="today-macro">
-      <span>FAT</span>
-      <strong id="todayFatRemaining">0g</strong>
-      <small>remaining</small>
-    </div>
-  </div>
-
-  <div class="today-progress-row">
-    <span>Today's nutrition</span>
-    <strong id="todayNutritionProgress">0%</strong>
-  </div>
-  <div class="today-progress">
-    <div id="todayNutritionProgressBar"></div>
-  </div>
-
-  <div class="today-tracker-actions">
-    <button type="button" class="today-track-btn primary" onclick="openAddFoodTracker()">
-      ＋ ADD FOOD
-    </button>
-    <button type="button" class="today-track-btn" onclick="addTodayWater()">
-      💧 ADD WATER
-    </button>
-  </div>
-
-  <div class="today-eaten" id="todayEatenList">
-    <div class="today-empty">Nothing logged yet today.</div>
-  </div>
-
-</div>
 
 
 <header class="home-header">
@@ -3386,9 +3343,66 @@ button{
 
   </div>
 
+<!-- SHIFT FIT TODAY'S PLAN TRACKER -->
+<div class="today-tracker" id="todayTracker">
+
+  <div class="today-tracker-head">
+    <div>
+      <div class="today-tracker-kicker">TODAY'S PLAN</div>
+      <h2>Track your day</h2>
+    </div>
+    <div class="today-water-badge" id="todayWaterBadge">💧 0 / 8</div>
+  </div>
+
+  <div class="today-macro-grid">
+    <div class="today-macro">
+      <span>CALORIES</span>
+      <strong id="todayCaloriesRemaining">0</strong>
+      <small>remaining</small>
+    </div>
+    <div class="today-macro">
+      <span>PROTEIN</span>
+      <strong id="todayProteinRemaining">0g</strong>
+      <small>remaining</small>
+    </div>
+    <div class="today-macro">
+      <span>CARBS</span>
+      <strong id="todayCarbsRemaining">0g</strong>
+      <small>remaining</small>
+    </div>
+    <div class="today-macro">
+      <span>FAT</span>
+      <strong id="todayFatRemaining">0g</strong>
+      <small>remaining</small>
+    </div>
+  </div>
+
+  <div class="today-progress-row">
+    <span>Today's nutrition</span>
+    <strong id="todayNutritionProgress">0%</strong>
+  </div>
+  <div class="today-progress">
+    <div id="todayNutritionProgressBar"></div>
+  </div>
+
+  <div class="today-tracker-actions">
+    <button type="button" class="today-track-btn primary" onclick="openAddFoodTracker()">
+      ＋ ADD FOOD
+    </button>
+    <button type="button" class="today-track-btn" onclick="addTodayWater()">
+      💧 ADD WATER
+    </button>
+  </div>
+
+  <div class="today-eaten" id="todayEatenList">
+    <div class="today-empty">Nothing logged yet today.</div>
+  </div>
+
+</div>
+
 </section>
 
-<div class="action-grid">
+
 
 <section class="action-card workout-card">
 
