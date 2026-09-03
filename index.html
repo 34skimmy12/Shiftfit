@@ -1102,6 +1102,81 @@ button{
   font-weight:850;
 }
 
+/* CUSTOM SHIFT */
+
+.custom-shift-panel{
+  display:none;
+  margin-top:12px;
+  padding:14px;
+  border-radius:15px;
+  border:1px solid rgba(139,92,246,.28);
+  background:rgba(5,8,22,.55);
+}
+
+.custom-shift-panel.show{
+  display:block;
+}
+
+.custom-shift-title{
+  font-size:13px;
+  font-weight:900;
+  margin-bottom:11px;
+}
+
+.custom-shift-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.custom-time-label{
+  display:block;
+  color:#aab1c5;
+  font-size:10px;
+  font-weight:850;
+  margin-bottom:6px;
+  letter-spacing:.5px;
+}
+
+.custom-time-input{
+  width:100%;
+  border:1px solid #374164;
+  border-radius:11px;
+  padding:12px 9px;
+  color:white;
+  font-size:15px;
+  font-weight:850;
+  outline:none;
+  background:#0a0f20;
+}
+
+.custom-time-input:focus{
+  border-color:#8b5cf6;
+}
+
+.overnight-row{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin-top:12px;
+  color:#c9cde0;
+  font-size:11px;
+  font-weight:800;
+}
+
+.overnight-row input{
+  width:18px;
+  height:18px;
+  accent-color:#8b5cf6;
+}
+
+.custom-shift-note{
+  color:#7f879b;
+  font-size:10px;
+  line-height:1.45;
+  margin-top:10px;
+}
+
 
 /* SHOPPING */
 
@@ -2890,7 +2965,7 @@ button{
       onclick="selectShift(this)"
     >
       <strong>🌙 Night</strong>
-      22:00 – 06:00
+      18:00 – 06:00
     </button>
 
     <button
@@ -2901,6 +2976,84 @@ button{
       <strong>🛌 Rest Day</strong>
       No work shift
     </button>
+
+    <button
+      class="shift-option"
+      data-shift="custom"
+      onclick="selectShift(this)"
+    >
+      <strong>⚙️ Custom</strong>
+      Choose your own times
+    </button>
+
+  </div>
+
+  <div
+    class="custom-shift-panel"
+    id="customShiftPanel"
+  >
+
+    <div class="custom-shift-title">
+      ⚙️ Custom Shift Times
+    </div>
+
+    <div class="custom-shift-grid">
+
+      <div>
+
+        <label class="custom-time-label">
+          SHIFT START
+        </label>
+
+        <input
+          id="customShiftStart"
+          class="custom-time-input"
+          type="time"
+          value="18:00"
+          onchange="updateCustomShift()"
+        >
+
+      </div>
+
+      <div>
+
+        <label class="custom-time-label">
+          SHIFT FINISH
+        </label>
+
+        <input
+          id="customShiftEnd"
+          class="custom-time-input"
+          type="time"
+          value="06:00"
+          onchange="updateCustomShift()"
+        >
+
+      </div>
+
+    </div>
+
+    <label class="overnight-row">
+
+      <input
+        id="customShiftOvernight"
+        type="checkbox"
+        checked
+        onchange="updateCustomShift()"
+      >
+
+      <span>
+        This is an overnight shift
+      </span>
+
+    </label>
+
+    <div
+      class="custom-shift-note"
+      id="customShiftNote"
+    >
+      Example: 18:00 – 06:00 will be treated as a 12-hour overnight shift.
+    </div>
 
   </div>
 
@@ -3110,10 +3263,20 @@ let selectedGoal="lose";
 let currentDay=0;
 
 
-/* SHIFT ENGINE */
+/* =========================================================
+   SHIFT ENGINE
+   ========================================================= */
 
 let selectedShift="day";
 
+let customShiftStart="18:00";
+
+let customShiftEnd="06:00";
+
+let customShiftOvernight=true;
+
+
+/* PRESET SHIFTS */
 
 const shiftOptions={
 
@@ -3134,18 +3297,23 @@ const shiftOptions={
 
   night:{
     name:"Night Shift",
-    time:"22:00 – 06:00"
+    time:"18:00 – 06:00"
   },
 
   rest:{
     name:"Rest Day",
     time:"No work shift"
+  },
+
+  custom:{
+    name:"Custom Shift",
+    time:"18:00 – 06:00"
   }
 
 };
 
 
-/* SHIFT-BASED WORKOUT SCHEDULE */
+/* PRESET WORKOUT WINDOWS */
 
 const workoutSchedule={
 
@@ -3187,6 +3355,335 @@ const workoutSchedule={
 };
 
 
+/* TIME HELPERS */
+
+function timeToMinutes(value){
+
+  if(!value || !value.includes(":")){
+    return 0;
+  }
+
+  const parts=value.split(":");
+
+  const hours=
+    Math.max(
+      0,
+      Math.min(
+        23,
+        parseInt(parts[0],10)||0
+      )
+    );
+
+  const minutes=
+    Math.max(
+      0,
+      Math.min(
+        59,
+        parseInt(parts[1],10)||0
+      )
+    );
+
+  return(
+    hours*60+
+    minutes
+  );
+
+}
+
+
+function minutesToTime(total){
+
+  total=
+    (
+      Number(total)||0
+    ) %
+    1440;
+
+  if(total<0){
+    total+=1440;
+  }
+
+  const hours=
+    Math.floor(
+      total/60
+    );
+
+  const minutes=
+    total%60;
+
+  return(
+    String(hours).padStart(2,"0")+
+    ":"+
+    String(minutes).padStart(2,"0")
+  );
+
+}
+
+
+function formatTimeRange(start,end){
+
+  return(
+    start+
+    " – "+
+    end
+  );
+
+}
+
+
+/* CUSTOM SHIFT */
+
+function getCustomShift(){
+
+  const start=
+    document.getElementById(
+      "customShiftStart"
+    )?.value ||
+    customShiftStart ||
+    "18:00";
+
+  const end=
+    document.getElementById(
+      "customShiftEnd"
+    )?.value ||
+    customShiftEnd ||
+    "06:00";
+
+  const overnight=
+    document.getElementById(
+      "customShiftOvernight"
+    )?.checked ??
+    customShiftOvernight;
+
+  customShiftStart=start;
+
+  customShiftEnd=end;
+
+  customShiftOvernight=overnight;
+
+  return{
+    name:"Custom Shift",
+    time:formatTimeRange(
+      start,
+      end
+    ),
+    start,
+    end,
+    overnight
+  };
+
+}
+
+
+function updateCustomShift(){
+
+  customShiftStart=
+    document.getElementById(
+      "customShiftStart"
+    )?.value ||
+    "18:00";
+
+  customShiftEnd=
+    document.getElementById(
+      "customShiftEnd"
+    )?.value ||
+    "06:00";
+
+  customShiftOvernight=
+    document.getElementById(
+      "customShiftOvernight"
+    )?.checked ||
+    false;
+
+  if(
+    selectedShift==="custom"
+  ){
+
+    updateShiftDisplay();
+
+  }
+
+}
+
+
+function calculateCustomWorkout(){
+
+  const custom=
+    getCustomShift();
+
+  if(
+    !custom.start ||
+    !custom.end
+  ){
+
+    return{
+      time:"Set your shift times",
+      label:"Workout window",
+      description:
+        "Choose your custom shift start and finish times."
+    };
+
+  }
+
+  const startMinutes=
+    timeToMinutes(
+      custom.start
+    );
+
+  let endMinutes=
+    timeToMinutes(
+      custom.end
+    );
+
+
+  let duration;
+
+  if(custom.overnight){
+
+    if(
+      endMinutes<=startMinutes
+    ){
+
+      endMinutes+=1440;
+
+    }
+
+  }else{
+
+    if(
+      endMinutes<=startMinutes
+    ){
+
+      endMinutes=
+        Math.min(
+          startMinutes+720,
+          1439
+        );
+
+    }
+
+  }
+
+
+  duration=
+    endMinutes-
+    startMinutes;
+
+
+  /*
+    For an overnight shift, allow a longer
+    recovery period after finishing work.
+    Example:
+    18:00 – 06:00
+    → workout around 15:00 – 17:00
+
+    For a normal custom shift, training
+    is placed after the shift.
+  */
+
+  let workoutStart;
+
+  if(custom.overnight){
+
+    workoutStart=
+      endMinutes+
+      9*60;
+
+  }else{
+
+    workoutStart=
+      endMinutes+
+      60;
+
+  }
+
+
+  /*
+    Keep the workout window at two hours.
+  */
+
+  const workoutEnd=
+    workoutStart+
+    120;
+
+
+  const time=
+    formatTimeRange(
+      minutesToTime(
+        workoutStart
+      ),
+      minutesToTime(
+        workoutEnd
+      )
+    );
+
+
+  let description;
+
+  if(custom.overnight){
+
+    description=
+      "Train after your recovery sleep and before your next overnight shift.";
+
+  }else{
+
+    description=
+      "Train after your custom shift when your workday is finished.";
+
+  }
+
+
+  return{
+    time,
+    label:"Best workout window",
+    description
+  };
+
+}
+
+
+function getCurrentShift(){
+
+  if(
+    selectedShift==="custom"
+  ){
+
+    return getCustomShift();
+
+  }
+
+  return(
+    shiftOptions[
+      selectedShift
+    ]||
+    shiftOptions.day
+  );
+
+}
+
+
+function getCurrentWorkoutSchedule(){
+
+  if(
+    selectedShift==="custom"
+  ){
+
+    return calculateCustomWorkout();
+
+  }
+
+  return(
+    workoutSchedule[
+      selectedShift
+    ]||
+    workoutSchedule.day
+  );
+
+}
+
+
+/* SHIFT SELECTION */
+
 function selectShift(button){
 
   document
@@ -3201,11 +3698,43 @@ function selectShift(button){
   selectedShift=
     button.dataset.shift;
 
+
+  const panel=
+    document.getElementById(
+      "customShiftPanel"
+    );
+
+  if(panel){
+
+    panel.classList.toggle(
+      "show",
+      selectedShift==="custom"
+    );
+
+  }
+
+
   updateShiftDisplay();
+
+  saveShiftSettings();
+
+}
+
+
+function saveShiftSettings(){
 
   localStorage.setItem(
     "shiftfitShift",
     selectedShift
+  );
+
+  localStorage.setItem(
+    "shiftfitCustomShift",
+    JSON.stringify({
+      start:customShiftStart,
+      end:customShiftEnd,
+      overnight:customShiftOvernight
+    })
   );
 
 }
@@ -3243,17 +3772,12 @@ function updateShiftDisplay(){
       "workoutScheduleText"
     );
 
+
   const shift=
-    shiftOptions[
-      selectedShift
-    ]||
-    shiftOptions.day;
+    getCurrentShift();
 
   const schedule=
-    workoutSchedule[
-      selectedShift
-    ]||
-    workoutSchedule.day;
+    getCurrentWorkoutSchedule();
 
 
   if(display){
@@ -3312,6 +3836,21 @@ function updateShiftDisplay(){
 
   }
 
+
+  const customPanel=
+    document.getElementById(
+      "customShiftPanel"
+    );
+
+  if(customPanel){
+
+    customPanel.classList.toggle(
+      "show",
+      selectedShift==="custom"
+    );
+
+  }
+
 }
 
 
@@ -3322,6 +3861,52 @@ function loadSavedShift(){
       "shiftfitShift"
     );
 
+
+  const savedCustom=
+    localStorage.getItem(
+      "shiftfitCustomShift"
+    );
+
+
+  if(savedCustom){
+
+    try{
+
+      const custom=
+        JSON.parse(
+          savedCustom
+        );
+
+      if(custom.start){
+        customShiftStart=
+          custom.start;
+      }
+
+      if(custom.end){
+        customShiftEnd=
+          custom.end;
+      }
+
+      if(
+        typeof custom.overnight==="boolean"
+      ){
+
+        customShiftOvernight=
+          custom.overnight;
+
+      }
+
+    }catch(error){
+
+      console.warn(
+        "Could not load custom shift."
+      );
+
+    }
+
+  }
+
+
   if(
     saved &&
     shiftOptions[saved]
@@ -3329,6 +3914,38 @@ function loadSavedShift(){
 
     selectedShift=saved;
 
+  }
+
+
+  const startInput=
+    document.getElementById(
+      "customShiftStart"
+    );
+
+  const endInput=
+    document.getElementById(
+      "customShiftEnd"
+    );
+
+  const overnightInput=
+    document.getElementById(
+      "customShiftOvernight"
+    );
+
+
+  if(startInput){
+    startInput.value=
+      customShiftStart;
+  }
+
+  if(endInput){
+    endInput.value=
+      customShiftEnd;
+  }
+
+  if(overnightInput){
+    overnightInput.checked=
+      customShiftOvernight;
   }
 
 
@@ -3345,6 +3962,7 @@ function loadSavedShift(){
 
       }
     );
+
 
   updateShiftDisplay();
 
@@ -4073,6 +4691,7 @@ function generatePlan(){
       ).value
     );
 
+
   if(!age || !weight || !height){
 
     alert(
@@ -4082,6 +4701,29 @@ function generatePlan(){
     return;
 
   }
+
+
+  if(
+    selectedShift==="custom"
+  ){
+
+    updateCustomShift();
+
+    if(
+      !customShiftStart ||
+      !customShiftEnd
+    ){
+
+      alert(
+        "Please enter your custom shift start and finish times."
+      );
+
+      return;
+
+    }
+
+  }
+
 
   let bmr=
     sex==="male"
@@ -4096,8 +4738,10 @@ function generatePlan(){
         (5*age)-
         161;
 
+
   const maintenance=
     bmr*activity;
+
 
   let calories=
     selectedGoal==="lose"
@@ -4116,15 +4760,18 @@ function generatePlan(){
               maintenance
             );
 
+
   const protein=
     Math.round(
       weight*2
     );
 
+
   const fats=
     Math.round(
       weight*.8
     );
+
 
   const carbs=
     Math.max(
@@ -4138,37 +4785,49 @@ function generatePlan(){
       )
     );
 
+
   const plan={
+
     age,
     weight,
     height,
     sex,
     activity,
     goal:selectedGoal,
+
     calories,
     protein,
     carbs,
     fats,
-    shift:selectedShift
+
+    shift:selectedShift,
+
+    customShift:{
+      start:customShiftStart,
+      end:customShiftEnd,
+      overnight:customShiftOvernight
+    }
+
   };
+
 
   localStorage.setItem(
     "shiftfitPlan",
     JSON.stringify(plan)
   );
 
-  localStorage.setItem(
-    "shiftfitShift",
-    selectedShift
-  );
+
+  saveShiftSettings();
 
   updatePlan(plan);
 
   updateShiftDisplay();
 
+
   alert(
     "⚡ Your personalised ShiftFit meal plan is ready!"
   );
+
 
   showMeals();
 
@@ -4438,8 +5097,10 @@ function loadSavedPlan(){
     const plan=
       JSON.parse(saved);
 
+
     selectedGoal=
       plan.goal;
+
 
     if(
       plan.shift &&
@@ -4450,6 +5111,31 @@ function loadSavedPlan(){
         plan.shift;
 
     }
+
+
+    if(
+      plan.customShift
+    ){
+
+      customShiftStart=
+        plan.customShift.start ||
+        customShiftStart;
+
+      customShiftEnd=
+        plan.customShift.end ||
+        customShiftEnd;
+
+      if(
+        typeof plan.customShift.overnight==="boolean"
+      ){
+
+        customShiftOvernight=
+          plan.customShift.overnight;
+
+      }
+
+    }
+
 
     document
       .getElementById(
@@ -4486,6 +5172,7 @@ function loadSavedPlan(){
       .value=
         plan.activity;
 
+
     document
       .querySelectorAll(
         ".goal-btn"
@@ -4501,6 +5188,39 @@ function loadSavedPlan(){
 
         }
       );
+
+
+    const startInput=
+      document.getElementById(
+        "customShiftStart"
+      );
+
+    const endInput=
+      document.getElementById(
+        "customShiftEnd"
+      );
+
+    const overnightInput=
+      document.getElementById(
+        "customShiftOvernight"
+      );
+
+
+    if(startInput){
+      startInput.value=
+        customShiftStart;
+    }
+
+    if(endInput){
+      endInput.value=
+        customShiftEnd;
+    }
+
+    if(overnightInput){
+      overnightInput.checked=
+        customShiftOvernight;
+    }
+
 
     updatePlan(plan);
 
