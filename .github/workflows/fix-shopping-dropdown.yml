@@ -1,0 +1,98 @@
+name: Fix Shopping Basket Dropdown
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  fix-shopping-dropdown:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Replace Shopping Basket food input
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text()
+          old = '''  <input
+    id="newShoppingItem"
+    class="add-item-input"
+    list="shiftfitFoodCatalogue"
+    placeholder="Search or add food..."
+    autocomplete="off"
+  >'''
+          new = '''  <select
+    id="newShoppingItem"
+    class="add-item-input"
+    aria-label="Choose food to add to shopping list"
+  >
+    <option value="">Select food...</option>
+    <option>Chicken breast</option>
+    <option>Lean beef mince</option>
+    <option>Lean turkey mince</option>
+    <option>Salmon</option>
+    <option>Tuna</option>
+    <option>Eggs</option>
+    <option>Greek yoghurt</option>
+    <option>Cottage cheese</option>
+    <option>Protein powder</option>
+    <option>Protein bar</option>
+    <option>Oats</option>
+    <option>Rice</option>
+    <option>Wholewheat pasta</option>
+    <option>Wholemeal wraps</option>
+    <option>Wholegrain bread</option>
+    <option>Rice cakes</option>
+    <option>Sweet potatoes</option>
+    <option>Potatoes</option>
+    <option>Beans</option>
+    <option>Kidney beans</option>
+    <option>Mixed vegetables</option>
+    <option>Spinach</option>
+    <option>Broccoli</option>
+    <option>Peppers</option>
+    <option>Onions</option>
+    <option>Tomatoes</option>
+    <option>Cucumber</option>
+    <option>Lettuce</option>
+    <option>Carrots</option>
+    <option>Mixed berries</option>
+    <option>Bananas</option>
+    <option>Apples</option>
+    <option>Blueberries</option>
+    <option>Strawberries</option>
+    <option>Avocado</option>
+    <option>Peanut butter</option>
+    <option>Almonds</option>
+    <option>Mixed nuts</option>
+    <option>Chia seeds</option>
+    <option>Honey</option>
+    <option>Olive oil</option>
+    <option>Light mayonnaise</option>
+    <option>Tomato sauce</option>
+    <option>Salsa</option>
+  </select>'''
+          if old not in s:
+              print('Shopping Basket input already changed or exact source not found')
+          else:
+              p.write_text(s.replace(old, new, 1))
+          PY
+
+      - name: Commit change
+        run: |
+          if git diff --quiet; then
+            echo "No changes needed"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Replace Shopping Basket food input with dropdown"
+          git push
