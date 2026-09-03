@@ -12511,7 +12511,8 @@ function escapeHtmlSafe(value){
 
 
 
-/* ShiftFit barcode photo scanner — iPhone friendly */
+/* ShiftFit barcode photo scanner — iPhone friendly
+   v23: ZBar WebAssembly is the primary image decoder. */
 let barcodeScanner = null;
 let barcodeLibraryLoading = null;
 let barcodePhotoBusy = false;
@@ -12575,6 +12576,124 @@ function loadBarcodeLibrary(){
 
 }
 
+
+async function loadZBarBarcodeLibrary(){
+
+  if(window.shiftfitZBar){
+    return window.shiftfitZBar;
+  }
+
+  if(window.shiftfitZBarLoading){
+    return window.shiftfitZBarLoading;
+  }
+
+  window.shiftfitZBarLoading = import(
+    "https://cdn.jsdelivr.net/npm/@undecaf/zbar-wasm@0.11.0/dist/inlined/index.js"
+  ).then(module=>{
+
+    if(!module || typeof module.scanImageData !== "function"){
+      throw new Error("ZBar loaded without scanImageData");
+    }
+
+    window.shiftfitZBar = module;
+    return module;
+
+  });
+
+  return window.shiftfitZBarLoading;
+
+}
+
+async function decodeWithZBarImage(file,variants){
+
+  const zbar = await loadZBarBarcodeLibrary();
+
+  if(!zbar || typeof zbar.scanImageData !== "function"){
+    return "";
+  }
+
+  const allImages =
+    Array.isArray(variants) && variants.length
+      ? variants
+      : [file];
+
+  for(let i=0;i<allImages.length;i++){
+
+    const item = allImages[i];
+    let objectUrl = "";
+
+    try{
+
+      objectUrl = URL.createObjectURL(item);
+
+      const image = new Image();
+      image.decoding = "async";
+
+      await new Promise((resolve,reject)=>{
+        image.onload = resolve;
+        image.onerror = reject;
+        image.src = objectUrl;
+      });
+
+      const width = Math.max(1,image.naturalWidth || image.width);
+      const height = Math.max(1,image.naturalHeight || image.height);
+      const maxDimension = 2200;
+      const scale = Math.min(1, maxDimension / Math.max(width,height));
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.max(1,Math.round(width * scale));
+      canvas.height = Math.max(1,Math.round(height * scale));
+
+      const context = canvas.getContext("2d",{willReadFrequently:true});
+      if(!context) continue;
+
+      context.drawImage(image,0,0,canvas.width,canvas.height);
+
+      const imageData = context.getImageData(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+
+      const symbols = await zbar.scanImageData(imageData);
+
+      if(Array.isArray(symbols) && symbols.length){
+
+        for(const symbol of symbols){
+
+          let value = "";
+
+          try{
+            if(symbol && typeof symbol.decode === "function"){
+              value = String(symbol.decode() || "");
+            }else if(symbol && symbol.rawData){
+              value = String(symbol.rawData);
+            }
+          }catch(error){}
+
+          value = value.replace(/\D/g,"");
+
+          if(value.length >= 8){
+            return value;
+          }
+
+        }
+
+      }
+
+    }catch(error){
+      console.error("ZBar image pass failed:",error);
+    }finally{
+      if(objectUrl){
+        try{ URL.revokeObjectURL(objectUrl); }catch(error){}
+      }
+    }
+
+  }
+
+  return "";
+
+}
 
 async function loadZXingBarcodeLibrary(){
 
@@ -12809,11 +12928,44 @@ async function handleBarcodePhoto(file){
 
   try{
 
-    await loadBarcodeLibrary();
+    /* Primary decoder: ZBar WebAssembly.
+       This is deliberately first because it is built for image data and
+       supports EAN-13 on Safari/iPhone without relying on BarcodeDetector. */
+    let variants =
+      await createBarcodeImageVariants(file);
 
-    if(!window.Html5Qrcode){
-      throw new Error("Barcode library unavailable");
+    if(message){
+      message.textContent =
+        "Using the iPhone barcode reader…";
     }
+
+    let decodedText = "";
+
+    try{
+
+      decodedText =
+        await decodeWithZBarImage(
+          file,
+          variants
+        );
+
+    }catch(error){
+
+      console.error(
+        "ZBar image scan failed:",
+        error
+      );
+
+    }
+
+    /* Existing readers remain as fallbacks. */
+    if(!decodedText){
+
+      await loadBarcodeLibrary();
+
+      if(!window.Html5Qrcode){
+        throw new Error("Barcode library unavailable");
+      }
 
     if(!barcodeScanner){
 
@@ -12834,12 +12986,7 @@ async function handleBarcodePhoto(file){
 
     }
 
-    const variants =
-      await createBarcodeImageVariants(file);
-
-    let decodedText = "";
-
-    for(let i=0;i<variants.length;i++){
+      for(let i=0;i<variants.length;i++){
 
       if(message){
 
@@ -12898,6 +13045,8 @@ async function handleBarcodePhoto(file){
 
       }
 
+      }
+
     }
 
     const value =
@@ -12918,7 +13067,7 @@ async function handleBarcodePhoto(file){
     if(message){
 
       message.textContent =
-        "Still couldn't read it. Try taking the photo closer with the barcode filling most of the frame, or use the manual barcode box.";
+        "I still couldn't read that photo. Try one close, straight photo with the barcode filling most of the frame, or enter the number manually.";
     }
 
   }catch(error){
