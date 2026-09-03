@@ -3321,6 +3321,69 @@ button{
 }
 </style>
 
+
+<style id="shiftfit-barcode-style">
+.barcode-btn{
+  width:100%;
+  margin-bottom:10px;
+}
+.barcode-card{
+  max-width:460px;
+}
+.barcode-view{
+  position:relative;
+  width:100%;
+  aspect-ratio:4/3;
+  overflow:hidden;
+  border-radius:18px;
+  background:#050914;
+  border:1px solid #303a60;
+  margin:12px 0 14px;
+}
+#barcodeVideo{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+.barcode-guide{
+  position:absolute;
+  left:10%;
+  right:10%;
+  top:35%;
+  height:30%;
+  border:2px solid #8b5cf6;
+  border-radius:12px;
+  pointer-events:none;
+}
+#barcodeScannerModal label{
+  display:block;
+  color:#b8bed0;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.05em;
+  margin-bottom:10px;
+}
+#barcodeScannerModal input{
+  display:block;
+  width:100%;
+  box-sizing:border-box;
+  margin-top:6px;
+  min-height:44px;
+  border:1px solid #303a60;
+  border-radius:13px;
+  background:#080d1d;
+  color:#f4f5fb;
+  padding:10px 12px;
+  font:inherit;
+  font-size:16px;
+}
+#barcodeScannerModal .today-track-btn{
+  width:100%;
+  margin-top:8px;
+}
+</style>
+
 </head>
 
 <body>
@@ -3478,8 +3541,8 @@ button{
     <button type="button" class="today-track-btn primary" onclick="openAddFoodTracker()">
       ＋ ADD FOOD
     </button>
-    <button type="button" class="today-track-btn" onclick="addTodayWater()">
-      💧 ADD WATER
+    <button type="button" class="today-track-btn primary" onclick="addTodayWater()">
+      + 💧 ADD WATER
     </button>
   </div>
 
@@ -10988,6 +11051,38 @@ function previewTodayMeal(){
 
 function saveTodayMeal(){
 
+  const selected =
+    document.getElementById("todayMealSelect");
+
+  if(
+    selected &&
+    String(selected.value || "").startsWith("scanned:") &&
+    window.shiftfitScannedMeal
+  ){
+
+    const meal =
+      window.shiftfitScannedMeal;
+
+    todayTrackerState.foods.push({
+      id:Date.now(),
+      name:meal.name,
+      calories:Number(meal.calories)||0,
+      protein:Number(meal.protein)||0,
+      carbs:Number(meal.carbs)||0,
+      fat:Number(meal.fats)||0
+    });
+
+    saveTodayTracker();
+    closeAddFoodTracker();
+    renderTodayTracker();
+
+    selected.value = "";
+    window.shiftfitScannedMeal = null;
+
+    return;
+
+  }
+
   resetTodayTrackerIfNeeded();
 
   const select =
@@ -11124,6 +11219,351 @@ function escapeHtmlSafe(value){
 }
 
 
+
+/* ShiftFit barcode scanner */
+let barcodeStream = null;
+let barcodeDetector = null;
+let barcodeScanTimer = null;
+
+function openBarcodeScanner(){
+
+  const modal =
+    document.getElementById("barcodeScannerModal");
+
+  if(!modal) return;
+
+  modal.classList.add("show");
+  modal.setAttribute("aria-hidden","false");
+
+  const message =
+    document.getElementById("barcodeScannerMessage");
+
+  if(message){
+    message.textContent =
+      "Point your camera at a food barcode.";
+  }
+
+  startBarcodeScanner();
+
+}
+
+async function startBarcodeScanner(){
+
+  const video =
+    document.getElementById("barcodeVideo");
+
+  const message =
+    document.getElementById("barcodeScannerMessage");
+
+  if(!video) return;
+
+  if(
+    !navigator.mediaDevices ||
+    !navigator.mediaDevices.getUserMedia
+  ){
+
+    if(message){
+      message.textContent =
+        "Camera access is not available. Enter the barcode below.";
+    }
+
+    return;
+  }
+
+  try{
+
+    barcodeStream =
+      await navigator.mediaDevices.getUserMedia({
+        video:{
+          facingMode:{ideal:"environment"}
+        },
+        audio:false
+      });
+
+    video.srcObject =
+      barcodeStream;
+
+    await video.play();
+
+    if("BarcodeDetector" in window){
+
+      barcodeDetector =
+        new BarcodeDetector({
+          formats:[
+            "ean_13",
+            "ean_8",
+            "upc_a",
+            "upc_e"
+          ]
+        });
+
+      scanBarcodeFrame();
+
+    }else if(message){
+
+      message.textContent =
+        "Automatic scanning is not supported in this browser. Enter the barcode below.";
+
+    }
+
+  }catch(error){
+
+    if(message){
+      message.textContent =
+        "Camera permission was unavailable. Enter the barcode below.";
+    }
+
+  }
+
+}
+
+async function scanBarcodeFrame(){
+
+  if(!barcodeDetector || !barcodeStream) return;
+
+  const video =
+    document.getElementById("barcodeVideo");
+
+  if(
+    !video ||
+    video.readyState < 2
+  ){
+
+    barcodeScanTimer =
+      setTimeout(
+        scanBarcodeFrame,
+        250
+      );
+
+    return;
+
+  }
+
+  try{
+
+    const codes =
+      await barcodeDetector.detect(video);
+
+    if(codes && codes.length){
+
+      const barcode =
+        String(
+          codes[0].rawValue || ""
+        ).replace(/\D/g,"");
+
+      if(barcode.length >= 8){
+
+        await lookupBarcodeNumber(barcode);
+        return;
+
+      }
+
+    }
+
+  }catch(error){}
+
+  barcodeScanTimer =
+    setTimeout(
+      scanBarcodeFrame,
+      250
+    );
+
+}
+
+async function lookupBarcodeNumber(value){
+
+  const input =
+    document.getElementById("barcodeManualInput");
+
+  const message =
+    document.getElementById("barcodeScannerMessage");
+
+  const barcode =
+    String(
+      value ??
+      input?.value ??
+      ""
+    ).replace(/\D/g,"");
+
+  if(barcode.length < 8){
+
+    if(message){
+      message.textContent =
+        "Please enter a valid food barcode.";
+    }
+
+    return;
+
+  }
+
+  if(message){
+    message.textContent =
+      "Looking up "+barcode+"…";
+  }
+
+  try{
+
+    const response =
+      await fetch(
+        "https://world.openfoodfacts.org/api/v2/product/"+encodeURIComponent(barcode)+".json"
+      );
+
+    if(!response.ok){
+      throw new Error("Lookup failed");
+    }
+
+    const data =
+      await response.json();
+
+    const product =
+      data?.product;
+
+    if(
+      Number(data?.status)!==1 ||
+      !product
+    ){
+      throw new Error("Product not found");
+    }
+
+    const n =
+      product.nutriments || {};
+
+    const calories =
+      Number(
+        n["energy-kcal_100g"] ??
+        n["energy-kcal"]
+      ) || 0;
+
+    const protein =
+      Number(n.proteins_100g) || 0;
+
+    const carbs =
+      Number(n.carbohydrates_100g) || 0;
+
+    const fat =
+      Number(n.fat_100g) || 0;
+
+    const name =
+      String(
+        product.product_name ||
+        product.generic_name ||
+        ("Scanned food "+barcode)
+      ).trim();
+
+    if(
+      typeof addScannedMealOption ===
+      "function"
+    ){
+
+      addScannedMealOption({
+        name:name,
+        calories:calories,
+        protein:protein,
+        carbs:carbs,
+        fats:fat
+      });
+
+    }
+
+    closeBarcodeScanner();
+
+  }catch(error){
+
+    if(message){
+      message.textContent =
+        "We couldn't find that barcode. Try another scan or enter the barcode manually.";
+    }
+
+  }
+
+}
+
+function closeBarcodeScanner(){
+
+  if(barcodeScanTimer){
+    clearTimeout(barcodeScanTimer);
+    barcodeScanTimer = null;
+  }
+
+  if(barcodeStream){
+
+    barcodeStream
+      .getTracks()
+      .forEach(
+        track=>track.stop()
+      );
+
+    barcodeStream = null;
+
+  }
+
+  barcodeDetector = null;
+
+  const video =
+    document.getElementById("barcodeVideo");
+
+  if(video){
+    video.srcObject = null;
+  }
+
+  const modal =
+    document.getElementById("barcodeScannerModal");
+
+  if(modal){
+
+    modal.classList.remove("show");
+    modal.setAttribute("aria-hidden","true");
+
+  }
+
+}
+
+
+function addScannedMealOption(meal){
+
+  const select =
+    document.getElementById("todayMealSelect");
+
+  if(!select) return;
+
+  const option =
+    document.createElement("option");
+
+  option.value =
+    "scanned:"+Date.now();
+
+  option.textContent =
+    "📷 "+meal.name;
+
+  option.dataset.scanned =
+    "true";
+
+  option.dataset.calories =
+    String(Math.round(meal.calories));
+
+  option.dataset.protein =
+    String(Math.round(meal.protein*10)/10);
+
+  option.dataset.carbs =
+    String(Math.round(meal.carbs*10)/10);
+
+  option.dataset.fats =
+    String(Math.round(meal.fats*10)/10);
+
+  select.appendChild(option);
+
+  select.value =
+    option.value;
+
+  window.shiftfitScannedMeal =
+    meal;
+
+  if(typeof previewTodayMeal === "function"){
+    previewTodayMeal();
+  }
+
+}
+
 </script>
 
 
@@ -11146,8 +11586,58 @@ function escapeHtmlSafe(value){
       <span>Select a meal to see its nutrition.</span>
     </div>
 
+    <button type="button" class="today-track-btn barcode-btn" onclick="openBarcodeScanner()">
+      ▣ SCAN BARCODE
+    </button>
+
     <button type="button" class="today-track-btn primary" onclick="saveTodayMeal()">
       + ADD TO TODAY
+    </button>
+
+  </div>
+</div>
+
+
+<div id="barcodeScannerModal" class="today-food-modal" aria-hidden="true">
+  <div class="today-food-card barcode-card">
+
+    <button type="button" class="today-food-close" onclick="closeBarcodeScanner()">×</button>
+
+    <div class="today-tracker-kicker">FOOD SCANNER</div>
+    <h2>Scan a barcode</h2>
+    <p id="barcodeScannerMessage">
+      Point your camera at a food barcode.
+    </p>
+
+    <div class="barcode-view">
+      <video id="barcodeVideo" autoplay muted playsinline></video>
+      <div class="barcode-guide"></div>
+    </div>
+
+    <label>BARCODE NUMBER
+      <input
+        id="barcodeManualInput"
+        type="text"
+        inputmode="numeric"
+        autocomplete="off"
+        placeholder="Enter barcode if needed"
+      >
+    </label>
+
+    <button
+      type="button"
+      class="today-track-btn"
+      onclick="lookupBarcodeNumber()"
+    >
+      LOOK UP BARCODE
+    </button>
+
+    <button
+      type="button"
+      class="today-track-btn"
+      onclick="closeBarcodeScanner()"
+    >
+      CANCEL
     </button>
 
   </div>
