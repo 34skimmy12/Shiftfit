@@ -4707,13 +4707,13 @@ button{
 </div>
 
 <div class="calendar-weekdays">
+  <div class="calendar-weekday">SUN</div>
   <div class="calendar-weekday">MON</div>
   <div class="calendar-weekday">TUE</div>
   <div class="calendar-weekday">WED</div>
   <div class="calendar-weekday">THU</div>
   <div class="calendar-weekday">FRI</div>
   <div class="calendar-weekday">SAT</div>
-  <div class="calendar-weekday">SUN</div>
 </div>
 
 <div
@@ -6692,23 +6692,14 @@ function renderCalendar(){
       0
     );
 
-  let mondayOffset =
-    firstDay.getDay()-1;
-
-  if(mondayOffset<0){
-
-    mondayOffset=6;
-
-  }
-
-  const cells =
+  // Sunday-first calendar: 0 = Sunday, 1 = Monday ... 6 = Saturday.
+  // Only dates belonging to the displayed month are rendered.
+  const firstDayOffset = firstDay.getDay();
+  const daysInMonth = lastDay.getDate();
+  const totalCells =
     Math.ceil(
-      (
-        mondayOffset+
-        lastDay.getDate()
-      )/
-      7
-    )*7;
+      (firstDayOffset + daysInMonth) / 7
+    ) * 7;
 
   const today =
     new Date();
@@ -6719,21 +6710,35 @@ function renderCalendar(){
 
   grid.innerHTML="";
 
-  for(let i=0;i<cells;i++){
+  // Leading empty cells keep each date under the correct weekday.
+  // They deliberately contain no dates from the previous month.
+  for(let i=0;i<firstDayOffset;i++){
+
+    const emptyCell =
+      document.createElement("div");
+
+    emptyCell.className =
+      "calendar-cell calendar-empty";
+
+    emptyCell.setAttribute(
+      "aria-hidden",
+      "true"
+    );
+
+    grid.appendChild(
+      emptyCell
+    );
+
+  }
+
+  for(let dayNumber=1;dayNumber<=daysInMonth;dayNumber++){
 
     const date =
       new Date(
         calendarViewDate.getFullYear(),
         calendarViewDate.getMonth(),
-        1+i-mondayOffset
+        dayNumber
       );
-
-    const key =
-      calendarDateKey(date);
-
-    const isCurrentMonth =
-      date.getMonth()===
-      calendarViewDate.getMonth();
 
     const isToday =
       date.getTime()===
@@ -6785,8 +6790,6 @@ function renderCalendar(){
 
     cell.className =
       "calendar-cell"+
-      (!isCurrentMonth
-        ?" other-month":"")+
       (isToday
         ?" today":"")+
       (isSelected
@@ -6794,7 +6797,7 @@ function renderCalendar(){
 
     cell.innerHTML=`
       ${isToday?'<span class="calendar-dot"></span>':''}
-      <span class="calendar-date-number">${date.getDate()}</span>
+      <span class="calendar-date-number">${dayNumber}</span>
       <span class="calendar-shift-pill ${pillClass}">
         ${pillText}
       </span>
@@ -6822,7 +6825,32 @@ function renderCalendar(){
 
   }
 
+  // Trailing empty cells complete the final week without showing next-month dates.
+  for(
+    let i=firstDayOffset+daysInMonth;
+    i<totalCells;
+    i++
+  ){
+
+    const emptyCell =
+      document.createElement("div");
+
+    emptyCell.className =
+      "calendar-cell calendar-empty";
+
+    emptyCell.setAttribute(
+      "aria-hidden",
+      "true"
+    );
+
+    grid.appendChild(
+      emptyCell
+    );
+
+  }
+
 }
+
 function showCalendarDay(date){
 
   const screen =
@@ -12354,3 +12382,18 @@ function addScannedMealOption(meal){
 
 </body>
 </html>
+<style id="shiftfit-calendar-month-only">
+#calendarScreen .calendar-empty{
+  display:block !important;
+  width:100% !important;
+  min-width:0 !important;
+  min-height:76px !important;
+  height:76px !important;
+  box-sizing:border-box !important;
+  border:1px solid transparent !important;
+  border-radius:12px !important;
+  padding:0 !important;
+  background:transparent !important;
+  pointer-events:none !important;
+}
+</style>
