@@ -3605,18 +3605,32 @@ button{
   border-radius:10px !important;
   font-size:10px !important;
 }
+.calendar-day-header{
+  position:relative;
+}
 .calendar-event-add{
-  width:100%;
-  min-height:44px;
-  margin:0 0 12px;
+  position:absolute;
+  top:0;
+  right:0;
+  width:48px;
+  height:48px;
+  min-width:48px;
+  min-height:48px;
+  margin:0;
+  padding:0;
+  display:grid;
+  place-items:center;
   border:1px solid #8b5cf6;
-  border-radius:12px;
+  border-radius:13px;
   background:linear-gradient(135deg,#7c3aed,#5123c5);
   color:#fff;
   font:inherit;
-  font-size:12px;
-  font-weight:900;
-  letter-spacing:.04em;
+  font-size:30px;
+  line-height:1;
+  font-weight:500;
+}
+.calendar-event-add:active{
+  transform:scale(.96);
 }
 .calendar-event-list{
   display:grid;
@@ -3744,6 +3758,172 @@ button{
 @media(max-width:390px){
   .calendar-event-card{padding:15px}
   .calendar-event-form-actions{grid-template-columns:1fr}
+}
+</style>
+
+<style id="calendar-events-v10-polish">
+/* Smaller close button in the top-right of the Add Event modal */
+#calendarEventModal .today-food-close{
+  position:absolute !important;
+  top:14px !important;
+  right:14px !important;
+  width:38px !important;
+  height:38px !important;
+  min-width:38px !important;
+  min-height:38px !important;
+  padding:0 !important;
+  margin:0 !important;
+  border:1px solid #303a60 !important;
+  border-radius:10px !important;
+  background:#080d1d !important;
+  color:#b8bfd0 !important;
+  display:grid !important;
+  place-items:center !important;
+  font-size:25px !important;
+  line-height:1 !important;
+  font-weight:500 !important;
+  box-sizing:border-box !important;
+}
+
+#calendarEventModal .today-food-close:active{
+  transform:scale(.97) !important;
+}
+
+/* Event name and time sit on the same row */
+#calendarEventModal .calendar-event-inline-fields{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) 125px !important;
+  gap:10px !important;
+  align-items:start !important;
+}
+
+#calendarEventModal .calendar-event-inline-fields label{
+  min-width:0 !important;
+  margin-bottom:10px !important;
+}
+
+#calendarEventModal .calendar-event-time-field input{
+  text-align:center !important;
+  padding-left:7px !important;
+  padding-right:7px !important;
+}
+
+/* Keep the event itself compact and put its time beside the title */
+.calendar-event-main-title-row{
+  display:flex;
+  align-items:baseline;
+  gap:8px;
+  min-width:0;
+  flex-wrap:wrap;
+}
+
+.calendar-event-main-title-row .calendar-event-title{
+  min-width:0;
+}
+
+.calendar-event-main-title-row .calendar-event-time{
+  margin-top:0 !important;
+  white-space:nowrap;
+}
+
+@media(max-width:390px){
+  #calendarEventModal .calendar-event-inline-fields{
+    grid-template-columns:minmax(0,1fr) 108px !important;
+    gap:8px !important;
+  }
+}
+</style>
+
+<style id="calendar-events-v12">
+#calendarDayScreen .calendar-day-header{
+  padding-right:132px !important;
+}
+#calendarDayScreen .calendar-event-add{
+  width:auto !important;
+  min-width:116px !important;
+  height:42px !important;
+  min-height:42px !important;
+  padding:0 13px !important;
+  border-radius:11px !important;
+  font-size:11px !important;
+  font-weight:900 !important;
+  letter-spacing:.05em !important;
+  white-space:nowrap !important;
+}
+.calendar-event-notification-row{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) 170px !important;
+  gap:10px !important;
+  align-items:end !important;
+  margin-bottom:12px !important;
+}
+.calendar-event-notify-toggle{
+  min-height:44px !important;
+  display:flex !important;
+  align-items:center !important;
+  gap:9px !important;
+  padding:10px 12px !important;
+  border:1px solid #303a60 !important;
+  border-radius:12px !important;
+  background:#080d1d !important;
+  color:#b8bed0 !important;
+  font-size:11px !important;
+  font-weight:900 !important;
+  letter-spacing:.05em !important;
+  box-sizing:border-box !important;
+}
+.calendar-event-notify-toggle input{
+  width:20px !important;
+  height:20px !important;
+  margin:0 !important;
+  accent-color:#8b5cf6 !important;
+}
+.calendar-event-reminder-field{
+  min-width:0 !important;
+}
+.calendar-event-reminder-field select{
+  display:block !important;
+  width:100% !important;
+  box-sizing:border-box !important;
+  margin-top:6px !important;
+  min-height:44px !important;
+  border:1px solid #303a60 !important;
+  border-radius:12px !important;
+  background:#080d1d !important;
+  color:#f4f5fb !important;
+  padding:9px 10px !important;
+  font:inherit !important;
+  font-size:13px !important;
+}
+.shiftfit-calendar-notify-toast{
+  position:fixed;
+  left:16px;
+  right:16px;
+  bottom:86px;
+  z-index:10050;
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+  padding:13px 15px;
+  border:1px solid #8b5cf6;
+  border-radius:14px;
+  background:#11162b;
+  box-shadow:0 10px 30px rgba(0,0,0,.35);
+  transform:translateY(12px);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .2s ease,transform .2s ease;
+}
+.shiftfit-calendar-notify-toast.show{
+  opacity:1;
+  transform:translateY(0);
+}
+.shiftfit-calendar-notify-toast strong{font-size:13px;color:#f4f5fb}
+.shiftfit-calendar-notify-toast span{font-size:11px;color:#aab1c5}
+@media(max-width:390px){
+  #calendarDayScreen .calendar-day-header{padding-right:108px !important}
+  #calendarDayScreen .calendar-event-add{min-width:96px !important;padding:0 8px !important;font-size:10px !important}
+  .calendar-event-notification-row{grid-template-columns:1fr !important;gap:8px !important}
 }
 </style>
 </head>
@@ -5079,6 +5259,8 @@ button{
       type="button"
       class="calendar-event-add"
       onclick="openCalendarEventModal()"
+      aria-label="Add event"
+      title="Add event"
     >
       + ADD EVENT
     </button>
@@ -7227,14 +7409,16 @@ function showCalendarDay(date){
                 <div class="calendar-event-item">
                   <div class="calendar-event-icon">📅</div>
                   <div class="calendar-event-main">
-                    <div class="calendar-event-title">
-                      ${escapeCalendarEventText(event.title)}
+                    <div class="calendar-event-main-title-row">
+                      <div class="calendar-event-title">
+                        ${escapeCalendarEventText(event.title)}
+                      </div>
+                      ${
+                        event.time
+                          ?`<div class="calendar-event-time">${escapeCalendarEventText(formatCalendarEventTime(event.time))}</div>`
+                          :""
+                      }
                     </div>
-                    ${
-                      event.time
-                        ?`<div class="calendar-event-time">${escapeCalendarEventText(event.time)}</div>`
-                        :""
-                    }
                     ${
                       event.notes
                         ?`<div class="calendar-event-notes">${escapeCalendarEventText(event.notes)}</div>`
@@ -12641,24 +12825,45 @@ function addScannedMealOption(meal){
     <h2>Add an event</h2>
     <p id="calendarEventModalDate">Add something to this day.</p>
 
-    <label>
-      EVENT NAME
-      <input
-        id="calendarEventTitle"
-        type="text"
-        maxlength="80"
-        autocomplete="off"
-        placeholder="e.g. Dentist appointment"
-      >
-    </label>
+    <div class="calendar-event-inline-fields">
+      <label class="calendar-event-name-field">
+        EVENT NAME
+        <input
+          id="calendarEventTitle"
+          type="text"
+          maxlength="80"
+          autocomplete="off"
+          placeholder="e.g. Dentist appointment"
+        >
+      </label>
 
-    <label>
-      TIME
-      <input
-        id="calendarEventTime"
-        type="time"
-      >
-    </label>
+      <label class="calendar-event-time-field">
+        TIME
+        <input
+          id="calendarEventTime"
+          type="time"
+        >
+      </label>
+    </div>
+
+    <div class="calendar-event-notification-row">
+      <label class="calendar-event-notify-toggle">
+        <input id="calendarEventNotify" type="checkbox">
+        <span>🔔 NOTIFY ME</span>
+      </label>
+
+      <label class="calendar-event-reminder-field">
+        REMINDER
+        <select id="calendarEventReminder">
+          <option value="0">At event time</option>
+          <option value="5">5 minutes before</option>
+          <option value="15" selected>15 minutes before</option>
+          <option value="30">30 minutes before</option>
+          <option value="60">1 hour before</option>
+          <option value="1440">1 day before</option>
+        </select>
+      </label>
+    </div>
 
     <label>
       NOTES
@@ -12736,6 +12941,12 @@ function openCalendarEventModal(){
   const notes =
     document.getElementById("calendarEventNotes");
 
+  const notify =
+    document.getElementById("calendarEventNotify");
+
+  const reminder =
+    document.getElementById("calendarEventReminder");
+
   if(dateText){
     dateText.textContent =
       calendarSelectedDate.toLocaleDateString(
@@ -12752,9 +12963,12 @@ function openCalendarEventModal(){
   if(title) title.value="";
   if(time) time.value="";
   if(notes) notes.value="";
+  if(notify) notify.checked=false;
+  if(reminder) reminder.value="15";
 
   modal.classList.add("show");
   modal.setAttribute("aria-hidden","false");
+  setupCalendarNotificationControls();
 
   setTimeout(()=>{
     if(title) title.focus();
@@ -12780,6 +12994,12 @@ function saveCalendarEvent(){
 
   const notesInput =
     document.getElementById("calendarEventNotes");
+
+  const notifyInput =
+    document.getElementById("calendarEventNotify");
+
+  const reminderInput =
+    document.getElementById("calendarEventReminder");
 
   const title =
     String(titleInput?.value || "").trim();
@@ -12809,12 +13029,105 @@ function saveCalendarEvent(){
       Math.random().toString(36).slice(2,8),
     title,
     time:String(timeInput?.value || ""),
-    notes:String(notesInput?.value || "").trim()
+    notes:String(notesInput?.value || "").trim(),
+    notify:!!notifyInput?.checked,
+    reminderMinutes:Number(reminderInput?.value || 15)
   });
 
   saveCalendarEvents();
+  scheduleCalendarEventNotifications();
   closeCalendarEventModal();
   showCalendarDay(calendarSelectedDate);
+}
+
+function formatCalendarEventTime(time){
+  if(!time) return "";
+  const parts=String(time).split(":");
+  const h=Number(parts[0]);
+  const m=Number(parts[1]||0);
+  if(!Number.isFinite(h)) return time;
+  const suffix=h>=12?"PM":"AM";
+  const displayHour=(h%12)||12;
+  return displayHour+":"+String(m).padStart(2,"0")+" "+suffix;
+}
+
+function showCalendarNotification(title,body){
+  if("Notification" in window && Notification.permission==="granted") {
+    try{ new Notification(title,{body,icon:"/icon-192.png",tag:"shiftfit-event"}); }catch(e){}
+  }
+
+  let notice=document.getElementById("shiftfitCalendarNotifyToast");
+  if(!notice){
+    notice=document.createElement("div");
+    notice.id="shiftfitCalendarNotifyToast";
+    notice.className="shiftfit-calendar-notify-toast";
+    document.body.appendChild(notice);
+  }
+  notice.innerHTML="<strong>🔔 "+escapeCalendarEventText(title)+"</strong><span>"+escapeCalendarEventText(body)+"</span>";
+  notice.classList.add("show");
+  clearTimeout(window.shiftfitCalendarNotifyTimer);
+  window.shiftfitCalendarNotifyTimer=setTimeout(()=>notice.classList.remove("show"),5000);
+}
+
+function scheduleCalendarEventNotifications(){
+  if(window.shiftfitCalendarNotifyTimers){
+    window.shiftfitCalendarNotifyTimers.forEach(clearTimeout);
+  }
+  window.shiftfitCalendarNotifyTimers=[];
+
+  const now=Date.now();
+  Object.keys(calendarEvents).forEach(key=>{
+    const events=Array.isArray(calendarEvents[key])?calendarEvents[key]:[];
+    events.forEach(event=>{
+      if(!event.notify || !event.time) return;
+      const parts=String(event.time).split(":");
+      const hour=Number(parts[0]);
+      const minute=Number(parts[1]||0);
+      if(!Number.isFinite(hour)||!Number.isFinite(minute)) return;
+      const date=new Date(key+"T00:00:00");
+      date.setHours(hour,minute,0,0);
+      const reminder=Math.max(0,Number(event.reminderMinutes||0));
+      const fireAt=date.getTime()-reminder*60000;
+      const delay=fireAt-now;
+      if(delay>0 && delay<2147483647){
+        const timer=setTimeout(()=>{
+          showCalendarNotification(event.title, reminder ? "Starts at "+formatCalendarEventTime(event.time) : "Your event is now.");
+        },delay);
+        window.shiftfitCalendarNotifyTimers.push(timer);
+      }
+    });
+  });
+}
+
+async function requestCalendarNotifications(){
+  if(!("Notification" in window)){
+    showCalendarNotification("Notifications unavailable","Your browser does not support notifications.");
+    return false;
+  }
+  if(Notification.permission==="granted") return true;
+  if(Notification.permission==="denied") {
+    showCalendarNotification("Notifications blocked","Allow notifications in your browser settings to use reminders.");
+    return false;
+  }
+  try{
+    const permission=await Notification.requestPermission();
+    return permission==="granted";
+  }catch(e){
+    return false;
+  }
+}
+
+function setupCalendarNotificationControls(){
+  const notify=document.getElementById("calendarEventNotify");
+  const reminder=document.getElementById("calendarEventReminder");
+  if(!notify || !reminder || notify.dataset.bound) return;
+  notify.dataset.bound="1";
+  notify.addEventListener("change",async()=>{
+    if(notify.checked){
+      const ok=await requestCalendarNotifications();
+      if(!ok) notify.checked=false;
+    }
+  });
 }
 
 function deleteCalendarEvent(id){
@@ -12836,6 +13149,10 @@ function deleteCalendarEvent(id){
   saveCalendarEvents();
   showCalendarDay(calendarSelectedDate);
 }
+</script>
+<script id="calendar-notification-init">
+window.shiftfitCalendarNotifyTimers=[];
+scheduleCalendarEventNotifications();
 </script>
 </body>
 </html>
