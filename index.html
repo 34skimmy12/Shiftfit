@@ -4764,6 +4764,51 @@ button{
 
 </style>
 
+
+<style id="shiftfit-target-weight-v31">
+
+.weight-target-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:13px;
+  padding-top:12px;
+  border-top:1px solid rgba(255,255,255,.06);
+}
+
+.weight-target-value{
+  display:flex;
+  align-items:baseline;
+  gap:4px;
+  margin-top:3px;
+}
+
+.weight-target-value strong{
+  font-size:21px;
+  line-height:1;
+}
+
+.weight-target-value span{
+  color:var(--muted);
+  font-size:11px;
+  font-weight:700;
+}
+
+.weight-target-btn{
+  border:1px solid rgba(139,92,246,.55);
+  background:rgba(139,92,246,.11);
+  color:#c7adff;
+  border-radius:10px;
+  padding:8px 10px;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.6px;
+  white-space:nowrap;
+}
+
+</style>
+
 </head>
 
 <body>
@@ -6147,6 +6192,61 @@ button{
         <span>CHANGE</span>
         <strong id="weightChangeValue">—</strong>
       </div>
+    </div>
+
+    <div class="weight-target-row">
+      <div>
+        <span class="weight-current-label">TARGET WEIGHT</span>
+        <div class="weight-target-value">
+          <strong id="targetWeightValue">—</strong>
+          <span>kg</span>
+        </div>
+      </div>
+
+      <button
+        class="weight-target-btn"
+        onclick="toggleTargetWeightEntry()"
+      >
+        SET TARGET
+      </button>
+    </div>
+
+    <div
+      id="targetWeightForm"
+      class="weight-entry-form"
+    >
+
+      <div class="weight-input-wrap">
+        <label for="targetWeightInput">Target weight</label>
+        <div class="weight-input-row">
+          <input
+            id="targetWeightInput"
+            type="number"
+            inputmode="decimal"
+            step="0.1"
+            min="20"
+            max="400"
+            placeholder="e.g. 80.0"
+          >
+          <span>kg</span>
+        </div>
+      </div>
+
+      <div class="weight-entry-actions">
+        <button
+          class="weight-cancel-btn"
+          onclick="toggleTargetWeightEntry(false)"
+        >
+          CANCEL
+        </button>
+        <button
+          class="weight-save-btn"
+          onclick="saveTargetWeight()"
+        >
+          SAVE TARGET
+        </button>
+      </div>
+
     </div>
 
     <div
@@ -13279,6 +13379,131 @@ function renderDailyStreak(){
 
 
 
+
+function getTargetWeight(){
+
+  try{
+
+    const saved =
+      localStorage.getItem(
+        "shiftfitTargetWeight"
+      );
+
+    const value =
+      saved !== null
+        ? Number(saved)
+        : NaN;
+
+    return Number.isFinite(value)
+      ? value
+      : null;
+
+  }catch(error){
+
+    return null;
+
+  }
+
+}
+
+
+function toggleTargetWeightEntry(force){
+
+  const form =
+    document.getElementById(
+      "targetWeightForm"
+    );
+
+  if(!form) return;
+
+  const shouldShow =
+    typeof force==="boolean"
+      ? force
+      : !form.classList.contains("show");
+
+  form.classList.toggle(
+    "show",
+    shouldShow
+  );
+
+  if(shouldShow){
+
+    const input =
+      document.getElementById(
+        "targetWeightInput"
+      );
+
+    if(input){
+
+      const target =
+        getTargetWeight();
+
+      if(target !== null){
+
+        input.value =
+          target.toFixed(1);
+
+      }
+
+      setTimeout(
+        ()=>input.focus(),
+        80
+      );
+
+    }
+
+  }
+
+}
+
+
+function saveTargetWeight(){
+
+  const input =
+    document.getElementById(
+      "targetWeightInput"
+    );
+
+  if(!input) return;
+
+  const weight =
+    Number(input.value);
+
+  if(
+    !Number.isFinite(weight) ||
+    weight < 20 ||
+    weight > 400
+  ){
+
+    input.focus();
+    return;
+
+  }
+
+  try{
+
+    localStorage.setItem(
+      "shiftfitTargetWeight",
+      String(
+        Math.round(weight*10)/10
+      )
+    );
+
+  }catch(error){
+
+    console.warn(
+      "Could not save target weight."
+    );
+
+  }
+
+  toggleTargetWeightEntry(false);
+
+  renderWeightProgress();
+
+}
+
+
 function getWeightHistory(){
 
   try{
@@ -13454,6 +13679,9 @@ function renderWeightProgress(){
   const history =
     getWeightHistory();
 
+  const target =
+    getTargetWeight();
+
   const current =
     history.length
       ? Number(
@@ -13493,6 +13721,11 @@ function renderWeightProgress(){
       "weightChangeValue"
     );
 
+  const targetEl =
+    document.getElementById(
+      "targetWeightValue"
+    );
+
   if(currentEl){
 
     currentEl.textContent =
@@ -13523,6 +13756,15 @@ function renderWeightProgress(){
         "—";
 
     }
+
+  }
+
+  if(targetEl){
+
+    targetEl.textContent =
+      target !== null
+        ? target.toFixed(1)
+        : "—";
 
   }
 
