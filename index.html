@@ -4809,6 +4809,82 @@ button{
 
 </style>
 
+
+<style id="shiftfit-weight-goal-v32">
+
+.weight-goal-journey{
+  margin-top:12px;
+  padding-top:11px;
+  border-top:1px solid rgba(255,255,255,.06);
+}
+
+.weight-journey-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  color:#8f97ae;
+  font-size:8px;
+  letter-spacing:1.3px;
+  font-weight:800;
+}
+
+.weight-journey-head strong{
+  color:var(--text);
+  font-size:12px;
+  letter-spacing:0;
+}
+
+.weight-journey-bar{
+  height:8px;
+  width:100%;
+  background:rgba(255,255,255,.07);
+  border-radius:99px;
+  overflow:hidden;
+  margin:8px 0 8px;
+}
+
+.weight-journey-bar > div{
+  width:0%;
+  height:100%;
+  border-radius:99px;
+  background:linear-gradient(90deg,#8b5cf6,#b084ff);
+  transition:width .25s ease;
+}
+
+.weight-journey-labels{
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:end;
+  gap:7px;
+  font-size:7px;
+  color:#8f97ae;
+  letter-spacing:.8px;
+}
+
+.weight-journey-labels span:last-child{
+  text-align:right;
+}
+
+.weight-journey-labels strong{
+  display:block;
+  margin-top:2px;
+  color:var(--text);
+  font-size:10px;
+  letter-spacing:0;
+}
+
+.weight-to-go{
+  color:#c7adff !important;
+  font-size:9px !important;
+  letter-spacing:0 !important;
+  text-align:center;
+  white-space:nowrap;
+  font-weight:800;
+}
+
+</style>
+
 </head>
 
 <body>
@@ -6209,6 +6285,34 @@ button{
       >
         SET TARGET
       </button>
+    </div>
+
+
+    <div class="weight-goal-journey">
+
+      <div class="weight-journey-head">
+        <span>GOAL JOURNEY</span>
+        <strong id="weightGoalPercent">0%</strong>
+      </div>
+
+      <div class="weight-journey-bar">
+        <div id="weightGoalFill"></div>
+      </div>
+
+      <div class="weight-journey-labels">
+        <span>
+          START
+          <strong id="weightStartValue">—</strong>
+        </span>
+        <span class="weight-to-go" id="weightToGoValue">
+          — kg to go
+        </span>
+        <span>
+          TARGET
+          <strong id="weightTargetJourneyValue">—</strong>
+        </span>
+      </div>
+
     </div>
 
     <div
@@ -13380,6 +13484,34 @@ function renderDailyStreak(){
 
 
 
+
+function planWeightFallback(){
+
+  try{
+
+    const saved =
+      localStorage.getItem(
+        "shiftfitProfile"
+      );
+
+    if(saved){
+
+      const profile =
+        JSON.parse(saved);
+
+      return Number(
+        profile.weight
+      );
+
+    }
+
+  }catch(error){}
+
+  return NaN;
+
+}
+
+
 function getTargetWeight(){
 
   try{
@@ -13708,8 +13840,133 @@ function renderWeightProgress(){
 
   }
 
+  const startWeight =
+    history.length
+      ? Number(history[0].weight)
+      : (
+          Number.isFinite(
+            Number(planWeightFallback())
+          )
+            ? Number(planWeightFallback())
+            : null
+        );
+
   const plan =
     getProgressPlan();
+
+  let journeyPercent = 0;
+  let weightToGo = null;
+
+  if(
+    startWeight !== null &&
+    target !== null &&
+    Number.isFinite(current) &&
+    Number.isFinite(startWeight) &&
+    Number.isFinite(target) &&
+    startWeight !== target
+  ){
+
+    const totalDistance =
+      Math.abs(startWeight-target);
+
+    const covered =
+      Math.abs(startWeight-current);
+
+    journeyPercent =
+      Math.max(
+        0,
+        Math.min(
+          100,
+          Math.round(
+            covered /
+            totalDistance *
+            100
+          )
+        )
+      );
+
+    weightToGo =
+      Math.round(
+        Math.abs(current-target)*10
+      )/10;
+
+  }else if(
+    startWeight !== null &&
+    target !== null &&
+    Number.isFinite(current) &&
+    startWeight === target
+  ){
+
+    journeyPercent =
+      current === target
+        ? 100
+        : 0;
+
+    weightToGo =
+      Math.round(
+        Math.abs(current-target)*10
+      )/10;
+
+  }
+
+  const journeyPercentEl =
+    document.getElementById(
+      "weightGoalPercent"
+    );
+
+  const journeyFillEl =
+    document.getElementById(
+      "weightGoalFill"
+    );
+
+  const startEl =
+    document.getElementById(
+      "weightStartValue"
+    );
+
+  const targetJourneyEl =
+    document.getElementById(
+      "weightTargetJourneyValue"
+    );
+
+  const toGoEl =
+    document.getElementById(
+      "weightToGoValue"
+    );
+
+  if(journeyPercentEl){
+    journeyPercentEl.textContent =
+      journeyPercent+"%";
+  }
+
+  if(journeyFillEl){
+    journeyFillEl.style.width =
+      journeyPercent+"%";
+  }
+
+  if(startEl){
+    startEl.textContent =
+      startWeight !== null
+        ? startWeight.toFixed(1)+" kg"
+        : "—";
+  }
+
+  if(targetJourneyEl){
+    targetJourneyEl.textContent =
+      target !== null
+        ? target.toFixed(1)+" kg"
+        : "—";
+  }
+
+  if(toGoEl){
+
+    toGoEl.textContent =
+      weightToGo !== null
+        ? weightToGo.toFixed(1)+" kg to go"
+        : "Set a target";
+
+  }
+
 
   const currentEl =
     document.getElementById(
