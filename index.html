@@ -3447,6 +3447,52 @@ button{
 }
 </style>
 
+
+<style id="shiftfit-scanner-status">
+.barcode-guide{
+  box-shadow:0 0 0 9999px rgba(0,0,0,.18);
+}
+</style>
+
+
+<style id="shiftfit-workout-day-compact">
+.workout-day-selector{
+  display:flex !important;
+  gap:6px !important;
+  overflow-x:auto !important;
+  margin:12px 0 10px !important;
+  padding:0 0 3px !important;
+  scrollbar-width:none;
+}
+.workout-day-selector::-webkit-scrollbar{
+  display:none;
+}
+.workout-day-selector .day-btn{
+  flex:0 0 62px !important;
+  width:62px !important;
+  min-width:62px !important;
+  min-height:54px !important;
+  height:54px !important;
+  padding:7px 4px !important;
+  border-radius:12px !important;
+  font-size:10px !important;
+  line-height:1.05 !important;
+}
+.workout-day-selector .day-btn strong{
+  display:block !important;
+  margin-top:3px !important;
+  font-size:13px !important;
+  line-height:1 !important;
+}
+.workout-day-selector .day-btn.today{
+  box-shadow:0 0 0 2px rgba(74,222,128,.72) inset !important;
+}
+.workout-day-title{
+  margin:7px 0 10px !important;
+  font-size:20px !important;
+}
+</style>
+
 </head>
 
 <body>
@@ -5691,15 +5737,88 @@ function loadSavedShift(){
 
 /* DAYS */
 
-const days=[
-  {name:"MON",date:"25"},
-  {name:"TUE",date:"26"},
-  {name:"WED",date:"27"},
-  {name:"THU",date:"28"},
-  {name:"FRI",date:"29"},
-  {name:"SAT",date:"30"},
-  {name:"SUN",date:"31"}
-];
+function getCurrentWeekDays(){
+
+  const now = new Date();
+
+  const today =
+    new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate()
+    );
+
+  const monday =
+    new Date(today);
+
+  const day =
+    monday.getDay();
+
+  const daysFromMonday =
+    day===0 ? 6 : day-1;
+
+  monday.setDate(
+    monday.getDate() -
+    daysFromMonday
+  );
+
+  const names=[
+    "MON",
+    "TUE",
+    "WED",
+    "THU",
+    "FRI",
+    "SAT",
+    "SUN"
+  ];
+
+  return names.map(
+    (name,index)=>{
+
+      const date =
+        new Date(monday);
+
+      date.setDate(
+        monday.getDate()+index
+      );
+
+      return {
+        name:name,
+        date:String(
+          date.getDate()
+        ),
+        iso:
+          date.getFullYear()+
+          "-" +
+          String(
+            date.getMonth()+1
+          ).padStart(2,"0")+
+          "-" +
+          String(
+            date.getDate()
+          ).padStart(2,"0")
+      };
+
+    }
+  );
+
+}
+
+const days =
+  getCurrentWeekDays();
+
+const todayWeekIndex =
+  (()=>{
+
+    const day =
+      new Date().getDay();
+
+    return day===0 ? 6 : day-1;
+
+  })();
+
+currentDay =
+  todayWeekIndex;
 
 
 /* MEAL OPTIONS */
@@ -6121,6 +6240,26 @@ function showHome(){
 
 
 function showWorkout(){
+
+  const refreshedDays =
+    getCurrentWeekDays();
+
+  days.splice(
+    0,
+    days.length,
+    ...refreshedDays
+  );
+
+  const todayIndex =
+    new Date().getDay()===0
+      ?6
+      :new Date().getDay()-1;
+
+  workoutDay =
+    todayIndex;
+
+  currentDay =
+    todayIndex;
 
   hideAllScreens();
 
@@ -11673,22 +11812,34 @@ async function startBarcodeScanner(){
     barcodeReader =
       new ZXing.BrowserMultiFormatReader();
 
+    /*
+      The camera stream is already attached to the video element above.
+      Decode that existing stream continuously instead of asking Safari
+      for a second camera stream.
+    */
     barcodeReaderControls =
-      await barcodeReader.decodeFromVideoElement(
+      await barcodeReader.decodeFromVideoElementContinuously(
         video,
         (result,error)=>{
-          if(result){
 
-            const value =
-              String(
-                result.getText() || ""
-              ).replace(/\D/g,"");
+          if(!result) return;
 
-            if(value.length >= 8){
-              lookupBarcodeNumber(value);
+          const value =
+            String(
+              result.getText() || ""
+            ).replace(/\D/g,"");
+
+          if(value.length >= 8){
+
+            if(message){
+              message.textContent =
+                "Barcode found — looking up product…";
             }
 
+            lookupBarcodeNumber(value);
+
           }
+
         }
       );
 
