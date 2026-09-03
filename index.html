@@ -3007,6 +3007,219 @@ button{
 }
 </style>
 
+
+<style id="today-tracker-style">
+.today-tracker{
+  background:var(--card,#11162b);
+  border:1px solid var(--border,#303a60);
+  border-radius:26px;
+  padding:20px;
+  margin:0 0 22px;
+}
+.today-tracker-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:12px;
+}
+.today-tracker h2{
+  margin:3px 0 0;
+  font-size:24px;
+  color:#f4f5fb;
+}
+.today-tracker-kicker{
+  color:#a98cff;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.22em;
+}
+.today-water-badge{
+  background:#17233b;
+  border:1px solid #304a72;
+  border-radius:14px;
+  padding:9px 11px;
+  color:#b9d9ff;
+  font-size:12px;
+  font-weight:900;
+  white-space:nowrap;
+}
+.today-macro-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+  margin-top:16px;
+}
+.today-macro{
+  background:rgba(255,255,255,.035);
+  border-radius:15px;
+  padding:11px 7px;
+  text-align:center;
+  min-width:0;
+}
+.today-macro span{
+  display:block;
+  color:#aab1c5;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.08em;
+}
+.today-macro strong{
+  display:block;
+  color:#f4f5fb;
+  font-size:18px;
+  margin:4px 0 1px;
+}
+.today-macro small{
+  color:#7f879d;
+  font-size:9px;
+}
+.today-progress-row{
+  display:flex;
+  justify-content:space-between;
+  margin:15px 0 7px;
+  color:#aab1c5;
+  font-size:12px;
+  font-weight:800;
+}
+.today-progress-row strong{color:#6ee7b7}
+.today-progress{
+  height:7px;
+  background:#20263d;
+  border-radius:99px;
+  overflow:hidden;
+}
+.today-progress div{
+  width:0;
+  height:100%;
+  background:linear-gradient(90deg,#7c3aed,#4ade80);
+  border-radius:99px;
+  transition:width .2s ease;
+}
+.today-tracker-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+  margin-top:14px;
+}
+.today-track-btn{
+  min-height:44px;
+  border-radius:14px;
+  border:1px solid #4b3d85;
+  background:#17142f;
+  color:#d7caff;
+  font:inherit;
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.04em;
+}
+.today-track-btn.primary{
+  border-color:#8b5cf6;
+  background:linear-gradient(135deg,#7c3aed,#5123c5);
+  color:#fff;
+}
+.today-eaten{
+  margin-top:14px;
+}
+.today-eaten-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:9px 0;
+  border-top:1px solid rgba(255,255,255,.07);
+}
+.today-eaten-name{
+  color:#e8eaf3;
+  font-size:13px;
+  font-weight:800;
+  min-width:0;
+}
+.today-eaten-macros{
+  color:#8f97ac;
+  font-size:10px;
+  text-align:right;
+  white-space:nowrap;
+}
+.today-empty{
+  color:#7f879d;
+  font-size:12px;
+  padding-top:4px;
+}
+.today-food-modal{
+  position:fixed;
+  inset:0;
+  z-index:10001;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(0,0,0,.62);
+}
+.today-food-modal.show{display:flex}
+.today-food-card{
+  width:min(100%,430px);
+  max-height:90vh;
+  overflow:auto;
+  background:#11162b;
+  border:1px solid #4b3d85;
+  border-radius:24px;
+  padding:20px;
+  position:relative;
+}
+.today-food-card h2{
+  margin:4px 0 6px;
+  color:#f4f5fb;
+}
+.today-food-card p{
+  color:#aab1c5;
+  font-size:13px;
+  line-height:1.4;
+  margin:0 0 16px;
+}
+.today-food-card label{
+  display:block;
+  color:#b8bed0;
+  font-size:11px;
+  font-weight:900;
+  margin-bottom:10px;
+  letter-spacing:.05em;
+}
+.today-food-card input{
+  display:block;
+  width:100%;
+  box-sizing:border-box;
+  margin-top:6px;
+  min-height:44px;
+  border:1px solid #303a60;
+  border-radius:13px;
+  background:#080d1d;
+  color:#f4f5fb;
+  padding:10px 12px;
+  font:inherit;
+  font-size:16px;
+}
+.today-food-input-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0 10px;
+}
+.today-food-close{
+  position:absolute;
+  top:10px;
+  right:12px;
+  width:42px;
+  height:42px;
+  border:0;
+  background:transparent;
+  color:#aab1c5;
+  font-size:30px;
+}
+@media(max-width:390px){
+  .today-macro strong{font-size:15px}
+  .today-tracker{padding:16px}
+}
+</style>
+
 </head>
 
 <body>
@@ -3017,6 +3230,64 @@ button{
 <!-- HOME -->
 
 <section id="homeScreen" class="screen active">
+
+<!-- SHIFT FIT TODAY'S PLAN TRACKER -->
+<div class="today-tracker" id="todayTracker">
+
+  <div class="today-tracker-head">
+    <div>
+      <div class="today-tracker-kicker">TODAY'S PLAN</div>
+      <h2>Track your day</h2>
+    </div>
+    <div class="today-water-badge" id="todayWaterBadge">💧 0 / 8</div>
+  </div>
+
+  <div class="today-macro-grid">
+    <div class="today-macro">
+      <span>CALORIES</span>
+      <strong id="todayCaloriesRemaining">0</strong>
+      <small>remaining</small>
+    </div>
+    <div class="today-macro">
+      <span>PROTEIN</span>
+      <strong id="todayProteinRemaining">0g</strong>
+      <small>remaining</small>
+    </div>
+    <div class="today-macro">
+      <span>CARBS</span>
+      <strong id="todayCarbsRemaining">0g</strong>
+      <small>remaining</small>
+    </div>
+    <div class="today-macro">
+      <span>FAT</span>
+      <strong id="todayFatRemaining">0g</strong>
+      <small>remaining</small>
+    </div>
+  </div>
+
+  <div class="today-progress-row">
+    <span>Today's nutrition</span>
+    <strong id="todayNutritionProgress">0%</strong>
+  </div>
+  <div class="today-progress">
+    <div id="todayNutritionProgressBar"></div>
+  </div>
+
+  <div class="today-tracker-actions">
+    <button type="button" class="today-track-btn primary" onclick="openAddFoodTracker()">
+      ＋ ADD FOOD
+    </button>
+    <button type="button" class="today-track-btn" onclick="addTodayWater()">
+      💧 ADD WATER
+    </button>
+  </div>
+
+  <div class="today-eaten" id="todayEatenList">
+    <div class="today-empty">Nothing logged yet today.</div>
+  </div>
+
+</div>
+
 
 <header class="home-header">
 
@@ -5769,6 +6040,9 @@ function showHome(){
   setNav("home");
 
   updateShiftDisplay();
+
+  loadTodayTracker();
+  renderTodayTracker();
 
   window.scrollTo(0,0);
 
@@ -10402,7 +10676,260 @@ updateMiniShopping();
 
 updateWorkoutProgress();
 
+
+try{
+  loadTodayTracker();
+  renderTodayTracker();
+}catch(e){}
+
+
+/* Today's Plan food + water tracking */
+let todayTrackerState = {
+  date: new Date().toISOString().slice(0,10),
+  foods: [],
+  water: 0
+};
+
+function loadTodayTracker(){
+  const today =
+    new Date().toISOString().slice(0,10);
+
+  try{
+    const saved =
+      JSON.parse(
+        localStorage.getItem("shiftfitTodayTracker") || "null"
+      );
+
+    if(
+      saved &&
+      saved.date===today &&
+      Array.isArray(saved.foods)
+    ){
+      todayTrackerState = {
+        date:today,
+        foods:saved.foods,
+        water:Math.max(
+          0,
+          Math.min(20,Number(saved.water)||0)
+        )
+      };
+    }
+  }catch(error){
+    console.warn("Could not load today's tracker.");
+  }
+}
+
+function saveTodayTracker(){
+  try{
+    localStorage.setItem(
+      "shiftfitTodayTracker",
+      JSON.stringify(todayTrackerState)
+    );
+  }catch(error){
+    console.warn("Could not save today's tracker.");
+  }
+}
+
+function resetTodayTrackerIfNeeded(){
+  const today = new Date().toISOString().slice(0,10);
+  if(todayTrackerState.date !== today){
+    todayTrackerState = {date:today, foods:[], water:0};
+  }
+}
+
+function getTodayPlanTargets(){
+
+  let plan = null;
+
+  try{
+    const saved =
+      localStorage.getItem("shiftfitPlan");
+
+    if(saved){
+      plan = JSON.parse(saved);
+    }
+  }catch(error){
+    plan = null;
+  }
+
+  return {
+    calories:Number(plan && plan.calories) || 0,
+    protein:Number(plan && plan.protein) || 0,
+    carbs:Number(plan && plan.carbs) || 0,
+    fat:Number(plan && (plan.fat ?? plan.fats)) || 0
+  };
+}
+
+function openAddFoodTracker(){
+  const modal = document.getElementById("todayFoodModal");
+  if(modal){
+    modal.classList.add("show");
+    modal.setAttribute("aria-hidden","false");
+    const input = document.getElementById("todayFoodName");
+    if(input) setTimeout(()=>input.focus(),50);
+  }
+}
+
+function closeAddFoodTracker(){
+  const modal = document.getElementById("todayFoodModal");
+  if(modal){
+    modal.classList.remove("show");
+    modal.setAttribute("aria-hidden","true");
+  }
+}
+
+function saveTodayFood(){
+  resetTodayTrackerIfNeeded();
+
+  const name = String(document.getElementById("todayFoodName")?.value || "").trim();
+  const calories = Math.max(0, Number(document.getElementById("todayFoodCalories")?.value || 0));
+  const protein = Math.max(0, Number(document.getElementById("todayFoodProtein")?.value || 0));
+  const carbs = Math.max(0, Number(document.getElementById("todayFoodCarbs")?.value || 0));
+  const fat = Math.max(0, Number(document.getElementById("todayFoodFat")?.value || 0));
+
+  if(!name || !Number.isFinite(calories) || !Number.isFinite(protein) || !Number.isFinite(carbs) || !Number.isFinite(fat)){
+    return;
+  }
+
+  todayTrackerState.foods.push({
+    id: Date.now(),
+    name,
+    calories: Math.min(calories,10000),
+    protein: Math.min(protein,500),
+    carbs: Math.min(carbs,1000),
+    fat: Math.min(fat,300)
+  });
+
+  saveTodayTracker();
+  closeAddFoodTracker();
+  renderTodayTracker();
+
+  ["todayFoodName","todayFoodCalories","todayFoodProtein","todayFoodCarbs","todayFoodFat"]
+    .forEach(id=>{
+      const el=document.getElementById(id);
+      if(el) el.value="";
+    });
+}
+
+function addTodayWater(){
+  resetTodayTrackerIfNeeded();
+  if(todayTrackerState.water < 20) todayTrackerState.water++;
+  saveTodayTracker();
+  renderTodayTracker();
+}
+
+function removeTodayFood(id){
+  todayTrackerState.foods =
+    todayTrackerState.foods.filter(food=>food.id!==id);
+  saveTodayTracker();
+  renderTodayTracker();
+}
+
+function renderTodayTracker(){
+  resetTodayTrackerIfNeeded();
+
+  const targets = getTodayPlanTargets();
+  const eaten = todayTrackerState.foods.reduce(
+    (sum,food)=>({
+      calories:sum.calories+food.calories,
+      protein:sum.protein+food.protein,
+      carbs:sum.carbs+food.carbs,
+      fat:sum.fat+food.fat
+    }),
+    {calories:0,protein:0,carbs:0,fat:0}
+  );
+
+  const remaining = {
+    calories:Math.max(0, targets.calories-eaten.calories),
+    protein:Math.max(0, targets.protein-eaten.protein),
+    carbs:Math.max(0, targets.carbs-eaten.carbs),
+    fat:Math.max(0, targets.fat-eaten.fat)
+  };
+
+  const cal = document.getElementById("todayCaloriesRemaining");
+  const pro = document.getElementById("todayProteinRemaining");
+  const carb = document.getElementById("todayCarbsRemaining");
+  const fat = document.getElementById("todayFatRemaining");
+  const water = document.getElementById("todayWaterBadge");
+  const list = document.getElementById("todayEatenList");
+  const pct = document.getElementById("todayNutritionProgress");
+  const bar = document.getElementById("todayNutritionProgressBar");
+
+  if(cal) cal.textContent = Math.round(remaining.calories).toLocaleString();
+  if(pro) pro.textContent = Math.round(remaining.protein)+"g";
+  if(carb) carb.textContent = Math.round(remaining.carbs)+"g";
+  if(fat) fat.textContent = Math.round(remaining.fat)+"g";
+  if(water) water.textContent = "💧 "+todayTrackerState.water+" / 8";
+
+  const progress =
+    targets.calories > 0
+      ? Math.min(100, Math.round((eaten.calories/targets.calories)*100))
+      : 0;
+
+  if(pct) pct.textContent = progress+"%";
+  if(bar) bar.style.width = progress+"%";
+
+  if(list){
+    list.innerHTML =
+      todayTrackerState.foods.length
+        ? todayTrackerState.foods.map(food=>`
+            <div class="today-eaten-row">
+              <div class="today-eaten-name">${escapeHtmlSafe(food.name)}</div>
+              <div class="today-eaten-macros">
+                ${Math.round(food.calories)} kcal ·
+                ${Math.round(food.protein)}P ·
+                ${Math.round(food.carbs)}C ·
+                ${Math.round(food.fat)}F
+              </div>
+              <button type="button" onclick="removeTodayFood(${food.id})" aria-label="Remove ${escapeHtmlSafe(food.name)}">×</button>
+            </div>
+          `).join("")
+        : '<div class="today-empty">Nothing logged yet today.</div>';
+  }
+}
+
+function escapeHtmlSafe(value){
+  return String(value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+
 </script>
+
+
+<div id="todayFoodModal" class="today-food-modal" aria-hidden="true">
+  <div class="today-food-card">
+    <button type="button" class="today-food-close" onclick="closeAddFoodTracker()">×</button>
+    <div class="today-tracker-kicker">TODAY'S PLAN</div>
+    <h2>Add food</h2>
+    <p>Log what you have eaten and ShiftFit will deduct it from today's target.</p>
+
+    <label>Food / meal
+      <input id="todayFoodName" type="text" placeholder="e.g. Chicken wrap" maxlength="80">
+    </label>
+
+    <div class="today-food-input-grid">
+      <label>Calories
+        <input id="todayFoodCalories" type="number" min="0" max="10000" inputmode="numeric" placeholder="500">
+      </label>
+      <label>Protein (g)
+        <input id="todayFoodProtein" type="number" min="0" max="500" inputmode="decimal" placeholder="40">
+      </label>
+      <label>Carbs (g)
+        <input id="todayFoodCarbs" type="number" min="0" max="1000" inputmode="decimal" placeholder="50">
+      </label>
+      <label>Fat (g)
+        <input id="todayFoodFat" type="number" min="0" max="300" inputmode="decimal" placeholder="15">
+      </label>
+    </div>
+
+    <button type="button" class="today-track-btn primary" onclick="saveTodayFood()">ADD TO TODAY</button>
+  </div>
+</div>
 
 </body>
 </html>
