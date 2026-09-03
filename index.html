@@ -4760,58 +4760,7 @@ button{
 
 
 
-<section class="progress-card">
 
-  <div class="progress-title">
-    Weekly Progress
-  </div>
-
-  <div class="progress-content">
-
-    <div class="progress-ring">
-      <div class="progress-inner">
-        78%
-      </div>
-    </div>
-
-    <div class="progress-info">
-
-      <div class="progress-row">
-        <span class="progress-row-label">
-          Workouts
-        </span>
-        <span class="progress-row-value">
-          5/6
-        </span>
-      </div>
-
-      <div class="progress-row">
-        <span class="progress-row-label">
-          Calories
-        </span>
-
-        <span class="progress-row-value on-track">
-          <span class="dot"></span>
-          On Track
-        </span>
-      </div>
-
-      <div class="progress-row">
-        <span class="progress-row-label">
-          Protein
-        </span>
-
-        <span class="progress-row-value on-track">
-          <span class="dot"></span>
-          On Track
-        </span>
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
 
 <section class="ai-card">
 
@@ -6027,6 +5976,34 @@ button{
       <div class="progress-stat-row">
         <span>💧 Water</span>
         <strong id="progressWater">0 / 8</strong>
+      </div>
+    </div>
+
+  </section>
+
+
+  <section class="progress-section-card">
+
+    <div class="progress-section-head">
+      <div>
+        <div class="progress-card-kicker">TRAINING</div>
+        <h2>Workout Progress</h2>
+      </div>
+      <div class="progress-percent" id="progressWorkoutPercent">0%</div>
+    </div>
+
+    <div class="progress-bar">
+      <div id="progressWorkoutFill"></div>
+    </div>
+
+    <div class="progress-stat-list">
+      <div class="progress-stat-row">
+        <span>🏋️ Exercises completed</span>
+        <strong id="progressExercisesDone">0</strong>
+      </div>
+      <div class="progress-stat-row">
+        <span>📅 Workout days started</span>
+        <strong id="progressWorkoutDays">0 / 7</strong>
       </div>
     </div>
 
@@ -13338,9 +13315,6 @@ function renderProgress(){
 
 function renderTodayTracker(){
 
-  if(typeof renderWeeklyProgress === "function"){
-    renderWeeklyProgress();
-  }
   resetTodayTrackerIfNeeded();
 
   const targets = getTodayPlanTargets();
