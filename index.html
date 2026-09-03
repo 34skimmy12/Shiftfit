@@ -1407,6 +1407,11 @@ button{
   outline:none;
 }
 
+.add-item-input:focus{
+  border-color:#8b5cf6;
+  box-shadow:0 0 0 2px rgba(139,92,246,.12);
+}
+
 .add-item-btn{
   border:none;
   border-radius:12px;
@@ -3182,8 +3187,63 @@ button{
   <input
     id="newShoppingItem"
     class="add-item-input"
-    placeholder="Add an item..."
+    list="shiftfitFoodCatalogue"
+    placeholder="Search or add food..."
+    autocomplete="off"
   >
+
+  <datalist id="shiftfitFoodCatalogue">
+
+    <option value="Chicken breast">
+    <option value="Lean beef mince">
+    <option value="Lean turkey mince">
+    <option value="Salmon">
+    <option value="Tuna">
+    <option value="Eggs">
+    <option value="Greek yoghurt">
+    <option value="Cottage cheese">
+    <option value="Protein powder">
+    <option value="Protein bar">
+
+    <option value="Oats">
+    <option value="Rice">
+    <option value="Wholewheat pasta">
+    <option value="Wholemeal wraps">
+    <option value="Wholegrain bread">
+    <option value="Rice cakes">
+    <option value="Sweet potatoes">
+    <option value="Potatoes">
+    <option value="Beans">
+    <option value="Kidney beans">
+
+    <option value="Mixed vegetables">
+    <option value="Spinach">
+    <option value="Broccoli">
+    <option value="Peppers">
+    <option value="Onions">
+    <option value="Tomatoes">
+    <option value="Cucumber">
+    <option value="Lettuce">
+    <option value="Carrots">
+
+    <option value="Mixed berries">
+    <option value="Bananas">
+    <option value="Apples">
+    <option value="Blueberries">
+    <option value="Strawberries">
+    <option value="Avocado">
+
+    <option value="Peanut butter">
+    <option value="Almonds">
+    <option value="Mixed nuts">
+    <option value="Chia seeds">
+    <option value="Honey">
+    <option value="Olive oil">
+    <option value="Light mayonnaise">
+    <option value="Tomato sauce">
+    <option value="Salsa">
+
+  </datalist>
 
   <button
     class="add-item-btn"
@@ -4264,6 +4324,62 @@ const defaultShoppingItems=[
   "Wholemeal wraps",
   "Wholegrain bread",
   "Rice cakes"
+];
+
+
+/* SHIFT FIT FOOD CATALOGUE */
+
+const shiftfitFoodCatalogue=[
+
+  "Chicken breast",
+  "Lean beef mince",
+  "Lean turkey mince",
+  "Salmon",
+  "Tuna",
+  "Eggs",
+  "Greek yoghurt",
+  "Cottage cheese",
+  "Protein powder",
+  "Protein bar",
+
+  "Oats",
+  "Rice",
+  "Wholewheat pasta",
+  "Wholemeal wraps",
+  "Wholegrain bread",
+  "Rice cakes",
+  "Sweet potatoes",
+  "Potatoes",
+  "Beans",
+  "Kidney beans",
+
+  "Mixed vegetables",
+  "Spinach",
+  "Broccoli",
+  "Peppers",
+  "Onions",
+  "Tomatoes",
+  "Cucumber",
+  "Lettuce",
+  "Carrots",
+
+  "Mixed berries",
+  "Bananas",
+  "Apples",
+  "Blueberries",
+  "Strawberries",
+  "Avocado",
+
+  "Peanut butter",
+  "Almonds",
+  "Mixed nuts",
+  "Chia seeds",
+  "Honey",
+  "Olive oil",
+  "Light mayonnaise",
+  "Tomato sauce",
+  "Salsa"
+
 ];
 
 
@@ -5567,6 +5683,8 @@ function deleteShoppingItem(index){
 }
 
 
+/* ADD SHOPPING ITEM */
+
 function addShoppingItem(){
 
   const input=
@@ -5574,10 +5692,106 @@ function addShoppingItem(){
       "newShoppingItem"
     );
 
-  const name=
+  if(!input) return;
+
+  const typedName=
     input.value.trim();
 
-  if(!name) return;
+  if(!typedName) return;
+
+
+  /*
+   * First look for an exact catalogue match.
+   *
+   * This means:
+   *
+   * "chicken breast"
+   *
+   * becomes:
+   *
+   * "Chicken breast"
+   */
+
+  const exactMatch=
+    shiftfitFoodCatalogue.find(
+      item=>
+        item.toLowerCase()===
+        typedName.toLowerCase()
+    );
+
+
+  /*
+   * If there is no exact match, allow a
+   * unique catalogue item containing the
+   * user's search text.
+   *
+   * Example:
+   *
+   * "chicken"
+   *
+   * can find "Chicken breast".
+   *
+   * If multiple foods match, we don't guess.
+   */
+
+  const partialMatches=
+    shiftfitFoodCatalogue.filter(
+      item=>
+        item.toLowerCase().includes(
+          typedName.toLowerCase()
+        )
+    );
+
+
+  const catalogueMatch=
+    exactMatch ||
+    (
+      partialMatches.length===1
+        ?partialMatches[0]
+        :null
+    );
+
+
+  /*
+   * Keep manual adding available.
+   *
+   * If the food isn't in the catalogue,
+   * the exact text the user entered is used.
+   */
+
+  const name=
+    catalogueMatch ||
+    typedName;
+
+
+  /*
+   * Prevent duplicate shopping items.
+   */
+
+  const duplicate=
+    shoppingItems.some(
+      item=>
+        item &&
+        String(
+          item.name
+        ).toLowerCase()===
+        name.toLowerCase()
+    );
+
+
+  if(duplicate){
+
+    input.value="";
+
+    alert(
+      name+
+      " is already on your shopping list."
+    );
+
+    return;
+
+  }
+
 
   shoppingItems.push({
 
@@ -5586,6 +5800,7 @@ function addShoppingItem(){
     checked:false
 
   });
+
 
   input.value="";
 
@@ -5597,6 +5812,8 @@ function addShoppingItem(){
 
 }
 
+
+/* RESET SHOPPING LIST */
 
 function resetShoppingList(){
 
