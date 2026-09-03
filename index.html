@@ -4869,10 +4869,29 @@ function generatePlan(){
     );
 
 
-  if(!age || !weight || !height){
+  if(
+    !Number.isFinite(age) ||
+    !Number.isFinite(weight) ||
+    !Number.isFinite(height)
+  ){
 
     alert(
       "Please enter your age, weight and height."
+    );
+
+    return;
+
+  }
+
+
+  if(
+    age<=0 ||
+    weight<=0 ||
+    height<=0
+  ){
+
+    alert(
+      "Please enter valid age, weight and height values."
     );
 
     return;
@@ -4902,6 +4921,42 @@ function generatePlan(){
   }
 
 
+  /*
+   * =======================================================
+   * SHIFT FIT GOAL & MACRO ENGINE
+   * =======================================================
+   *
+   * BMR:
+   * Mifflin-St Jeor equation.
+   *
+   * Maintenance:
+   * BMR × activity multiplier.
+   *
+   * Lose Weight:
+   * 15% calorie deficit.
+   *
+   * Maintain:
+   * Maintenance calories.
+   *
+   * Build Muscle:
+   * 10% calorie surplus.
+   *
+   * Protein:
+   * Lose = 2.2g/kg
+   * Maintain/Gain = 2.0g/kg
+   *
+   * Fat:
+   * Lose = 0.8g/kg
+   * Maintain = 0.9g/kg
+   * Gain = 1.0g/kg
+   *
+   * Carbohydrates:
+   * Remaining calories after protein and fat.
+   */
+
+
+  /* BMR */
+
   let bmr=
     sex==="male"
       ?
@@ -4916,52 +4971,152 @@ function generatePlan(){
         161;
 
 
+  /* MAINTENANCE CALORIES */
+
   const maintenance=
-    bmr*activity;
+    Math.round(
+      bmr*activity
+    );
 
 
-  let calories=
+  /* GOAL CALORIES */
+
+  let calories;
+
+
+  if(
     selectedGoal==="lose"
-      ?
-        Math.round(
-          maintenance-400
-        )
-      :
-        selectedGoal==="gain"
-          ?
-            Math.round(
-              maintenance+300
-            )
-          :
-            Math.round(
-              maintenance
-            );
+  ){
+
+    calories=
+      Math.round(
+        maintenance*0.85
+      );
+
+  }else if(
+    selectedGoal==="gain"
+  ){
+
+    calories=
+      Math.round(
+        maintenance*1.10
+      );
+
+  }else{
+
+    calories=
+      maintenance;
+
+  }
+
+
+  /*
+   * Safety floor so unusual profile values
+   * cannot generate an extremely low target.
+   */
+
+  calories=
+    Math.max(
+      1200,
+      calories
+    );
+
+
+  /* GOAL-SPECIFIC PROTEIN */
+
+  let proteinMultiplier;
+
+
+  if(
+    selectedGoal==="lose"
+  ){
+
+    proteinMultiplier=
+      2.2;
+
+  }else{
+
+    proteinMultiplier=
+      2.0;
+
+  }
 
 
   const protein=
     Math.round(
-      weight*2
+      weight*
+      proteinMultiplier
     );
+
+
+  /* GOAL-SPECIFIC FAT */
+
+  let fatMultiplier;
+
+
+  if(
+    selectedGoal==="lose"
+  ){
+
+    fatMultiplier=
+      0.8;
+
+  }else if(
+    selectedGoal==="gain"
+  ){
+
+    fatMultiplier=
+      1.0;
+
+  }else{
+
+    fatMultiplier=
+      0.9;
+
+  }
 
 
   const fats=
     Math.round(
-      weight*.8
+      weight*
+      fatMultiplier
     );
+
+
+  /*
+   * REMAINING CALORIES → CARBOHYDRATES
+   *
+   * Protein = 4 kcal per gram
+   * Fat     = 9 kcal per gram
+   * Carbs   = 4 kcal per gram
+   */
+
+  const proteinCalories=
+    protein*
+    4;
+
+  const fatCalories=
+    fats*
+    9;
+
+
+  const remainingCalories=
+    calories-
+    proteinCalories-
+    fatCalories;
 
 
   const carbs=
     Math.max(
       0,
       Math.round(
-        (
-          calories-
-          (protein*4)-
-          (fats*9)
-        )/4
+        remainingCalories/
+        4
       )
     );
 
+
+  /* SAVE COMPLETE PLAN */
 
   const plan={
 
@@ -4970,19 +5125,36 @@ function generatePlan(){
     height,
     sex,
     activity,
-    goal:selectedGoal,
+
+    goal:
+      selectedGoal,
+
+    maintenance,
 
     calories,
+
     protein,
+
     carbs,
+
     fats,
 
-    shift:selectedShift,
+    proteinMultiplier,
+
+    fatMultiplier,
+
+    shift:
+      selectedShift,
 
     customShift:{
-      start:customShiftStart,
-      end:customShiftEnd,
-      overnight:customShiftOvernight
+      start:
+        customShiftStart,
+
+      end:
+        customShiftEnd,
+
+      overnight:
+        customShiftOvernight
     }
 
   };
@@ -4990,13 +5162,17 @@ function generatePlan(){
 
   localStorage.setItem(
     "shiftfitPlan",
-    JSON.stringify(plan)
+    JSON.stringify(
+      plan
+    )
   );
 
 
   saveShiftSettings();
 
-  updatePlan(plan);
+  updatePlan(
+    plan
+  );
 
   updateShiftDisplay();
 
@@ -5009,7 +5185,6 @@ function generatePlan(){
   showMeals();
 
 }
-
 
 function updatePlan(plan){
 
