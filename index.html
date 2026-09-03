@@ -2696,6 +2696,113 @@ button{
 }
 </style>
 
+
+<style>
+/* Calendar custom shift generator */
+.calendar-custom-shift{
+  display:none;
+  margin-top:12px;
+  padding:13px;
+  border:1px solid rgba(139,92,246,.35);
+  border-radius:15px;
+  background:rgba(109,40,217,.08);
+}
+.calendar-custom-shift.show{display:block}
+.calendar-custom-title{
+  font-size:13px;
+  font-weight:900;
+  margin-bottom:10px;
+}
+.calendar-custom-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+.calendar-custom-grid label{
+  display:block;
+  color:#aab1c5;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.12em;
+  margin-bottom:5px;
+}
+.calendar-custom-grid input{
+  width:100%;
+  box-sizing:border-box;
+  padding:10px;
+  border-radius:11px;
+  border:1px solid #303a60;
+  background:#090e20;
+  color:#f4f5fb;
+  font-size:14px;
+}
+.calendar-custom-overnight{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-top:10px;
+  color:#aab1c5;
+  font-size:12px;
+}
+
+/* Make day-screen buttons match the main ShiftFit button language */
+#calendarDayScreen .calendar-action-btn{
+  min-height:44px !important;
+  width:100% !important;
+  border:1px solid #303a60 !important;
+  background:#0d1326 !important;
+  color:#d7c9ff !important;
+  border-radius:15px !important;
+  font-size:12px !important;
+  font-weight:950 !important;
+}
+#calendarDayScreen .calendar-action-btn.primary{
+  border:none !important;
+  background:linear-gradient(135deg,#8b3cff,#5123c5) !important;
+  color:#fff !important;
+  box-shadow:0 8px 20px rgba(109,40,217,.22) !important;
+}
+
+/* Compact workout screen */
+#workoutScreen .workout-stats{
+  gap:7px !important;
+  margin:14px 0 16px !important;
+}
+#workoutScreen .workout-stat{
+  padding:10px 5px !important;
+  border-radius:14px !important;
+}
+#workoutScreen .workout-stat small{
+  font-size:8px !important;
+  margin-bottom:4px !important;
+}
+#workoutScreen .exercise-card{
+  gap:10px !important;
+  padding:11px !important;
+  margin-bottom:8px !important;
+  border-radius:15px !important;
+}
+#workoutScreen .exercise-check{
+  width:36px !important;
+  height:36px !important;
+  min-width:36px !important;
+  border-radius:10px !important;
+  font-size:19px !important;
+}
+#workoutScreen .exercise-name{
+  font-size:15px !important;
+}
+#workoutScreen .exercise-sets{
+  font-size:12px !important;
+  margin-top:3px !important;
+}
+#workoutScreen .exercise-tip{
+  font-size:11px !important;
+  line-height:1.3 !important;
+  margin-top:6px !important;
+}
+</style>
+
 </head>
 
 <body>
@@ -4028,7 +4135,10 @@ button{
 
       <label>ROTATION</label>
 
-      <select id="shiftGeneratorPattern">
+      <select
+        id="shiftGeneratorPattern"
+        onchange="toggleCalendarCustomShiftFields()"
+      >
 
         <option value="4day4rest">
           4 Day / 4 Rest
@@ -4046,7 +4156,53 @@ button{
           5 Day / 2 Rest
         </option>
 
+        <option value="custom">
+          ⚙️ Custom Shift
+        </option>
+
       </select>
+
+      <div
+        class="calendar-custom-shift"
+        id="calendarCustomShiftFields"
+      >
+
+        <div class="calendar-custom-title">
+          ⚙️ Custom Shift Times
+        </div>
+
+        <div class="calendar-custom-grid">
+
+          <div>
+            <label>SHIFT START</label>
+            <input
+              id="calendarCustomStart"
+              type="time"
+              value="18:00"
+            >
+          </div>
+
+          <div>
+            <label>SHIFT FINISH</label>
+            <input
+              id="calendarCustomEnd"
+              type="time"
+              value="06:00"
+            >
+          </div>
+
+        </div>
+
+        <label class="calendar-custom-overnight">
+          <input
+            id="calendarCustomOvernight"
+            type="checkbox"
+            checked
+          >
+          <span>Overnight shift</span>
+        </label>
+
+      </div>
 
     </div>
 
@@ -5764,6 +5920,8 @@ function renderCalendar(){
 
   }
 
+  toggleCalendarCustomShiftFields();
+
   monthTitle.textContent =
     calendarViewDate.toLocaleDateString(
       "en-GB",
@@ -6090,6 +6248,88 @@ function showCalendarDay(date){
 }
 
 
+
+function toggleCalendarCustomShiftFields(){
+
+  const select =
+    document.getElementById(
+      "shiftGeneratorPattern"
+    );
+
+  const panel =
+    document.getElementById(
+      "calendarCustomShiftFields"
+    );
+
+  if(!select || !panel) return;
+
+  panel.classList.toggle(
+    "show",
+    select.value==="custom"
+  );
+
+  if(select.value==="custom"){
+
+    const start =
+      document.getElementById(
+        "calendarCustomStart"
+      );
+
+    const end =
+      document.getElementById(
+        "calendarCustomEnd"
+      );
+
+    const overnight =
+      document.getElementById(
+        "calendarCustomOvernight"
+      );
+
+    if(start) start.value=customShiftStart;
+    if(end) end.value=customShiftEnd;
+    if(overnight) overnight.checked=customShiftOvernight;
+
+  }
+
+}
+
+
+function saveCalendarCustomShift(){
+
+  const start =
+    document.getElementById(
+      "calendarCustomStart"
+    )?.value ||
+    customShiftStart;
+
+  const end =
+    document.getElementById(
+      "calendarCustomEnd"
+    )?.value ||
+    customShiftEnd;
+
+  const overnight =
+    document.getElementById(
+      "calendarCustomOvernight"
+    )?.checked ??
+    customShiftOvernight;
+
+  customShiftStart=start;
+  customShiftEnd=end;
+  customShiftOvernight=overnight;
+
+  localStorage.setItem(
+    "shiftfitCustomShift",
+    JSON.stringify({
+      start,
+      end,
+      overnight
+    })
+  );
+
+}
+
+
 function generateCalendarShifts(){
 
   const startInput =
@@ -6135,6 +6375,10 @@ function generateCalendarShifts(){
 
   }
 
+  if(patternInput.value==="custom"){
+    saveCalendarCustomShift();
+  }
+
   const patterns = {
 
     "4day4rest":[
@@ -6156,6 +6400,10 @@ function generateCalendarShifts(){
     "5day2rest":[
       "day","day","day","day","day",
       "rest","rest"
+    ],
+
+    "custom":[
+      "custom"
     ]
 
   };
@@ -7103,91 +7351,198 @@ function updatePlan(plan){
 }
 
 
+
+const mealNutritionProfiles={
+
+  breakfast:[
+    {calories:430,protein:35,carbs:48,fats:10},
+    {calories:500,protein:28,carbs:55,fats:18},
+    {calories:460,protein:36,carbs:54,fats:9},
+    {calories:480,protein:34,carbs:52,fats:14},
+    {calories:450,protein:30,carbs:55,fats:12},
+    {calories:430,protein:34,carbs:25,fats:18},
+    {calories:440,protein:27,carbs:52,fats:15},
+    {calories:470,protein:40,carbs:45,fats:11}
+  ],
+
+  lunch:[
+    {calories:600,protein:50,carbs:62,fats:14},
+    {calories:570,protein:46,carbs:66,fats:11},
+    {calories:560,protein:48,carbs:55,fats:15},
+    {calories:520,protein:38,carbs:58,fats:12},
+    {calories:610,protein:44,carbs:72,fats:14},
+    {calories:530,protein:48,carbs:48,fats:16},
+    {calories:590,protein:40,carbs:62,fats:17},
+    {calories:560,protein:45,carbs:58,fats:13}
+  ],
+
+  dinner:[
+    {calories:680,protein:52,carbs:60,fats:21},
+    {calories:620,protein:52,carbs:64,fats:14},
+    {calories:650,protein:46,carbs:68,fats:18},
+    {calories:630,protein:48,carbs:67,fats:15},
+    {calories:640,protein:50,carbs:70,fats:14},
+    {calories:690,protein:55,carbs:52,fats:21},
+    {calories:610,protein:48,carbs:58,fats:16},
+    {calories:650,protein:50,carbs:65,fats:17}
+  ],
+
+  snack:[
+    {calories:300,protein:24,carbs:25,fats:10},
+    {calories:280,protein:30,carbs:31,fats:6},
+    {calories:290,protein:25,carbs:24,fats:9},
+    {calories:260,protein:20,carbs:28,fats:8},
+    {calories:250,protein:22,carbs:28,fats:6},
+    {calories:240,protein:18,carbs:20,fats:10},
+    {calories:270,protein:25,carbs:30,fats:6},
+    {calories:280,protein:10,carbs:30,fats:13}
+  ]
+
+};
+
+
+function getSelectedMealNutrition(type,index){
+
+  return (
+    mealNutritionProfiles[type] &&
+    mealNutritionProfiles[type][index]
+  ) || {
+    calories:0,
+    protein:0,
+    carbs:0,
+    fats:0
+  };
+
+}
+
+
 function scaleMeals(plan){
 
-  const mealCalories={
-
+  const selected = {
     breakfast:
-      Math.round(
-        plan.calories*.24
+      getSelectedMealNutrition(
+        "breakfast",
+        weeklyMeals[currentDay]?.breakfast ?? 0
       ),
-
     lunch:
-      Math.round(
-        plan.calories*.29
+      getSelectedMealNutrition(
+        "lunch",
+        weeklyMeals[currentDay]?.lunch ?? 0
       ),
-
     dinner:
-      Math.round(
-        plan.calories*.32
+      getSelectedMealNutrition(
+        "dinner",
+        weeklyMeals[currentDay]?.dinner ?? 0
       ),
-
     snack:
-      Math.round(
-        plan.calories*.15
+      getSelectedMealNutrition(
+        "snack",
+        weeklyMeals[currentDay]?.snack ?? 0
       )
-
   };
 
+  /*
+   * Each meal keeps its own nutrition profile.
+   * The selected meal's profile changes when it is swapped.
+   * Profiles are then proportionally scaled to the user's
+   * daily target so the four meal cards still add up to
+   * the personalised plan.
+   */
 
-  const portions={
+  const totalCalories =
+    Object.values(selected)
+      .reduce(
+        (sum,meal)=>sum+meal.calories,
+        0
+      );
 
-    breakfast:.25,
-    lunch:.30,
-    dinner:.32,
-    snack:.13
+  const totalProtein =
+    Object.values(selected)
+      .reduce(
+        (sum,meal)=>sum+meal.protein,
+        0
+      );
 
-  };
+  const totalCarbs =
+    Object.values(selected)
+      .reduce(
+        (sum,meal)=>sum+meal.carbs,
+        0
+      );
 
+  const totalFats =
+    Object.values(selected)
+      .reduce(
+        (sum,meal)=>sum+meal.fats,
+        0
+      );
 
   [
     "breakfast",
     "lunch",
     "dinner",
     "snack"
-  ].forEach(
-    type=>{
+  ].forEach(type=>{
 
-      document
-        .getElementById(
-          type+"Calories"
-        )
-        .textContent=
-          mealCalories[type]+
-          " kcal";
+    const meal=selected[type];
 
-      document
-        .getElementById(
-          type+"P"
-        )
-        .textContent=
-          Math.round(
-            plan.protein*
-            portions[type]
-          )+"g";
+    const calories =
+      totalCalories
+        ? Math.round(
+            meal.calories/
+            totalCalories*
+            plan.calories
+          )
+        : 0;
 
-      document
-        .getElementById(
-          type+"C"
-        )
-        .textContent=
-          Math.round(
-            plan.carbs*
-            portions[type]
-          )+"g";
+    const protein =
+      totalProtein
+        ? Math.round(
+            meal.protein/
+            totalProtein*
+            plan.protein
+          )
+        : 0;
 
-      document
-        .getElementById(
-          type+"F"
-        )
-        .textContent=
-          Math.round(
-            plan.fats*
-            portions[type]
-          )+"g";
+    const carbs =
+      totalCarbs
+        ? Math.round(
+            meal.carbs/
+            totalCarbs*
+            plan.carbs
+          )
+        : 0;
 
-    }
-  );
+    const fats =
+      totalFats
+        ? Math.round(
+            meal.fats/
+            totalFats*
+            plan.fats
+          )
+        : 0;
+
+    document
+      .getElementById(type+"Calories")
+      .textContent=
+        calories+" kcal";
+
+    document
+      .getElementById(type+"P")
+      .textContent=
+        protein+"g";
+
+    document
+      .getElementById(type+"C")
+      .textContent=
+        carbs+"g";
+
+    document
+      .getElementById(type+"F")
+      .textContent=
+        fats+"g";
+
+  });
 
 }
 
