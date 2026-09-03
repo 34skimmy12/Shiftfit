@@ -12670,14 +12670,19 @@ async function handleBarcodePhoto(file){
 
   if(message){
     message.textContent =
-      "Reading barcode from your photo…";
+      "Reading your barcode photo…";
   }
 
   try{
 
     await loadBarcodeLibrary();
 
+    if(!window.Html5Qrcode){
+      throw new Error("Barcode library unavailable");
+    }
+
     if(!barcodeScanner){
+
       barcodeScanner =
         new Html5Qrcode(
           "barcodeImageScanner",
@@ -12692,46 +12697,47 @@ async function handleBarcodePhoto(file){
             ]
           }
         );
+
     }
 
-    let decodedText = null;
+    const variants =
+      await createBarcodeImageVariants(file);
 
-    try{
-      decodedText =
-        await barcodeScanner.scanFile(file,false);
-    }catch(error){
-      decodedText = null;
-    }
+    let decodedText = "";
 
-    if(!decodedText){
+    for(let i=0;i<variants.length;i++){
 
       if(message){
-        message.textContent =
-          "Enhancing the photo and trying again…";
-      }
 
-      const enhancedFile =
-        await createEnhancedBarcodeFile(file);
-
-      if(enhancedFile){
-
-        try{
-          decodedText =
-            await barcodeScanner.scanFile(
-              enhancedFile,
-              false
-            );
-        }catch(error){
-          decodedText = null;
+        if(i===0){
+          message.textContent =
+            "Reading the original photo…";
+        }else{
+          message.textContent =
+            "Trying another angle / image enhancement…";
         }
 
       }
 
+      try{
+
+        const result =
+          await barcodeScanner.scanFile(
+            variants[i],
+            false
+          );
+
+        if(result){
+          decodedText = String(result);
+          break;
+        }
+
+      }catch(error){}
+
     }
 
     const value =
-      String(decodedText || "")
-        .replace(/\D/g,"");
+      decodedText.replace(/\D/g,"");
 
     if(value.length >= 8){
 
@@ -12746,8 +12752,9 @@ async function handleBarcodePhoto(file){
     }
 
     if(message){
+
       message.textContent =
-        "I couldn't read that photo. Take another photo with the barcode straight, close and well lit.";
+        "I couldn't read that photo. Retake it with the barcode filling most of the picture and keep it straight.";
     }
 
   }catch(error){
@@ -12755,17 +12762,21 @@ async function handleBarcodePhoto(file){
     console.error("Barcode photo scan failed:",error);
 
     if(message){
+
       message.textContent =
-        "I couldn't read that photo. Take another clear photo or enter the barcode manually.";
+        "Photo scanning failed. Try another clear photo or enter the barcode manually.";
+
     }
 
   }finally{
+
     barcodePhotoBusy = false;
+
   }
 
 }
 
-function createEnhancedBarcodeFile(file){
+function createBarcodeImageVariants(file){
 
   return new Promise((resolve)=>{
 
@@ -12776,205 +12787,263 @@ function createEnhancedBarcodeFile(file){
 
       try{
 
-        const maxDimension = 2200;
-        const scale =
-          Math.min(
-            1,
-            maxDimension / Math.max(image.naturalWidth,image.naturalHeight)
-          );
+        const naturalWidth =
+          Math.max(1,image.naturalWidth || image.width);
 
-        const width =
-          Math.max(1,Math.round(image.naturalWidth*scale));
+        const naturalHeight =
+          Math.max(1,image.naturalHeight || image.height);
 
-        const height =
-          Math.max(1,Math.round(image.naturalHeight*scale));
+        const variants = [];
 
-        const canvas = document.createElement("canvas");
-        canvas.width = width;
-        canvas.height = height;
+        /*
+          The first pass uses the original photo. The remaining passes
+          resize, enhance, rotate and crop it so labels photographed
+          sideways or with glare have a much better chance of decoding.
+        */
 
-        const context = canvas.getContext("2d",{willReadFrequently:true});
+        variants.push(file);
 
-        if(!context){
-          URL.revokeObjectURL(objectUrl);
-          resolve(null);
-          return;
-        }
+        const makeVariant =
+          (angle, crop, contrast, threshold, quality)=>{
 
-        context.drawImage(image,0,0,width,height);
+            const swap =
+              angle===90 || angle===270;
 
-        const pixels =
-          context.getImageData(0,0,width,height);
+            const sourceWidth =
+              crop
+                ? Math.max(1,Math.round(naturalWidth*crop.w))
+                : naturalWidth;
 
-        const data = pixels.data;
+            const sourceHeight =
+              crop
+                ? Math.max(1,Math.round(naturalHeight*crop.h))
+                : naturalHeight;
 
-        for(let i=0;i<data.length;i+=4){
+            const maxDimension = 2400;
 
-          const grey =
-            (data[i]*0.299)+
-            (data[i+1]*0.587)+
-            (data[i+2]*0.114);
-
-          const contrast =
-            Math.max(
-              0,
+            const baseScale =
               Math.min(
-                255,
-                ((grey-128)*1.55)+128
-              )
+                1,
+                maxDimension /
+                Math.max(sourceWidth,sourceHeight)
+              );
+
+            const drawWidth =
+              Math.max(
+                1,
+                Math.round(sourceWidth*baseScale)
+              );
+
+            const drawHeight =
+              Math.max(
+                1,
+                Math.round(sourceHeight*baseScale)
+              );
+
+            const canvas =
+              document.createElement("canvas");
+
+            canvas.width =
+              swap ? drawHeight : drawWidth;
+
+            canvas.height =
+              swap ? drawWidth : drawHeight;
+
+            const context =
+              canvas.getContext(
+                "2d",
+                {willReadFrequently:true}
+              );
+
+            if(!context) return;
+
+            context.save();
+
+            context.translate(
+              canvas.width/2,
+              canvas.height/2
             );
 
-          data[i] = contrast;
-          data[i+1] = contrast;
-          data[i+2] = contrast;
+            context.rotate(
+              angle*Math.PI/180
+            );
 
-        }
+            if(crop){
 
-        context.putImageData(pixels,0,0);
+              context.drawImage(
+                image,
+                Math.round(
+                  naturalWidth*crop.x
+                ),
+                Math.round(
+                  naturalHeight*crop.y
+                ),
+                sourceWidth,
+                sourceHeight,
+                -drawWidth/2,
+                -drawHeight/2,
+                drawWidth,
+                drawHeight
+              );
 
-        canvas.toBlob(
-          blob=>{
+            }else{
 
-            URL.revokeObjectURL(objectUrl);
+              context.drawImage(
+                image,
+                -drawWidth/2,
+                -drawHeight/2,
+                drawWidth,
+                drawHeight
+              );
 
-            if(!blob){
-              resolve(null);
-              return;
             }
+
+            context.restore();
+
+            let pixels;
 
             try{
-              resolve(
-                new File(
-                  [blob],
-                  "shiftfit-barcode-enhanced.jpg",
-                  {type:"image/jpeg"}
-                )
-              );
+
+              pixels =
+                context.getImageData(
+                  0,
+                  0,
+                  canvas.width,
+                  canvas.height
+                );
+
             }catch(error){
-              resolve(null);
+
+              return;
+
             }
 
-          },
-          "image/jpeg",
-          0.92
+            const data = pixels.data;
+
+            for(let i=0;i<data.length;i+=4){
+
+              const grey =
+                (data[i]*0.299)+
+                (data[i+1]*0.587)+
+                (data[i+2]*0.114);
+
+              let value =
+                ((grey-128)*contrast)+128;
+
+              if(threshold){
+
+                value =
+                  value >= threshold
+                    ? 255
+                    : 0;
+
+              }
+
+              value =
+                Math.max(
+                  0,
+                  Math.min(255,value)
+                );
+
+              data[i] = value;
+              data[i+1] = value;
+              data[i+2] = value;
+
+            }
+
+            context.putImageData(
+              pixels,
+              0,
+              0
+            );
+
+            canvas.toBlob(
+              blob=>{
+
+                if(!blob) return;
+
+                try{
+
+                  variants.push(
+                    new File(
+                      [blob],
+                      "shiftfit-barcode-"+variants.length+".jpg",
+                      {type:"image/jpeg"}
+                    )
+                  );
+
+                }catch(error){}
+
+              },
+              "image/jpeg",
+              quality
+            );
+
+          };
+
+        /*
+          Build several independent attempts. They are deliberately
+          varied because a supermarket label may be photographed
+          sideways, upside down, far away, or with glare.
+        */
+
+        makeVariant(0,null,1.65,null,.94);
+        makeVariant(90,null,1.65,null,.94);
+        makeVariant(270,null,1.65,null,.94);
+        makeVariant(180,null,1.65,null,.94);
+
+        /* Center crop: useful when the barcode occupies only part
+           of a large package photo. */
+        makeVariant(
+          0,
+          {x:.12,y:.18,w:.76,h:.64},
+          1.75,
+          null,
+          .94
+        );
+
+        makeVariant(
+          90,
+          {x:.12,y:.18,w:.76,h:.64},
+          1.75,
+          null,
+          .94
+        );
+
+        /* Strong black/white pass for clean printed barcodes. */
+        makeVariant(0,null,2.0,145,.94);
+        makeVariant(90,null,2.0,145,.94);
+
+        URL.revokeObjectURL(objectUrl);
+
+        /*
+          Canvas.toBlob is asynchronous, so allow the generated
+          variants a moment to enter the array before scanning.
+        */
+        setTimeout(
+          ()=>resolve(variants),
+          180
         );
 
       }catch(error){
+
         URL.revokeObjectURL(objectUrl);
-        resolve(null);
+        resolve([file]);
+
       }
 
     };
 
     image.onerror = ()=>{
+
       URL.revokeObjectURL(objectUrl);
-      resolve(null);
+      resolve([file]);
+
     };
 
     image.src = objectUrl;
 
   });
-
-}
-
-async function lookupBarcodeNumber(value){
-
-  const input =
-    document.getElementById("barcodeManualInput");
-
-  const message =
-    document.getElementById("barcodeScannerMessage");
-
-  const barcode =
-    String(
-      value ??
-      input?.value ??
-      ""
-    ).replace(/\D/g,"");
-
-  if(barcode.length < 8){
-
-    if(message){
-      message.textContent =
-        "Please enter a valid food barcode.";
-    }
-
-    return;
-
-  }
-
-  if(message){
-    message.textContent =
-      "Looking up "+barcode+"…";
-  }
-
-  try{
-
-    const response =
-      await fetch(
-        "https://world.openfoodfacts.org/api/v2/product/"+
-        encodeURIComponent(barcode)+
-        ".json"
-      );
-
-    if(!response.ok){
-      throw new Error("Lookup failed");
-    }
-
-    const data =
-      await response.json();
-
-    const product = data?.product;
-
-    if(
-      Number(data?.status)!==1 ||
-      !product
-    ){
-      throw new Error("Product not found");
-    }
-
-    const n = product.nutriments || {};
-
-    const calories =
-      Number(
-        n["energy-kcal_100g"] ??
-        n["energy-kcal"]
-      ) || 0;
-
-    const protein =
-      Number(n.proteins_100g) || 0;
-
-    const carbs =
-      Number(n.carbohydrates_100g) || 0;
-
-    const fat =
-      Number(n.fat_100g) || 0;
-
-    const name =
-      String(
-        product.product_name ||
-        product.generic_name ||
-        ("Scanned food "+barcode)
-      ).trim();
-
-    addScannedMealOption({
-      name:name,
-      calories:calories,
-      protein:protein,
-      carbs:carbs,
-      fats:fat
-    });
-
-    await closeBarcodeScanner();
-
-  }catch(error){
-
-    if(message){
-      message.textContent =
-        "Barcode found, but that product was not in the food database. Try another photo or enter the barcode manually.";
-    }
-
-  }
 
 }
 
@@ -12985,12 +13054,16 @@ async function closeBarcodeScanner(){
   if(barcodeScanner){
 
     try{
+
       if(
         typeof barcodeScanner.clear ===
         "function"
       ){
+
         barcodeScanner.clear();
+
       }
+
     }catch(error){}
 
     barcodeScanner = null;
@@ -13003,9 +13076,15 @@ async function closeBarcodeScanner(){
   if(preview){
 
     if(preview.dataset.objectUrl){
+
       try{
-        URL.revokeObjectURL(preview.dataset.objectUrl);
+
+        URL.revokeObjectURL(
+          preview.dataset.objectUrl
+        );
+
       }catch(error){}
+
     }
 
     preview.removeAttribute("src");
@@ -13025,8 +13104,13 @@ async function closeBarcodeScanner(){
     document.getElementById("barcodeScannerModal");
 
   if(modal){
+
     modal.classList.remove("show");
-    modal.setAttribute("aria-hidden","true");
+    modal.setAttribute(
+      "aria-hidden",
+      "true"
+    );
+
   }
 
 }
