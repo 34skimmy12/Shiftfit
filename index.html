@@ -1388,11 +1388,78 @@ button{
   padding:0;
 }
 
+
+/* =========================================================
+   FOOD DROPDOWN
+   ========================================================= */
+
 .add-item-card{
   display:grid;
   grid-template-columns:1fr 82px;
   gap:10px;
   margin-top:15px;
+  position:relative;
+}
+
+.food-dropdown-wrap{
+  position:relative;
+  min-width:0;
+}
+
+.food-dropdown{
+  position:absolute;
+  left:0;
+  right:0;
+  top:calc(100% + 6px);
+  background:#11162b;
+  border:1px solid #303a60;
+  border-radius:14px;
+  overflow:hidden;
+  z-index:1000;
+  max-height:280px;
+  overflow-y:auto;
+  display:none;
+  box-shadow:0 15px 35px rgba(0,0,0,.55);
+}
+
+.food-dropdown.show{
+  display:block;
+}
+
+.food-option{
+  width:100%;
+  padding:14px 15px;
+  color:#f4f5fb;
+  background:#11162b;
+  border:none;
+  border-bottom:1px solid rgba(48,58,96,.55);
+  text-align:left;
+  font-size:14px;
+  font-weight:700;
+}
+
+.food-option:last-child{
+  border-bottom:none;
+}
+
+.food-option:active{
+  background:#202849;
+}
+
+.food-option:hover{
+  background:#191f39;
+}
+
+.food-option.empty{
+  color:#aab1c5;
+  cursor:default;
+  line-height:1.45;
+}
+
+.food-option.add-manually{
+  color:#bda8ff;
+  background:rgba(109,40,217,.08);
+  font-weight:850;
 }
 
 .add-item-input{
@@ -3182,68 +3249,30 @@ button{
 
 </div>
 
+
+<!-- =====================================================
+     PROPER SHIFT FIT FOOD DROPDOWN
+     ===================================================== -->
+
 <div class="add-item-card">
 
-  <input
-    id="newShoppingItem"
-    class="add-item-input"
-    list="shiftfitFoodCatalogue"
-    placeholder="Search or add food..."
-    autocomplete="off"
-  >
+  <div class="food-dropdown-wrap">
 
-  <datalist id="shiftfitFoodCatalogue">
+    <input
+      id="newShoppingItem"
+      class="add-item-input"
+      placeholder="Search or add food..."
+      autocomplete="off"
+      onfocus="openFoodDropdown()"
+      oninput="filterFoodDropdown(this.value)"
+    >
 
-    <option value="Chicken breast">
-    <option value="Lean beef mince">
-    <option value="Lean turkey mince">
-    <option value="Salmon">
-    <option value="Tuna">
-    <option value="Eggs">
-    <option value="Greek yoghurt">
-    <option value="Cottage cheese">
-    <option value="Protein powder">
-    <option value="Protein bar">
+    <div
+      id="foodDropdown"
+      class="food-dropdown"
+    ></div>
 
-    <option value="Oats">
-    <option value="Rice">
-    <option value="Wholewheat pasta">
-    <option value="Wholemeal wraps">
-    <option value="Wholegrain bread">
-    <option value="Rice cakes">
-    <option value="Sweet potatoes">
-    <option value="Potatoes">
-    <option value="Beans">
-    <option value="Kidney beans">
-
-    <option value="Mixed vegetables">
-    <option value="Spinach">
-    <option value="Broccoli">
-    <option value="Peppers">
-    <option value="Onions">
-    <option value="Tomatoes">
-    <option value="Cucumber">
-    <option value="Lettuce">
-    <option value="Carrots">
-
-    <option value="Mixed berries">
-    <option value="Bananas">
-    <option value="Apples">
-    <option value="Blueberries">
-    <option value="Strawberries">
-    <option value="Avocado">
-
-    <option value="Peanut butter">
-    <option value="Almonds">
-    <option value="Mixed nuts">
-    <option value="Chia seeds">
-    <option value="Honey">
-    <option value="Olive oil">
-    <option value="Light mayonnaise">
-    <option value="Tomato sauce">
-    <option value="Salsa">
-
-  </datalist>
+  </div>
 
   <button
     class="add-item-btn"
@@ -5683,6 +5712,233 @@ function deleteShoppingItem(index){
 }
 
 
+/* =========================================================
+   FOOD DROPDOWN
+   ========================================================= */
+
+function openFoodDropdown(){
+
+  const input=
+    document.getElementById(
+      "newShoppingItem"
+    );
+
+  renderFoodDropdown(
+    input?.value || ""
+  );
+
+}
+
+
+function closeFoodDropdown(){
+
+  const dropdown=
+    document.getElementById(
+      "foodDropdown"
+    );
+
+  if(dropdown){
+
+    dropdown.classList.remove(
+      "show"
+    );
+
+  }
+
+}
+
+
+function filterFoodDropdown(value){
+
+  renderFoodDropdown(
+    value
+  );
+
+}
+
+
+function renderFoodDropdown(value=""){
+
+  const dropdown=
+    document.getElementById(
+      "foodDropdown"
+    );
+
+  if(!dropdown) return;
+
+
+  const query=
+    String(
+      value ||
+      ""
+    )
+    .trim()
+    .toLowerCase();
+
+
+  const matches=
+    shiftfitFoodCatalogue
+      .filter(
+        food=>
+          !query ||
+          food
+            .toLowerCase()
+            .includes(query)
+      )
+      .slice(
+        0,
+        20
+      );
+
+
+  dropdown.innerHTML="";
+
+
+  matches.forEach(
+    food=>{
+
+      const option=
+        document.createElement(
+          "button"
+        );
+
+      option.type="button";
+
+      option.className=
+        "food-option";
+
+      option.textContent=
+        food;
+
+      option.onclick=
+        function(){
+
+          selectFoodFromDropdown(
+            food
+          );
+
+        };
+
+      dropdown.appendChild(
+        option
+      );
+
+    }
+  );
+
+
+  if(
+    !matches.length
+  ){
+
+    const empty=
+      document.createElement(
+        "div"
+      );
+
+    empty.className=
+      "food-option empty";
+
+    empty.textContent=
+      "No catalogue match — you can add this food manually.";
+
+    dropdown.appendChild(
+      empty
+    );
+
+
+  }else if(
+    query &&
+    !matches.some(
+      food=>
+        food.toLowerCase()===
+        query
+    )
+  ){
+
+    const manual=
+      document.createElement(
+        "button"
+      );
+
+    manual.type="button";
+
+    manual.className=
+      "food-option add-manually";
+
+    manual.textContent=
+      '＋ Add "'+
+      value.trim()+
+      '" manually';
+
+    manual.onclick=
+      function(){
+
+        selectFoodFromDropdown(
+          value.trim()
+        );
+
+      };
+
+    dropdown.appendChild(
+      manual
+    );
+
+  }
+
+
+  dropdown.classList.add(
+    "show"
+  );
+
+}
+
+
+function selectFoodFromDropdown(food){
+
+  const input=
+    document.getElementById(
+      "newShoppingItem"
+    );
+
+  if(!input) return;
+
+  input.value=
+    food;
+
+  closeFoodDropdown();
+
+  input.focus();
+
+}
+
+
+/* CLOSE DROPDOWN WHEN TAPPING OUTSIDE */
+
+document.addEventListener(
+  "click",
+  function(event){
+
+    const wrapper=
+      document.querySelector(
+        ".food-dropdown-wrap"
+      );
+
+    if(
+      wrapper &&
+      !wrapper.contains(
+        event.target
+      )
+    ){
+
+      closeFoodDropdown();
+
+    }
+
+  }
+);
+
+
 /* ADD SHOPPING ITEM */
 
 function addShoppingItem(){
@@ -5697,7 +5953,13 @@ function addShoppingItem(){
   const typedName=
     input.value.trim();
 
-  if(!typedName) return;
+  if(!typedName){
+
+    closeFoodDropdown();
+
+    return;
+
+  }
 
 
   /*
@@ -5783,6 +6045,8 @@ function addShoppingItem(){
 
     input.value="";
 
+    closeFoodDropdown();
+
     alert(
       name+
       " is already on your shopping list."
@@ -5803,6 +6067,8 @@ function addShoppingItem(){
 
 
   input.value="";
+
+  closeFoodDropdown();
 
   saveShoppingItems();
 
