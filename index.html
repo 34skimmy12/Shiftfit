@@ -4588,6 +4588,182 @@ button{
 
 </style>
 
+
+<style id="shiftfit-weight-progress-v30">
+
+.weight-progress-card{
+  margin-bottom:11px;
+}
+
+.weight-log-btn{
+  border:1px solid rgba(139,92,246,.55);
+  background:rgba(139,92,246,.11);
+  color:#c7adff;
+  border-radius:10px;
+  padding:8px 9px;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.6px;
+  white-space:nowrap;
+}
+
+.weight-main-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:14px;
+}
+
+.weight-current-label{
+  display:block;
+  color:#8f97ae;
+  font-size:8px;
+  letter-spacing:1.3px;
+  font-weight:800;
+}
+
+.weight-current{
+  display:flex;
+  align-items:baseline;
+  gap:4px;
+  margin-top:3px;
+}
+
+.weight-current strong{
+  font-size:27px;
+  line-height:1;
+}
+
+.weight-current span{
+  color:var(--muted);
+  font-size:12px;
+  font-weight:700;
+}
+
+.weight-change-box{
+  min-width:92px;
+  padding:9px 10px;
+  border-radius:11px;
+  background:rgba(255,255,255,.035);
+  text-align:right;
+}
+
+.weight-change-box span{
+  display:block;
+  color:#8f97ae;
+  font-size:7px;
+  letter-spacing:1px;
+  font-weight:800;
+}
+
+.weight-change-box strong{
+  display:block;
+  margin-top:3px;
+  font-size:14px;
+}
+
+.weight-entry-form{
+  display:none;
+  margin-top:12px;
+  padding-top:12px;
+  border-top:1px solid rgba(255,255,255,.06);
+}
+
+.weight-entry-form.show{
+  display:block;
+}
+
+.weight-input-wrap label{
+  display:block;
+  color:#8f97ae;
+  font-size:9px;
+  font-weight:800;
+  margin-bottom:6px;
+}
+
+.weight-input-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.weight-input-row input{
+  flex:1;
+  min-width:0;
+  height:44px;
+  box-sizing:border-box;
+  border:1px solid #303a60;
+  border-radius:12px;
+  background:#080d1d;
+  color:#f4f5fb;
+  padding:8px 11px;
+  font:inherit;
+  font-size:16px;
+}
+
+.weight-input-row span{
+  color:var(--muted);
+  font-size:12px;
+  font-weight:800;
+}
+
+.weight-entry-actions{
+  display:grid;
+  grid-template-columns:1fr 1.5fr;
+  gap:7px;
+  margin-top:8px;
+}
+
+.weight-cancel-btn,
+.weight-save-btn{
+  min-height:40px;
+  border-radius:11px;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.5px;
+}
+
+.weight-cancel-btn{
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.035);
+  color:var(--muted);
+}
+
+.weight-save-btn{
+  border:1px solid rgba(139,92,246,.7);
+  background:linear-gradient(135deg,#7135df,#5124bf);
+  color:#fff;
+}
+
+.weight-history{
+  margin-top:12px;
+}
+
+.weight-history-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:7px 0;
+  border-top:1px solid rgba(255,255,255,.05);
+  color:var(--muted);
+  font-size:10px;
+}
+
+.weight-history-row strong{
+  color:var(--text);
+  font-size:11px;
+}
+
+.weight-empty{
+  padding-top:10px;
+  color:#8f97ae;
+  font-size:10px;
+  line-height:1.4;
+}
+
+</style>
+
 </head>
 
 <body>
@@ -5940,6 +6116,79 @@ button{
         <strong id="progressFatTarget">0g</strong>
       </div>
     </div>
+  </section>
+
+
+  <section class="progress-section-card weight-progress-card">
+
+    <div class="progress-section-head">
+      <div>
+        <div class="progress-card-kicker">BODY WEIGHT</div>
+        <h2>Weight Progress</h2>
+      </div>
+      <button
+        class="weight-log-btn"
+        onclick="toggleWeightEntry()"
+      >
+        + LOG WEIGHT
+      </button>
+    </div>
+
+    <div class="weight-main-row">
+      <div>
+        <span class="weight-current-label">CURRENT</span>
+        <div class="weight-current">
+          <strong id="currentWeightValue">—</strong>
+          <span>kg</span>
+        </div>
+      </div>
+
+      <div class="weight-change-box">
+        <span>CHANGE</span>
+        <strong id="weightChangeValue">—</strong>
+      </div>
+    </div>
+
+    <div
+      id="weightEntryForm"
+      class="weight-entry-form"
+    >
+
+      <div class="weight-input-wrap">
+        <label for="weightEntryInput">Today's weight</label>
+        <div class="weight-input-row">
+          <input
+            id="weightEntryInput"
+            type="number"
+            inputmode="decimal"
+            step="0.1"
+            min="20"
+            max="400"
+            placeholder="e.g. 84.0"
+          >
+          <span>kg</span>
+        </div>
+      </div>
+
+      <div class="weight-entry-actions">
+        <button
+          class="weight-cancel-btn"
+          onclick="toggleWeightEntry(false)"
+        >
+          CANCEL
+        </button>
+        <button
+          class="weight-save-btn"
+          onclick="saveWeightEntry()"
+        >
+          SAVE WEIGHT
+        </button>
+      </div>
+
+    </div>
+
+    <div class="weight-history" id="weightHistory"></div>
+
   </section>
 
   <section class="progress-section-card">
@@ -7550,6 +7799,7 @@ function showProgress(){
 
   renderProgress();
   renderDailyStreak();
+  renderWeightProgress();
 
   window.scrollTo(0,0);
 
@@ -13028,6 +13278,308 @@ function renderDailyStreak(){
 }
 
 
+
+function getWeightHistory(){
+
+  try{
+
+    const saved =
+      localStorage.getItem(
+        "shiftfitWeightHistory"
+      );
+
+    const parsed =
+      saved ? JSON.parse(saved) : [];
+
+    return Array.isArray(parsed)
+      ? parsed
+      : [];
+
+  }catch(error){
+
+    return [];
+
+  }
+
+}
+
+
+function saveWeightHistory(history){
+
+  try{
+
+    localStorage.setItem(
+      "shiftfitWeightHistory",
+      JSON.stringify(
+        history.slice(-90)
+      )
+    );
+
+  }catch(error){
+
+    console.warn(
+      "Could not save weight history."
+    );
+
+  }
+
+}
+
+
+function toggleWeightEntry(force){
+
+  const form =
+    document.getElementById(
+      "weightEntryForm"
+    );
+
+  if(!form) return;
+
+  const shouldShow =
+    typeof force==="boolean"
+      ? force
+      : !form.classList.contains("show");
+
+  form.classList.toggle(
+    "show",
+    shouldShow
+  );
+
+  if(shouldShow){
+
+    const input =
+      document.getElementById(
+        "weightEntryInput"
+      );
+
+    if(input){
+
+      const history =
+        getWeightHistory();
+
+      if(history.length){
+
+        input.value =
+          Number(
+            history[history.length-1].weight
+          ).toFixed(1);
+
+      }
+
+      setTimeout(
+        ()=>input.focus(),
+        80
+      );
+
+    }
+
+  }
+
+}
+
+
+function saveWeightEntry(){
+
+  const input =
+    document.getElementById(
+      "weightEntryInput"
+    );
+
+  if(!input) return;
+
+  const weight =
+    Number(
+      input.value
+    );
+
+  if(
+    !Number.isFinite(weight) ||
+    weight < 20 ||
+    weight > 400
+  ){
+
+    input.focus();
+    return;
+
+  }
+
+  const history =
+    getWeightHistory();
+
+  const today =
+    getLocalDateKey();
+
+  const existingIndex =
+    history.findIndex(
+      entry=>entry.date===today
+    );
+
+  const entry = {
+    date:today,
+    weight:
+      Math.round(weight*10)/10
+  };
+
+  if(existingIndex>=0){
+
+    history[existingIndex] =
+      entry;
+
+  }else{
+
+    history.push(entry);
+
+  }
+
+  history.sort(
+    (a,b)=>
+      a.date.localeCompare(b.date)
+  );
+
+  saveWeightHistory(history);
+
+  markDailyStreakActivity();
+
+  toggleWeightEntry(false);
+
+  renderWeightProgress();
+
+  renderDailyStreak();
+
+}
+
+
+function renderWeightProgress(){
+
+  const history =
+    getWeightHistory();
+
+  const current =
+    history.length
+      ? Number(
+          history[history.length-1].weight
+        )
+      : null;
+
+  let change = null;
+
+  if(history.length>=2){
+
+    const first =
+      Number(history[0].weight);
+
+    if(Number.isFinite(first) &&
+       Number.isFinite(current)){
+
+      change =
+        Math.round(
+          (current-first)*10
+        )/10;
+
+    }
+
+  }
+
+  const plan =
+    getProgressPlan();
+
+  const currentEl =
+    document.getElementById(
+      "currentWeightValue"
+    );
+
+  const changeEl =
+    document.getElementById(
+      "weightChangeValue"
+    );
+
+  if(currentEl){
+
+    currentEl.textContent =
+      current !== null
+        ? current.toFixed(1)
+        : (
+            Number.isFinite(
+              Number(plan.weight)
+            )
+              ? Number(plan.weight).toFixed(1)
+              : "—"
+          );
+
+  }
+
+  if(changeEl){
+
+    if(change !== null){
+
+      changeEl.textContent =
+        (change>0?"+":"")+
+        change.toFixed(1)+
+        " kg";
+
+    }else{
+
+      changeEl.textContent =
+        "—";
+
+    }
+
+  }
+
+  const historyEl =
+    document.getElementById(
+      "weightHistory"
+    );
+
+  if(!historyEl) return;
+
+  if(!history.length){
+
+    historyEl.innerHTML =
+      `<div class="weight-empty">
+        Log your first weigh-in to start tracking.
+      </div>`;
+
+    return;
+
+  }
+
+  const recent =
+    history
+      .slice(-5)
+      .reverse();
+
+  historyEl.innerHTML =
+    recent.map(
+      entry=>{
+
+        const date =
+          new Date(
+            entry.date+"T12:00:00"
+          );
+
+        const label =
+          date.toLocaleDateString(
+            undefined,
+            {
+              day:"numeric",
+              month:"short"
+            }
+          );
+
+        return `
+          <div class="weight-history-row">
+            <span>${label}</span>
+            <strong>${Number(entry.weight).toFixed(1)} kg</strong>
+          </div>
+        `;
+
+      }
+    ).join("");
+
+}
+
+
 function getProgressPlan(){
 
   let plan = null;
@@ -13056,6 +13608,8 @@ function getProgressPlan(){
 
 
 function renderProgress(){
+
+  renderWeightProgress();
 
   const plan = getProgressPlan();
 
