@@ -2931,6 +2931,82 @@ button{
 }
 </style>
 
+
+<style id="shiftfit-reset-confirm-style">
+#shiftfitResetConfirm{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:88px;
+  z-index:10000;
+  display:flex;
+  justify-content:center;
+  padding:0 20px;
+  opacity:0;
+  pointer-events:none;
+  transform:translateY(16px);
+  transition:opacity .22s ease, transform .22s ease;
+}
+
+#shiftfitResetConfirm.show{
+  opacity:1;
+  pointer-events:auto;
+  transform:translateY(0);
+}
+
+.shiftfit-reset-card{
+  width:min(100%,430px);
+  padding:18px;
+  border:1px solid rgba(139,92,246,.55);
+  border-radius:20px;
+  background:rgba(17,22,43,.98);
+  box-shadow:0 14px 40px rgba(0,0,0,.5);
+  backdrop-filter:blur(16px);
+}
+
+.shiftfit-reset-title{
+  color:#f4f5fb;
+  font-size:18px;
+  font-weight:900;
+  margin-bottom:5px;
+}
+
+.shiftfit-reset-text{
+  color:#aab1c5;
+  font-size:14px;
+  line-height:1.4;
+}
+
+.shiftfit-reset-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:14px;
+}
+
+.shiftfit-reset-actions button{
+  min-height:44px;
+  border-radius:14px;
+  padding:10px 12px;
+  font:inherit;
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.04em;
+}
+
+.shiftfit-reset-cancel{
+  border:1px solid #303a60;
+  background:#11162b;
+  color:#c8cce0;
+}
+
+.shiftfit-reset-confirm{
+  border:1px solid #8b5cf6;
+  background:linear-gradient(135deg,#7c3aed,#5123c5);
+  color:#fff;
+}
+</style>
+
 </head>
 
 <body>
@@ -8599,11 +8675,85 @@ function addShoppingItem(){
 
 function resetShoppingList(){
 
-  if(
-    !confirm(
-      "Reset your shopping list?"
-    )
-  ) return;
+  showResetShoppingConfirm();
+
+}
+
+function showResetShoppingConfirm(){
+
+  let modal =
+    document.getElementById(
+      "shiftfitResetConfirm"
+    );
+
+  if(!modal){
+
+    modal =
+      document.createElement("div");
+
+    modal.id =
+      "shiftfitResetConfirm";
+
+    modal.innerHTML = `
+      <div class="shiftfit-reset-card">
+
+        <div class="shiftfit-reset-title">
+          Reset Shopping List?
+        </div>
+
+        <div class="shiftfit-reset-text">
+          This will restore your default weekly shopping list.
+        </div>
+
+        <div class="shiftfit-reset-actions">
+
+          <button
+            class="shiftfit-reset-cancel"
+            onclick="closeResetShoppingConfirm()"
+          >
+            CANCEL
+          </button>
+
+          <button
+            class="shiftfit-reset-confirm"
+            onclick="confirmResetShoppingList()"
+          >
+            RESET LIST
+          </button>
+
+        </div>
+
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+
+  }
+
+  requestAnimationFrame(function(){
+
+    modal.classList.add("show");
+
+  });
+
+}
+
+function closeResetShoppingConfirm(){
+
+  const modal =
+    document.getElementById(
+      "shiftfitResetConfirm"
+    );
+
+  if(modal){
+
+    modal.classList.remove("show");
+
+  }
+
+}
+
+function confirmResetShoppingList(){
 
   shoppingItems=
     defaultShoppingItems.map(
@@ -8621,6 +8771,10 @@ function resetShoppingList(){
   renderShoppingList();
 
   clearBasketResults();
+
+  closeResetShoppingConfirm();
+
+  showPlanSuccess();
 
 }
 
