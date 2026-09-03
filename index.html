@@ -4236,6 +4236,53 @@ button{
 }
 </style>
 
+
+<style id="calendar-events-v17-time-alignment">
+/* Final alignment: time text sits on the same visual middle line as event text */
+#calendarEventModal .calendar-event-inline-fields{
+  align-items:start !important;
+}
+
+#calendarEventModal .calendar-event-inline-fields > label{
+  display:flex !important;
+  flex-direction:column !important;
+}
+
+#calendarEventModal .calendar-event-inline-fields input{
+  display:flex !important;
+  align-items:center !important;
+}
+
+#calendarEventModal .calendar-event-time-field input{
+  text-align:center !important;
+  vertical-align:middle !important;
+  line-height:56px !important;
+  padding-top:0 !important;
+  padding-bottom:0 !important;
+}
+
+#calendarEventModal .calendar-event-name-field input{
+  line-height:56px !important;
+  padding-top:0 !important;
+  padding-bottom:0 !important;
+}
+
+/* Keep the saved event title and time perfectly aligned on one row */
+#calendarDayScreen .calendar-event-main-title-row{
+  display:flex !important;
+  align-items:center !important;
+  gap:8px !important;
+  min-height:24px !important;
+}
+
+#calendarDayScreen .calendar-event-main-title-row .calendar-event-title,
+#calendarDayScreen .calendar-event-main-title-row .calendar-event-time{
+  margin:0 !important;
+  line-height:24px !important;
+  vertical-align:middle !important;
+}
+</style>
+
 </head>
 
 <body>
