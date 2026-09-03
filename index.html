@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ShiftFit</title>
+<!-- ShiftFit v42: exercise demonstration links -->
 
 <style>
 :root{
@@ -2316,6 +2317,39 @@ button{
   #workoutSetModal .modal-card{
     padding:17px !important;
     border-radius:19px !important;
+  }
+}
+
+
+/* ShiftFit v42 — exercise demonstration actions */
+.workout-action-buttons{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:7px;
+  flex-wrap:wrap;
+}
+.workout-video-btn{
+  min-height:44px;
+  padding:0 13px;
+  border:1px solid rgba(53,223,141,.55);
+  border-radius:11px;
+  background:rgba(53,223,141,.08);
+  color:#8ff0bd;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.08em;
+}
+.workout-video-btn:active{
+  transform:scale(.98);
+}
+@media(max-width:390px){
+  .workout-action-buttons{
+    gap:5px;
+  }
+  .workout-video-btn{
+    padding:0 9px;
+    font-size:9px;
   }
 }
 
@@ -10597,6 +10631,43 @@ function renderWorkoutDays(){
 
 }
 
+
+function openExerciseVideo(event,index){
+
+  if(event){
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  const workout =
+    weeklyWorkouts[workoutDay] ||
+    weeklyWorkouts[0];
+
+  const exercise =
+    workout &&
+    workout.exercises &&
+    workout.exercises[index];
+
+  if(!exercise){
+    return;
+  }
+
+  const query =
+    exercise[0]+
+    " proper form exercise demonstration";
+
+  const url =
+    "https://www.youtube.com/results?search_query="+
+    encodeURIComponent(query);
+
+  window.open(
+    url,
+    "_blank",
+    "noopener,noreferrer"
+  );
+
+}
+
 function renderWorkoutDay(){
 
   const workout =
@@ -10688,13 +10759,23 @@ function renderWorkoutDay(){
                   ${getTargetSetCount(exercise[1])} sets logged
                 </div>
 
-                <button
-                  type="button"
-                  class="workout-log-btn"
-                  onclick="openWorkoutSetModal(${index})"
-                >
-                  + LOG SET
-                </button>
+                <div class="workout-action-buttons">
+                  <button
+                    type="button"
+                    class="workout-video-btn"
+                    onclick="openExerciseVideo(event,${index})"
+                  >
+                    ▶ DEMO
+                  </button>
+
+                  <button
+                    type="button"
+                    class="workout-log-btn"
+                    onclick="openWorkoutSetModal(${index})"
+                  >
+                    + LOG SET
+                  </button>
+                </div>
               </div>
 
               ${logs.length ? `
