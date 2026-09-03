@@ -3774,6 +3774,18 @@ button{
 
 </div>
 
+<div
+  id="calendarDayTitle"
+  class="calendar-section-title"
+>
+  Today's Schedule
+</div>
+
+<div
+  id="calendarSchedule"
+></div>
+
+
 <div class="calendar-generator">
 
   <div class="calendar-generator-title">
@@ -3841,16 +3853,6 @@ button{
 
 </div>
 
-<div
-  id="calendarDayTitle"
-  class="calendar-section-title"
->
-  Today's Schedule
-</div>
-
-<div
-  id="calendarSchedule"
-></div>
 
 </section>
 
@@ -5368,6 +5370,18 @@ function selectCalendarDate(date){
 
   renderCalendar();
 
+  const schedule =
+    document.getElementById("calendarSchedule");
+
+  if(schedule){
+    setTimeout(function(){
+      schedule.scrollIntoView({
+        behavior:"smooth",
+        block:"start"
+      });
+    },50);
+  }
+
 }
 
 
@@ -5794,7 +5808,7 @@ function renderCalendar(){
               <div class="calendar-card-label">${meal.type}</div>
               <div class="calendar-card-title">${meal.name}</div>
               <div class="calendar-card-detail">
-                ${meal.calories} kcal
+                ${Number.isFinite(Number(meal.calories)) ? Number(meal.calories) + " kcal" : "Included in your meal plan"}
               </div>
             </div>
           </div>
