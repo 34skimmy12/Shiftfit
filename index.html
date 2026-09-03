@@ -4885,6 +4885,102 @@ button{
 
 </style>
 
+
+<style id="shiftfit-progress-history-v33">
+
+.progress-history-list{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+  margin-top:12px;
+}
+
+.progress-history-day{
+  border:1px solid rgba(255,255,255,.055);
+  border-radius:13px;
+  padding:9px;
+  background:rgba(255,255,255,.025);
+}
+
+.progress-history-day.today{
+  border-color:rgba(139,92,246,.38);
+  background:rgba(139,92,246,.06);
+}
+
+.progress-history-date{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:8px;
+}
+
+.progress-history-date strong{
+  font-size:10px;
+}
+
+.progress-history-date span{
+  font-size:10px;
+  color:#8f97ae;
+  font-weight:800;
+}
+
+.progress-history-metrics{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:3px;
+}
+
+.progress-history-metrics > div{
+  min-width:0;
+  text-align:center;
+  padding:5px 1px;
+  border-radius:8px;
+  background:rgba(0,0,0,.13);
+}
+
+.progress-history-metrics span{
+  display:block;
+  font-size:11px;
+  line-height:1;
+}
+
+.progress-history-metrics strong{
+  display:block;
+  margin-top:3px;
+  font-size:8px;
+  line-height:1.05;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.progress-history-metrics small{
+  display:block;
+  margin-top:2px;
+  color:#8f97ae;
+  font-size:5.5px;
+  line-height:1;
+  text-transform:uppercase;
+}
+
+@media(max-width:380px){
+
+  .progress-history-metrics{
+    gap:2px;
+  }
+
+  .progress-history-metrics > div{
+    padding:5px 0;
+  }
+
+  .progress-history-metrics strong{
+    font-size:7.5px;
+  }
+
+}
+
+</style>
+
 </head>
 
 <body>
@@ -6434,6 +6530,23 @@ button{
 
   </section>
 
+
+
+  <section class="progress-section-card progress-history-card">
+
+    <div class="progress-section-head">
+      <div>
+        <div class="progress-card-kicker">LAST 7 DAYS</div>
+        <h2>Daily History</h2>
+      </div>
+    </div>
+
+    <div
+      id="progressHistoryList"
+      class="progress-history-list"
+    ></div>
+
+  </section>
 
   <section class="progress-section-card">
 
@@ -8004,6 +8117,7 @@ function showProgress(){
   renderProgress();
   renderDailyStreak();
   renderWeightProgress();
+  renderProgressHistory();
 
   window.scrollTo(0,0);
 
@@ -13307,6 +13421,305 @@ function removeTodayFood(id){
 
 
 
+
+function getProgressDailyHistory(){
+
+  try{
+
+    const saved =
+      localStorage.getItem(
+        "shiftfitDailyProgressHistory"
+      );
+
+    const parsed =
+      saved ? JSON.parse(saved) : {};
+
+    return parsed &&
+      typeof parsed === "object"
+      ? parsed
+      : {};
+
+  }catch(error){
+
+    return {};
+
+  }
+
+}
+
+
+function saveProgressDailyHistory(history){
+
+  try{
+
+    const entries =
+      Object.entries(history)
+        .sort(
+          (a,b)=>a[0].localeCompare(b[0])
+        )
+        .slice(-365);
+
+    localStorage.setItem(
+      "shiftfitDailyProgressHistory",
+      JSON.stringify(
+        Object.fromEntries(entries)
+      )
+    );
+
+  }catch(error){
+
+    console.warn(
+      "Could not save daily progress history."
+    );
+
+  }
+
+}
+
+
+function recordTodayProgressSnapshot(){
+
+  resetTodayTrackerIfNeeded();
+
+  const history =
+    getProgressDailyHistory();
+
+  const today =
+    getLocalDateKey();
+
+  const nutrition =
+    todayTrackerState.foods.reduce(
+      (sum,food)=>({
+        calories:
+          sum.calories+
+          (Number(food.calories)||0),
+        protein:
+          sum.protein+
+          (Number(food.protein)||0),
+        carbs:
+          sum.carbs+
+          (Number(food.carbs)||0),
+        fat:
+          sum.fat+
+          (Number(food.fat)||0)
+      }),
+      {
+        calories:0,
+        protein:0,
+        carbs:0,
+        fat:0
+      }
+    );
+
+  let exercisesDone = 0;
+  let exercisesTotal = 0;
+
+  if(
+    typeof weeklyWorkouts !== "undefined" &&
+    Array.isArray(weeklyWorkouts)
+  ){
+
+    weeklyWorkouts.forEach(
+      (workout,index)=>{
+
+        const total =
+          Array.isArray(workout.exercises)
+            ? workout.exercises.length
+            : 0;
+
+        exercisesTotal += total;
+
+        exercisesDone +=
+          Object.values(
+            workoutCompleted[index] || {}
+          ).filter(Boolean).length;
+
+      }
+    );
+
+  }
+
+  const weightHistory =
+    getWeightHistory();
+
+  const todayWeight =
+    weightHistory.find(
+      entry=>entry.date===today
+    );
+
+  history[today] = {
+    calories:
+      Math.round(nutrition.calories),
+    protein:
+      Math.round(nutrition.protein),
+    carbs:
+      Math.round(nutrition.carbs),
+    fat:
+      Math.round(nutrition.fat),
+    water:
+      Number(todayTrackerState.water)||0,
+    exercisesDone,
+    exercisesTotal,
+    workout:
+      exercisesDone>0,
+    weight:
+      todayWeight
+        ? Number(todayWeight.weight)
+        : null
+  };
+
+  saveProgressDailyHistory(history);
+
+}
+
+
+function getLastSevenDates(){
+
+  const dates = [];
+  const today = new Date();
+
+  for(let i=6;i>=0;i--){
+
+    const date =
+      new Date(today);
+
+    date.setHours(
+      12,0,0,0
+    );
+
+    date.setDate(
+      date.getDate()-i
+    );
+
+    dates.push(
+      getLocalDateKey(date)
+    );
+
+  }
+
+  return dates;
+
+}
+
+
+function renderProgressHistory(){
+
+  recordTodayProgressSnapshot();
+
+  const history =
+    getProgressDailyHistory();
+
+  const list =
+    document.getElementById(
+      "progressHistoryList"
+    );
+
+  if(!list) return;
+
+  const dates =
+    getLastSevenDates();
+
+  list.innerHTML =
+    dates.map(
+      key=>{
+
+        const data =
+          history[key] || {
+            calories:0,
+            protein:0,
+            carbs:0,
+            fat:0,
+            water:0,
+            exercisesDone:0,
+            workout:false,
+            weight:null
+          };
+
+        const date =
+          new Date(
+            key+"T12:00:00"
+          );
+
+        const day =
+          date.toLocaleDateString(
+            undefined,
+            {weekday:"short"}
+          );
+
+        const dateNumber =
+          date.getDate();
+
+        const isToday =
+          key===getLocalDateKey();
+
+        return `
+          <div class="progress-history-day ${isToday?"today":""}">
+
+            <div class="progress-history-date">
+              <strong>${day}</strong>
+              <span>${dateNumber}</span>
+            </div>
+
+            <div class="progress-history-metrics">
+
+              <div>
+                <span>🔥</span>
+                <strong>${data.calories||0}</strong>
+                <small>kcal</small>
+              </div>
+
+              <div>
+                <span>🥩</span>
+                <strong>${data.protein||0}g</strong>
+                <small>protein</small>
+              </div>
+
+              <div>
+                <span>🍚</span>
+                <strong>${data.carbs||0}g</strong>
+                <small>carbs</small>
+              </div>
+
+              <div>
+                <span>🥑</span>
+                <strong>${data.fat||0}g</strong>
+                <small>fat</small>
+              </div>
+
+              <div>
+                <span>💧</span>
+                <strong>${data.water||0}/8</strong>
+                <small>water</small>
+              </div>
+
+              <div>
+                <span>${data.workout?"🏋️":"—"}</span>
+                <strong>${data.workout?"Done":"—"}</strong>
+                <small>workout</small>
+              </div>
+
+              <div>
+                <span>⚖️</span>
+                <strong>${
+                  data.weight!==null &&
+                  Number.isFinite(Number(data.weight))
+                    ? Number(data.weight).toFixed(1)
+                    : "—"
+                }</strong>
+                <small>kg</small>
+              </div>
+
+            </div>
+
+          </div>
+        `;
+
+      }
+    ).join("");
+
+}
+
+
 function getLocalDateKey(date = new Date()){
 
   const y = date.getFullYear();
@@ -14367,6 +14780,10 @@ function renderProgress(){
 
 
 function renderTodayTracker(){
+
+  if(typeof recordTodayProgressSnapshot === "function"){
+    recordTodayProgressSnapshot();
+  }
 
   resetTodayTrackerIfNeeded();
 
