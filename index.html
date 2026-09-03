@@ -1102,6 +1102,7 @@ button{
   font-weight:850;
 }
 
+
 /* CUSTOM SHIFT */
 
 .custom-shift-panel{
@@ -1291,6 +1292,9 @@ button{
   border-bottom:1px solid rgba(255,255,255,.07);
 }
 
+
+/* SHOPPING QUANTITY CONTROLS */
+
 .shop-row{
   display:grid;
   grid-template-columns:28px 1fr auto 32px;
@@ -1332,16 +1336,48 @@ button{
   font-weight:750;
 }
 
+.shop-qty-wrap{
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
+
+.shop-qty-btn{
+  width:28px;
+  height:32px;
+  border:1px solid #374164;
+  border-radius:8px;
+  background:#0a0f20;
+  color:white;
+  font-size:17px;
+  font-weight:900;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0;
+}
+
+.shop-qty-btn:active{
+  transform:scale(.94);
+  background:#171d36;
+}
+
 .shop-qty{
-  width:68px;
+  width:48px;
   border:1px solid #374164;
   border-radius:9px;
   background:#0a0f20;
   color:white;
-  padding:8px 6px;
+  padding:8px 4px;
   text-align:center;
   font-size:12px;
   font-weight:800;
+  outline:none;
+}
+
+.shop-qty:focus{
+  border-color:#8b5cf6;
+  box-shadow:0 0 0 2px rgba(139,92,246,.12);
 }
 
 .delete-shop{
@@ -1839,12 +1875,23 @@ button{
 
   .shop-row{
     grid-template-columns:
-      25px 1fr 58px 25px;
+      25px 1fr auto 25px;
     gap:7px;
   }
 
+  .shop-qty-wrap{
+    gap:3px;
+  }
+
+  .shop-qty-btn{
+    width:25px;
+    height:30px;
+    font-size:15px;
+  }
+
   .shop-qty{
-    width:58px;
+    width:42px;
+    padding:7px 3px;
   }
 
   .retailer-total{
@@ -3570,17 +3617,6 @@ function calculateCustomWorkout(){
     startMinutes;
 
 
-  /*
-    For an overnight shift, allow a longer
-    recovery period after finishing work.
-    Example:
-    18:00 – 06:00
-    → workout around 15:00 – 17:00
-
-    For a normal custom shift, training
-    is placed after the shift.
-  */
-
   let workoutStart;
 
   if(custom.overnight){
@@ -3597,10 +3633,6 @@ function calculateCustomWorkout(){
 
   }
 
-
-  /*
-    Keep the workout window at two hours.
-  */
 
   const workoutEnd=
     workoutStart+
@@ -5281,6 +5313,7 @@ function loadShoppingItems(){
 
   }
 
+
 }
 
 
@@ -5323,6 +5356,15 @@ function renderShoppingList(){
             :""
         );
 
+      const qty=
+        Math.max(
+          1,
+          parseInt(
+            item.qty,
+            10
+          )||1
+        );
+
       row.innerHTML=`
 
         <button
@@ -5336,21 +5378,36 @@ function renderShoppingList(){
           ${escapeHtml(item.name)}
         </div>
 
-        <input
-          class="shop-qty"
-          type="number"
-          min="1"
-          step="1"
-          value="${escapeHtml(
-            String(
-              item.qty||1
-            )
-          )}"
-          onchange="updateShoppingQty(
-            ${index},
-            this.value
-          )"
-        >
+        <div class="shop-qty-wrap">
+
+          <button
+            class="shop-qty-btn"
+            onclick="changeShoppingQty(${index},-1)"
+            aria-label="Decrease quantity"
+          >
+            −
+          </button>
+
+          <input
+            class="shop-qty"
+            type="number"
+            min="1"
+            step="1"
+            value="${qty}"
+            inputmode="numeric"
+            onchange="updateShoppingQty(${index},this.value)"
+            oninput="shoppingQtyTyping(${index},this.value)"
+          >
+
+          <button
+            class="shop-qty-btn"
+            onclick="changeShoppingQty(${index},1)"
+            aria-label="Increase quantity"
+          >
+            +
+          </button>
+
+        </div>
 
         <button
           class="delete-shop"
@@ -5429,6 +5486,67 @@ function updateShoppingQty(index,value){
   saveShoppingItems();
 
   clearBasketResults();
+
+  renderShoppingList();
+
+}
+
+
+function changeShoppingQty(index,amount){
+
+  if(
+    !shoppingItems[index]
+  ) return;
+
+  let qty=
+    parseInt(
+      shoppingItems[index].qty,
+      10
+    )||1;
+
+  qty+=amount;
+
+  if(qty<1){
+    qty=1;
+  }
+
+  shoppingItems[index].qty=
+    String(qty);
+
+  saveShoppingItems();
+
+  clearBasketResults();
+
+  renderShoppingList();
+
+}
+
+
+function shoppingQtyTyping(index,value){
+
+  if(
+    !shoppingItems[index]
+  ) return;
+
+  const qty=
+    parseInt(
+      value,
+      10
+    );
+
+  if(
+    Number.isFinite(qty) &&
+    qty>=1
+  ){
+
+    shoppingItems[index].qty=
+      String(qty);
+
+    saveShoppingItems();
+
+    clearBasketResults();
+
+  }
 
 }
 
