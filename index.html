@@ -4515,6 +4515,79 @@ button{
 </style>
 
 
+<style id="shiftfit-progress-nutrition-v27">
+.progress-section-card .progress-stat-list{
+  gap:0;
+}
+.progress-section-card .progress-stat-row{
+  padding:8px 0;
+}
+</style>
+
+
+<style id="shiftfit-daily-streak-v28">
+
+.daily-streak-card{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  border:1px solid var(--border);
+  background:linear-gradient(
+    145deg,
+    rgba(20,26,52,.96),
+    rgba(12,16,34,.96)
+  );
+  border-radius:18px;
+  padding:14px 15px;
+  margin:0 0 11px;
+}
+
+.daily-streak-icon{
+  width:48px;
+  height:48px;
+  min-width:48px;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(139,92,246,.13);
+  font-size:25px;
+}
+
+.daily-streak-kicker{
+  font-size:8px;
+  letter-spacing:1.7px;
+  color:#8f97ae;
+  font-weight:800;
+}
+
+.daily-streak-value{
+  display:flex;
+  align-items:baseline;
+  gap:5px;
+  margin-top:2px;
+}
+
+.daily-streak-value strong{
+  font-size:25px;
+  line-height:1;
+}
+
+.daily-streak-value span{
+  color:var(--muted);
+  font-size:11px;
+  font-weight:700;
+}
+
+.daily-streak-copy p{
+  margin:4px 0 0;
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.3;
+}
+
+</style>
+
 </head>
 
 <body>
@@ -5875,6 +5948,22 @@ button{
     <p>See how your training and nutrition are moving you towards your goal.</p>
   </div>
 
+
+  <section class="daily-streak-card">
+
+    <div class="daily-streak-icon">🔥</div>
+
+    <div class="daily-streak-copy">
+      <div class="daily-streak-kicker">DAILY STREAK</div>
+      <div class="daily-streak-value">
+        <strong id="dailyStreakCount">0</strong>
+        <span>days</span>
+      </div>
+      <p id="dailyStreakMessage">Start today to build your streak.</p>
+    </div>
+
+  </section>
+
   <section class="progress-hero-card">
     <div class="progress-hero-top">
       <div>
@@ -5928,35 +6017,16 @@ button{
         <strong id="progressProteinEaten">0g</strong>
       </div>
       <div class="progress-stat-row">
+        <span>🍚 Carbs eaten</span>
+        <strong id="progressCarbsEaten">0g</strong>
+      </div>
+      <div class="progress-stat-row">
+        <span>🥑 Fat eaten</span>
+        <strong id="progressFatEaten">0g</strong>
+      </div>
+      <div class="progress-stat-row">
         <span>💧 Water</span>
         <strong id="progressWater">0 / 8</strong>
-      </div>
-    </div>
-
-  </section>
-
-  <section class="progress-section-card">
-
-    <div class="progress-section-head">
-      <div>
-        <div class="progress-card-kicker">TRAINING</div>
-        <h2>Workout Progress</h2>
-      </div>
-      <div class="progress-percent" id="progressWorkoutPercent">0%</div>
-    </div>
-
-    <div class="progress-bar">
-      <div id="progressWorkoutFill"></div>
-    </div>
-
-    <div class="progress-stat-list">
-      <div class="progress-stat-row">
-        <span>🏋️ Exercises completed</span>
-        <strong id="progressExercisesDone">0</strong>
-      </div>
-      <div class="progress-stat-row">
-        <span>📅 Workout days started</span>
-        <strong id="progressWorkoutDays">0 / 7</strong>
       </div>
     </div>
 
@@ -7502,6 +7572,7 @@ function showProgress(){
   setNav("progress");
 
   renderProgress();
+  renderDailyStreak();
 
   window.scrollTo(0,0);
 
@@ -8912,6 +8983,8 @@ function updateWorkoutDayProgress(){
 }
 
 function finishWorkout(){
+
+  markDailyStreakActivity();
 
   showWorkoutSuccess();
 
@@ -12780,6 +12853,7 @@ function saveTodayMeal(){
 
   closeAddFoodTracker();
 
+  markDailyStreakActivity();
   renderTodayTracker();
 
 }
@@ -12788,6 +12862,7 @@ function saveTodayMeal(){
 function addTodayWater(){
   resetTodayTrackerIfNeeded();
   if(todayTrackerState.water < 20) todayTrackerState.water++;
+  markDailyStreakActivity();
   saveTodayTracker();
   renderTodayTracker();
 }
@@ -12797,6 +12872,182 @@ function removeTodayFood(id){
     todayTrackerState.foods.filter(food=>food.id!==id);
   saveTodayTracker();
   renderTodayTracker();
+}
+
+
+
+function getLocalDateKey(date = new Date()){
+
+  const y = date.getFullYear();
+  const m = String(date.getMonth()+1).padStart(2,"0");
+  const d = String(date.getDate()).padStart(2,"0");
+
+  return `${y}-${m}-${d}`;
+
+}
+
+
+function getDailyStreakDates(){
+
+  try{
+
+    const saved =
+      localStorage.getItem(
+        "shiftfitDailyStreakDates"
+      );
+
+    const parsed =
+      saved ? JSON.parse(saved) : [];
+
+    return Array.isArray(parsed)
+      ? parsed
+      : [];
+
+  }catch(error){
+
+    return [];
+
+  }
+
+}
+
+
+function markDailyStreakActivity(){
+
+  const dates =
+    getDailyStreakDates();
+
+  const today =
+    getLocalDateKey();
+
+  if(!dates.includes(today)){
+
+    dates.push(today);
+
+  }
+
+  dates.sort();
+
+  // Keep the local history lightweight.
+  const recent =
+    dates.slice(-365);
+
+  try{
+
+    localStorage.setItem(
+      "shiftfitDailyStreakDates",
+      JSON.stringify(recent)
+    );
+
+  }catch(error){
+
+    console.warn(
+      "Could not save daily streak."
+    );
+
+  }
+
+  renderDailyStreak();
+
+}
+
+
+function calculateDailyStreak(){
+
+  const dates =
+    new Set(
+      getDailyStreakDates()
+    );
+
+  const today =
+    new Date();
+
+  const todayKey =
+    getLocalDateKey(today);
+
+  let cursor =
+    new Date(today);
+
+  // If there is no activity today, show the current
+  // consecutive streak ending yesterday.
+  if(!dates.has(todayKey)){
+
+    cursor.setDate(
+      cursor.getDate()-1
+    );
+
+  }
+
+  let streak = 0;
+
+  while(
+    dates.has(
+      getLocalDateKey(cursor)
+    )
+  ){
+
+    streak++;
+
+    cursor.setDate(
+      cursor.getDate()-1
+    );
+
+  }
+
+  return streak;
+
+}
+
+
+function renderDailyStreak(){
+
+  const count =
+    calculateDailyStreak();
+
+  const countEl =
+    document.getElementById(
+      "dailyStreakCount"
+    );
+
+  const messageEl =
+    document.getElementById(
+      "dailyStreakMessage"
+    );
+
+  if(countEl){
+
+    countEl.textContent =
+      count;
+
+  }
+
+  if(messageEl){
+
+    if(count===0){
+
+      messageEl.textContent =
+        "Start today to build your streak.";
+
+    }else if(
+      getDailyStreakDates().includes(
+        getLocalDateKey()
+      )
+    ){
+
+      messageEl.textContent =
+        count===1
+          ? "You're on the board. Keep it going!"
+          : "Keep going — you're building momentum!";
+
+    }else{
+
+      messageEl.textContent =
+        "Your streak is waiting for you today.";
+
+    }
+
+  }
+
 }
 
 
@@ -12955,6 +13206,16 @@ function renderProgress(){
       "progressProteinEaten"
     );
 
+  const carbsEaten =
+    document.getElementById(
+      "progressCarbsEaten"
+    );
+
+  const fatEaten =
+    document.getElementById(
+      "progressFatEaten"
+    );
+
   const water =
     document.getElementById(
       "progressWater"
@@ -12969,6 +13230,16 @@ function renderProgress(){
   if(proteinEaten){
     proteinEaten.textContent =
       Math.round(eaten.protein)+"g";
+  }
+
+  if(carbsEaten){
+    carbsEaten.textContent =
+      Math.round(eaten.carbs)+"g";
+  }
+
+  if(fatEaten){
+    fatEaten.textContent =
+      Math.round(eaten.fat)+"g";
   }
 
   if(water){
