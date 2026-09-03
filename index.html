@@ -5094,6 +5094,185 @@ button{
 
 </style>
 
+
+<style id="shiftfit-my-history-v36">
+
+.my-history-card{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:14px;
+  margin:0 0 13px;
+  border:1px solid rgba(139,92,246,.42);
+  border-radius:17px;
+  background:linear-gradient(
+    145deg,
+    rgba(25,25,58,.96),
+    rgba(12,16,34,.96)
+  );
+}
+
+.my-history-kicker{
+  font-size:8px;
+  letter-spacing:1.6px;
+  color:#a78bfa;
+  font-weight:900;
+}
+
+.my-history-copy h2{
+  margin:4px 0 0;
+  font-size:18px;
+}
+
+.my-history-copy p{
+  margin:4px 0 0;
+  color:var(--muted);
+  font-size:9px;
+  line-height:1.35;
+}
+
+.my-history-btn{
+  min-width:105px;
+  padding:9px 9px;
+  border:1px solid rgba(139,92,246,.55);
+  border-radius:10px;
+  background:rgba(139,92,246,.1);
+  color:#c7adff;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.5px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:7px;
+}
+
+.my-history-panel{
+  display:none;
+  padding-bottom:24px;
+}
+
+.my-history-panel.active{
+  display:block;
+}
+
+.my-history-hidden{
+  display:none !important;
+}
+
+.my-history-panel-head{
+  margin:12px 0 14px;
+}
+
+.my-history-panel-head h1{
+  margin:4px 0 0;
+  font-size:25px;
+}
+
+.my-history-panel-head p{
+  margin:6px 0 0;
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.4;
+}
+
+.my-history-list{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.my-history-day{
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:15px;
+  padding:11px;
+  background:rgba(255,255,255,.025);
+}
+
+.my-history-day.today{
+  border-color:rgba(139,92,246,.45);
+  background:rgba(139,92,246,.065);
+}
+
+.my-history-day-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom:9px;
+}
+
+.my-history-day-head strong{
+  display:block;
+  font-size:12px;
+}
+
+.my-history-day-head span{
+  display:block;
+  margin-top:2px;
+  color:#8f97ae;
+  font-size:9px;
+}
+
+.my-history-workout{
+  color:#c7adff;
+  font-size:8px;
+  font-weight:900;
+}
+
+.my-history-metrics{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:4px;
+}
+
+.my-history-metrics > div{
+  min-width:0;
+  padding:7px 2px;
+  border-radius:9px;
+  background:rgba(0,0,0,.13);
+  text-align:center;
+}
+
+.my-history-metrics span{
+  display:block;
+  font-size:12px;
+  line-height:1;
+}
+
+.my-history-metrics strong{
+  display:block;
+  margin-top:4px;
+  font-size:8px;
+  line-height:1.05;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.my-history-metrics small{
+  display:block;
+  margin-top:2px;
+  color:#8f97ae;
+  font-size:5.5px;
+  line-height:1;
+}
+
+@media(max-width:380px){
+
+  .my-history-card{
+    padding:12px;
+  }
+
+  .my-history-btn{
+    min-width:98px;
+  }
+
+}
+
+</style>
+
 </head>
 
 <body>
@@ -5806,12 +5985,58 @@ button{
 
 <section id="setupScreen" class="screen">
 
+<section
+  id="myHistoryPanel"
+  class="my-history-panel"
+>
+
+  <button
+    class="back-btn"
+    onclick="hideMyHistory()"
+  >
+    ← MY PROFILE
+  </button>
+
+  <div class="my-history-panel-head">
+    <div class="setup-kicker">ANDREW · HISTORY</div>
+    <h1>My History</h1>
+    <p>Your latest seven days of tracked progress.</p>
+  </div>
+
+  <div
+    id="myHistoryList"
+    class="my-history-list"
+  ></div>
+
+</section>
+
+
+
 <button
   class="back-btn"
   onclick="showMeals()"
 >
   ← Back to Meal Plan
 </button>
+
+
+<section class="my-history-card">
+
+  <div class="my-history-copy">
+    <div class="my-history-kicker">ANDREW</div>
+    <h2>My History</h2>
+    <p>Your saved nutrition, water, workouts and weight.</p>
+  </div>
+
+  <button
+    class="my-history-btn"
+    onclick="showMyHistory()"
+  >
+    VIEW HISTORY
+    <span>→</span>
+  </button>
+
+</section>
 
 <div class="setup-header">
 
@@ -8393,13 +8618,225 @@ function showProgress(){
 }
 
 
+
+function showMyHistory(){
+
+  const panel =
+    document.getElementById(
+      "myHistoryPanel"
+    );
+
+  const cards =
+    document.querySelectorAll(
+      "#setupScreen > :not(#myHistoryPanel)"
+    );
+
+  if(panel){
+    panel.classList.add("active");
+  }
+
+  cards.forEach(
+    element=>{
+      element.classList.add(
+        "my-history-hidden"
+      );
+    }
+  );
+
+  renderMyHistory();
+
+  window.scrollTo(0,0);
+
+}
+
+
+function hideMyHistory(){
+
+  const panel =
+    document.getElementById(
+      "myHistoryPanel"
+    );
+
+  const cards =
+    document.querySelectorAll(
+      "#setupScreen > .my-history-hidden"
+    );
+
+  if(panel){
+    panel.classList.remove("active");
+  }
+
+  cards.forEach(
+    element=>{
+      element.classList.remove(
+        "my-history-hidden"
+      );
+    }
+  );
+
+  window.scrollTo(0,0);
+
+}
+
+
+function renderMyHistory(){
+
+  recordTodayProgressSnapshot();
+
+  const history =
+    getProgressDailyHistory();
+
+  const list =
+    document.getElementById(
+      "myHistoryList"
+    );
+
+  if(!list) return;
+
+  const dates =
+    getNutritionHistoryDates();
+
+  list.innerHTML =
+    dates.map(
+      key=>{
+
+        const data =
+          history[key] || {
+            calories:0,
+            protein:0,
+            carbs:0,
+            fat:0,
+            water:0,
+            workout:false,
+            weight:null
+          };
+
+        const date =
+          new Date(
+            key+"T12:00:00"
+          );
+
+        const day =
+          date.toLocaleDateString(
+            undefined,
+            {weekday:"long"}
+          );
+
+        const dateLabel =
+          date.toLocaleDateString(
+            undefined,
+            {
+              day:"numeric",
+              month:"short",
+              year:"numeric"
+            }
+          );
+
+        const isToday =
+          key===getLocalDateKey();
+
+        return `
+          <section
+            class="my-history-day ${isToday?"today":""}"
+          >
+
+            <div class="my-history-day-head">
+
+              <div>
+                <strong>${day}</strong>
+                <span>
+                  ${dateLabel}${isToday?" · TODAY":""}
+                </span>
+              </div>
+
+              <div class="my-history-workout">
+                ${data.workout?"🏋️ DONE":"—"}
+              </div>
+
+            </div>
+
+            <div class="my-history-metrics">
+
+              <div>
+                <span>🔥</span>
+                <strong>${data.calories||0}</strong>
+                <small>KCAL</small>
+              </div>
+
+              <div>
+                <span>🥩</span>
+                <strong>${data.protein||0}g</strong>
+                <small>PROTEIN</small>
+              </div>
+
+              <div>
+                <span>🍚</span>
+                <strong>${data.carbs||0}g</strong>
+                <small>CARBS</small>
+              </div>
+
+              <div>
+                <span>🥑</span>
+                <strong>${data.fat||0}g</strong>
+                <small>FAT</small>
+              </div>
+
+              <div>
+                <span>💧</span>
+                <strong>${data.water||0}/8</strong>
+                <small>WATER</small>
+              </div>
+
+              <div>
+                <span>⚖️</span>
+                <strong>${
+                  data.weight!==null &&
+                  Number.isFinite(Number(data.weight))
+                    ? Number(data.weight).toFixed(1)
+                    : "—"
+                }</strong>
+                <small>WEIGHT</small>
+              </div>
+
+            </div>
+
+          </section>
+        `;
+
+      }
+    ).join("");
+
+}
+
+
 function showSetup(){
 
   hideAllScreens();
 
+  const historyPanel =
+    document.getElementById(
+      "myHistoryPanel"
+    );
+
+  if(historyPanel){
+    historyPanel.classList.remove("active");
+  }
+
   document
     .getElementById("setupScreen")
     .classList.add("active");
+
+  document
+    .querySelectorAll(
+      "#setupScreen > .my-history-hidden"
+    )
+    .forEach(
+      element=>{
+        element.classList.remove(
+          "my-history-hidden"
+        );
+      }
+    );
 
   setNav("");
 
@@ -14794,7 +15231,7 @@ function getNutritionHistoryDates(){
   const dates = [];
   const today = new Date();
 
-  for(let i=6;i>=0;i--){
+  for(let i=0;i<7;i++){
 
     const date = new Date(today);
 
