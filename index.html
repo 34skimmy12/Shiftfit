@@ -1976,6 +1976,41 @@ button{
 
 }
 </style>
+<style id="shiftfit-plan-notice-style">
+#shiftfitPlanNotice{
+  position:fixed;
+  left:20px;
+  right:20px;
+  bottom:92px;
+  z-index:9999;
+  padding:16px 18px;
+  border:1px solid rgba(139,92,246,.55);
+  border-radius:18px;
+  background:rgba(17,22,43,.97);
+  box-shadow:0 14px 40px rgba(0,0,0,.45);
+  backdrop-filter:blur(14px);
+  transform:translateY(18px);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .22s ease, transform .22s ease;
+}
+#shiftfitPlanNotice.show{
+  opacity:1;
+  transform:translateY(0);
+}
+.shiftfit-plan-notice-title{
+  font-size:17px;
+  font-weight:800;
+  color:#f4f5fb;
+  margin-bottom:4px;
+}
+.shiftfit-plan-notice-text{
+  font-size:14px;
+  line-height:1.4;
+  color:#aab1c5;
+}
+</style>
+
 </head>
 
 <body>
@@ -4833,6 +4868,50 @@ function selectGoal(button){
 }
 
 
+function showPlanSuccess(){
+
+  let notice =
+    document.getElementById("shiftfitPlanNotice");
+
+  if(!notice){
+
+    notice =
+      document.createElement("div");
+
+    notice.id =
+      "shiftfitPlanNotice";
+
+    notice.innerHTML = `
+      <div class="shiftfit-plan-notice-title">⚡ Plan updated</div>
+      <div class="shiftfit-plan-notice-text">
+        Your personalised nutrition plan is ready.
+      </div>
+    `;
+
+    document.body.appendChild(notice);
+
+  }
+
+  notice.classList.remove("show");
+
+  void notice.offsetWidth;
+
+  notice.classList.add("show");
+
+  clearTimeout(
+    window.shiftfitPlanNoticeTimer
+  );
+
+  window.shiftfitPlanNoticeTimer =
+    setTimeout(function(){
+
+      notice.classList.remove("show");
+
+    }, 2600);
+
+}
+
+
 function generatePlan(){
 
   const age=
@@ -5177,9 +5256,7 @@ function generatePlan(){
   updateShiftDisplay();
 
 
-  alert(
-    "⚡ Your personalised ShiftFit meal plan is ready!"
-  );
+  showPlanSuccess();
 
 
   showMeals();
