@@ -3333,28 +3333,38 @@ button{
 .barcode-view{
   position:relative;
   width:100%;
-  aspect-ratio:4/3;
+  min-height:240px;
   overflow:hidden;
   border-radius:18px;
   background:#050914;
   border:1px solid #303a60;
   margin:12px 0 14px;
 }
-#barcodeVideo{
+#barcodeReader{
   width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
+  min-height:240px;
 }
-.barcode-guide{
-  position:absolute;
-  left:10%;
-  right:10%;
-  top:35%;
-  height:30%;
-  border:2px solid #8b5cf6;
-  border-radius:12px;
-  pointer-events:none;
+#barcodeReader video{
+  width:100% !important;
+  height:auto !important;
+  min-height:240px !important;
+  object-fit:cover !important;
+  display:block !important;
+  pointer-events:none !important;
+  -webkit-user-select:none !important;
+  user-select:none !important;
+}
+#barcodeReader canvas{
+  display:none !important;
+}
+#barcodeReader__scan_region{
+  border:none !important;
+}
+#barcodeReader__dashboard,
+#barcodeReader__dashboard_section,
+#barcodeReader__camera_permission_button,
+#barcodeReader__camera_selection{
+  display:none !important;
 }
 #barcodeScannerModal label{
   display:block;
@@ -3385,22 +3395,7 @@ button{
 </style>
 
 
-<style id="barcode-ios-polish">
-#barcodeScannerMessage{
-  min-height:38px;
-}
-.barcode-guide::before{
-  content:"";
-  position:absolute;
-  left:8%;
-  right:8%;
-  top:50%;
-  height:2px;
-  transform:translateY(-50%);
-  background:#8b5cf6;
-  opacity:.8;
-}
-</style>
+
 
 
 <style id="shiftfit-workout-days-style">
@@ -3490,6 +3485,35 @@ button{
 .workout-day-title{
   margin:7px 0 10px !important;
   font-size:20px !important;
+}
+</style>
+
+
+<style id="shiftfit-calendar-straight">
+#calendarScreen .calendar-weekdays,
+#calendarScreen .calendar-month-grid{
+  width:100% !important;
+  max-width:100% !important;
+  display:grid !important;
+  grid-template-columns:repeat(7,minmax(0,1fr)) !important;
+  align-items:stretch !important;
+  transform:none !important;
+  rotate:none !important;
+  scale:1 !important;
+  box-sizing:border-box !important;
+}
+#calendarScreen .calendar-cell{
+  transform:none !important;
+  rotate:none !important;
+  width:100% !important;
+  max-width:none !important;
+  box-sizing:border-box !important;
+  justify-self:stretch !important;
+  align-self:stretch !important;
+}
+#calendarScreen .calendar-weekday{
+  transform:none !important;
+  text-align:center !important;
 }
 </style>
 
@@ -11626,40 +11650,17 @@ function escapeHtmlSafe(value){
 
 
 
-/* ShiftFit barcode scanner — iPhone/Safari compatible */
-let barcodeStream = null;
-let barcodeDetector = null;
-let barcodeScanTimer = null;
-let barcodeReader = null;
-let barcodeReaderControls = null;
+/* ShiftFit barcode scanner — dedicated iPhone barcode engine */
+let barcodeScanner = null;
 let barcodeLibraryLoading = null;
+let barcodeLookupInProgress = false;
 
-function openBarcodeScanner(){
+function loadBarcodeLibrary(){
 
-  const modal =
-    document.getElementById("barcodeScannerModal");
-
-  if(!modal) return;
-
-  modal.classList.add("show");
-  modal.setAttribute("aria-hidden","false");
-
-  const message =
-    document.getElementById("barcodeScannerMessage");
-
-  if(message){
-    message.textContent =
-      "Point your camera at a food barcode.";
-  }
-
-  startBarcodeScanner();
-
-}
-
-async function loadBarcodeLibrary(){
-
-  if(window.ZXingBrowser){
-    return window.ZXingBrowser;
+  if(window.Html5Qrcode){
+    return Promise.resolve(
+      window.Html5Qrcode
+    );
   }
 
   if(barcodeLibraryLoading){
@@ -11673,32 +11674,33 @@ async function loadBarcodeLibrary(){
         document.createElement("script");
 
       const sources = [
-        "https://cdn.jsdelivr.net/npm/@zxing/browser@0.1.5/umd/index.min.js",
-        "https://unpkg.com/@zxing/browser@0.1.5/umd/index.min.js"
+        "https://unpkg.com/html5-qrcode",
+        "https://cdn.jsdelivr.net/npm/html5-qrcode"
       ];
 
       let sourceIndex = 0;
 
       function tryNextSource(){
 
+        if(sourceIndex >= sources.length){
+          reject(
+            new Error("Barcode library failed to load")
+          );
+          return;
+        }
+
         script.src =
           sources[sourceIndex];
 
         script.onload = ()=>{
 
-          if(window.ZXingBrowser){
-            resolve(window.ZXingBrowser);
-            return;
-          }
-
-          sourceIndex++;
-
-          if(sourceIndex < sources.length){
-            tryNextSource();
-          }else{
-            reject(
-              new Error("Barcode library did not load")
+          if(window.Html5Qrcode){
+            resolve(
+              window.Html5Qrcode
             );
+          }else{
+            sourceIndex++;
+            tryNextSource();
           }
 
         };
@@ -11706,14 +11708,7 @@ async function loadBarcodeLibrary(){
         script.onerror = ()=>{
 
           sourceIndex++;
-
-          if(sourceIndex < sources.length){
-            tryNextSource();
-          }else{
-            reject(
-              new Error("Barcode library failed to load")
-            );
-          }
+          tryNextSource();
 
         };
 
@@ -11730,190 +11725,164 @@ async function loadBarcodeLibrary(){
 
 }
 
-async function startBarcodeScanner(){
+async function openBarcodeScanner(){
 
-  const video =
-    document.getElementById("barcodeVideo");
+  const modal =
+    document.getElementById(
+      "barcodeScannerModal"
+    );
+
+  if(!modal) return;
+
+  modal.classList.add("show");
+  modal.setAttribute(
+    "aria-hidden",
+    "false"
+  );
 
   const message =
-    document.getElementById("barcodeScannerMessage");
+    document.getElementById(
+      "barcodeScannerMessage"
+    );
 
-  if(!video) return;
-
-  if(
-    !navigator.mediaDevices ||
-    !navigator.mediaDevices.getUserMedia
-  ){
-
-    if(message){
-      message.textContent =
-        "Camera access is not available. Enter the barcode below.";
-    }
-
-    return;
-
+  if(message){
+    message.textContent =
+      "Starting scanner…";
   }
 
   try{
 
-    barcodeStream =
-      await navigator.mediaDevices.getUserMedia({
-        video:{
-          facingMode:{ideal:"environment"},
-          width:{ideal:1280},
-          height:{ideal:720}
-        },
-        audio:false
-      });
+    await loadBarcodeLibrary();
 
-    video.srcObject =
-      barcodeStream;
-
-    await video.play();
-
-    /* Native detector where supported. */
-    if("BarcodeDetector" in window){
-
-      try{
-
-        barcodeDetector =
-          new BarcodeDetector({
-            formats:[
-              "ean_13",
-              "ean_8",
-              "upc_a",
-              "upc_e"
-            ]
-          });
-
-        scanBarcodeFrame();
-
-        return;
-
-      }catch(error){
-
-        barcodeDetector = null;
-
-      }
-
-    }
-
-    /* iPhone Safari fallback. */
-    if(message){
-      message.textContent =
-        "Scanner ready — line up the barcode.";
-    }
-
-    const ZXing =
-      await loadBarcodeLibrary();
-
-    if(!barcodeStream) return;
-
-    barcodeReader =
-      new ZXing.BrowserMultiFormatReader();
-
-    /*
-      The camera stream is already attached to the video element above.
-      Decode that existing stream continuously instead of asking Safari
-      for a second camera stream.
-    */
-    barcodeReaderControls =
-      await barcodeReader.decodeFromVideoElementContinuously(
-        video,
-        (result,error)=>{
-
-          if(!result) return;
-
-          const value =
-            String(
-              result.getText() || ""
-            ).replace(/\D/g,"");
-
-          if(value.length >= 8){
-
-            if(message){
-              message.textContent =
-                "Barcode found — looking up product…";
-            }
-
-            lookupBarcodeNumber(value);
-
-          }
-
-        }
-      );
+    await startBarcodeScanner();
 
   }catch(error){
 
     if(message){
       message.textContent =
-        "Scanner could not start. You can enter the barcode below.";
+        "Scanner could not start. Enter the barcode below.";
     }
 
   }
 
 }
 
-async function scanBarcodeFrame(){
+async function startBarcodeScanner(){
 
-  if(!barcodeDetector || !barcodeStream) return;
+  const message =
+    document.getElementById(
+      "barcodeScannerMessage"
+    );
 
-  const video =
-    document.getElementById("barcodeVideo");
+  const readerElement =
+    document.getElementById(
+      "barcodeReader"
+    );
 
-  if(
-    !video ||
-    video.readyState < 2
-  ){
+  if(!readerElement){
+    throw new Error(
+      "Barcode reader element missing"
+    );
+  }
 
-    barcodeScanTimer =
-      setTimeout(
-        scanBarcodeFrame,
-        250
-      );
+  if(barcodeScanner){
 
-    return;
+    try{
+      await barcodeScanner.stop();
+    }catch(error){}
+
+    barcodeScanner.clear();
+
+    barcodeScanner = null;
 
   }
 
-  try{
+  barcodeScanner =
+    new Html5Qrcode(
+      "barcodeReader",
+      {
+        verbose:false,
+        formatsToSupport:[
+          Html5QrcodeSupportedFormats.EAN_13,
+          Html5QrcodeSupportedFormats.EAN_8,
+          Html5QrcodeSupportedFormats.UPC_A,
+          Html5QrcodeSupportedFormats.UPC_E,
+          Html5QrcodeSupportedFormats.CODE_128
+        ]
+      }
+    );
 
-    const codes =
-      await barcodeDetector.detect(video);
+  if(message){
+    message.textContent =
+      "Scanner ready — line up the barcode.";
+  }
 
-    if(codes && codes.length){
+  await barcodeScanner.start(
+    {
+      facingMode:"environment"
+    },
+    {
+      fps:10,
+      qrbox:{
+        width:280,
+        height:110
+      },
+      aspectRatio:1.7777778,
+      disableFlip:true
+    },
+    (decodedText)=>{
 
-      const barcode =
+      if(barcodeLookupInProgress){
+        return;
+      }
+
+      const value =
         String(
-          codes[0].rawValue || ""
+          decodedText || ""
         ).replace(/\D/g,"");
 
-      if(barcode.length >= 8){
+      if(value.length >= 8){
 
-        await lookupBarcodeNumber(barcode);
-        return;
+        barcodeLookupInProgress =
+          true;
+
+        if(message){
+          message.textContent =
+            "Barcode found — looking up product…";
+        }
+
+        lookupBarcodeNumber(
+          value
+        ).finally(()=>{
+
+          barcodeLookupInProgress =
+            false;
+
+        });
 
       }
 
+    },
+    ()=>{
+
+      /* Normal: no barcode in this frame. */
+
     }
-
-  }catch(error){}
-
-  barcodeScanTimer =
-    setTimeout(
-      scanBarcodeFrame,
-      250
-    );
+  );
 
 }
 
 async function lookupBarcodeNumber(value){
 
   const input =
-    document.getElementById("barcodeManualInput");
+    document.getElementById(
+      "barcodeManualInput"
+    );
 
   const message =
-    document.getElementById("barcodeScannerMessage");
+    document.getElementById(
+      "barcodeScannerMessage"
+    );
 
   const barcode =
     String(
@@ -11946,7 +11915,9 @@ async function lookupBarcodeNumber(value){
       );
 
     if(!response.ok){
-      throw new Error("Lookup failed");
+      throw new Error(
+        "Lookup failed"
+      );
     }
 
     const data =
@@ -11959,7 +11930,9 @@ async function lookupBarcodeNumber(value){
       Number(data?.status)!==1 ||
       !product
     ){
-      throw new Error("Product not found");
+      throw new Error(
+        "Product not found"
+      );
     }
 
     const n =
@@ -11972,13 +11945,19 @@ async function lookupBarcodeNumber(value){
       ) || 0;
 
     const protein =
-      Number(n.proteins_100g) || 0;
+      Number(
+        n.proteins_100g
+      ) || 0;
 
     const carbs =
-      Number(n.carbohydrates_100g) || 0;
+      Number(
+        n.carbohydrates_100g
+      ) || 0;
 
     const fat =
-      Number(n.fat_100g) || 0;
+      Number(
+        n.fat_100g
+      ) || 0;
 
     const name =
       String(
@@ -11987,20 +11966,13 @@ async function lookupBarcodeNumber(value){
         ("Scanned food "+barcode)
       ).trim();
 
-    if(
-      typeof addScannedMealOption ===
-      "function"
-    ){
-
-      addScannedMealOption({
-        name:name,
-        calories:calories,
-        protein:protein,
-        carbs:carbs,
-        fats:fat
-      });
-
-    }
+    addScannedMealOption({
+      name:name,
+      calories:calories,
+      protein:protein,
+      carbs:carbs,
+      fats:fat
+    });
 
     closeBarcodeScanner();
 
@@ -12008,68 +11980,74 @@ async function lookupBarcodeNumber(value){
 
     if(message){
       message.textContent =
-        "We couldn't find that barcode. Try another scan or enter the barcode manually.";
+        "Barcode found, but that product was not in the food database. Try another product or enter the barcode manually.";
     }
 
   }
 
 }
 
-function closeBarcodeScanner(){
+async function closeBarcodeScanner(){
 
-  if(barcodeScanTimer){
-    clearTimeout(barcodeScanTimer);
-    barcodeScanTimer = null;
-  }
-
-  if(barcodeReaderControls){
+  if(barcodeScanner){
 
     try{
-      barcodeReaderControls.stop();
+
+      if(
+        typeof barcodeScanner.getState ===
+        "function"
+      ){
+
+        const state =
+          barcodeScanner.getState();
+
+        if(
+          state === 2 ||
+          state === 3
+        ){
+          await barcodeScanner.stop();
+        }
+
+      }
+
     }catch(error){}
-
-    barcodeReaderControls = null;
-
-  }
-
-  if(barcodeReader){
 
     try{
-      barcodeReader.reset();
+      barcodeScanner.clear();
     }catch(error){}
 
-    barcodeReader = null;
+    barcodeScanner =
+      null;
 
   }
 
-  if(barcodeStream){
+  barcodeLookupInProgress =
+    false;
 
-    barcodeStream
-      .getTracks()
-      .forEach(
-        track=>track.stop()
-      );
+  const reader =
+    document.getElementById(
+      "barcodeReader"
+    );
 
-    barcodeStream = null;
-
-  }
-
-  barcodeDetector = null;
-
-  const video =
-    document.getElementById("barcodeVideo");
-
-  if(video){
-    video.srcObject = null;
+  if(reader){
+    reader.innerHTML = "";
   }
 
   const modal =
-    document.getElementById("barcodeScannerModal");
+    document.getElementById(
+      "barcodeScannerModal"
+    );
 
   if(modal){
 
-    modal.classList.remove("show");
-    modal.setAttribute("aria-hidden","true");
+    modal.classList.remove(
+      "show"
+    );
+
+    modal.setAttribute(
+      "aria-hidden",
+      "true"
+    );
 
   }
 
@@ -12166,8 +12144,7 @@ function addScannedMealOption(meal){
     </p>
 
     <div class="barcode-view">
-      <video id="barcodeVideo" autoplay muted playsinline></video>
-      <div class="barcode-guide"></div>
+      <div id="barcodeReader"></div>
     </div>
 
     <label>BARCODE NUMBER
