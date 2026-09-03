@@ -560,311 +560,6 @@ button{
 
 /* CALENDAR */
 
-let calendarSelectedDate = new Date();
-
-
-function startOfWeek(date){
-
-  const result =
-    new Date(date);
-
-  const day =
-    result.getDay();
-
-  const diff =
-    day===0
-      ?-6
-      :1-day;
-
-  result.setDate(
-    result.getDate()+diff
-  );
-
-  result.setHours(
-    0,0,0,0
-  );
-
-  return result;
-
-}
-
-
-function formatCalendarDate(date){
-
-  return date.toLocaleDateString(
-    "en-GB",
-    {
-      day:"numeric",
-      month:"short"
-    }
-  );
-
-}
-
-
-function getCalendarDayIndex(date){
-
-  const monday =
-    startOfWeek(
-      new Date()
-    );
-
-  const selected =
-    new Date(date);
-
-  selected.setHours(
-    0,0,0,0
-  );
-
-  return Math.max(
-    0,
-    Math.min(
-      6,
-      Math.round(
-        (
-          selected-monday
-        )/
-        86400000
-      )
-    )
-  );
-
-}
-
-
-function selectCalendarDate(date){
-
-  calendarSelectedDate =
-    new Date(date);
-
-  renderCalendar();
-
-}
-
-
-function renderCalendar(){
-
-  const week =
-    document.getElementById(
-      "calendarWeek"
-    );
-
-  const schedule =
-    document.getElementById(
-      "calendarSchedule"
-    );
-
-  const title =
-    document.getElementById(
-      "calendarDayTitle"
-    );
-
-  if(!week || !schedule || !title) return;
-
-  const monday =
-    startOfWeek(
-      new Date()
-    );
-
-  const today =
-    new Date();
-
-  today.setHours(
-    0,0,0,0
-  );
-
-  week.innerHTML="";
-
-  for(let i=0;i<7;i++){
-
-    const date =
-      new Date(monday);
-
-    date.setDate(
-      monday.getDate()+i
-    );
-
-    const dayName =
-      date
-        .toLocaleDateString(
-          "en-GB",
-          {weekday:"short"}
-        )
-        .toUpperCase();
-
-    const isToday =
-      date.getTime()===
-      today.getTime();
-
-    const isSelected =
-      date.toDateString()===
-      calendarSelectedDate.toDateString();
-
-    const button =
-      document.createElement(
-        "button"
-      );
-
-    button.type="button";
-
-    button.className =
-      "calendar-day"+
-      (isSelected?" active":"")+
-      (isToday?" today":"");
-
-    button.innerHTML=`
-      <div class="calendar-day-name">${dayName}</div>
-      <div class="calendar-day-number">${date.getDate()}</div>
-      ${isToday?'<div class="calendar-today-dot"></div>':''}
-    `;
-
-    button.onclick=function(){
-
-      selectCalendarDate(
-        date
-      );
-
-    };
-
-    week.appendChild(
-      button
-    );
-
-  }
-
-  const selected =
-    new Date(
-      calendarSelectedDate
-    );
-
-  const selectedName =
-    selected.toLocaleDateString(
-      "en-GB",
-      {weekday:"long"}
-    );
-
-  const isToday =
-    selected.toDateString()===
-    today.toDateString();
-
-  title.textContent =
-    isToday
-      ?"Today's Schedule"
-      :selectedName+"'s Schedule";
-
-  const shift =
-    getCurrentShift();
-
-  const workout =
-    getCurrentWorkoutSchedule();
-
-  const dayIndex =
-    getCalendarDayIndex(
-      selected
-    );
-
-  const meals =
-    weeklyMeals[dayIndex]||
-    weeklyMeals[0];
-
-  const mealData = [
-    {
-      type:"BREAKFAST",
-      name:mealOptions.breakfast[meals.breakfast].name,
-      emoji:mealOptions.breakfast[meals.breakfast].emoji,
-      calories:mealOptions.breakfast[meals.breakfast].calories
-    },
-    {
-      type:"LUNCH",
-      name:mealOptions.lunch[meals.lunch].name,
-      emoji:mealOptions.lunch[meals.lunch].emoji,
-      calories:mealOptions.lunch[meals.lunch].calories
-    },
-    {
-      type:"DINNER",
-      name:mealOptions.dinner[meals.dinner].name,
-      emoji:mealOptions.dinner[meals.dinner].emoji,
-      calories:mealOptions.dinner[meals.dinner].calories
-    }
-  ];
-
-  const shiftCard = `
-    <div class="calendar-card">
-      <div class="calendar-card-top">
-        <div class="calendar-card-icon">🕐</div>
-        <div>
-          <div class="calendar-card-label">WORK SHIFT</div>
-          <div class="calendar-card-title">${shift.name}</div>
-          <div class="calendar-card-detail">
-            ${shift.time}
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
-
-  const workoutCard = `
-    <div class="calendar-card">
-      <div class="calendar-card-top">
-        <div class="calendar-card-icon">🏋️</div>
-        <div>
-          <div class="calendar-card-label">TRAINING</div>
-          <div class="calendar-card-title">
-            ${selectedShift==="rest"?"Recovery Day":"Push Day"}
-          </div>
-          <div class="calendar-card-detail">
-            ${workout.description}
-          </div>
-        </div>
-      </div>
-      <div class="calendar-time">
-        ${workout.time}
-      </div>
-      <div class="calendar-actions">
-        <button
-          class="calendar-action-btn primary"
-          onclick="showWorkout()"
-        >
-          OPEN WORKOUT
-        </button>
-        <button
-          class="calendar-action-btn"
-          onclick="showMeals()"
-        >
-          VIEW MEALS
-        </button>
-      </div>
-    </div>
-  `;
-
-  const mealCards =
-    mealData.map(
-      meal=>`
-        <div class="calendar-card">
-          <div class="calendar-card-top">
-            <div class="calendar-card-icon">${meal.emoji}</div>
-            <div>
-              <div class="calendar-card-label">${meal.type}</div>
-              <div class="calendar-card-title">${meal.name}</div>
-              <div class="calendar-card-detail">
-                ${meal.calories} kcal
-              </div>
-            </div>
-          </div>
-        </div>
-      `
-    ).join("");
-
-  schedule.innerHTML =
-    shiftCard+
-    workoutCard+
-    `<div class="calendar-section-title">Meals</div>`+
-    mealCards;
-
-}
-
-
-
 /* WORKOUT */
 
 .workout-stats{
@@ -5149,6 +4844,312 @@ function showShopping(){
   window.scrollTo(0,0);
 
 }
+
+
+let calendarSelectedDate = new Date();
+
+
+function startOfWeek(date){
+
+  const result =
+    new Date(date);
+
+  const day =
+    result.getDay();
+
+  const diff =
+    day===0
+      ?-6
+      :1-day;
+
+  result.setDate(
+    result.getDate()+diff
+  );
+
+  result.setHours(
+    0,0,0,0
+  );
+
+  return result;
+
+}
+
+
+function formatCalendarDate(date){
+
+  return date.toLocaleDateString(
+    "en-GB",
+    {
+      day:"numeric",
+      month:"short"
+    }
+  );
+
+}
+
+
+function getCalendarDayIndex(date){
+
+  const monday =
+    startOfWeek(
+      new Date()
+    );
+
+  const selected =
+    new Date(date);
+
+  selected.setHours(
+    0,0,0,0
+  );
+
+  return Math.max(
+    0,
+    Math.min(
+      6,
+      Math.round(
+        (
+          selected-monday
+        )/
+        86400000
+      )
+    )
+  );
+
+}
+
+
+function selectCalendarDate(date){
+
+  calendarSelectedDate =
+    new Date(date);
+
+  renderCalendar();
+
+}
+
+
+function renderCalendar(){
+
+  const week =
+    document.getElementById(
+      "calendarWeek"
+    );
+
+  const schedule =
+    document.getElementById(
+      "calendarSchedule"
+    );
+
+  const title =
+    document.getElementById(
+      "calendarDayTitle"
+    );
+
+  if(!week || !schedule || !title) return;
+
+  const monday =
+    startOfWeek(
+      new Date()
+    );
+
+  const today =
+    new Date();
+
+  today.setHours(
+    0,0,0,0
+  );
+
+  week.innerHTML="";
+
+  for(let i=0;i<7;i++){
+
+    const date =
+      new Date(monday);
+
+    date.setDate(
+      monday.getDate()+i
+    );
+
+    const dayName =
+      date
+        .toLocaleDateString(
+          "en-GB",
+          {weekday:"short"}
+        )
+        .toUpperCase();
+
+    const isToday =
+      date.getTime()===
+      today.getTime();
+
+    const isSelected =
+      date.toDateString()===
+      calendarSelectedDate.toDateString();
+
+    const button =
+      document.createElement(
+        "button"
+      );
+
+    button.type="button";
+
+    button.className =
+      "calendar-day"+
+      (isSelected?" active":"")+
+      (isToday?" today":"");
+
+    button.innerHTML=`
+      <div class="calendar-day-name">${dayName}</div>
+      <div class="calendar-day-number">${date.getDate()}</div>
+      ${isToday?'<div class="calendar-today-dot"></div>':''}
+    `;
+
+    button.onclick=function(){
+
+      selectCalendarDate(
+        date
+      );
+
+    };
+
+    week.appendChild(
+      button
+    );
+
+  }
+
+  const selected =
+    new Date(
+      calendarSelectedDate
+    );
+
+  const selectedName =
+    selected.toLocaleDateString(
+      "en-GB",
+      {weekday:"long"}
+    );
+
+  const isToday =
+    selected.toDateString()===
+    today.toDateString();
+
+  title.textContent =
+    isToday
+      ?"Today's Schedule"
+      :selectedName+"'s Schedule";
+
+  const shift =
+    getCurrentShift();
+
+  const workout =
+    getCurrentWorkoutSchedule();
+
+  const dayIndex =
+    getCalendarDayIndex(
+      selected
+    );
+
+  const meals =
+    weeklyMeals[dayIndex]||
+    weeklyMeals[0];
+
+  const mealData = [
+    {
+      type:"BREAKFAST",
+      name:mealOptions.breakfast[meals.breakfast].name,
+      emoji:mealOptions.breakfast[meals.breakfast].emoji,
+      calories:mealOptions.breakfast[meals.breakfast].calories
+    },
+    {
+      type:"LUNCH",
+      name:mealOptions.lunch[meals.lunch].name,
+      emoji:mealOptions.lunch[meals.lunch].emoji,
+      calories:mealOptions.lunch[meals.lunch].calories
+    },
+    {
+      type:"DINNER",
+      name:mealOptions.dinner[meals.dinner].name,
+      emoji:mealOptions.dinner[meals.dinner].emoji,
+      calories:mealOptions.dinner[meals.dinner].calories
+    }
+  ];
+
+  const shiftCard = `
+    <div class="calendar-card">
+      <div class="calendar-card-top">
+        <div class="calendar-card-icon">🕐</div>
+        <div>
+          <div class="calendar-card-label">WORK SHIFT</div>
+          <div class="calendar-card-title">${shift.name}</div>
+          <div class="calendar-card-detail">
+            ${shift.time}
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  const workoutCard = `
+    <div class="calendar-card">
+      <div class="calendar-card-top">
+        <div class="calendar-card-icon">🏋️</div>
+        <div>
+          <div class="calendar-card-label">TRAINING</div>
+          <div class="calendar-card-title">
+            ${selectedShift==="rest"?"Recovery Day":"Push Day"}
+          </div>
+          <div class="calendar-card-detail">
+            ${workout.description}
+          </div>
+        </div>
+      </div>
+      <div class="calendar-time">
+        ${workout.time}
+      </div>
+      <div class="calendar-actions">
+        <button
+          class="calendar-action-btn primary"
+          onclick="showWorkout()"
+        >
+          OPEN WORKOUT
+        </button>
+        <button
+          class="calendar-action-btn"
+          onclick="showMeals()"
+        >
+          VIEW MEALS
+        </button>
+      </div>
+    </div>
+  `;
+
+  const mealCards =
+    mealData.map(
+      meal=>`
+        <div class="calendar-card">
+          <div class="calendar-card-top">
+            <div class="calendar-card-icon">${meal.emoji}</div>
+            <div>
+              <div class="calendar-card-label">${meal.type}</div>
+              <div class="calendar-card-title">${meal.name}</div>
+              <div class="calendar-card-detail">
+                ${meal.calories} kcal
+              </div>
+            </div>
+          </div>
+        </div>
+      `
+    ).join("");
+
+  schedule.innerHTML =
+    shiftCard+
+    workoutCard+
+    `<div class="calendar-section-title">Meals</div>`+
+    mealCards;
+
+}
+
+
 
 
 /* WORKOUT */
