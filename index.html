@@ -4762,6 +4762,174 @@ button{
   line-height:1.4;
 }
 
+
+
+.weight-trend-card{
+  margin-bottom:11px;
+}
+
+.weight-trend-periods{
+  display:flex;
+  align-items:center;
+  gap:4px;
+  padding:3px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:#080d1d;
+}
+
+.weight-trend-period{
+  border:0;
+  min-width:36px;
+  height:30px;
+  padding:0 8px;
+  border-radius:8px;
+  background:transparent;
+  color:var(--muted);
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.08em;
+}
+
+.weight-trend-period.active{
+  background:linear-gradient(135deg,#7c3aed,#5123c5);
+  color:#fff;
+  box-shadow:0 4px 12px rgba(124,58,237,.22);
+}
+
+.weight-trend-summary{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:7px;
+  margin:11px 0 10px;
+}
+
+.weight-trend-summary > div{
+  min-width:0;
+  padding:9px 8px;
+  border:1px solid var(--border);
+  border-radius:11px;
+  background:#080d1d;
+}
+
+.weight-trend-summary span{
+  display:block;
+  color:#858da6;
+  font-size:7px;
+  font-weight:900;
+  letter-spacing:.12em;
+}
+
+.weight-trend-summary strong{
+  display:block;
+  margin-top:4px;
+  color:var(--text);
+  font-size:13px;
+  line-height:1.1;
+  white-space:nowrap;
+}
+
+.weight-trend-chart-wrap{
+  position:relative;
+  width:100%;
+  height:190px;
+  overflow:hidden;
+  border:1px solid var(--border);
+  border-radius:14px;
+  background:linear-gradient(180deg,rgba(17,22,43,.98),rgba(7,11,25,.98));
+}
+
+.weight-trend-chart{
+  display:block;
+  width:100%;
+  height:100%;
+}
+
+.weight-trend-grid{
+  stroke:rgba(170,177,197,.12);
+  stroke-width:1;
+  vector-effect:non-scaling-stroke;
+}
+
+.weight-trend-axis{
+  fill:#707992;
+  font-size:9px;
+  font-weight:700;
+}
+
+.weight-trend-line{
+  fill:none;
+  stroke:#8b5cf6;
+  stroke-width:3;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  vector-effect:non-scaling-stroke;
+}
+
+.weight-trend-area{
+  fill:url(#weightTrendGradient);
+  opacity:.18;
+}
+
+.weight-trend-point{
+  fill:#11162b;
+  stroke:#a78bfa;
+  stroke-width:2.5;
+  vector-effect:non-scaling-stroke;
+}
+
+.weight-trend-last-point{
+  fill:#35df8d;
+  stroke:#fff;
+  stroke-width:2;
+  vector-effect:non-scaling-stroke;
+}
+
+.weight-trend-empty{
+  display:none;
+  margin-top:9px;
+  padding:10px 12px;
+  border:1px dashed var(--border);
+  border-radius:11px;
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.35;
+  text-align:center;
+}
+
+.weight-trend-footer{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  margin-top:7px;
+  color:#737c95;
+  font-size:8px;
+  font-weight:700;
+}
+
+@media(max-width:390px){
+  .weight-trend-period{
+    min-width:33px;
+    padding:0 6px;
+  }
+
+  .weight-trend-chart-wrap{
+    height:175px;
+  }
+
+  .weight-trend-summary{
+    gap:5px;
+  }
+
+  .weight-trend-summary > div{
+    padding:8px 6px;
+  }
+
+  .weight-trend-summary strong{
+    font-size:12px;
+  }
+}
+
 </style>
 
 
@@ -6866,6 +7034,75 @@ button{
 
   </section>
 
+  <section class="progress-section-card weight-trend-card">
+
+    <div class="progress-section-head">
+      <div>
+        <div class="progress-card-kicker">BODY WEIGHT</div>
+        <h2>Weight Trend</h2>
+      </div>
+
+      <div class="weight-trend-periods" role="tablist" aria-label="Weight trend period">
+        <button
+          type="button"
+          class="weight-trend-period active"
+          data-days="7"
+          onclick="selectWeightTrendPeriod(7)"
+        >7D</button>
+
+        <button
+          type="button"
+          class="weight-trend-period"
+          data-days="30"
+          onclick="selectWeightTrendPeriod(30)"
+        >30D</button>
+
+        <button
+          type="button"
+          class="weight-trend-period"
+          data-days="90"
+          onclick="selectWeightTrendPeriod(90)"
+        >90D</button>
+      </div>
+    </div>
+
+    <div class="weight-trend-summary">
+      <div>
+        <span>START</span>
+        <strong id="weightTrendStart">—</strong>
+      </div>
+      <div>
+        <span>CHANGE</span>
+        <strong id="weightTrendChange">—</strong>
+      </div>
+      <div>
+        <span>AVERAGE</span>
+        <strong id="weightTrendAverage">—</strong>
+      </div>
+    </div>
+
+    <div class="weight-trend-chart-wrap">
+      <svg
+        id="weightTrendChart"
+        class="weight-trend-chart"
+        viewBox="0 0 360 190"
+        preserveAspectRatio="none"
+        role="img"
+        aria-label="Weight trend chart"
+      ></svg>
+    </div>
+
+    <div id="weightTrendEmpty" class="weight-trend-empty">
+      Log a few weigh-ins to see your trend.
+    </div>
+
+    <div class="weight-trend-footer">
+      <span id="weightTrendFirstDate">—</span>
+      <span id="weightTrendLastDate">—</span>
+    </div>
+
+  </section>
+
   <section class="progress-section-card">
 
     <div
@@ -8612,6 +8849,7 @@ function showProgress(){
   renderDailyStreak();
   renderWeightProgress();
   renderProgressHistory();
+  renderWeightTrend();
 
   window.scrollTo(0,0);
 
@@ -14922,6 +15160,8 @@ function saveWeightEntry(){
 
   renderDailyStreak();
 
+  renderWeightTrend();
+
 }
 
 
@@ -15194,6 +15434,227 @@ function renderWeightProgress(){
 
       }
     ).join("");
+
+}
+
+
+let weightTrendPeriod=7;
+
+function selectWeightTrendPeriod(days){
+
+  const value=Number(days);
+
+  if(![7,30,90].includes(value)) return;
+
+  weightTrendPeriod=value;
+
+  document
+    .querySelectorAll(".weight-trend-period")
+    .forEach(button=>{
+      button.classList.toggle(
+        "active",
+        Number(button.dataset.days)===value
+      );
+    });
+
+  renderWeightTrend();
+
+}
+
+function getWeightTrendEntries(){
+
+  const history=
+    getWeightHistory()
+      .filter(entry=>{
+        const weight=Number(entry.weight);
+        return(
+          entry &&
+          entry.date &&
+          Number.isFinite(weight) &&
+          weight>0
+        );
+      })
+      .sort((a,b)=>a.date.localeCompare(b.date));
+
+  const today=new Date();
+  today.setHours(12,0,0,0);
+
+  const cutoff=new Date(today);
+  cutoff.setDate(
+    cutoff.getDate()-(weightTrendPeriod-1)
+  );
+
+  const todayKey=getLocalDateKey(today);
+  const cutoffKey=getLocalDateKey(cutoff);
+
+  return history.filter(
+    entry=>entry.date>=cutoffKey && entry.date<=todayKey
+  );
+
+}
+
+function renderWeightTrend(){
+
+  const chart=document.getElementById("weightTrendChart");
+  const empty=document.getElementById("weightTrendEmpty");
+
+  if(!chart) return;
+
+  const entries=getWeightTrendEntries();
+
+  const startEl=document.getElementById("weightTrendStart");
+  const changeEl=document.getElementById("weightTrendChange");
+  const averageEl=document.getElementById("weightTrendAverage");
+  const firstDateEl=document.getElementById("weightTrendFirstDate");
+  const lastDateEl=document.getElementById("weightTrendLastDate");
+
+  if(!entries.length){
+    chart.innerHTML="";
+    if(empty) empty.style.display="block";
+    if(startEl) startEl.textContent="—";
+    if(changeEl) changeEl.textContent="—";
+    if(averageEl) averageEl.textContent="—";
+    if(firstDateEl) firstDateEl.textContent="—";
+    if(lastDateEl) lastDateEl.textContent="—";
+    return;
+  }
+
+  if(empty) empty.style.display=entries.length>=2?"none":"block";
+
+  const values=entries.map(entry=>Number(entry.weight));
+  const first=values[0];
+  const last=values[values.length-1];
+  const change=Math.round((last-first)*10)/10;
+  const average=Math.round(
+    values.reduce((sum,value)=>sum+value,0)/values.length*10
+  )/10;
+
+  if(startEl) startEl.textContent=first.toFixed(1)+" kg";
+  if(changeEl){
+    changeEl.textContent=(change>0?"+":"")+change.toFixed(1)+" kg";
+    changeEl.style.color=
+      change<0?"var(--green)":
+      change>0?"var(--orange)":"var(--text)";
+  }
+  if(averageEl) averageEl.textContent=average.toFixed(1)+" kg";
+
+  const firstDate=new Date(entries[0].date+"T12:00:00");
+  const lastDate=new Date(entries[entries.length-1].date+"T12:00:00");
+  const dateOptions={day:"numeric",month:"short"};
+
+  if(firstDateEl) firstDateEl.textContent=firstDate.toLocaleDateString(undefined,dateOptions);
+  if(lastDateEl) lastDateEl.textContent=lastDate.toLocaleDateString(undefined,dateOptions);
+
+  if(entries.length===1){
+    chart.innerHTML=`
+      <text x="180" y="92" text-anchor="middle" class="weight-trend-axis">
+        ${first.toFixed(1)} kg
+      </text>
+      <text x="180" y="112" text-anchor="middle" class="weight-trend-axis">
+        Add another weigh-in to create your trend
+      </text>
+    `;
+    return;
+  }
+
+  const width=360;
+  const height=190;
+  const padLeft=38;
+  const padRight=12;
+  const padTop=16;
+  const padBottom=26;
+  const chartWidth=width-padLeft-padRight;
+  const chartHeight=height-padTop-padBottom;
+
+  let min=Math.min(...values);
+  let max=Math.max(...values);
+  const spread=max-min;
+  const padding=Math.max(.5,spread*.20);
+  min-=padding;
+  max+=padding;
+
+  if(max===min){
+    max+=1;
+    min-=1;
+  }
+
+  const xFor=index=>
+    padLeft+(index/(entries.length-1))*chartWidth;
+
+  const yFor=value=>
+    padTop+((max-value)/(max-min))*chartHeight;
+
+  const points=entries.map((entry,index)=>[
+    xFor(index),
+    yFor(Number(entry.weight))
+  ]);
+
+  const linePath=points
+    .map((point,index)=>
+      (index===0?"M ":"L ")+
+      point[0].toFixed(2)+" "+point[1].toFixed(2)
+    )
+    .join(" ");
+
+  const areaPath=
+    linePath+
+    " L "+points[points.length-1][0].toFixed(2)+" "+
+    (height-padBottom)+
+    " L "+points[0][0].toFixed(2)+" "+
+    (height-padBottom)+" Z";
+
+  let svg=`
+    <defs>
+      <linearGradient id="weightTrendGradient" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#8b5cf6" stop-opacity=".9" />
+        <stop offset="100%" stop-color="#8b5cf6" stop-opacity="0" />
+      </linearGradient>
+    </defs>
+  `;
+
+  const gridCount=4;
+
+  for(let i=0;i<gridCount;i++){
+    const ratio=i/(gridCount-1);
+    const y=padTop+ratio*chartHeight;
+    const value=max-ratio*(max-min);
+
+    svg+=`
+      <line x1="${padLeft}" y1="${y.toFixed(2)}" x2="${width-padRight}" y2="${y.toFixed(2)}" class="weight-trend-grid" />
+      <text x="${padLeft-7}" y="${(y+3).toFixed(2)}" text-anchor="end" class="weight-trend-axis">${value.toFixed(1)}</text>
+    `;
+  }
+
+  svg+=`
+    <path d="${areaPath}" class="weight-trend-area" />
+    <path d="${linePath}" class="weight-trend-line" />
+  `;
+
+  points.forEach((point,index)=>{
+    const isLast=index===points.length-1;
+    svg+=`
+      <circle
+        cx="${point[0].toFixed(2)}"
+        cy="${point[1].toFixed(2)}"
+        r="${isLast?4.5:3.2}"
+        class="${isLast?"weight-trend-last-point":"weight-trend-point"}"
+      />
+    `;
+  });
+
+  const firstX=points[0][0];
+  const lastX=points[points.length-1][0];
+
+  svg+=`
+    <text x="${firstX}" y="${height-8}" text-anchor="start" class="weight-trend-axis">
+      ${firstDate.toLocaleDateString(undefined,{day:"numeric",month:"short"})}
+    </text>
+    <text x="${lastX}" y="${height-8}" text-anchor="end" class="weight-trend-axis">
+      ${lastDate.toLocaleDateString(undefined,{day:"numeric",month:"short"})}
+    </text>
+  `;
+
+  chart.innerHTML=svg;
 
 }
 
