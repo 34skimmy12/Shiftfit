@@ -5527,6 +5527,124 @@ button{
 
 </style>
 
+
+<style id="shiftfit-workout-logging-v40">
+.workout-log-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-top:9px;
+  padding-top:9px;
+  border-top:1px solid rgba(48,58,96,.7);
+}
+.workout-log-summary{
+  color:#aab1c5;
+  font-size:10px;
+  font-weight:800;
+}
+.workout-log-summary strong{
+  color:#f4f5fb;
+}
+.workout-log-btn{
+  border:1px solid #6d3be7;
+  background:#24134f;
+  color:#c9b4ff;
+  border-radius:9px;
+  padding:8px 11px;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.08em;
+}
+.workout-set-list{
+  display:flex;
+  flex-wrap:wrap;
+  gap:5px;
+  margin-top:8px;
+}
+.workout-set-chip{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  padding:5px 7px;
+  border:1px solid #303a60;
+  border-radius:8px;
+  background:#080d1d;
+  color:#dfe3ef;
+  font-size:9px;
+  font-weight:800;
+}
+.workout-set-chip button{
+  border:0;
+  background:transparent;
+  color:#858da6;
+  padding:0 1px;
+  font-size:12px;
+  line-height:1;
+}
+#workoutSetModal .modal-card{
+  max-width:420px;
+}
+.workout-log-modal-target{
+  margin:-2px 0 14px;
+  color:#aab1c5;
+  font-size:11px;
+  line-height:1.4;
+}
+.workout-log-fields{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+}
+.workout-log-field label{
+  display:block;
+  margin-bottom:5px;
+  color:#858da6;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.1em;
+}
+.workout-log-field input{
+  width:100%;
+  box-sizing:border-box;
+  min-height:46px;
+  border:1px solid #303a60;
+  border-radius:11px;
+  background:#080d1d;
+  color:#f4f5fb;
+  padding:10px 11px;
+  font:inherit;
+  font-size:16px;
+}
+.workout-log-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:13px;
+}
+.workout-log-actions button{
+  min-height:44px;
+  border-radius:11px;
+  font-weight:900;
+  font-size:10px;
+  letter-spacing:.06em;
+}
+.workout-log-cancel{
+  border:1px solid #303a60;
+  background:#11162b;
+  color:#aab1c5;
+}
+.workout-log-save{
+  border:1px solid #7c3aed;
+  background:#6d28d9;
+  color:#fff;
+}
+@media(max-width:390px){
+  .workout-log-row{gap:7px}
+  .workout-log-btn{padding:8px 9px}
+}
+</style>
+
 </head>
 
 <body>
@@ -10432,40 +10550,27 @@ function renderWorkoutDays(){
 function renderWorkoutDay(){
 
   const workout =
-    weeklyWorkouts[
-      workoutDay
-    ] ||
+    weeklyWorkouts[workoutDay] ||
     weeklyWorkouts[0];
 
   const title =
-    document.getElementById(
-      "workoutDayTitle"
-    );
+    document.getElementById("workoutDayTitle");
 
   const header =
-    document.querySelector(
-      ".workout-header h1"
-    );
+    document.querySelector(".workout-header h1");
 
   const kicker =
-    document.querySelector(
-      ".workout-day"
-    );
+    document.querySelector(".workout-day");
 
   const focus =
-    document.querySelector(
-      ".workout-stat:nth-child(3) strong"
-    );
+    document.querySelector(".workout-stat:nth-child(3) strong");
 
   const list =
-    document.getElementById(
-      "workoutExerciseList"
-    );
+    document.getElementById("workoutExerciseList");
 
   if(title){
     title.textContent =
-      days[workoutDay].name+
-      "'s Workout";
+      days[workoutDay].name + "'s Workout";
   }
 
   if(header){
@@ -10488,49 +10593,400 @@ function renderWorkoutDay(){
 
   list.innerHTML =
     workout.exercises.map(
-      (exercise,index)=>`
+      (exercise,index)=>{
 
-        <div
-          class="exercise-card ${
-            workoutCompleted[workoutDay] &&
-            workoutCompleted[workoutDay][index]
-              ? "completed"
-              : ""
-          }"
-          onclick="toggleWorkoutExercise(${index})"
-        >
+        const logs =
+          getWorkoutExerciseLogs(
+            workoutDay,
+            index
+          );
 
-          <div class="exercise-check">
-            ${
-              workoutCompleted[workoutDay] &&
-              workoutCompleted[workoutDay][index]
-                ? "✓"
-                : ""
-            }
+        const completed =
+          workoutCompleted[workoutDay] &&
+          workoutCompleted[workoutDay][index];
+
+        return `
+          <div
+            class="exercise-card ${completed ? "completed" : ""}"
+            onclick="toggleWorkoutExercise(${index})"
+          >
+
+            <div class="exercise-check">
+              ${completed ? "✓" : ""}
+            </div>
+
+            <div class="exercise-content">
+
+              <div class="exercise-name">
+                ${index+1}. ${exercise[0]}
+              </div>
+
+              <div class="exercise-sets">
+                ${exercise[1]}
+              </div>
+
+              <div class="exercise-tip">
+                ${exercise[2]}
+              </div>
+
+              <div
+                class="workout-log-row"
+                onclick="event.stopPropagation()"
+              >
+                <div class="workout-log-summary">
+                  <strong>${logs.length}</strong> /
+                  ${getTargetSetCount(exercise[1])} sets logged
+                </div>
+
+                <button
+                  type="button"
+                  class="workout-log-btn"
+                  onclick="openWorkoutSetModal(event,${index})"
+                >
+                  + LOG SET
+                </button>
+              </div>
+
+              ${logs.length ? `
+                <div
+                  class="workout-set-list"
+                  onclick="event.stopPropagation()"
+                >
+                  ${logs.map((log,setIndex)=>`
+                    <div class="workout-set-chip">
+                      Set ${setIndex+1}: ${formatWorkoutLog(log)}
+                      <button
+                        type="button"
+                        aria-label="Delete set"
+                        onclick="deleteWorkoutSet(event,${index},${setIndex})"
+                      >×</button>
+                    </div>
+                  `).join("")}
+                </div>
+              ` : ""}
+
+            </div>
+
           </div>
-
-          <div class="exercise-content">
-
-            <div class="exercise-name">
-              ${index+1}. ${exercise[0]}
-            </div>
-
-            <div class="exercise-sets">
-              ${exercise[1]}
-            </div>
-
-            <div class="exercise-tip">
-              ${exercise[2]}
-            </div>
-
-          </div>
-
-        </div>
-      `
+        `;
+      }
     ).join("");
 
   updateWorkoutDayProgress();
 
+}
+
+function getWorkoutLogKey(dayIndex,exerciseIndex){
+  return String(dayIndex)+":"+String(exerciseIndex);
+}
+
+function loadWorkoutLogs(){
+  try{
+    const raw =
+      localStorage.getItem(
+        "shiftfitWorkoutLogs"
+      );
+
+    const parsed =
+      raw ? JSON.parse(raw) : {};
+
+    return parsed && typeof parsed === "object"
+      ? parsed
+      : {};
+  }catch(e){
+    return {};
+  }
+}
+
+let workoutLogs =
+  loadWorkoutLogs();
+
+function saveWorkoutLogs(){
+  localStorage.setItem(
+    "shiftfitWorkoutLogs",
+    JSON.stringify(workoutLogs)
+  );
+}
+
+function getWorkoutExerciseLogs(dayIndex,exerciseIndex){
+  const key =
+    getWorkoutLogKey(dayIndex,exerciseIndex);
+
+  return Array.isArray(workoutLogs[key])
+    ? workoutLogs[key]
+    : [];
+}
+
+function getTargetSetCount(target){
+  const match =
+    String(target || "").match(/^(\d+)\s*sets?/i);
+
+  return match
+    ? Number(match[1])
+    : 1;
+}
+
+function formatWorkoutLog(log){
+  const weight =
+    Number(log.weight);
+
+  const reps =
+    Number(log.reps);
+
+  const weightText =
+    Number.isFinite(weight)
+      ? weight.toFixed(weight % 1 ? 1 : 0)+"kg"
+      : "—";
+
+  return weightText+
+    " × "+
+    reps+
+    " reps";
+}
+
+let workoutSetModalExercise = null;
+
+function openWorkoutSetModal(event,index){
+
+  if(event){
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  workoutSetModalExercise =
+    index;
+
+  const workout =
+    weeklyWorkouts[workoutDay] ||
+    weeklyWorkouts[0];
+
+  const exercise =
+    workout.exercises[index];
+
+  const modal =
+    document.getElementById(
+      "workoutSetModal"
+    );
+
+  const title =
+    document.getElementById(
+      "workoutSetModalTitle"
+    );
+
+  const target =
+    document.getElementById(
+      "workoutSetModalTarget"
+    );
+
+  const weight =
+    document.getElementById(
+      "workoutSetWeight"
+    );
+
+  const reps =
+    document.getElementById(
+      "workoutSetReps"
+    );
+
+  const logs =
+    getWorkoutExerciseLogs(
+      workoutDay,
+      index
+    );
+
+  if(title){
+    title.textContent =
+      "Log Set "+(logs.length+1);
+  }
+
+  if(target){
+    target.textContent =
+      exercise[0]+" • "+exercise[1];
+  }
+
+  if(weight){
+    weight.value =
+      logs.length
+        ? logs[logs.length-1].weight
+        : "";
+  }
+
+  if(reps){
+    reps.value =
+      logs.length
+        ? logs[logs.length-1].reps
+        : "";
+  }
+
+  if(modal){
+    modal.style.display =
+      "flex";
+  }
+
+  setTimeout(()=>{
+    if(reps) reps.focus();
+  },50);
+}
+
+function closeWorkoutSetModal(){
+  const modal =
+    document.getElementById(
+      "workoutSetModal"
+    );
+
+  if(modal){
+    modal.style.display =
+      "none";
+  }
+
+  workoutSetModalExercise =
+    null;
+}
+
+function saveWorkoutSet(){
+
+  if(workoutSetModalExercise===null){
+    return;
+  }
+
+  const weightEl =
+    document.getElementById(
+      "workoutSetWeight"
+    );
+
+  const repsEl =
+    document.getElementById(
+      "workoutSetReps"
+    );
+
+  const weight =
+    Number(weightEl && weightEl.value);
+
+  const reps =
+    Number(repsEl && repsEl.value);
+
+  if(!Number.isFinite(weight) || weight<0){
+    if(weightEl) weightEl.focus();
+    return;
+  }
+
+  if(!Number.isInteger(reps) || reps<1){
+    if(repsEl) repsEl.focus();
+    return;
+  }
+
+  const key =
+    getWorkoutLogKey(
+      workoutDay,
+      workoutSetModalExercise
+    );
+
+  if(!Array.isArray(workoutLogs[key])){
+    workoutLogs[key] = [];
+  }
+
+  const targetSets =
+    getTargetSetCount(
+      weeklyWorkouts[workoutDay].exercises[
+        workoutSetModalExercise
+      ][1]
+    );
+
+  if(workoutLogs[key].length>=targetSets){
+    showWorkoutLogNotice(
+      "All sets logged",
+      "Edit or remove a set if you want to change it."
+    );
+    closeWorkoutSetModal();
+    return;
+  }
+
+  workoutLogs[key].push({
+    weight:weight,
+    reps:reps,
+    loggedAt:new Date().toISOString()
+  });
+
+  saveWorkoutLogs();
+  closeWorkoutSetModal();
+  renderWorkoutDay();
+
+}
+
+function deleteWorkoutSet(event,exerciseIndex,setIndex){
+
+  if(event){
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  const key =
+    getWorkoutLogKey(
+      workoutDay,
+      exerciseIndex
+    );
+
+  if(!Array.isArray(workoutLogs[key])){
+    return;
+  }
+
+  workoutLogs[key].splice(
+    setIndex,
+    1
+  );
+
+  if(!workoutLogs[key].length){
+    delete workoutLogs[key];
+  }
+
+  saveWorkoutLogs();
+  renderWorkoutDay();
+}
+
+function showWorkoutLogNotice(title,text){
+
+  let notice =
+    document.getElementById(
+      "shiftfitWorkoutLogNotice"
+    );
+
+  if(!notice){
+    notice =
+      document.createElement("div");
+
+    notice.id =
+      "shiftfitWorkoutLogNotice";
+
+    notice.innerHTML = `
+      <div class="shiftfit-plan-notice-title"></div>
+      <div class="shiftfit-plan-notice-text"></div>
+    `;
+
+    document.body.appendChild(notice);
+  }
+
+  notice.querySelector(
+    ".shiftfit-plan-notice-title"
+  ).textContent =
+    "🏋️ "+title;
+
+  notice.querySelector(
+    ".shiftfit-plan-notice-text"
+  ).textContent =
+    text;
+
+  notice.classList.remove("show");
+  void notice.offsetWidth;
+  notice.classList.add("show");
+
+  clearTimeout(
+    window.shiftfitWorkoutLogNoticeTimer
+  );
+
+  window.shiftfitWorkoutLogNoticeTimer =
+    setTimeout(()=>{
+      notice.classList.remove("show");
+    },2600);
 }
 
 function toggleWorkoutExercise(index){
@@ -17965,6 +18421,38 @@ function deleteCalendarEvent(id){
 window.shiftfitCalendarNotifyTimers=[];
 scheduleCalendarEventNotifications();
 </script>
+
+
+<div id="workoutSetModal" class="modal-overlay" style="display:none;">
+  <div class="modal-card">
+    <button class="modal-close" type="button" onclick="closeWorkoutSetModal()">×</button>
+    <div class="modal-kicker">WORKOUT LOG</div>
+    <h2 id="workoutSetModalTitle">Log Set</h2>
+    <p id="workoutSetModalTarget" class="workout-log-modal-target"></p>
+
+    <div class="workout-log-fields">
+      <div class="workout-log-field">
+        <label>WEIGHT (KG)</label>
+        <input id="workoutSetWeight" type="number" inputmode="decimal" min="0" step="0.5" placeholder="e.g. 40">
+      </div>
+      <div class="workout-log-field">
+        <label>REPS</label>
+        <input id="workoutSetReps" type="number" inputmode="numeric" min="1" step="1" placeholder="e.g. 10">
+      </div>
+    </div>
+
+    <div class="workout-log-actions">
+      <button type="button" class="workout-log-cancel" onclick="closeWorkoutSetModal()">CANCEL</button>
+      <button type="button" class="workout-log-save" onclick="saveWorkoutSet()">SAVE SET</button>
+    </div>
+  </div>
+</div>
+
+
+<script id="shiftfit-workout-logging-init">
+/* ShiftFit v40 workout logging is initialized lazily by renderWorkoutDay(). */
+</script>
+
 </body>
 </html>
 <style id="shiftfit-calendar-month-only">
