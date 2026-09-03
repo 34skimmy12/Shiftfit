@@ -3384,6 +3384,24 @@ button{
 }
 </style>
 
+
+<style id="barcode-ios-polish">
+#barcodeScannerMessage{
+  min-height:38px;
+}
+.barcode-guide::before{
+  content:"";
+  position:absolute;
+  left:8%;
+  right:8%;
+  top:50%;
+  height:2px;
+  transform:translateY(-50%);
+  background:#8b5cf6;
+  opacity:.8;
+}
+</style>
+
 </head>
 
 <body>
@@ -11220,10 +11238,13 @@ function escapeHtmlSafe(value){
 
 
 
-/* ShiftFit barcode scanner */
+/* ShiftFit barcode scanner — iPhone/Safari compatible */
 let barcodeStream = null;
 let barcodeDetector = null;
 let barcodeScanTimer = null;
+let barcodeReader = null;
+let barcodeReaderControls = null;
+let barcodeLibraryLoading = null;
 
 function openBarcodeScanner(){
 
@@ -11244,6 +11265,51 @@ function openBarcodeScanner(){
   }
 
   startBarcodeScanner();
+
+}
+
+async function loadBarcodeLibrary(){
+
+  if(window.ZXingBrowser){
+    return window.ZXingBrowser;
+  }
+
+  if(barcodeLibraryLoading){
+    return barcodeLibraryLoading;
+  }
+
+  barcodeLibraryLoading =
+    new Promise((resolve,reject)=>{
+
+      const script =
+        document.createElement("script");
+
+      script.src =
+        "https://cdn.jsdelivr.net/npm/@zxing/browser@0.1.5/umd/index.min.js";
+
+      script.async = true;
+
+      script.onload = ()=>{
+        if(window.ZXingBrowser){
+          resolve(window.ZXingBrowser);
+        }else{
+          reject(
+            new Error("Barcode library did not load")
+          );
+        }
+      };
+
+      script.onerror = ()=>{
+        reject(
+          new Error("Barcode library failed to load")
+        );
+      };
+
+      document.head.appendChild(script);
+
+    });
+
+  return barcodeLibraryLoading;
 
 }
 
@@ -11268,6 +11334,7 @@ async function startBarcodeScanner(){
     }
 
     return;
+
   }
 
   try{
@@ -11275,7 +11342,9 @@ async function startBarcodeScanner(){
     barcodeStream =
       await navigator.mediaDevices.getUserMedia({
         video:{
-          facingMode:{ideal:"environment"}
+          facingMode:{ideal:"environment"},
+          width:{ideal:1280},
+          height:{ideal:720}
         },
         audio:false
       });
@@ -11285,32 +11354,71 @@ async function startBarcodeScanner(){
 
     await video.play();
 
+    /* Native detector where supported. */
     if("BarcodeDetector" in window){
 
-      barcodeDetector =
-        new BarcodeDetector({
-          formats:[
-            "ean_13",
-            "ean_8",
-            "upc_a",
-            "upc_e"
-          ]
-        });
+      try{
 
-      scanBarcodeFrame();
+        barcodeDetector =
+          new BarcodeDetector({
+            formats:[
+              "ean_13",
+              "ean_8",
+              "upc_a",
+              "upc_e"
+            ]
+          });
 
-    }else if(message){
+        scanBarcodeFrame();
 
-      message.textContent =
-        "Automatic scanning is not supported in this browser. Enter the barcode below.";
+        return;
+
+      }catch(error){
+
+        barcodeDetector = null;
+
+      }
 
     }
+
+    /* iPhone Safari fallback. */
+    if(message){
+      message.textContent =
+        "Scanner ready — line up the barcode.";
+    }
+
+    const ZXing =
+      await loadBarcodeLibrary();
+
+    if(!barcodeStream) return;
+
+    barcodeReader =
+      new ZXing.BrowserMultiFormatReader();
+
+    barcodeReaderControls =
+      await barcodeReader.decodeFromVideoElement(
+        video,
+        (result,error)=>{
+          if(result){
+
+            const value =
+              String(
+                result.getText() || ""
+              ).replace(/\D/g,"");
+
+            if(value.length >= 8){
+              lookupBarcodeNumber(value);
+            }
+
+          }
+        }
+      );
 
   }catch(error){
 
     if(message){
       message.textContent =
-        "Camera permission was unavailable. Enter the barcode below.";
+        "Scanner could not start. You can enter the barcode below.";
     }
 
   }
@@ -11485,6 +11593,26 @@ function closeBarcodeScanner(){
     barcodeScanTimer = null;
   }
 
+  if(barcodeReaderControls){
+
+    try{
+      barcodeReaderControls.stop();
+    }catch(error){}
+
+    barcodeReaderControls = null;
+
+  }
+
+  if(barcodeReader){
+
+    try{
+      barcodeReader.reset();
+    }catch(error){}
+
+    barcodeReader = null;
+
+  }
+
   if(barcodeStream){
 
     barcodeStream
@@ -11517,7 +11645,6 @@ function closeBarcodeScanner(){
   }
 
 }
-
 
 function addScannedMealOption(meal){
 
