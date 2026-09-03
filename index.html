@@ -4515,128 +4515,6 @@ button{
 </style>
 
 
-<style id="shiftfit-weekly-progress-v25">
-
-.weekly-progress-card{
-  border:1px solid var(--border);
-  background:linear-gradient(
-    145deg,
-    rgba(20,26,52,.96),
-    rgba(12,16,34,.96)
-  );
-  border-radius:18px;
-  padding:14px;
-  margin:0 0 12px;
-}
-
-.weekly-progress-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-}
-
-.weekly-progress-kicker{
-  font-size:8px;
-  letter-spacing:1.6px;
-  color:#8f97ae;
-  font-weight:800;
-}
-
-.weekly-progress-head h2{
-  margin:4px 0 0;
-  font-size:18px;
-}
-
-.weekly-progress-badge{
-  font-size:16px;
-  font-weight:800;
-}
-
-.weekly-progress-bar{
-  height:8px;
-  width:100%;
-  background:rgba(255,255,255,.07);
-  border-radius:99px;
-  overflow:hidden;
-  margin:12px 0 11px;
-}
-
-.weekly-progress-bar > div{
-  width:0%;
-  height:100%;
-  border-radius:99px;
-  background:linear-gradient(90deg,#8b5cf6,#b084ff);
-  transition:width .25s ease;
-}
-
-.weekly-progress-stats{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:6px;
-}
-
-.weekly-progress-stats > div{
-  min-width:0;
-  text-align:center;
-  padding:8px 3px;
-  border-radius:11px;
-  background:rgba(255,255,255,.035);
-}
-
-.weekly-progress-stats span{
-  display:block;
-  font-size:14px;
-  line-height:1;
-}
-
-.weekly-progress-stats strong{
-  display:block;
-  margin-top:5px;
-  font-size:13px;
-}
-
-.weekly-progress-stats small{
-  display:block;
-  margin-top:2px;
-  font-size:7px;
-  color:#8f97ae;
-  text-transform:uppercase;
-  letter-spacing:.5px;
-}
-
-.weekly-progress-link{
-  width:100%;
-  margin-top:10px;
-  padding:9px 11px;
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:11px;
-  background:rgba(255,255,255,.035);
-  color:var(--text);
-  font-size:10px;
-  font-weight:800;
-  letter-spacing:.6px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-
-@media(max-width:380px){
-  .weekly-progress-stats{
-    gap:4px;
-  }
-
-  .weekly-progress-stats > div{
-    padding:7px 2px;
-  }
-
-  .weekly-progress-stats strong{
-    font-size:12px;
-  }
-}
-
-</style>
-
 </head>
 
 <body>
@@ -5079,50 +4957,6 @@ button{
 
 </section>
 
-
-<section class="weekly-progress-card">
-
-  <div class="weekly-progress-head">
-    <div>
-      <div class="weekly-progress-kicker">WEEKLY PROGRESS</div>
-      <h2>Your Week</h2>
-    </div>
-    <div class="weekly-progress-badge" id="weeklyProgressPercent">0%</div>
-  </div>
-
-  <div class="weekly-progress-bar">
-    <div id="weeklyProgressFill"></div>
-  </div>
-
-  <div class="weekly-progress-stats">
-    <div>
-      <span>🏋️</span>
-      <strong id="weeklyWorkoutsDone">0</strong>
-      <small>Workouts</small>
-    </div>
-    <div>
-      <span>🔥</span>
-      <strong id="weeklyCaloriesTracked">0</strong>
-      <small>Calories</small>
-    </div>
-    <div>
-      <span>🥩</span>
-      <strong id="weeklyProteinTracked">0g</strong>
-      <small>Protein</small>
-    </div>
-    <div>
-      <span>💧</span>
-      <strong id="weeklyWaterTracked">0</strong>
-      <small>Water</small>
-    </div>
-  </div>
-
-  <button class="weekly-progress-link" onclick="renderWeeklyProgress();">
-    VIEW WEEKLY PROGRESS
-    <span>→</span>
-  </button>
-
-</section>
 
 <div
   class="meal-section-title"
@@ -6030,6 +5864,115 @@ button{
 <!-- SHOPPING SCREEN -->
 
 
+
+<!-- PROGRESS -->
+
+<section id="progressScreen" class="screen">
+
+  <div class="progress-header">
+    <div class="progress-kicker">SHIFT FIT PROGRESS</div>
+    <h1>Your Progress</h1>
+    <p>See how your training and nutrition are moving you towards your goal.</p>
+  </div>
+
+  <section class="progress-hero-card">
+    <div class="progress-hero-top">
+      <div>
+        <div class="progress-hero-label">CURRENT GOAL</div>
+        <div class="progress-goal" id="progressGoal">Lose Weight</div>
+      </div>
+      <div class="progress-goal-icon" id="progressGoalIcon">🔥</div>
+    </div>
+
+    <div class="progress-target-grid">
+      <div>
+        <span>CALORIES</span>
+        <strong id="progressCaloriesTarget">0</strong>
+      </div>
+      <div>
+        <span>PROTEIN</span>
+        <strong id="progressProteinTarget">0g</strong>
+      </div>
+      <div>
+        <span>CARBS</span>
+        <strong id="progressCarbsTarget">0g</strong>
+      </div>
+      <div>
+        <span>FAT</span>
+        <strong id="progressFatTarget">0g</strong>
+      </div>
+    </div>
+  </section>
+
+  <section class="progress-section-card">
+
+    <div class="progress-section-head">
+      <div>
+        <div class="progress-card-kicker">TODAY</div>
+        <h2>Nutrition</h2>
+      </div>
+      <div class="progress-percent" id="progressNutritionPercent">0%</div>
+    </div>
+
+    <div class="progress-bar">
+      <div id="progressNutritionFill"></div>
+    </div>
+
+    <div class="progress-stat-list">
+      <div class="progress-stat-row">
+        <span>🔥 Calories eaten</span>
+        <strong id="progressCaloriesEaten">0 kcal</strong>
+      </div>
+      <div class="progress-stat-row">
+        <span>🥩 Protein eaten</span>
+        <strong id="progressProteinEaten">0g</strong>
+      </div>
+      <div class="progress-stat-row">
+        <span>💧 Water</span>
+        <strong id="progressWater">0 / 8</strong>
+      </div>
+    </div>
+
+  </section>
+
+  <section class="progress-section-card">
+
+    <div class="progress-section-head">
+      <div>
+        <div class="progress-card-kicker">TRAINING</div>
+        <h2>Workout Progress</h2>
+      </div>
+      <div class="progress-percent" id="progressWorkoutPercent">0%</div>
+    </div>
+
+    <div class="progress-bar">
+      <div id="progressWorkoutFill"></div>
+    </div>
+
+    <div class="progress-stat-list">
+      <div class="progress-stat-row">
+        <span>🏋️ Exercises completed</span>
+        <strong id="progressExercisesDone">0</strong>
+      </div>
+      <div class="progress-stat-row">
+        <span>📅 Workout days started</span>
+        <strong id="progressWorkoutDays">0 / 7</strong>
+      </div>
+    </div>
+
+  </section>
+
+  <section class="progress-coming-card">
+    <div class="progress-coming-icon">📊</div>
+    <div>
+      <strong>More progress tracking is coming</strong>
+      <p>Weight history, weekly trends and longer-term stats will be added here.</p>
+    </div>
+  </section>
+
+</section>
+
+
 <section id="shoppingScreen" class="screen">
 
 <button
@@ -6226,12 +6169,14 @@ button{
 </button>
 <button
   class="nav-item"
-  id="moreNav"
-  onclick="showSetup()"
+  id="progressNav"
+  onclick="showProgress()"
 >
-  <span class="nav-icon">☰</span>
-  <span>More</span>
+  <span class="nav-icon">📈</span>
+  <span>Progress</span>
 </button>
+
+
 
 </nav>
 
@@ -7415,6 +7360,14 @@ function setNav(active){
 
   }
 
+  if(active==="progress"){
+
+    document
+      .getElementById("progressNav")
+      .classList.add("active");
+
+  }
+
 }
 
 
@@ -7536,6 +7489,23 @@ function showCalendar(){
 
 }
 
+
+
+function showProgress(){
+
+  hideAllScreens();
+
+  document
+    .getElementById("progressScreen")
+    .classList.add("active");
+
+  setNav("progress");
+
+  renderProgress();
+
+  window.scrollTo(0,0);
+
+}
 
 
 function showSetup(){
@@ -12855,131 +12825,6 @@ function getProgressPlan(){
 }
 
 
-
-function renderWeeklyProgress(){
-
-  const plan = getProgressPlan();
-
-  resetTodayTrackerIfNeeded();
-
-  const eaten =
-    todayTrackerState.foods.reduce(
-      (sum,food)=>({
-        calories:sum.calories+(Number(food.calories)||0),
-        protein:sum.protein+(Number(food.protein)||0)
-      }),
-      {calories:0,protein:0}
-    );
-
-  let workoutsDone = 0;
-  let exercisesDone = 0;
-  let totalExercises = 0;
-
-  if(
-    typeof weeklyWorkouts !== "undefined" &&
-    Array.isArray(weeklyWorkouts)
-  ){
-
-    weeklyWorkouts.forEach((workout,index)=>{
-
-      const total =
-        Array.isArray(workout.exercises)
-          ? workout.exercises.length
-          : 0;
-
-      totalExercises += total;
-
-      const completed =
-        Object.values(
-          workoutCompleted[index] || {}
-        ).filter(Boolean).length;
-
-      exercisesDone += completed;
-
-      if(completed > 0){
-        workoutsDone++;
-      }
-
-    });
-
-  }
-
-  const workoutPercent =
-    totalExercises > 0
-      ? Math.min(
-          100,
-          Math.round(
-            exercisesDone /
-            totalExercises *
-            100
-          )
-        )
-      : 0;
-
-  const pct =
-    workoutPercent;
-
-  const percentEl =
-    document.getElementById(
-      "weeklyProgressPercent"
-    );
-
-  const fillEl =
-    document.getElementById(
-      "weeklyProgressFill"
-    );
-
-  const workoutsEl =
-    document.getElementById(
-      "weeklyWorkoutsDone"
-    );
-
-  const caloriesEl =
-    document.getElementById(
-      "weeklyCaloriesTracked"
-    );
-
-  const proteinEl =
-    document.getElementById(
-      "weeklyProteinTracked"
-    );
-
-  const waterEl =
-    document.getElementById(
-      "weeklyWaterTracked"
-    );
-
-  if(percentEl){
-    percentEl.textContent =
-      pct+"%";
-  }
-
-  if(fillEl){
-    fillEl.style.width =
-      pct+"%";
-  }
-
-  if(workoutsEl){
-    workoutsEl.textContent =
-      workoutsDone;
-  }
-
-  if(caloriesEl){
-    caloriesEl.textContent =
-      Math.round(eaten.calories).toLocaleString();
-  }
-
-  if(proteinEl){
-    proteinEl.textContent =
-      Math.round(eaten.protein)+"g";
-  }
-
-  if(waterEl){
-    waterEl.textContent =
-      todayTrackerState.water;
-  }
-
-}
 
 
 function renderProgress(){
