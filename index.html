@@ -5776,19 +5776,15 @@ function renderFoodDropdown(value=""){
     .toLowerCase();
 
 
-  const matches=
-    shiftfitFoodCatalogue
-      .filter(
-        food=>
-          !query ||
-          food
-            .toLowerCase()
-            .includes(query)
-      )
-      .slice(
-        0,
-        20
-      );
+const matches=
+  shiftfitFoodCatalogue
+    .filter(
+      food=>
+        !query ||
+        food
+          .toLowerCase()
+          .includes(query)
+    );
 
 
   dropdown.innerHTML="";
