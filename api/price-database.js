@@ -2,1193 +2,728 @@
  * ShiftFit Price Database
  *
  * IMPORTANT:
- * These are seeded test prices.
+ * These are seeded TEST prices.
  * They are NOT live supermarket prices.
+ *
+ * The existing Best Basket API remains compatible with this file.
+ * Products are generated across all six configured supermarkets from
+ * base product definitions so the catalogue can be expanded safely.
  */
 
 export const supermarkets = {
-  tesco: {
-    id: "tesco",
-    name: "Tesco"
-  },
+  tesco: { id: "tesco", name: "Tesco" },
+  sainsburys: { id: "sainsburys", name: "Sainsbury's" },
+  asda: { id: "asda", name: "Asda" },
+  morrisons: { id: "morrisons", name: "Morrisons" },
+  waitrose: { id: "waitrose", name: "Waitrose" },
+  aldi: { id: "aldi", name: "Aldi" }
+};
 
-  sainsburys: {
-    id: "sainsburys",
-    name: "Sainsbury's"
-  },
+const retailerIds = Object.keys(supermarkets);
 
-  asda: {
-    id: "asda",
-    name: "Asda"
-  },
 
-  morrisons: {
-    id: "morrisons",
-    name: "Morrisons"
-  },
+/*
+ * EXISTING SEEDED PRODUCTS
+ *
+ * These are the products already in your working database.
+ * Their existing supermarket prices are preserved exactly.
+ */
 
-  waitrose: {
-    id: "waitrose",
-    name: "Waitrose"
-  },
+const existingProducts = [
+  ["Chicken Breast","1kg"],
+  ["Lean Beef Mince","500g"],
+  ["Lean Turkey Mince","500g"],
+  ["Salmon","400g"],
+  ["Eggs","12 pack"],
+  ["Greek Yoghurt","1kg"],
+  ["Protein Powder","1kg"],
+  ["Oats","1kg"],
+  ["Rice","1kg"],
+  ["Wholewheat Pasta","500g"],
+  ["Sweet Potatoes","1kg"],
+  ["Potatoes","2.5kg"],
+  ["Mixed Vegetables","1kg"],
+  ["Spinach","240g"],
+  ["Mixed Berries","500g"],
+  ["Bananas","1kg"],
+  ["Avocado","2 pack"],
+  ["Wholemeal Wraps","8 pack"],
+  ["Wholegrain Bread","800g"],
+  ["Rice Cakes","130g"]
+];
 
-  aldi: {
-    id: "aldi",
-    name: "Aldi"
-  }
+
+/*
+ * EXISTING RETAILER PRICES
+ *
+ * These values are kept exactly as they were.
+ */
+
+const existingRetailerPrices = {
+
+  "Chicken Breast":[
+    8.50,
+    8.75,
+    8.25,
+    8.40,
+    10.50,
+    7.99
+  ],
+
+  "Lean Beef Mince":[
+    5.75,
+    5.95,
+    5.50,
+    5.65,
+    7.50,
+    5.06
+  ],
+
+  "Lean Turkey Mince":[
+    5.25,
+    5.45,
+    4.95,
+    5.10,
+    6.75,
+    4.49
+  ],
+
+  "Salmon":[
+    6.50,
+    6.75,
+    6.25,
+    6.40,
+    8.50,
+    5.99
+  ],
+
+  "Eggs":[
+    3.25,
+    3.30,
+    3.00,
+    3.10,
+    4.25,
+    2.20
+  ],
+
+  "Greek Yoghurt":[
+    3.50,
+    3.75,
+    3.25,
+    3.35,
+    4.50,
+    2.99
+  ],
+
+  "Protein Powder":[
+    25.00,
+    26.00,
+    24.00,
+    24.50,
+    30.00,
+    19.99
+  ],
+
+  "Oats":[
+    1.75,
+    1.80,
+    1.60,
+    1.65,
+    2.50,
+    1.39
+  ],
+
+  "Rice":[
+    2.20,
+    2.30,
+    2.00,
+    2.10,
+    3.00,
+    1.69
+  ],
+
+  "Wholewheat Pasta":[
+    1.40,
+    1.45,
+    1.25,
+    1.35,
+    1.90,
+    0.99
+  ],
+
+  "Sweet Potatoes":[
+    2.50,
+    2.60,
+    2.30,
+    2.40,
+    3.20,
+    1.89
+  ],
+
+  "Potatoes":[
+    2.50,
+    2.60,
+    2.25,
+    2.35,
+    3.25,
+    1.79
+  ],
+
+  "Mixed Vegetables":[
+    2.50,
+    2.60,
+    2.25,
+    2.35,
+    3.25,
+    1.89
+  ],
+
+  "Spinach":[
+    1.50,
+    1.60,
+    1.40,
+    1.45,
+    2.00,
+    1.19
+  ],
+
+  "Mixed Berries":[
+    3.50,
+    3.60,
+    3.25,
+    3.40,
+    4.50,
+    2.99
+  ],
+
+  "Bananas":[
+    1.35,
+    1.40,
+    1.25,
+    1.30,
+    1.75,
+    1.09
+  ],
+
+  "Avocado":[
+    2.20,
+    2.30,
+    2.00,
+    2.10,
+    3.00,
+    1.69
+  ],
+
+  "Wholemeal Wraps":[
+    1.50,
+    1.55,
+    1.35,
+    1.45,
+    2.00,
+    1.19
+  ],
+
+  "Wholegrain Bread":[
+    1.60,
+    1.65,
+    1.45,
+    1.55,
+    2.25,
+    1.19
+  ],
+
+  "Rice Cakes":[
+    1.50,
+    1.55,
+    1.35,
+    1.45,
+    2.00,
+    1.19
+  ]
+
 };
 
 
 /*
- * PRODUCT DATABASE
+ * EXPANDED FOOD CATALOGUE
  *
- * price = price for ONE pack
+ * basePrice = seeded test price for one pack.
  *
- * The Best Basket API multiplies:
- *
- * price × requested quantity
+ * These are NOT live supermarket prices.
  */
+
+const additionalProducts = [
+
+  /* =========================
+     PROTEIN
+     ========================= */
+
+  ["Chicken Thighs","1kg",7.25],
+  ["Chicken Mince","500g",5.25],
+  ["Chicken Drumsticks","1kg",4.75],
+  ["Turkey Breast","500g",5.75],
+  ["Turkey Steaks","500g",5.95],
+  ["Lean Beef Steak","400g",7.50],
+  ["Beef Strips","500g",6.50],
+  ["Lean Beef Burgers","4 pack",4.75],
+  ["Pork Loin","500g",5.75],
+  ["Pork Chops","500g",5.50],
+  ["Lean Pork Mince","500g",5.25],
+  ["Lamb Chops","400g",7.95],
+  ["Lamb Mince","500g",6.75],
+
+  ["Cod","400g",5.95],
+  ["Haddock","400g",5.95],
+  ["White Fish","400g",5.50],
+  ["Tuna","4 pack",4.50],
+  ["Tinned Tuna","145g",1.25],
+  ["Prawns","300g",4.50],
+  ["Mackerel","400g",4.25],
+  ["Sardines","120g",1.20],
+  ["Smoked Salmon","200g",5.50],
+  ["Trout","400g",6.50],
+  ["Sea Bass","300g",6.95],
+  ["Fish Fingers","10 pack",2.75],
+  ["Egg Whites","500ml",3.00],
+
+
+  /* =========================
+     DAIRY
+     ========================= */
+
+  ["Skimmed Milk","2 pints",1.25],
+  ["Semi Skimmed Milk","2 pints",1.25],
+  ["Whole Milk","2 pints",1.30],
+  ["Almond Milk","1L",1.80],
+  ["Oat Milk","1L",1.80],
+  ["Soy Milk","1L",1.70],
+  ["Natural Yoghurt","500g",1.80],
+  ["Skyr","450g",2.50],
+  ["Cottage Cheese","300g",1.80],
+  ["Light Cottage Cheese","300g",1.90],
+  ["Cheddar Cheese","400g",3.75],
+  ["Light Cheddar","400g",4.00],
+  ["Mozzarella","125g",1.50],
+  ["Feta","200g",2.50],
+  ["Parmesan","100g",2.50],
+  ["Cream Cheese","200g",2.00],
+
+
+  /* =========================
+     PLANT PROTEIN
+     ========================= */
+
+  ["Chickpeas","400g",0.90],
+  ["Kidney Beans","400g",0.90],
+  ["Black Beans","400g",1.00],
+  ["Baked Beans","400g",0.90],
+  ["Cannellini Beans","400g",1.00],
+  ["Butter Beans","400g",1.00],
+  ["Green Lentils","400g",1.10],
+  ["Red Lentils","500g",1.50],
+  ["Puy Lentils","400g",1.75],
+  ["Tofu","280g",2.25],
+  ["Tempeh","200g",3.00],
+  ["Edamame","400g",2.50],
+  ["Falafel","200g",2.00],
+  ["Seitan","250g",3.00],
+  ["Plant Based Mince","500g",3.50],
+
+
+  /* =========================
+     CARBOHYDRATES
+     ========================= */
+
+  ["Brown Rice","1kg",2.50],
+  ["Basmati Rice","1kg",2.40],
+  ["Jasmine Rice","1kg",2.50],
+  ["Wild Rice","500g",3.00],
+  ["Quinoa","500g",3.25],
+  ["Couscous","500g",1.50],
+  ["Bulgur Wheat","500g",1.75],
+  ["Pearl Barley","500g",1.50],
+  ["Wholewheat Noodles","300g",1.75],
+  ["Rice Noodles","300g",2.00],
+  ["Wholewheat Spaghetti","500g",1.40],
+  ["Pasta","500g",1.25],
+  ["Brown Pasta","500g",1.50],
+  ["Wholemeal Pitta","6 pack",1.50],
+  ["Pitta Bread","6 pack",1.35],
+  ["Wholemeal Bagels","5 pack",1.75],
+  ["Bagels","5 pack",1.60],
+  ["Wholemeal English Muffins","4 pack",1.50],
+  ["Tortilla Wraps","8 pack",1.50],
+  ["Corn Tortillas","8 pack",1.75],
+  ["Wholegrain Crackers","250g",1.75],
+  ["Corn Cakes","120g",1.50],
+  ["Granola","500g",3.00],
+  ["Muesli","1kg",3.00],
+  ["Bran Flakes","500g",2.25],
+  ["Corn Flakes","500g",1.75],
+
+
+  /* =========================
+     VEGETABLES
+     ========================= */
+
+  ["Mushrooms","400g",1.25],
+  ["Closed Cup Mushrooms","400g",1.30],
+  ["Onions","1kg",1.20],
+  ["Red Onions","500g",1.25],
+  ["Spring Onions","100g",0.90],
+  ["Garlic","3 pack",0.90],
+  ["Peppers","3 pack",1.75],
+  ["Red Peppers","3 pack",1.80],
+  ["Green Peppers","3 pack",1.70],
+  ["Yellow Peppers","3 pack",1.80],
+  ["Tomatoes","500g",1.75],
+  ["Cherry Tomatoes","300g",1.50],
+  ["Cucumber","1 pack",0.90],
+  ["Carrots","1kg",0.75],
+  ["Broccoli","1 head",1.25],
+  ["Cauliflower","1 head",1.50],
+  ["Courgette","3 pack",1.50],
+  ["Aubergine","1 pack",1.25],
+  ["Cabbage","1 head",1.25],
+  ["Red Cabbage","1 head",1.50],
+  ["Kale","200g",1.50],
+  ["Green Beans","200g",1.50],
+  ["Peas","900g",1.75],
+  ["Petit Pois","900g",2.00],
+  ["Sweetcorn","340g",1.00],
+  ["Corn on the Cob","4 pack",2.00],
+  ["Asparagus","250g",2.25],
+  ["Celery","1 pack",1.00],
+  ["Leeks","500g",1.50],
+  ["Beetroot","500g",1.25],
+  ["Turnip","500g",1.00],
+  ["Swede","1 pack",1.00],
+  ["Butternut Squash","1kg",2.00],
+  ["Pumpkin","1 pack",2.00],
+  ["Rocket","70g",1.25],
+  ["Lettuce","1 head",1.00],
+  ["Mixed Salad","250g",1.50],
+  ["Watercress","80g",1.20],
+  ["Pak Choi","2 pack",1.50],
+  ["Tenderstem Broccoli","200g",2.00],
+  ["Brussels Sprouts","500g",1.50],
+  ["Spinach Leaves","240g",1.50],
+  ["Frozen Broccoli","1kg",1.75],
+  ["Frozen Peas","1kg",1.75],
+  ["Frozen Sweetcorn","1kg",1.75],
+  ["Frozen Mixed Vegetables","1kg",1.75],
+
+
+  /* =========================
+     FRUIT
+     ========================= */
+
+  ["Apples","6 pack",2.00],
+  ["Green Apples","6 pack",2.25],
+  ["Pears","4 pack",1.75],
+  ["Oranges","6 pack",2.25],
+  ["Mandarins","600g",2.00],
+  ["Clementines","600g",2.00],
+  ["Grapes","500g",2.25],
+  ["Strawberries","400g",2.50],
+  ["Blueberries","150g",2.00],
+  ["Raspberries","150g",2.25],
+  ["Blackberries","150g",2.25],
+  ["Cherries","300g",3.00],
+  ["Pineapple","1 pack",2.00],
+  ["Mango","1 pack",1.50],
+  ["Kiwi","6 pack",2.00],
+  ["Melon","1 pack",2.00],
+  ["Watermelon","1 pack",3.00],
+  ["Peaches","4 pack",2.25],
+  ["Nectarines","4 pack",2.25],
+  ["Plums","6 pack",2.00],
+  ["Grapefruit","3 pack",2.00],
+  ["Lemon","4 pack",1.50],
+  ["Lime","4 pack",1.50],
+  ["Pomegranate","1 pack",1.50],
+  ["Passion Fruit","3 pack",2.50],
+  ["Dried Dates","200g",2.00],
+  ["Raisins","500g",2.00],
+  ["Dried Apricots","250g",2.50],
+  ["Frozen Strawberries","500g",2.50],
+  ["Frozen Blueberries","500g",3.00],
+  ["Frozen Raspberries","500g",3.00],
+  ["Frozen Fruit","500g",3.00],
+
+
+  /* =========================
+     NUTS, SEEDS & HEALTHY FATS
+     ========================= */
+
+  ["Almonds","200g",2.75],
+  ["Walnuts","200g",3.00],
+  ["Cashews","200g",3.00],
+  ["Peanuts","500g",2.50],
+  ["Mixed Nuts","300g",3.50],
+  ["Pistachios","200g",3.50],
+  ["Brazil Nuts","200g",3.25],
+  ["Hazelnuts","200g",3.25],
+  ["Chia Seeds","300g",3.50],
+  ["Flaxseed","300g",2.50],
+  ["Pumpkin Seeds","250g",2.50],
+  ["Sunflower Seeds","250g",1.75],
+  ["Sesame Seeds","250g",1.75],
+  ["Peanut Butter","340g",2.50],
+  ["Smooth Peanut Butter","340g",2.50],
+  ["Crunchy Peanut Butter","340g",2.50],
+  ["Almond Butter","250g",4.50],
+  ["Tahini","300g",3.00],
+  ["Olive Oil","500ml",5.00],
+  ["Extra Virgin Olive Oil","500ml",6.50],
+  ["Rapeseed Oil","1L",3.50],
+  ["Coconut Oil","500ml",4.50],
+
+
+  /* =========================
+     TINNED / JARRED / COOKING
+     ========================= */
+
+  ["Chopped Tomatoes","400g",0.85],
+  ["Tinned Tomatoes","400g",0.85],
+  ["Passata","500g",1.00],
+  ["Tomato Puree","200g",0.90],
+  ["Baked Beans","4 pack",2.50],
+  ["Sweetcorn","3 pack",2.50],
+  ["Tinned Peas","400g",0.90],
+  ["Tinned Kidney Beans","400g",0.90],
+  ["Tinned Chickpeas","400g",0.90],
+  ["Tinned Lentils","400g",1.00],
+  ["Salsa","300g",1.75],
+  ["Hummus","200g",1.50],
+  ["Light Hummus","200g",1.60],
+  ["Pesto","190g",2.00],
+  ["Low Fat Mayonnaise","500ml",2.00],
+  ["Mayonnaise","500ml",2.00],
+  ["Tomato Ketchup","500ml",1.75],
+  ["Soy Sauce","150ml",1.50],
+  ["Hot Sauce","150ml",1.50],
+  ["Balsamic Vinegar","500ml",2.50],
+
+
+  /* =========================
+     HERBS & SPICES
+     ========================= */
+
+  ["Salt","750g",0.60],
+  ["Black Pepper","100g",1.50],
+  ["Paprika","50g",1.00],
+  ["Smoked Paprika","50g",1.25],
+  ["Chilli Powder","50g",1.00],
+  ["Cumin","40g",1.00],
+  ["Turmeric","40g",1.00],
+  ["Cinnamon","40g",1.00],
+  ["Mixed Herbs","15g",0.90],
+  ["Oregano","15g",0.90],
+  ["Basil","15g",0.90],
+  ["Curry Powder","100g",1.25],
+  ["Ginger","150g",1.00],
+  ["Fresh Coriander","30g",0.90],
+  ["Fresh Parsley","30g",0.90],
+
+
+  /* =========================
+     BREAKFAST & SNACKS
+     ========================= */
+
+  ["Porridge Oats","1kg",1.75],
+  ["Protein Bars","4 pack",4.00],
+  ["Popcorn","100g",1.25],
+  ["Dark Chocolate","100g",1.75],
+  ["Rice Pudding","400g",1.50],
+  ["Low Sugar Cereal","500g",2.50],
+  ["Greek Yoghurt 0%","500g",2.25],
+  ["Protein Yoghurt","400g",2.50],
+  ["Fruit Yoghurt","4 pack",2.00],
+
+
+  /* =========================
+     VEGETARIAN & VEGAN
+     ========================= */
+
+  ["Vegetarian Sausages","8 pack",3.00],
+  ["Vegetarian Burgers","4 pack",3.00],
+  ["Vegan Sausages","6 pack",3.25],
+  ["Vegan Burgers","2 pack",3.00],
+  ["Vegan Nuggets","300g",3.00],
+  ["Plant Based Chicken","300g",3.50]
+
+];
+
+
+/*
+ * SEEDED RETAILER MULTIPLIERS
+ *
+ * These create test comparisons only.
+ * They are NOT live supermarket prices.
+ */
+
+const retailerMultiplier = {
+
+  tesco: 1.00,
+
+  sainsburys: 1.03,
+
+  asda: 0.96,
+
+  morrisons: 0.99,
+
+  waitrose: 1.25,
+
+  aldi: 0.88
+
+};
+
+
+const seededUpdatedAt = "2026-09-02";
+
+
+/* =========================================================
+   INTERNAL HELPERS
+   ========================================================= */
+
+function makeId(
+  retailer,
+  name
+){
+
+  return (
+    retailer +
+    "-" +
+    clean(name)
+      .replace(
+        /[^a-z0-9]+/g,
+        "-"
+      )
+      .replace(
+        /^-|-$/g,
+        ""
+      )
+  );
+
+}
+
+
+function seededPrice(
+  basePrice,
+  retailer
+){
+
+  return Math.round(
+    basePrice *
+    retailerMultiplier[retailer] *
+    100
+  ) / 100;
+
+}
+
+
+/* =========================================================
+   BUILD EXISTING PRODUCTS
+   ========================================================= */
+
+const existingGeneratedProducts =
+  existingProducts.flatMap(
+    ([name,packSize]) =>
+
+      retailerIds.map(
+        (retailer,index) => ({
+
+          id:
+            makeId(
+              retailer,
+              name
+            ),
+
+          retailer:
+
+            retailer,
+
+          name:
+
+            name,
+
+          packSize:
+
+            packSize,
+
+          price:
+
+            existingRetailerPrices[
+              name
+            ][index],
+
+          updatedAt:
+
+            seededUpdatedAt
+
+        })
+      )
+
+  );
+
+
+/* =========================================================
+   BUILD EXPANDED PRODUCTS
+   ========================================================= */
+
+const generatedAdditionalProducts =
+  additionalProducts.flatMap(
+
+    ([name,packSize,basePrice]) =>
+
+      retailerIds.map(
+        retailer => ({
+
+          id:
+            makeId(
+              retailer,
+              name
+            ),
+
+          retailer:
+
+            retailer,
+
+          name:
+
+            name,
+
+          packSize:
+
+            packSize,
+
+          price:
+
+            seededPrice(
+              basePrice,
+              retailer
+            ),
+
+          updatedAt:
+
+            seededUpdatedAt
+
+        })
+      )
+
+  );
+
+
+/* =========================================================
+   PUBLIC PRODUCT DATABASE
+   ========================================================= */
 
 export const products = [
 
-  /* CHICKEN */
+  ...existingGeneratedProducts,
 
-  {
-    id: "tesco-chicken-breast",
-    retailer: "tesco",
-    name: "Chicken Breast",
-    packSize: "1kg",
-    price: 8.50,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "sainsburys-chicken-breast",
-    retailer: "sainsburys",
-    name: "Chicken Breast",
-    packSize: "1kg",
-    price: 8.75,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "asda-chicken-breast",
-    retailer: "asda",
-    name: "Chicken Breast",
-    packSize: "1kg",
-    price: 8.25,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "morrisons-chicken-breast",
-    retailer: "morrisons",
-    name: "Chicken Breast",
-    packSize: "1kg",
-    price: 8.40,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "waitrose-chicken-breast",
-    retailer: "waitrose",
-    name: "Chicken Breast",
-    packSize: "1kg",
-    price: 10.50,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "aldi-chicken-breast",
-    retailer: "aldi",
-    name: "Chicken Breast",
-    packSize: "1kg",
-    price: 7.99,
-    updatedAt: "2026-09-02"
-  },
-
-
-  /* LEAN BEEF MINCE */
-
-  {
-    id: "tesco-lean-beef-mince",
-    retailer: "tesco",
-    name: "Lean Beef Mince",
-    packSize: "500g",
-    price: 5.75,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "sainsburys-lean-beef-mince",
-    retailer: "sainsburys",
-    name: "Lean Beef Mince",
-    packSize: "500g",
-    price: 5.95,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "asda-lean-beef-mince",
-    retailer: "asda",
-    name: "Lean Beef Mince",
-    packSize: "500g",
-    price: 5.50,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "morrisons-lean-beef-mince",
-    retailer: "morrisons",
-    name: "Lean Beef Mince",
-    packSize: "500g",
-    price: 5.65,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "waitrose-lean-beef-mince",
-    retailer: "waitrose",
-    name: "Lean Beef Mince",
-    packSize: "500g",
-    price: 7.50,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "aldi-lean-beef-mince",
-    retailer: "aldi",
-    name: "Lean Beef Mince",
-    packSize: "500g",
-    price: 5.06,
-    updatedAt: "2026-09-02"
-  },
-
-
-  /* LEAN TURKEY MINCE */
-
-  {
-    id: "tesco-lean-turkey-mince",
-    retailer: "tesco",
-    name: "Lean Turkey Mince",
-    packSize: "500g",
-    price: 5.25,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "sainsburys-lean-turkey-mince",
-    retailer: "sainsburys",
-    name: "Lean Turkey Mince",
-    packSize: "500g",
-    price: 5.45,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "asda-lean-turkey-mince",
-    retailer: "asda",
-    name: "Lean Turkey Mince",
-    packSize: "500g",
-    price: 4.95,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "morrisons-lean-turkey-mince",
-    retailer: "morrisons",
-    name: "Lean Turkey Mince",
-    packSize: "500g",
-    price: 5.10,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "waitrose-lean-turkey-mince",
-    retailer: "waitrose",
-    name: "Lean Turkey Mince",
-    packSize: "500g",
-    price: 6.75,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "aldi-lean-turkey-mince",
-    retailer: "aldi",
-    name: "Lean Turkey Mince",
-    packSize: "500g",
-    price: 4.49,
-    updatedAt: "2026-09-02"
-  },
-
-
-  /* SALMON */
-
-  {
-    id: "tesco-salmon",
-    retailer: "tesco",
-    name: "Salmon",
-    packSize: "400g",
-    price: 6.50,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "sainsburys-salmon",
-    retailer: "sainsburys",
-    name: "Salmon",
-    packSize: "400g",
-    price: 6.75,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "asda-salmon",
-    retailer: "asda",
-    name: "Salmon",
-    packSize: "400g",
-    price: 6.25,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "morrisons-salmon",
-    retailer: "morrisons",
-    name: "Salmon",
-    packSize: "400g",
-    price: 6.40,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "waitrose-salmon",
-    retailer: "waitrose",
-    name: "Salmon",
-    packSize: "400g",
-    price: 8.50,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "aldi-salmon",
-    retailer: "aldi",
-    name: "Salmon",
-    packSize: "400g",
-    price: 5.99,
-    updatedAt: "2026-09-02"
-  },
-
-
-  /* EGGS */
-
-  {
-    id: "tesco-eggs",
-    retailer: "tesco",
-    name: "Eggs",
-    packSize: "12 pack",
-    price: 3.25,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "sainsburys-eggs",
-    retailer: "sainsburys",
-    name: "Eggs",
-    packSize: "12 pack",
-    price: 3.30,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "asda-eggs",
-    retailer: "asda",
-    name: "Eggs",
-    packSize: "12 pack",
-    price: 3.00,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "morrisons-eggs",
-    retailer: "morrisons",
-    name: "Eggs",
-    packSize: "12 pack",
-    price: 3.10,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "waitrose-eggs",
-    retailer: "waitrose",
-    name: "Eggs",
-    packSize: "12 pack",
-    price: 4.25,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "aldi-eggs",
-    retailer: "aldi",
-    name: "Eggs",
-    packSize: "12 pack",
-    price: 2.20,
-    updatedAt: "2026-09-02"
-  },
-
-
-  /* GREEK YOGHURT */
-
-  {
-    id: "tesco-greek-yoghurt",
-    retailer: "tesco",
-    name: "Greek Yoghurt",
-    packSize: "1kg",
-    price: 3.50,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "sainsburys-greek-yoghurt",
-    retailer: "sainsburys",
-    name: "Greek Yoghurt",
-    packSize: "1kg",
-    price: 3.75,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "asda-greek-yoghurt",
-    retailer: "asda",
-    name: "Greek Yoghurt",
-    packSize: "1kg",
-    price: 3.25,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "morrisons-greek-yoghurt",
-    retailer: "morrisons",
-    name: "Greek Yoghurt",
-    packSize: "1kg",
-    price: 3.35,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "waitrose-greek-yoghurt",
-    retailer: "waitrose",
-    name: "Greek Yoghurt",
-    packSize: "1kg",
-    price: 4.50,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "aldi-greek-yoghurt",
-    retailer: "aldi",
-    name: "Greek Yoghurt",
-    packSize: "1kg",
-    price: 2.99,
-    updatedAt: "2026-09-02"
-  },
-
-
-  /* PROTEIN POWDER */
-
-  {
-    id: "tesco-protein-powder",
-    retailer: "tesco",
-    name: "Protein Powder",
-    packSize: "1kg",
-    price: 25.00,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "sainsburys-protein-powder",
-    retailer: "sainsburys",
-    name: "Protein Powder",
-    packSize: "1kg",
-    price: 26.00,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "asda-protein-powder",
-    retailer: "asda",
-    name: "Protein Powder",
-    packSize: "1kg",
-    price: 24.00,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "morrisons-protein-powder",
-    retailer: "morrisons",
-    name: "Protein Powder",
-    packSize: "1kg",
-    price: 24.50,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "waitrose-protein-powder",
-    retailer: "waitrose",
-    name: "Protein Powder",
-    packSize: "1kg",
-    price: 30.00,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "aldi-protein-powder",
-    retailer: "aldi",
-    name: "Protein Powder",
-    packSize: "1kg",
-    price: 19.99,
-    updatedAt: "2026-09-02"
-  },
-
-
-  /* OATS */
-
-  {
-    id: "tesco-oats",
-    retailer: "tesco",
-    name: "Oats",
-    packSize: "1kg",
-    price: 1.75,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "sainsburys-oats",
-    retailer: "sainsburys",
-    name: "Oats",
-    packSize: "1kg",
-    price: 1.80,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "asda-oats",
-    retailer: "asda",
-    name: "Oats",
-    packSize: "1kg",
-    price: 1.60,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "morrisons-oats",
-    retailer: "morrisons",
-    name: "Oats",
-    packSize: "1kg",
-    price: 1.65,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "waitrose-oats",
-    retailer: "waitrose",
-    name: "Oats",
-    packSize: "1kg",
-    price: 2.50,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "aldi-oats",
-    retailer: "aldi",
-    name: "Oats",
-    packSize: "1kg",
-    price: 1.39,
-    updatedAt: "2026-09-02"
-  },
-
-
-  /* RICE */
-
-  {
-    id: "tesco-rice",
-    retailer: "tesco",
-    name: "Rice",
-    packSize: "1kg",
-    price: 2.20,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "sainsburys-rice",
-    retailer: "sainsburys",
-    name: "Rice",
-    packSize: "1kg",
-    price: 2.30,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "asda-rice",
-    retailer: "asda",
-    name: "Rice",
-    packSize: "1kg",
-    price: 2.00,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "morrisons-rice",
-    retailer: "morrisons",
-    name: "Rice",
-    packSize: "1kg",
-    price: 2.10,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "waitrose-rice",
-    retailer: "waitrose",
-    name: "Rice",
-    packSize: "1kg",
-    price: 3.00,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "aldi-rice",
-    retailer: "aldi",
-    name: "Rice",
-    packSize: "1kg",
-    price: 1.69,
-    updatedAt: "2026-09-02"
-  },
-
-
-  /* WHOLEWHEAT PASTA */
-
-  {
-    id: "tesco-wholewheat-pasta",
-    retailer: "tesco",
-    name: "Wholewheat Pasta",
-    packSize: "500g",
-    price: 1.40,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "sainsburys-wholewheat-pasta",
-    retailer: "sainsburys",
-    name: "Wholewheat Pasta",
-    packSize: "500g",
-    price: 1.45,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "asda-wholewheat-pasta",
-    retailer: "asda",
-    name: "Wholewheat Pasta",
-    packSize: "500g",
-    price: 1.25,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "morrisons-wholewheat-pasta",
-    retailer: "morrisons",
-    name: "Wholewheat Pasta",
-    packSize: "500g",
-    price: 1.35,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "waitrose-wholewheat-pasta",
-    retailer: "waitrose",
-    name: "Wholewheat Pasta",
-    packSize: "500g",
-    price: 1.90,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "aldi-wholewheat-pasta",
-    retailer: "aldi",
-    name: "Wholewheat Pasta",
-    packSize: "500g",
-    price: 0.99,
-    updatedAt: "2026-09-02"
-  },
-
-
-  /* SWEET POTATOES */
-
-  {
-    id: "tesco-sweet-potatoes",
-    retailer: "tesco",
-    name: "Sweet Potatoes",
-    packSize: "1kg",
-    price: 2.50,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "sainsburys-sweet-potatoes",
-    retailer: "sainsburys",
-    name: "Sweet Potatoes",
-    packSize: "1kg",
-    price: 2.60,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "asda-sweet-potatoes",
-    retailer: "asda",
-    name: "Sweet Potatoes",
-    packSize: "1kg",
-    price: 2.30,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "morrisons-sweet-potatoes",
-    retailer: "morrisons",
-    name: "Sweet Potatoes",
-    packSize: "1kg",
-    price: 2.40,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "waitrose-sweet-potatoes",
-    retailer: "waitrose",
-    name: "Sweet Potatoes",
-    packSize: "1kg",
-    price: 3.20,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "aldi-sweet-potatoes",
-    retailer: "aldi",
-    name: "Sweet Potatoes",
-    packSize: "1kg",
-    price: 1.89,
-    updatedAt: "2026-09-02"
-  },
-
-
-  /* POTATOES */
-
-  {
-    id: "tesco-potatoes",
-    retailer: "tesco",
-    name: "Potatoes",
-    packSize: "2.5kg",
-    price: 2.50,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "sainsburys-potatoes",
-    retailer: "sainsburys",
-    name: "Potatoes",
-    packSize: "2.5kg",
-    price: 2.60,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "asda-potatoes",
-    retailer: "asda",
-    name: "Potatoes",
-    packSize: "2.5kg",
-    price: 2.25,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "morrisons-potatoes",
-    retailer: "morrisons",
-    name: "Potatoes",
-    packSize: "2.5kg",
-    price: 2.35,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "waitrose-potatoes",
-    retailer: "waitrose",
-    name: "Potatoes",
-    packSize: "2.5kg",
-    price: 3.25,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "aldi-potatoes",
-    retailer: "aldi",
-    name: "Potatoes",
-    packSize: "2.5kg",
-    price: 1.79,
-    updatedAt: "2026-09-02"
-  },
-
-
-  /* MIXED VEGETABLES */
-
-  {
-    id: "tesco-mixed-vegetables",
-    retailer: "tesco",
-    name: "Mixed Vegetables",
-    packSize: "1kg",
-    price: 2.50,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "sainsburys-mixed-vegetables",
-    retailer: "sainsburys",
-    name: "Mixed Vegetables",
-    packSize: "1kg",
-    price: 2.60,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "asda-mixed-vegetables",
-    retailer: "asda",
-    name: "Mixed Vegetables",
-    packSize: "1kg",
-    price: 2.25,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "morrisons-mixed-vegetables",
-    retailer: "morrisons",
-    name: "Mixed Vegetables",
-    packSize: "1kg",
-    price: 2.35,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "waitrose-mixed-vegetables",
-    retailer: "waitrose",
-    name: "Mixed Vegetables",
-    packSize: "1kg",
-    price: 3.25,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "aldi-mixed-vegetables",
-    retailer: "aldi",
-    name: "Mixed Vegetables",
-    packSize: "1kg",
-    price: 1.89,
-    updatedAt: "2026-09-02"
-  },
-
-
-  /* SPINACH */
-
-  {
-    id: "tesco-spinach",
-    retailer: "tesco",
-    name: "Spinach",
-    packSize: "240g",
-    price: 1.50,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "sainsburys-spinach",
-    retailer: "sainsburys",
-    name: "Spinach",
-    packSize: "240g",
-    price: 1.60,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "asda-spinach",
-    retailer: "asda",
-    name: "Spinach",
-    packSize: "240g",
-    price: 1.40,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "morrisons-spinach",
-    retailer: "morrisons",
-    name: "Spinach",
-    packSize: "240g",
-    price: 1.45,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "waitrose-spinach",
-    retailer: "waitrose",
-    name: "Spinach",
-    packSize: "240g",
-    price: 2.00,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "aldi-spinach",
-    retailer: "aldi",
-    name: "Spinach",
-    packSize: "240g",
-    price: 1.19,
-    updatedAt: "2026-09-02"
-  },
-
-
-  /* MIXED BERRIES */
-
-  {
-    id: "tesco-mixed-berries",
-    retailer: "tesco",
-    name: "Mixed Berries",
-    packSize: "500g",
-    price: 3.50,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "sainsburys-mixed-berries",
-    retailer: "sainsburys",
-    name: "Mixed Berries",
-    packSize: "500g",
-    price: 3.60,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "asda-mixed-berries",
-    retailer: "asda",
-    name: "Mixed Berries",
-    packSize: "500g",
-    price: 3.25,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "morrisons-mixed-berries",
-    retailer: "morrisons",
-    name: "Mixed Berries",
-    packSize: "500g",
-    price: 3.40,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "waitrose-mixed-berries",
-    retailer: "waitrose",
-    name: "Mixed Berries",
-    packSize: "500g",
-    price: 4.50,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "aldi-mixed-berries",
-    retailer: "aldi",
-    name: "Mixed Berries",
-    packSize: "500g",
-    price: 2.99,
-    updatedAt: "2026-09-02"
-  },
-
-
-  /* BANANAS */
-
-  {
-    id: "tesco-bananas",
-    retailer: "tesco",
-    name: "Bananas",
-    packSize: "1kg",
-    price: 1.35,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "sainsburys-bananas",
-    retailer: "sainsburys",
-    name: "Bananas",
-    packSize: "1kg",
-    price: 1.40,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "asda-bananas",
-    retailer: "asda",
-    name: "Bananas",
-    packSize: "1kg",
-    price: 1.25,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "morrisons-bananas",
-    retailer: "morrisons",
-    name: "Bananas",
-    packSize: "1kg",
-    price: 1.30,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "waitrose-bananas",
-    retailer: "waitrose",
-    name: "Bananas",
-    packSize: "1kg",
-    price: 1.75,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "aldi-bananas",
-    retailer: "aldi",
-    name: "Bananas",
-    packSize: "1kg",
-    price: 1.09,
-    updatedAt: "2026-09-02"
-  },
-
-
-  /* AVOCADO */
-
-  {
-    id: "tesco-avocado",
-    retailer: "tesco",
-    name: "Avocado",
-    packSize: "2 pack",
-    price: 2.20,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "sainsburys-avocado",
-    retailer: "sainsburys",
-    name: "Avocado",
-    packSize: "2 pack",
-    price: 2.30,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "asda-avocado",
-    retailer: "asda",
-    name: "Avocado",
-    packSize: "2 pack",
-    price: 2.00,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "morrisons-avocado",
-    retailer: "morrisons",
-    name: "Avocado",
-    packSize: "2 pack",
-    price: 2.10,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "waitrose-avocado",
-    retailer: "waitrose",
-    name: "Avocado",
-    packSize: "2 pack",
-    price: 3.00,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "aldi-avocado",
-    retailer: "aldi",
-    name: "Avocado",
-    packSize: "2 pack",
-    price: 1.69,
-    updatedAt: "2026-09-02"
-  },
-
-
-  /* WHOLEMEAL WRAPS */
-
-  {
-    id: "tesco-wholemeal-wraps",
-    retailer: "tesco",
-    name: "Wholemeal Wraps",
-    packSize: "8 pack",
-    price: 1.50,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "sainsburys-wholemeal-wraps",
-    retailer: "sainsburys",
-    name: "Wholemeal Wraps",
-    packSize: "8 pack",
-    price: 1.55,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "asda-wholemeal-wraps",
-    retailer: "asda",
-    name: "Wholemeal Wraps",
-    packSize: "8 pack",
-    price: 1.35,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "morrisons-wholemeal-wraps",
-    retailer: "morrisons",
-    name: "Wholemeal Wraps",
-    packSize: "8 pack",
-    price: 1.45,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "waitrose-wholemeal-wraps",
-    retailer: "waitrose",
-    name: "Wholemeal Wraps",
-    packSize: "8 pack",
-    price: 2.00,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "aldi-wholemeal-wraps",
-    retailer: "aldi",
-    name: "Wholemeal Wraps",
-    packSize: "8 pack",
-    price: 1.19,
-    updatedAt: "2026-09-02"
-  },
-
-
-  /* WHOLEGRAIN BREAD */
-
-  {
-    id: "tesco-wholegrain-bread",
-    retailer: "tesco",
-    name: "Wholegrain Bread",
-    packSize: "800g",
-    price: 1.60,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "sainsburys-wholegrain-bread",
-    retailer: "sainsburys",
-    name: "Wholegrain Bread",
-    packSize: "800g",
-    price: 1.65,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "asda-wholegrain-bread",
-    retailer: "asda",
-    name: "Wholegrain Bread",
-    packSize: "800g",
-    price: 1.45,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "morrisons-wholegrain-bread",
-    retailer: "morrisons",
-    name: "Wholegrain Bread",
-    packSize: "800g",
-    price: 1.55,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "waitrose-wholegrain-bread",
-    retailer: "waitrose",
-    name: "Wholegrain Bread",
-    packSize: "800g",
-    price: 2.25,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "aldi-wholegrain-bread",
-    retailer: "aldi",
-    name: "Wholegrain Bread",
-    packSize: "800g",
-    price: 1.19,
-    updatedAt: "2026-09-02"
-  },
-
-
-  /* RICE CAKES */
-
-  {
-    id: "tesco-rice-cakes",
-    retailer: "tesco",
-    name: "Rice Cakes",
-    packSize: "130g",
-    price: 1.50,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "sainsburys-rice-cakes",
-    retailer: "sainsburys",
-    name: "Rice Cakes",
-    packSize: "130g",
-    price: 1.55,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "asda-rice-cakes",
-    retailer: "asda",
-    name: "Rice Cakes",
-    packSize: "130g",
-    price: 1.35,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "morrisons-rice-cakes",
-    retailer: "morrisons",
-    name: "Rice Cakes",
-    packSize: "130g",
-    price: 1.45,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "waitrose-rice-cakes",
-    retailer: "waitrose",
-    name: "Rice Cakes",
-    packSize: "130g",
-    price: 2.00,
-    updatedAt: "2026-09-02"
-  },
-
-  {
-    id: "aldi-rice-cakes",
-    retailer: "aldi",
-    name: "Rice Cakes",
-    packSize: "130g",
-    price: 1.19,
-    updatedAt: "2026-09-02"
-  }
+  ...generatedAdditionalProducts
 
 ];
 
@@ -1196,6 +731,7 @@ export const products = [
 /* =========================================================
    HELPERS
    ========================================================= */
+
 
 /*
  * Normalise text for reliable matching.
@@ -1211,7 +747,9 @@ export const products = [
  * "potatoes"
  */
 
-export function clean(value){
+export function clean(
+  value
+){
 
   return String(
     value || ""
@@ -1250,35 +788,44 @@ export function findProducts(
   retailerIds=[]
 ){
 
-  const query=
+  const query =
     clean(
       itemName
     );
 
 
-  if(!query){
+  if(
+    !query
+  ){
 
     return [];
 
   }
 
 
-  const allowedRetailers=
+  const allowedRetailers =
+
     Array.isArray(
       retailerIds
     ) &&
     retailerIds.length
-      ?new Set(
+
+      ? new Set(
+
           retailerIds.map(
-            id=>clean(id)
+            id =>
+              clean(id)
           )
+
         )
-      :null;
+
+      : null;
 
 
-  const candidates=
+  const candidates =
+
     products.filter(
-      product=>{
+      product => {
 
         if(
           !allowedRetailers
@@ -1301,16 +848,18 @@ export function findProducts(
   /*
    * 1. EXACT MATCH
    *
-   * This is the most important part.
+   * Most important.
    */
 
-  const exactMatches=
+  const exactMatches =
+
     candidates.filter(
-      product=>
+      product =>
+
         clean(
           product.name
-        )===
-        query
+        ) === query
+
     );
 
 
@@ -1326,9 +875,7 @@ export function findProducts(
   /*
    * 2. SAFE WORD MATCH
    *
-   * Only use this if no exact match exists.
-   *
-   * This allows things such as:
+   * Allows:
    *
    * "chicken breast 1kg"
    *
@@ -1337,30 +884,29 @@ export function findProducts(
    * "Chicken Breast"
    */
 
-  const wordMatches=
-    candidates.filter(
-      product=>{
+  const queryWords =
 
-        const productName=
+    query
+      .split(" ")
+      .filter(Boolean);
+
+
+  const wordMatches =
+
+    candidates.filter(
+      product => {
+
+        const productWords =
+
           clean(
             product.name
-          );
-
-
-        const productWords=
-          productName
-            .split(" ")
-            .filter(Boolean);
-
-
-        const queryWords=
-          query
+          )
             .split(" ")
             .filter(Boolean);
 
 
         return queryWords.every(
-          word=>
+          word =>
             productWords.includes(
               word
             )
@@ -1382,25 +928,29 @@ export function findProducts(
   /*
    * 3. PARTIAL MATCH
    *
-   * Last resort only.
+   * Last resort.
    */
 
   return candidates.filter(
-    product=>{
+    product => {
 
-      const productName=
+      const productName =
+
         clean(
           product.name
         );
 
 
-      return(
+      return (
+
         productName.includes(
           query
         ) ||
+
         query.includes(
           productName
         )
+
       );
 
     }
