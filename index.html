@@ -3926,6 +3926,29 @@ button{
   .calendar-event-notification-row{grid-template-columns:1fr !important;gap:8px !important}
 }
 </style>
+
+<style id="calendar-events-v13">
+/* Event name and time fields use equal widths */
+#calendarEventModal .calendar-event-inline-fields{
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
+  gap:10px !important;
+}
+@media(max-width:390px){
+  #calendarEventModal .calendar-event-inline-fields{
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
+    gap:8px !important;
+  }
+}
+/* Keep notification controls usable on narrow phones */
+#calendarEventModal .calendar-event-notification-row{
+  grid-template-columns:minmax(0,1fr) 170px !important;
+}
+@media(max-width:390px){
+  #calendarEventModal .calendar-event-notification-row{
+    grid-template-columns:1fr !important;
+  }
+}
+</style>
 </head>
 
 <body>
@@ -13053,7 +13076,25 @@ function formatCalendarEventTime(time){
 
 function showCalendarNotification(title,body){
   if("Notification" in window && Notification.permission==="granted") {
-    try{ new Notification(title,{body,icon:"/icon-192.png",tag:"shiftfit-event"}); }catch(e){}
+    try{
+      if(navigator.serviceWorker && navigator.serviceWorker.ready){
+        navigator.serviceWorker.ready.then(reg=>{
+          if(reg && reg.showNotification){
+            return reg.showNotification(title,{
+              body,
+              icon:"/icon-192.png",
+              tag:"shiftfit-event",
+              renotify:true
+            });
+          }
+          return new Notification(title,{body,icon:"/icon-192.png",tag:"shiftfit-event"});
+        }).catch(()=>{
+          try{ new Notification(title,{body,icon:"/icon-192.png",tag:"shiftfit-event"}); }catch(e){}
+        });
+      }else{
+        new Notification(title,{body,icon:"/icon-192.png",tag:"shiftfit-event"});
+      }
+    }catch(e){}
   }
 
   let notice=document.getElementById("shiftfitCalendarNotifyToast");
@@ -13100,20 +13141,53 @@ function scheduleCalendarEventNotifications(){
 }
 
 async function requestCalendarNotifications(){
+  /*
+    iPhone/Safari can expose the Notification API only in supported
+    contexts (notably an installed Home Screen web app). Do not make
+    the event reminder unusable when the API is unavailable: the
+    reminder is still scheduled as an in-app reminder while ShiftFit
+    remains open.
+  */
   if(!("Notification" in window)){
-    showCalendarNotification("Notifications unavailable","Your browser does not support notifications.");
-    return false;
+    showCalendarNotification(
+      "Reminder enabled",
+      "Your event reminder will appear in ShiftFit while the app is open. For iPhone push notifications, add ShiftFit to your Home Screen."
+    );
+    return true;
   }
-  if(Notification.permission==="granted") return true;
-  if(Notification.permission==="denied") {
-    showCalendarNotification("Notifications blocked","Allow notifications in your browser settings to use reminders.");
-    return false;
+
+  if(Notification.permission==="granted"){
+    showCalendarNotification("Notifications enabled","Your ShiftFit event reminder is ready.");
+    return true;
   }
+
+  if(Notification.permission==="denied"){
+    showCalendarNotification(
+      "Notifications blocked",
+      "Your reminder is still saved. Enable notifications for ShiftFit in iPhone settings if supported."
+    );
+    return true;
+  }
+
   try{
     const permission=await Notification.requestPermission();
-    return permission==="granted";
+
+    if(permission==="granted"){
+      showCalendarNotification("Notifications enabled","Your ShiftFit event reminder is ready.");
+      return true;
+    }
+
+    showCalendarNotification(
+      "Reminder saved",
+      "The event is saved and will remind you in ShiftFit while it is open."
+    );
+    return true;
   }catch(e){
-    return false;
+    showCalendarNotification(
+      "Reminder saved",
+      "The event is saved and will remind you in ShiftFit while it is open."
+    );
+    return true;
   }
 }
 
