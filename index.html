@@ -3404,60 +3404,6 @@ button{
 
 
 
-<section class="action-card workout-card">
-
-  <div class="action-icon">🏋️</div>
-  <div class="action-label">WORKOUT</div>
-  <div class="action-title">Push Day</div>
-
-  <div
-    class="action-desc"
-    id="homeWorkoutDescription"
-  >
-    Train after your day shift when your workday is finished.
-  </div>
-
-  <div
-    id="homeWorkoutSchedule"
-    style="
-      color:#75e7b1;
-      font-size:11px;
-      font-weight:900;
-      margin-top:8px;
-    "
-  >
-    19:00 – 21:00
-  </div>
-
-  <button
-    class="action-button"
-    onclick="showWorkout()"
-  >
-    Start Workout
-  </button>
-
-</section>
-
-<section class="action-card meal-card">
-
-  <div class="action-icon">🍽️</div>
-  <div class="action-label">MEALS</div>
-  <div class="action-title">High Protein</div>
-  <div class="action-desc">
-    Personalised for you
-  </div>
-
-  <button
-    class="action-button"
-    onclick="showMeals()"
-  >
-    View Plan
-  </button>
-
-</section>
-
-</div>
-
 <section class="progress-card">
 
   <div class="progress-title">
@@ -10766,11 +10712,50 @@ function getTodayPlanTargets(){
     plan = null;
   }
 
+  const domCalories =
+    Number(
+      String(
+        document.getElementById("homeCalories")?.textContent || ""
+      ).replace(/,/g,"")
+    ) || 0;
+
+  const domProtein =
+    Number(
+      String(
+        document.getElementById("homeProtein")?.textContent || ""
+      ).replace(/[^0-9.]/g,"")
+    ) || 0;
+
+  const mealCarbs =
+    Number(
+      String(
+        document.getElementById("mealCarbs")?.textContent || ""
+      ).replace(/[^0-9.]/g,"")
+    ) || 0;
+
+  const mealFats =
+    Number(
+      String(
+        document.getElementById("mealFats")?.textContent || ""
+      ).replace(/[^0-9.]/g,"")
+    ) || 0;
+
   return {
-    calories:Number(plan && plan.calories) || 0,
-    protein:Number(plan && plan.protein) || 0,
-    carbs:Number(plan && plan.carbs) || 0,
-    fat:Number(plan && (plan.fat ?? plan.fats)) || 0
+    calories:
+      Number(plan && plan.calories) ||
+      domCalories,
+
+    protein:
+      Number(plan && plan.protein) ||
+      domProtein,
+
+    carbs:
+      Number(plan && plan.carbs) ||
+      mealCarbs,
+
+    fat:
+      Number(plan && (plan.fat ?? plan.fats)) ||
+      mealFats
   };
 }
 
