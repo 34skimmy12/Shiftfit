@@ -3549,6 +3549,203 @@ button{
 }
 </style>
 
+
+<style id="calendar-day-extra-compact">
+#calendarDayScreen .calendar-day-card{
+  padding:11px 13px !important;
+  border-radius:16px !important;
+  margin-bottom:8px !important;
+}
+#calendarDayScreen .calendar-day-card-top{
+  gap:9px !important;
+}
+#calendarDayScreen .calendar-day-card-icon{
+  width:38px !important;
+  height:38px !important;
+  min-width:38px !important;
+  border-radius:11px !important;
+  font-size:19px !important;
+}
+#calendarDayScreen .calendar-day-card-label{
+  font-size:9px !important;
+  letter-spacing:.12em !important;
+}
+#calendarDayScreen .calendar-day-card-title{
+  font-size:16px !important;
+}
+#calendarDayScreen .calendar-day-card-detail{
+  font-size:12px !important;
+  line-height:1.25 !important;
+  margin-top:3px !important;
+}
+#calendarDayScreen .calendar-day-section-title{
+  font-size:12px !important;
+  margin:12px 0 6px !important;
+}
+#calendarDayScreen .calendar-day-meal{
+  gap:8px !important;
+  padding:8px 0 !important;
+}
+#calendarDayScreen .calendar-day-meal-icon{
+  width:34px !important;
+  height:34px !important;
+  min-width:34px !important;
+  border-radius:10px !important;
+  font-size:18px !important;
+}
+#calendarDayScreen .calendar-day-meal-name{
+  font-size:13px !important;
+}
+#calendarDayScreen .calendar-day-actions{
+  gap:7px !important;
+  margin-top:10px !important;
+}
+#calendarDayScreen .calendar-action-btn{
+  padding:9px 8px !important;
+  border-radius:10px !important;
+  font-size:10px !important;
+}
+.calendar-event-add{
+  width:100%;
+  min-height:44px;
+  margin:0 0 12px;
+  border:1px solid #8b5cf6;
+  border-radius:12px;
+  background:linear-gradient(135deg,#7c3aed,#5123c5);
+  color:#fff;
+  font:inherit;
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.04em;
+}
+.calendar-event-list{
+  display:grid;
+  gap:7px;
+}
+.calendar-event-item{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  padding:10px 11px;
+  border:1px solid #303a60;
+  border-radius:13px;
+  background:#10152a;
+}
+.calendar-event-icon{
+  width:32px;
+  height:32px;
+  min-width:32px;
+  border-radius:9px;
+  display:grid;
+  place-items:center;
+  background:#211d50;
+  font-size:16px;
+}
+.calendar-event-main{
+  min-width:0;
+  flex:1;
+}
+.calendar-event-title{
+  color:#f4f5fb;
+  font-size:13px;
+  font-weight:900;
+}
+.calendar-event-time{
+  color:#75e7b1;
+  font-size:10px;
+  font-weight:800;
+  margin-top:2px;
+}
+.calendar-event-notes{
+  color:#aab1c5;
+  font-size:11px;
+  line-height:1.3;
+  margin-top:3px;
+}
+.calendar-event-delete{
+  border:0;
+  background:transparent;
+  color:#8f97ac;
+  min-width:36px;
+  min-height:36px;
+  border-radius:9px;
+  font-size:17px;
+}
+.calendar-event-empty{
+  color:#7f879d;
+  font-size:11px;
+  padding:2px 0 4px;
+}
+.calendar-event-modal{
+  position:fixed;
+  inset:0;
+  z-index:10002;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  background:rgba(0,0,0,.68);
+}
+.calendar-event-modal.show{display:flex}
+.calendar-event-card{
+  width:min(100%,430px);
+  max-height:90vh;
+  overflow:auto;
+  background:#11162b;
+  border:1px solid #4b3d85;
+  border-radius:20px;
+  padding:18px;
+  position:relative;
+  box-sizing:border-box;
+}
+.calendar-event-card h2{
+  margin:2px 0 5px;
+  color:#f4f5fb;
+}
+.calendar-event-card p{
+  margin:0 0 14px;
+  color:#aab1c5;
+  font-size:12px;
+  line-height:1.4;
+}
+.calendar-event-card label{
+  display:block;
+  color:#b8bed0;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.05em;
+  margin-bottom:10px;
+}
+.calendar-event-card input,
+.calendar-event-card textarea{
+  display:block;
+  width:100%;
+  box-sizing:border-box;
+  margin-top:6px;
+  min-height:44px;
+  border:1px solid #303a60;
+  border-radius:12px;
+  background:#080d1d;
+  color:#f4f5fb;
+  padding:10px 12px;
+  font:inherit;
+  font-size:16px;
+}
+.calendar-event-card textarea{
+  min-height:80px;
+  resize:vertical;
+}
+.calendar-event-form-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:12px;
+}
+@media(max-width:390px){
+  .calendar-event-card{padding:15px}
+  .calendar-event-form-actions{grid-template-columns:1fr}
+}
+</style>
 </head>
 
 <body>
@@ -4877,6 +5074,14 @@ button{
     <p id="calendarDayScreenSubtitle">
       Your shift, training and meals for this day.
     </p>
+
+    <button
+      type="button"
+      class="calendar-event-add"
+      onclick="openCalendarEventModal()"
+    >
+      + ADD EVENT
+    </button>
   </div>
 
   <div id="calendarDayScreenContent"></div>
@@ -7008,6 +7213,48 @@ function showCalendarDay(date){
         >
           VIEW MEAL PLAN
         </button>
+      </div>
+    </div>
+
+    <div class="calendar-day-section-title">Events</div>
+
+    <div class="calendar-day-card">
+      <div class="calendar-event-list">
+        ${
+          getCalendarEvents(selected)
+            .map(
+              event=>`
+                <div class="calendar-event-item">
+                  <div class="calendar-event-icon">📅</div>
+                  <div class="calendar-event-main">
+                    <div class="calendar-event-title">
+                      ${escapeCalendarEventText(event.title)}
+                    </div>
+                    ${
+                      event.time
+                        ?`<div class="calendar-event-time">${escapeCalendarEventText(event.time)}</div>`
+                        :""
+                    }
+                    ${
+                      event.notes
+                        ?`<div class="calendar-event-notes">${escapeCalendarEventText(event.notes)}</div>`
+                        :""
+                    }
+                  </div>
+                  <button
+                    type="button"
+                    class="calendar-event-delete"
+                    onclick="deleteCalendarEvent('${escapeCalendarEventText(event.id)}')"
+                    aria-label="Delete event"
+                  >
+                    ×
+                  </button>
+                </div>
+              `
+            )
+            .join("") ||
+          `<div class="calendar-event-empty">No events added for this day yet.</div>`
+        }
       </div>
     </div>
   `;
@@ -12380,6 +12627,216 @@ function addScannedMealOption(meal){
   </div>
 </div>
 
+
+<div id="calendarEventModal" class="calendar-event-modal" aria-hidden="true">
+  <div class="calendar-event-card">
+    <button
+      type="button"
+      class="today-food-close"
+      onclick="closeCalendarEventModal()"
+      aria-label="Close"
+    >×</button>
+
+    <div class="today-tracker-kicker">CALENDAR EVENT</div>
+    <h2>Add an event</h2>
+    <p id="calendarEventModalDate">Add something to this day.</p>
+
+    <label>
+      EVENT NAME
+      <input
+        id="calendarEventTitle"
+        type="text"
+        maxlength="80"
+        autocomplete="off"
+        placeholder="e.g. Dentist appointment"
+      >
+    </label>
+
+    <label>
+      TIME
+      <input
+        id="calendarEventTime"
+        type="time"
+      >
+    </label>
+
+    <label>
+      NOTES
+      <textarea
+        id="calendarEventNotes"
+        maxlength="250"
+        placeholder="Optional notes..."
+      ></textarea>
+    </label>
+
+    <div class="calendar-event-form-actions">
+      <button
+        type="button"
+        class="today-track-btn"
+        onclick="closeCalendarEventModal()"
+      >
+        CANCEL
+      </button>
+
+      <button
+        type="button"
+        class="today-track-btn primary"
+        onclick="saveCalendarEvent()"
+      >
+        + ADD EVENT
+      </button>
+    </div>
+  </div>
+</div>
+
+<script id="calendar-events-system">
+let calendarEvents =
+  JSON.parse(
+    localStorage.getItem("shiftfitCalendarEvents") || "{}"
+  );
+
+function saveCalendarEvents(){
+  localStorage.setItem(
+    "shiftfitCalendarEvents",
+    JSON.stringify(calendarEvents)
+  );
+}
+
+function getCalendarEvents(date){
+  const key = calendarDateKey(new Date(date));
+  return Array.isArray(calendarEvents[key])
+    ? calendarEvents[key]
+    : [];
+}
+
+function escapeCalendarEventText(value){
+  return String(value || "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+function openCalendarEventModal(){
+  const modal =
+    document.getElementById("calendarEventModal");
+
+  if(!modal) return;
+
+  const dateText =
+    document.getElementById("calendarEventModalDate");
+
+  const title =
+    document.getElementById("calendarEventTitle");
+
+  const time =
+    document.getElementById("calendarEventTime");
+
+  const notes =
+    document.getElementById("calendarEventNotes");
+
+  if(dateText){
+    dateText.textContent =
+      calendarSelectedDate.toLocaleDateString(
+        "en-GB",
+        {
+          weekday:"long",
+          day:"numeric",
+          month:"long",
+          year:"numeric"
+        }
+      );
+  }
+
+  if(title) title.value="";
+  if(time) time.value="";
+  if(notes) notes.value="";
+
+  modal.classList.add("show");
+  modal.setAttribute("aria-hidden","false");
+
+  setTimeout(()=>{
+    if(title) title.focus();
+  },50);
+}
+
+function closeCalendarEventModal(){
+  const modal =
+    document.getElementById("calendarEventModal");
+
+  if(!modal) return;
+
+  modal.classList.remove("show");
+  modal.setAttribute("aria-hidden","true");
+}
+
+function saveCalendarEvent(){
+  const titleInput =
+    document.getElementById("calendarEventTitle");
+
+  const timeInput =
+    document.getElementById("calendarEventTime");
+
+  const notesInput =
+    document.getElementById("calendarEventNotes");
+
+  const title =
+    String(titleInput?.value || "").trim();
+
+  if(!title){
+    if(titleInput){
+      titleInput.focus();
+      titleInput.setCustomValidity("Please enter an event name.");
+      titleInput.reportValidity();
+      setTimeout(()=>{
+        titleInput.setCustomValidity("");
+      },1000);
+    }
+    return;
+  }
+
+  const key =
+    calendarDateKey(calendarSelectedDate);
+
+  if(!Array.isArray(calendarEvents[key])){
+    calendarEvents[key]=[];
+  }
+
+  calendarEvents[key].push({
+    id:
+      Date.now().toString(36)+
+      Math.random().toString(36).slice(2,8),
+    title,
+    time:String(timeInput?.value || ""),
+    notes:String(notesInput?.value || "").trim()
+  });
+
+  saveCalendarEvents();
+  closeCalendarEventModal();
+  showCalendarDay(calendarSelectedDate);
+}
+
+function deleteCalendarEvent(id){
+  const key =
+    calendarDateKey(calendarSelectedDate);
+
+  const events =
+    getCalendarEvents(calendarSelectedDate);
+
+  calendarEvents[key] =
+    events.filter(
+      event=>event.id!==id
+    );
+
+  if(calendarEvents[key].length===0){
+    delete calendarEvents[key];
+  }
+
+  saveCalendarEvents();
+  showCalendarDay(calendarSelectedDate);
+}
+</script>
 </body>
 </html>
 <style id="shiftfit-calendar-month-only">
