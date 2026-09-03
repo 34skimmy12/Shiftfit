@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ShiftFit</title>
-<!-- ShiftFit v42: exercise demonstration links -->
+<!-- ShiftFit v43: in-app exercise videos -->
 
 <style>
 :root{
@@ -2321,36 +2321,120 @@ button{
 }
 
 
-/* ShiftFit v42 — exercise demonstration actions */
-.workout-action-buttons{
-  display:flex;
-  align-items:center;
-  justify-content:flex-end;
-  gap:7px;
-  flex-wrap:wrap;
+/* ShiftFit v43 — in-app exercise video player */
+.exercise-video-modal{
+  position:fixed !important;
+  inset:0 !important;
+  z-index:10020 !important;
+  display:none;
+  align-items:center !important;
+  justify-content:center !important;
+  padding:16px !important;
+  box-sizing:border-box !important;
+  background:rgba(2,4,14,.82) !important;
+  backdrop-filter:blur(9px);
+  -webkit-backdrop-filter:blur(9px);
 }
-.workout-video-btn{
+.exercise-video-modal.open{
+  display:flex !important;
+}
+.exercise-video-dialog{
+  width:min(100%,420px);
+  max-height:calc(100dvh - 32px);
+  overflow:auto;
+  box-sizing:border-box;
+  padding:14px;
+  border:1px solid var(--border);
+  border-radius:20px;
+  background:linear-gradient(180deg,#141a34,#090e20);
+  box-shadow:0 24px 70px rgba(0,0,0,.55);
+  position:relative;
+}
+.exercise-video-close{
+  position:absolute;
+  top:10px;
+  right:10px;
+  z-index:3;
+  width:34px;
+  height:34px;
+  min-height:34px;
+  padding:0;
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:50%;
+  background:rgba(4,7,18,.72);
+  color:#fff;
+  font-size:18px;
+  line-height:1;
+}
+.exercise-video-title{
+  padding:2px 44px 10px 3px;
+}
+.exercise-video-title .kicker{
+  color:#8f98b0;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.15em;
+}
+.exercise-video-title h2{
+  margin:5px 0 0;
+  color:var(--text);
+  font-size:20px;
+  line-height:1.12;
+}
+.exercise-video-title p{
+  margin:5px 0 0;
+  color:var(--muted);
+  font-size:10px;
+}
+.exercise-video-frame{
+  width:100%;
+  aspect-ratio:9/16;
+  max-height:58dvh;
+  background:#02040d;
+  border-radius:14px;
+  overflow:hidden;
+  border:1px solid var(--border);
+}
+.exercise-video-frame video{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  background:#02040d;
+}
+.exercise-video-note{
+  margin-top:9px;
+  color:#858da6;
+  font-size:9px;
+  line-height:1.35;
+}
+.exercise-video-actions{
+  display:flex;
+  gap:7px;
+  margin-top:10px;
+}
+.exercise-video-actions button{
+  flex:1;
   min-height:44px;
-  padding:0 13px;
-  border:1px solid rgba(53,223,141,.55);
   border-radius:11px;
-  background:rgba(53,223,141,.08);
-  color:#8ff0bd;
   font-size:10px;
   font-weight:900;
   letter-spacing:.08em;
 }
-.workout-video-btn:active{
-  transform:scale(.98);
+.exercise-video-log{
+  border:1px solid #8b5cf6;
+  background:linear-gradient(135deg,#7c3aed,#5123c5);
+  color:#fff;
+}
+.exercise-video-close-action{
+  border:1px solid var(--border);
+  background:#11172c;
+  color:var(--muted);
 }
 @media(max-width:390px){
-  .workout-action-buttons{
-    gap:5px;
-  }
-  .workout-video-btn{
-    padding:0 9px;
-    font-size:9px;
-  }
+  .exercise-video-modal{padding:10px !important}
+  .exercise-video-dialog{padding:11px;border-radius:17px}
+  .exercise-video-frame{border-radius:12px}
 }
 
 </style>
@@ -10632,6 +10716,53 @@ function renderWorkoutDays(){
 }
 
 
+const inAppExerciseVideos = {
+  "Bench Press":{
+    src:"videos/bench-press.mp4",
+    title:"Barbell Bench Press",
+    note:"In-app demonstration. This is the barbell version of the exercise."
+  },
+  "Lat Pulldown":{
+    src:"videos/lat-pulldown.mp4",
+    title:"Lat Pulldown with V-Grip",
+    note:"In-app demonstration using a V-grip attachment."
+  },
+  "Seated Cable Row":{
+    src:"videos/seated-cable-row.mp4",
+    title:"Seated Cable Row — Neutral Grip",
+    note:"In-app demonstration using a neutral-grip cable row."
+  },
+  "Single-Arm Dumbbell Row":{
+    src:"videos/single-arm-dumbbell-row.mp4",
+    title:"Single Arm Dumbbell Row",
+    note:"In-app demonstration."
+  },
+  "Goblet Squat":{
+    src:"videos/goblet-squat.mp4",
+    title:"Dumbbell Goblet Squat",
+    note:"In-app demonstration."
+  },
+  "Romanian Deadlift":{
+    src:"videos/romanian-deadlift.mp4",
+    title:"Kettlebell Romanian Deadlift",
+    note:"In-app demonstration using a kettlebell variation."
+  },
+  "Tricep Pushdown":{
+    src:"videos/tricep-pushdown.mp4",
+    title:"Cable Tricep Pushdown",
+    note:"In-app demonstration."
+  },
+  "Squat":{
+    src:"videos/squat.mp4",
+    title:"Barbell Back Squat",
+    note:"In-app demonstration of a barbell squat variation."
+  }
+};
+
+function hasInAppExerciseVideo(exerciseName){
+  return !!inAppExerciseVideos[exerciseName];
+}
+
 function openExerciseVideo(event,index){
 
   if(event){
@@ -10652,6 +10783,73 @@ function openExerciseVideo(event,index){
     return;
   }
 
+  const localVideo =
+    inAppExerciseVideos[exercise[0]];
+
+  if(localVideo){
+    const modal =
+      document.getElementById("exerciseVideoModal");
+
+    const video =
+      document.getElementById("exerciseVideoPlayer");
+
+    const title =
+      document.getElementById("exerciseVideoTitle");
+
+    const subtitle =
+      document.getElementById("exerciseVideoSubtitle");
+
+    const note =
+      document.getElementById("exerciseVideoNote");
+
+    if(!modal || !video){
+      return;
+    }
+
+    if(title){
+      title.textContent =
+        localVideo.title;
+    }
+
+    if(subtitle){
+      subtitle.textContent =
+        exercise[0];
+    }
+
+    if(note){
+      note.textContent =
+        localVideo.note;
+    }
+
+    video.pause();
+    video.src =
+      localVideo.src;
+    video.load();
+
+    modal.style.display =
+      "flex";
+
+    modal.setAttribute(
+      "aria-hidden",
+      "false"
+    );
+
+    document.body.classList.add(
+      "shiftfit-modal-open"
+    );
+
+    setTimeout(
+      ()=>{
+        video.play().catch(
+          ()=>{}
+        );
+      },
+      100
+    );
+
+    return;
+  }
+
   const query =
     exercise[0]+
     " proper form exercise demonstration";
@@ -10664,6 +10862,40 @@ function openExerciseVideo(event,index){
     url,
     "_blank",
     "noopener,noreferrer"
+  );
+
+}
+
+function closeExerciseVideo(){
+
+  const modal =
+    document.getElementById(
+      "exerciseVideoModal"
+    );
+
+  const video =
+    document.getElementById(
+      "exerciseVideoPlayer"
+    );
+
+  if(video){
+    video.pause();
+    video.removeAttribute("src");
+    video.load();
+  }
+
+  if(modal){
+    modal.style.display =
+      "none";
+
+    modal.setAttribute(
+      "aria-hidden",
+      "true"
+    );
+  }
+
+  document.body.classList.remove(
+    "shiftfit-modal-open"
   );
 
 }
@@ -10760,13 +10992,27 @@ function renderWorkoutDay(){
                 </div>
 
                 <div class="workout-action-buttons">
-                  <button
-                    type="button"
-                    class="workout-video-btn"
-                    onclick="openExerciseVideo(event,${index})"
-                  >
-                    ▶ DEMO
-                  </button>
+                  ${
+                    hasInAppExerciseVideo(exercise[0])
+                      ? `
+                        <button
+                          type="button"
+                          class="workout-video-btn"
+                          onclick="openExerciseVideo(event,${index})"
+                        >
+                          ▶ WATCH DEMO
+                        </button>
+                      `
+                      : `
+                        <button
+                          type="button"
+                          class="workout-video-btn"
+                          onclick="openExerciseVideo(event,${index})"
+                        >
+                          ▶ DEMO
+                        </button>
+                      `
+                  }
 
                   <button
                     type="button"
@@ -18048,6 +18294,27 @@ function addScannedMealOption(meal){
 
 }
 
+
+document.addEventListener(
+  "keydown",
+  function(event){
+    if(event.key==="Escape"){
+      const modal =
+        document.getElementById(
+          "exerciseVideoModal"
+        );
+
+      if(
+        modal &&
+        modal.style.display==="flex"
+      ){
+        closeExerciseVideo();
+      }
+    }
+  }
+);
+
+
 </script>
 
 
@@ -18578,6 +18845,66 @@ scheduleCalendarEventNotifications();
 <script id="shiftfit-workout-logging-init">
 /* ShiftFit v40 workout logging is initialized lazily by renderWorkoutDay(). */
 </script>
+
+
+<div
+  id="exerciseVideoModal"
+  class="exercise-video-modal"
+  aria-hidden="true"
+  onclick="if(event.target===this) closeExerciseVideo()"
+>
+  <div
+    class="exercise-video-dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="exerciseVideoTitle"
+  >
+    <button
+      type="button"
+      class="exercise-video-close"
+      aria-label="Close exercise video"
+      onclick="closeExerciseVideo()"
+    >×</button>
+
+    <div class="exercise-video-title">
+      <div class="kicker">EXERCISE DEMO</div>
+      <h2 id="exerciseVideoTitle">Exercise</h2>
+      <p id="exerciseVideoSubtitle"></p>
+    </div>
+
+    <div class="exercise-video-frame">
+      <video
+        id="exerciseVideoPlayer"
+        controls
+        playsinline
+        preload="metadata"
+      ></video>
+    </div>
+
+    <div
+      id="exerciseVideoNote"
+      class="exercise-video-note"
+    ></div>
+
+    <div class="exercise-video-actions">
+      <button
+        type="button"
+        class="exercise-video-close-action"
+        onclick="closeExerciseVideo()"
+      >
+        CLOSE
+      </button>
+
+      <button
+        type="button"
+        class="exercise-video-log"
+        onclick="closeExerciseVideo()"
+      >
+        LOG SET
+      </button>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
