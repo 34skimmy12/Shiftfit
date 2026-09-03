@@ -3402,6 +3402,51 @@ button{
 }
 </style>
 
+
+<style id="shiftfit-workout-days-style">
+.workout-day-selector{
+  margin:18px 0 14px;
+  overflow-x:auto;
+  display:flex;
+  gap:8px;
+  padding-bottom:4px;
+}
+.workout-day-selector .day-btn{
+  flex:0 0 78px;
+  min-height:68px;
+  padding:9px 6px;
+}
+.workout-day-title{
+  margin:8px 0 12px;
+  font-size:22px;
+}
+#workoutExerciseList .exercise-card{
+  min-height:0 !important;
+  padding:13px !important;
+  margin-bottom:9px !important;
+}
+#workoutExerciseList .exercise-check{
+  width:42px !important;
+  height:42px !important;
+  min-width:42px !important;
+}
+#workoutExerciseList .exercise-name{
+  font-size:17px !important;
+}
+#workoutExerciseList .exercise-sets{
+  font-size:13px !important;
+  margin-top:3px !important;
+}
+#workoutExerciseList .exercise-tip{
+  font-size:11px !important;
+  line-height:1.35 !important;
+  margin-top:4px !important;
+}
+#workoutExerciseList .exercise-card.completed{
+  border-color:#4ade80 !important;
+}
+</style>
+
 </head>
 
 <body>
@@ -3722,110 +3767,18 @@ button{
 
 </div>
 
-<div
-  class="exercise-card"
-  onclick="toggleExercise(this)"
->
-  <div class="exercise-check"></div>
-
-  <div class="exercise-content">
-    <div class="exercise-name">
-      1. Bench Press
-    </div>
-
-    <div class="exercise-sets">
-      4 sets × 8–10 reps
-    </div>
-
-    <div class="exercise-tip">
-      Control the weight and keep your shoulders stable.
-    </div>
-  </div>
-</div>
 
 <div
-  class="exercise-card"
-  onclick="toggleExercise(this)"
->
-  <div class="exercise-check"></div>
+  class="day-selector workout-day-selector"
+  id="workoutDaySelector"
+></div>
 
-  <div class="exercise-content">
-    <div class="exercise-name">
-      2. Incline Dumbbell Press
-    </div>
+<h2
+  id="workoutDayTitle"
+  class="workout-day-title"
+></h2>
 
-    <div class="exercise-sets">
-      4 sets × 10–12 reps
-    </div>
-
-    <div class="exercise-tip">
-      Keep the movement controlled.
-    </div>
-  </div>
-</div>
-
-<div
-  class="exercise-card"
-  onclick="toggleExercise(this)"
->
-  <div class="exercise-check"></div>
-
-  <div class="exercise-content">
-    <div class="exercise-name">
-      3. Shoulder Press
-    </div>
-
-    <div class="exercise-sets">
-      3 sets × 8–12 reps
-    </div>
-
-    <div class="exercise-tip">
-      Brace your core and press smoothly.
-    </div>
-  </div>
-</div>
-
-<div
-  class="exercise-card"
-  onclick="toggleExercise(this)"
->
-  <div class="exercise-check"></div>
-
-  <div class="exercise-content">
-    <div class="exercise-name">
-      4. Tricep Dips
-    </div>
-
-    <div class="exercise-sets">
-      3 sets × 12–15 reps
-    </div>
-
-    <div class="exercise-tip">
-      Keep control throughout the movement.
-    </div>
-  </div>
-</div>
-
-<div
-  class="exercise-card"
-  onclick="toggleExercise(this)"
->
-  <div class="exercise-check"></div>
-
-  <div class="exercise-content">
-    <div class="exercise-name">
-      5. Chest Flyes
-    </div>
-
-    <div class="exercise-sets">
-      3 sets × 12–15 reps
-    </div>
-
-    <div class="exercise-tip">
-      Use a controlled stretch and squeeze.
-    </div>
-  </div>
-</div>
+<div id="workoutExerciseList"></div>
 
 <button
   id="finishButton"
@@ -6181,6 +6134,9 @@ function showWorkout(){
 
   updateShiftDisplay();
 
+  renderWorkoutDays();
+  renderWorkoutDay();
+
   window.scrollTo(0,0);
 
 }
@@ -7275,6 +7231,299 @@ function showWorkoutSuccess(){
 
 }
 
+
+
+const weeklyWorkouts = [
+  {
+    name:"Push Day",
+    focus:"Push",
+    exercises:[
+      ["Bench Press","4 sets × 8–10 reps","Control the weight and keep your shoulders stable."],
+      ["Incline Dumbbell Press","4 sets × 10–12 reps","Keep the movement controlled."],
+      ["Shoulder Press","3 sets × 8–12 reps","Brace your core and press smoothly."],
+      ["Tricep Dips","3 sets × 12–15 reps","Keep control throughout the movement."],
+      ["Chest Flyes","3 sets × 12–15 reps","Use a controlled stretch and squeeze."]
+    ]
+  },
+  {
+    name:"Pull Day",
+    focus:"Pull",
+    exercises:[
+      ["Lat Pulldown","4 sets × 8–12 reps","Pull toward your upper chest and avoid swinging."],
+      ["Seated Cable Row","4 sets × 10–12 reps","Keep your chest tall and squeeze your back."],
+      ["Single-Arm Dumbbell Row","3 sets × 10–12 reps","Drive your elbow back and stay controlled."],
+      ["Face Pulls","3 sets × 12–15 reps","Pull toward your face and keep your shoulders stable."],
+      ["Dumbbell Curls","3 sets × 10–15 reps","Keep your elbows close to your sides."]
+    ]
+  },
+  {
+    name:"Leg Day",
+    focus:"Legs",
+    exercises:[
+      ["Goblet Squat","4 sets × 8–12 reps","Keep your chest up and knees tracking over your toes."],
+      ["Romanian Deadlift","4 sets × 8–12 reps","Hinge at the hips and keep the back neutral."],
+      ["Leg Press","3 sets × 10–15 reps","Lower under control and drive through your feet."],
+      ["Walking Lunges","3 sets × 10 each leg","Take steady steps and stay balanced."],
+      ["Calf Raises","3 sets × 12–20 reps","Pause briefly at the top of each rep."]
+    ]
+  },
+  {
+    name:"Upper Body",
+    focus:"Upper",
+    exercises:[
+      ["Dumbbell Bench Press","3 sets × 8–12 reps","Keep your shoulders packed and press smoothly."],
+      ["Lat Pulldown","3 sets × 8–12 reps","Keep your torso steady as you pull."],
+      ["Seated Shoulder Press","3 sets × 10–12 reps","Brace your core and avoid overextending."],
+      ["Cable Row","3 sets × 10–12 reps","Squeeze your shoulder blades together."],
+      ["Tricep Pushdown","3 sets × 12–15 reps","Keep your elbows tucked in."]
+    ]
+  },
+  {
+    name:"Lower Body",
+    focus:"Lower",
+    exercises:[
+      ["Leg Press","4 sets × 8–12 reps","Use a comfortable depth and controlled tempo."],
+      ["Hip Thrust","4 sets × 8–12 reps","Drive through your heels and squeeze at the top."],
+      ["Leg Curl","3 sets × 10–15 reps","Control the return on every rep."],
+      ["Leg Extension","3 sets × 12–15 reps","Pause briefly as you straighten your legs."],
+      ["Calf Raises","3 sets × 12–20 reps","Use a full comfortable range of motion."]
+    ]
+  },
+  {
+    name:"Full Body",
+    focus:"Full Body",
+    exercises:[
+      ["Squat","3 sets × 8–10 reps","Stay braced and keep the movement controlled."],
+      ["Dumbbell Press","3 sets × 8–12 reps","Keep your wrists stacked and press smoothly."],
+      ["Cable Row","3 sets × 10–12 reps","Pull with your elbows and control the return."],
+      ["Romanian Deadlift","3 sets × 8–12 reps","Hinge at the hips with a neutral spine."],
+      ["Plank","3 sets × 30–60 sec","Keep your body in a straight line and brace your core."]
+    ]
+  },
+  {
+    name:"Recovery Day",
+    focus:"Recovery",
+    exercises:[
+      ["Easy Walk","20–30 min","Keep the pace comfortable and focus on recovery."],
+      ["Mobility Flow","10 min","Move slowly through your comfortable range."],
+      ["Bodyweight Squat","2 sets × 10 reps","Use an easy range and stay controlled."],
+      ["Hip Mobility","5 min","Spend time gently opening the hips."],
+      ["Shoulder Mobility","5 min","Use slow, pain-free movements."]
+    ]
+  }
+];
+
+let workoutDay = currentDay;
+let workoutCompleted = {};
+
+function renderWorkoutDays(){
+
+  const selector =
+    document.getElementById(
+      "workoutDaySelector"
+    );
+
+  if(!selector) return;
+
+  selector.innerHTML = "";
+
+  days.forEach((day,index)=>{
+
+    const btn =
+      document.createElement("button");
+
+    const todayIndex =
+      new Date().getDay()===0
+        ?6
+        :new Date().getDay()-1;
+
+    btn.className =
+      "day-btn"+
+      (index===workoutDay ? " active" : "")+
+      (index===todayIndex ? " today" : "");
+
+    btn.innerHTML =
+      day.name+
+      "<strong>"+
+      day.date+
+      "</strong>";
+
+    btn.onclick = ()=>{
+
+      workoutDay = index;
+      currentDay = index;
+
+      renderWorkoutDays();
+      renderWorkoutDay();
+
+    };
+
+    selector.appendChild(btn);
+
+  });
+
+}
+
+function renderWorkoutDay(){
+
+  const workout =
+    weeklyWorkouts[
+      workoutDay
+    ] ||
+    weeklyWorkouts[0];
+
+  const title =
+    document.getElementById(
+      "workoutDayTitle"
+    );
+
+  const header =
+    document.querySelector(
+      ".workout-header h1"
+    );
+
+  const kicker =
+    document.querySelector(
+      ".workout-day"
+    );
+
+  const focus =
+    document.querySelector(
+      ".workout-stat:nth-child(3) strong"
+    );
+
+  const list =
+    document.getElementById(
+      "workoutExerciseList"
+    );
+
+  if(title){
+    title.textContent =
+      days[workoutDay].name+
+      "'s Workout";
+  }
+
+  if(header){
+    header.textContent =
+      workout.name;
+  }
+
+  if(kicker){
+    kicker.textContent =
+      days[workoutDay].name.toUpperCase()+
+      " • WORKOUT";
+  }
+
+  if(focus){
+    focus.textContent =
+      workout.focus;
+  }
+
+  if(!list) return;
+
+  list.innerHTML =
+    workout.exercises.map(
+      (exercise,index)=>`
+
+        <div
+          class="exercise-card ${
+            workoutCompleted[workoutDay] &&
+            workoutCompleted[workoutDay][index]
+              ? "completed"
+              : ""
+          }"
+          onclick="toggleWorkoutExercise(${index})"
+        >
+
+          <div class="exercise-check">
+            ${
+              workoutCompleted[workoutDay] &&
+              workoutCompleted[workoutDay][index]
+                ? "✓"
+                : ""
+            }
+          </div>
+
+          <div class="exercise-content">
+
+            <div class="exercise-name">
+              ${index+1}. ${exercise[0]}
+            </div>
+
+            <div class="exercise-sets">
+              ${exercise[1]}
+            </div>
+
+            <div class="exercise-tip">
+              ${exercise[2]}
+            </div>
+
+          </div>
+
+        </div>
+      `
+    ).join("");
+
+  updateWorkoutDayProgress();
+
+}
+
+function toggleWorkoutExercise(index){
+
+  if(!workoutCompleted[workoutDay]){
+    workoutCompleted[workoutDay] = {};
+  }
+
+  workoutCompleted[workoutDay][index] =
+    !workoutCompleted[workoutDay][index];
+
+  renderWorkoutDay();
+
+}
+
+function updateWorkoutDayProgress(){
+
+  const total =
+    weeklyWorkouts[workoutDay].exercises.length;
+
+  const done =
+    Object.values(
+      workoutCompleted[workoutDay] || {}
+    ).filter(Boolean).length;
+
+  const text =
+    document.getElementById(
+      "workoutProgressText"
+    );
+
+  const fill =
+    document.getElementById(
+      "workoutProgressFill"
+    );
+
+  const finish =
+    document.getElementById(
+      "finishButton"
+    );
+
+  if(text){
+    text.textContent =
+      done+" / "+total;
+  }
+
+  if(fill){
+    fill.style.width =
+      Math.round(
+        (done/total)*100
+      )+"%";
+  }
+
+  if(finish){
+    finish.disabled =
+      done!==total;
+  }
+
+}
 
 function finishWorkout(){
 
@@ -11284,26 +11533,55 @@ async function loadBarcodeLibrary(){
       const script =
         document.createElement("script");
 
-      script.src =
-        "https://cdn.jsdelivr.net/npm/@zxing/browser@0.1.5/umd/index.min.js";
+      const sources = [
+        "https://cdn.jsdelivr.net/npm/@zxing/browser@0.1.5/umd/index.min.js",
+        "https://unpkg.com/@zxing/browser@0.1.5/umd/index.min.js"
+      ];
+
+      let sourceIndex = 0;
+
+      function tryNextSource(){
+
+        script.src =
+          sources[sourceIndex];
+
+        script.onload = ()=>{
+
+          if(window.ZXingBrowser){
+            resolve(window.ZXingBrowser);
+            return;
+          }
+
+          sourceIndex++;
+
+          if(sourceIndex < sources.length){
+            tryNextSource();
+          }else{
+            reject(
+              new Error("Barcode library did not load")
+            );
+          }
+
+        };
+
+        script.onerror = ()=>{
+
+          sourceIndex++;
+
+          if(sourceIndex < sources.length){
+            tryNextSource();
+          }else{
+            reject(
+              new Error("Barcode library failed to load")
+            );
+          }
+
+        };
+
+      }
 
       script.async = true;
-
-      script.onload = ()=>{
-        if(window.ZXingBrowser){
-          resolve(window.ZXingBrowser);
-        }else{
-          reject(
-            new Error("Barcode library did not load")
-          );
-        }
-      };
-
-      script.onerror = ()=>{
-        reject(
-          new Error("Barcode library failed to load")
-        );
-      };
+      tryNextSource();
 
       document.head.appendChild(script);
 
