@@ -12754,7 +12754,7 @@ async function handleBarcodePhoto(file){
     if(message){
 
       message.textContent =
-        "I couldn't read that photo. Retake it with the barcode filling most of the picture and keep it straight.";
+        "I couldn't read that photo. Move closer, use good light, and make the barcode fill most of the picture. You can also crop the photo so only the barcode is visible.";
     }
 
   }catch(error){
@@ -12783,71 +12783,59 @@ function createBarcodeImageVariants(file){
     const image = new Image();
     const objectUrl = URL.createObjectURL(file);
 
-    image.onload = ()=>{
+    image.onload = async ()=>{
 
-      try{
+      const naturalWidth =
+        Math.max(1,image.naturalWidth || image.width);
 
-        const naturalWidth =
-          Math.max(1,image.naturalWidth || image.width);
+      const naturalHeight =
+        Math.max(1,image.naturalHeight || image.height);
 
-        const naturalHeight =
-          Math.max(1,image.naturalHeight || image.height);
+      const jobs = [];
 
-        const variants = [];
+      /* Wait for every canvas image to finish before scanning.
+         The previous version could start scanning too early. */
+      const makeVariant = (angle,crop,contrast,threshold,quality)=>{
 
-        /*
-          The first pass uses the original photo. The remaining passes
-          resize, enhance, rotate and crop it so labels photographed
-          sideways or with glare have a much better chance of decoding.
-        */
+        return new Promise((finish)=>{
 
-        variants.push(file);
-
-        const makeVariant =
-          (angle, crop, contrast, threshold, quality)=>{
+          try{
 
             const swap =
               angle===90 || angle===270;
 
-            const sourceWidth =
-              crop
-                ? Math.max(1,Math.round(naturalWidth*crop.w))
-                : naturalWidth;
+            const sx = crop
+              ? Math.round(naturalWidth*crop.x)
+              : 0;
 
-            const sourceHeight =
-              crop
-                ? Math.max(1,Math.round(naturalHeight*crop.h))
-                : naturalHeight;
+            const sy = crop
+              ? Math.round(naturalHeight*crop.y)
+              : 0;
 
-            const maxDimension = 2400;
+            const sw = crop
+              ? Math.max(1,Math.round(naturalWidth*crop.w))
+              : naturalWidth;
 
-            const baseScale =
+            const sh = crop
+              ? Math.max(1,Math.round(naturalHeight*crop.h))
+              : naturalHeight;
+
+            const maxDimension = 3200;
+
+            const scale =
               Math.min(
-                1,
-                maxDimension /
-                Math.max(sourceWidth,sourceHeight)
+                1.5,
+                maxDimension/Math.max(sw,sh)
               );
 
-            const drawWidth =
-              Math.max(
-                1,
-                Math.round(sourceWidth*baseScale)
-              );
-
-            const drawHeight =
-              Math.max(
-                1,
-                Math.round(sourceHeight*baseScale)
-              );
+            const dw = Math.max(1,Math.round(sw*scale));
+            const dh = Math.max(1,Math.round(sh*scale));
 
             const canvas =
               document.createElement("canvas");
 
-            canvas.width =
-              swap ? drawHeight : drawWidth;
-
-            canvas.height =
-              swap ? drawWidth : drawHeight;
+            canvas.width = swap ? dh : dw;
+            canvas.height = swap ? dw : dh;
 
             const context =
               canvas.getContext(
@@ -12855,7 +12843,10 @@ function createBarcodeImageVariants(file){
                 {willReadFrequently:true}
               );
 
-            if(!context) return;
+            if(!context){
+              finish(null);
+              return;
+            }
 
             context.save();
 
@@ -12868,35 +12859,17 @@ function createBarcodeImageVariants(file){
               angle*Math.PI/180
             );
 
-            if(crop){
-
-              context.drawImage(
-                image,
-                Math.round(
-                  naturalWidth*crop.x
-                ),
-                Math.round(
-                  naturalHeight*crop.y
-                ),
-                sourceWidth,
-                sourceHeight,
-                -drawWidth/2,
-                -drawHeight/2,
-                drawWidth,
-                drawHeight
-              );
-
-            }else{
-
-              context.drawImage(
-                image,
-                -drawWidth/2,
-                -drawHeight/2,
-                drawWidth,
-                drawHeight
-              );
-
-            }
+            context.drawImage(
+              image,
+              sx,
+              sy,
+              sw,
+              sh,
+              -dw/2,
+              -dh/2,
+              dw,
+              dh
+            );
 
             context.restore();
 
@@ -12914,6 +12887,7 @@ function createBarcodeImageVariants(file){
 
             }catch(error){
 
+              finish(null);
               return;
 
             }
@@ -12931,12 +12905,8 @@ function createBarcodeImageVariants(file){
                 ((grey-128)*contrast)+128;
 
               if(threshold){
-
                 value =
-                  value >= threshold
-                    ? 255
-                    : 0;
-
+                  value>=threshold ? 255 : 0;
               }
 
               value =
@@ -12945,92 +12915,116 @@ function createBarcodeImageVariants(file){
                   Math.min(255,value)
                 );
 
-              data[i] = value;
-              data[i+1] = value;
-              data[i+2] = value;
+              data[i]=value;
+              data[i+1]=value;
+              data[i+2]=value;
 
             }
 
-            context.putImageData(
-              pixels,
-              0,
-              0
-            );
+            context.putImageData(pixels,0,0);
 
             canvas.toBlob(
               blob=>{
 
-                if(!blob) return;
+                if(!blob){
+                  finish(null);
+                  return;
+                }
 
                 try{
 
-                  variants.push(
+                  finish(
                     new File(
                       [blob],
-                      "shiftfit-barcode-"+variants.length+".jpg",
+                      "shiftfit-barcode-"+Date.now()+"-"+Math.random()+".jpg",
                       {type:"image/jpeg"}
                     )
                   );
 
-                }catch(error){}
+                }catch(error){
+
+                  finish(null);
+
+                }
 
               },
               "image/jpeg",
               quality
             );
 
-          };
+          }catch(error){
 
-        /*
-          Build several independent attempts. They are deliberately
-          varied because a supermarket label may be photographed
-          sideways, upside down, far away, or with glare.
-        */
+            finish(null);
 
-        makeVariant(0,null,1.65,null,.94);
-        makeVariant(90,null,1.65,null,.94);
-        makeVariant(270,null,1.65,null,.94);
-        makeVariant(180,null,1.65,null,.94);
+          }
 
-        /* Center crop: useful when the barcode occupies only part
-           of a large package photo. */
-        makeVariant(
-          0,
-          {x:.12,y:.18,w:.76,h:.64},
-          1.75,
-          null,
-          .94
+        });
+
+      };
+
+      /* Original orientations. */
+      jobs.push(makeVariant(0,null,1.45,null,.96));
+      jobs.push(makeVariant(90,null,1.45,null,.96));
+      jobs.push(makeVariant(180,null,1.45,null,.96));
+      jobs.push(makeVariant(270,null,1.45,null,.96));
+
+      /*
+        The barcode in the user's test photo is in the lower part
+        of the package, so scan several lower/centre crops as well.
+      */
+      const crops = [
+        {x:0,y:.40,w:1,h:.60},
+        {x:0,y:.50,w:1,h:.50},
+        {x:.05,y:.35,w:.90,h:.65},
+        {x:.05,y:.50,w:.90,h:.50},
+        {x:.15,y:.55,w:.70,h:.40}
+      ];
+
+      for(const crop of crops){
+
+        jobs.push(
+          makeVariant(0,crop,1.65,null,.96)
         );
 
-        makeVariant(
-          90,
-          {x:.12,y:.18,w:.76,h:.64},
-          1.75,
-          null,
-          .94
+        jobs.push(
+          makeVariant(90,crop,1.65,null,.96)
         );
-
-        /* Strong black/white pass for clean printed barcodes. */
-        makeVariant(0,null,2.0,145,.94);
-        makeVariant(90,null,2.0,145,.94);
-
-        URL.revokeObjectURL(objectUrl);
-
-        /*
-          Canvas.toBlob is asynchronous, so allow the generated
-          variants a moment to enter the array before scanning.
-        */
-        setTimeout(
-          ()=>resolve(variants),
-          180
-        );
-
-      }catch(error){
-
-        URL.revokeObjectURL(objectUrl);
-        resolve([file]);
 
       }
+
+      /* High-contrast barcode passes. */
+      jobs.push(
+        makeVariant(
+          0,
+          {x:0,y:.40,w:1,h:.60},
+          2.1,
+          150,
+          .96
+        )
+      );
+
+      jobs.push(
+        makeVariant(
+          90,
+          {x:0,y:.40,w:1,h:.60},
+          2.1,
+          150,
+          .96
+        )
+      );
+
+      const generated =
+        await Promise.all(jobs);
+
+      URL.revokeObjectURL(objectUrl);
+
+      const variants = [file];
+
+      generated.forEach(item=>{
+        if(item) variants.push(item);
+      });
+
+      resolve(variants);
 
     };
 
