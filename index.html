@@ -5618,16 +5618,6 @@ function renderCalendar(){
       "calendarMonthGrid"
     );
 
-  const schedule =
-    document.getElementById(
-      "calendarSchedule"
-    );
-
-  const title =
-    document.getElementById(
-      "calendarDayTitle"
-    );
-
   const monthTitle =
     document.getElementById(
       "calendarMonthTitle"
@@ -5640,8 +5630,6 @@ function renderCalendar(){
 
   if(
     !grid ||
-    !schedule ||
-    !title ||
     !monthTitle
   ) return;
 
