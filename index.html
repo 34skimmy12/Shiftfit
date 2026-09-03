@@ -560,6 +560,753 @@ button{
 
 /* CALENDAR */
 
+let calendarSelectedDate = new Date();
+let calendarViewDate = new Date();
+let calendarShiftSchedule =
+  JSON.parse(
+    localStorage.getItem("shiftfitCalendarShifts") || "{}"
+  );
+
+
+function calendarDateKey(date){
+
+  const y =
+    date.getFullYear();
+
+  const m =
+    String(
+      date.getMonth()+1
+    ).padStart(2,"0");
+
+  const d =
+    String(
+      date.getDate()
+    ).padStart(2,"0");
+
+  return y+"-"+m+"-"+d;
+
+}
+
+
+function startOfWeek(date){
+
+  const result =
+    new Date(date);
+
+  const day =
+    result.getDay();
+
+  const diff =
+    day===0
+      ?-6
+      :1-day;
+
+  result.setDate(
+    result.getDate()+diff
+  );
+
+  result.setHours(
+    0,0,0,0
+  );
+
+  return result;
+
+}
+
+
+function formatCalendarDate(date){
+
+  return date.toLocaleDateString(
+    "en-GB",
+    {
+      day:"numeric",
+      month:"short"
+    }
+  );
+
+}
+
+
+function getCalendarDayIndex(date){
+
+  const monday =
+    startOfWeek(
+      new Date()
+    );
+
+  const selected =
+    new Date(date);
+
+  selected.setHours(
+    0,0,0,0
+  );
+
+  return Math.max(
+    0,
+    Math.min(
+      6,
+      Math.round(
+        (
+          selected-monday
+        )/
+        86400000
+      )
+    )
+  );
+
+}
+
+
+function selectCalendarDate(date){
+
+  calendarSelectedDate =
+    new Date(date);
+
+  renderCalendar();
+
+}
+
+
+function changeCalendarMonth(direction){
+
+  calendarViewDate =
+    new Date(
+      calendarViewDate.getFullYear(),
+      calendarViewDate.getMonth()+direction,
+      1
+    );
+
+  renderCalendar();
+
+}
+
+
+function getGeneratedShift(date){
+
+  const value =
+    calendarShiftSchedule[
+      calendarDateKey(date)
+    ];
+
+  if(!value) return null;
+
+  return value;
+
+}
+
+
+function getShiftForCalendarDate(date){
+
+  const generated =
+    getGeneratedShift(date);
+
+  if(generated){
+
+    return shiftOptions[
+      generated
+    ] || shiftOptions.day;
+
+  }
+
+  if(
+    date.toDateString()===
+    new Date().toDateString()
+  ){
+
+    return getCurrentShift();
+
+  }
+
+  return {
+    name:"Rest Day",
+    time:"No shift scheduled"
+  };
+
+}
+
+
+function getShiftKeyForCalendarDate(date){
+
+  const generated =
+    getGeneratedShift(date);
+
+  if(generated) return generated;
+
+  if(
+    date.toDateString()===
+    new Date().toDateString()
+  ){
+
+    return selectedShift;
+
+  }
+
+  return "rest";
+
+}
+
+
+function getWorkoutForShiftKey(key){
+
+  if(key==="custom"){
+
+    return calculateCustomWorkout();
+
+  }
+
+  return workoutSchedule[
+    key
+  ] || workoutSchedule.rest;
+
+}
+
+
+function renderCalendar(){
+
+  const grid =
+    document.getElementById(
+      "calendarMonthGrid"
+    );
+
+  const schedule =
+    document.getElementById(
+      "calendarSchedule"
+    );
+
+  const title =
+    document.getElementById(
+      "calendarDayTitle"
+    );
+
+  const monthTitle =
+    document.getElementById(
+      "calendarMonthTitle"
+    );
+
+  const startInput =
+    document.getElementById(
+      "shiftGeneratorStart"
+    );
+
+  if(
+    !grid ||
+    !schedule ||
+    !title ||
+    !monthTitle
+  ) return;
+
+  if(
+    startInput &&
+    !startInput.value
+  ){
+
+    startInput.value =
+      calendarDateKey(
+        new Date()
+      );
+
+  }
+
+  monthTitle.textContent =
+    calendarViewDate.toLocaleDateString(
+      "en-GB",
+      {
+        month:"long",
+        year:"numeric"
+      }
+    );
+
+  const firstDay =
+    new Date(
+      calendarViewDate.getFullYear(),
+      calendarViewDate.getMonth(),
+      1
+    );
+
+  const lastDay =
+    new Date(
+      calendarViewDate.getFullYear(),
+      calendarViewDate.getMonth()+1,
+      0
+    );
+
+  let mondayOffset =
+    firstDay.getDay()-1;
+
+  if(mondayOffset<0){
+
+    mondayOffset=6;
+
+  }
+
+  const cells =
+    Math.ceil(
+      (
+        mondayOffset+
+        lastDay.getDate()
+      )/
+      7
+    )*7;
+
+  const today =
+    new Date();
+
+  today.setHours(
+    0,0,0,0
+  );
+
+  grid.innerHTML="";
+
+  for(let i=0;i<cells;i++){
+
+    const date =
+      new Date(
+        calendarViewDate.getFullYear(),
+        calendarViewDate.getMonth(),
+        1+i-mondayOffset
+      );
+
+    const key =
+      calendarDateKey(date);
+
+    const isCurrentMonth =
+      date.getMonth()===
+      calendarViewDate.getMonth();
+
+    const isToday =
+      date.getTime()===
+      today.getTime();
+
+    const isSelected =
+      date.toDateString()===
+      calendarSelectedDate.toDateString();
+
+    const shiftKey =
+      getShiftKeyForCalendarDate(
+        date
+      );
+
+    const shift =
+      getShiftForCalendarDate(
+        date
+      );
+
+    let pillClass =
+      "rest";
+
+    let pillText =
+      "REST";
+
+    if(shiftKey==="day"){
+
+      pillClass="day";
+      pillText="DAY";
+
+    }else if(shiftKey==="night"){
+
+      pillClass="night";
+      pillText="NIGHT";
+
+    }else if(shiftKey==="custom"){
+
+      pillClass="custom";
+      pillText="CUSTOM";
+
+    }
+
+    const cell =
+      document.createElement(
+        "button"
+      );
+
+    cell.type="button";
+
+    cell.className =
+      "calendar-cell"+
+      (!isCurrentMonth
+        ?" other-month":"")+
+      (isToday
+        ?" today":"")+
+      (isSelected
+        ?" selected":"");
+
+    cell.innerHTML=`
+      ${isToday?'<span class="calendar-dot"></span>':''}
+      <span class="calendar-date-number">${date.getDate()}</span>
+      <span class="calendar-shift-pill ${pillClass}">
+        ${pillText}
+      </span>
+    `;
+
+    cell.title =
+      shift.name+
+      (
+        shift.time
+          ?" • "+shift.time
+          :""
+      );
+
+    cell.onclick=function(){
+
+      selectCalendarDate(
+        date
+      );
+
+    };
+
+    grid.appendChild(
+      cell
+    );
+
+  }
+
+  const selected =
+    new Date(
+      calendarSelectedDate
+    );
+
+  const selectedName =
+    selected.toLocaleDateString(
+      "en-GB",
+      {weekday:"long"}
+    );
+
+  const selectedShiftKey =
+    getShiftKeyForCalendarDate(
+      selected
+    );
+
+  const shift =
+    getShiftForCalendarDate(
+      selected
+    );
+
+  const workout =
+    getWorkoutForShiftKey(
+      selectedShiftKey
+    );
+
+  const isToday =
+    selected.toDateString()===
+    today.toDateString();
+
+  title.textContent =
+    isToday
+      ?"Today's Schedule"
+      :selectedName+"'s Schedule";
+
+  const dayIndex =
+    getCalendarDayIndex(
+      selected
+    );
+
+  const meals =
+    weeklyMeals[dayIndex]||
+    weeklyMeals[0];
+
+  const mealData = [
+    {
+      type:"BREAKFAST",
+      name:mealOptions.breakfast[meals.breakfast].name,
+      emoji:mealOptions.breakfast[meals.breakfast].emoji,
+      calories:mealOptions.breakfast[meals.breakfast].calories
+    },
+    {
+      type:"LUNCH",
+      name:mealOptions.lunch[meals.lunch].name,
+      emoji:mealOptions.lunch[meals.lunch].emoji,
+      calories:mealOptions.lunch[meals.lunch].calories
+    },
+    {
+      type:"DINNER",
+      name:mealOptions.dinner[meals.dinner].name,
+      emoji:mealOptions.dinner[meals.dinner].emoji,
+      calories:mealOptions.dinner[meals.dinner].calories
+    }
+  ];
+
+  const shiftCard = `
+    <div class="calendar-card">
+      <div class="calendar-card-top">
+        <div class="calendar-card-icon">🕐</div>
+        <div>
+          <div class="calendar-card-label">WORK SHIFT</div>
+          <div class="calendar-card-title">${shift.name}</div>
+          <div class="calendar-card-detail">
+            ${shift.time}
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  const workoutCard = `
+    <div class="calendar-card">
+      <div class="calendar-card-top">
+        <div class="calendar-card-icon">🏋️</div>
+        <div>
+          <div class="calendar-card-label">TRAINING</div>
+          <div class="calendar-card-title">
+            ${selectedShiftKey==="rest"?"Recovery Day":"Push Day"}
+          </div>
+          <div class="calendar-card-detail">
+            ${workout.description}
+          </div>
+        </div>
+      </div>
+
+      <div class="calendar-time">
+        ${workout.time}
+      </div>
+
+      <div class="calendar-actions">
+
+        <button
+          class="calendar-action-btn primary"
+          onclick="showWorkout()"
+        >
+          OPEN WORKOUT
+        </button>
+
+        <button
+          class="calendar-action-btn"
+          onclick="showMeals()"
+        >
+          VIEW MEALS
+        </button>
+
+      </div>
+
+    </div>
+  `;
+
+  const mealCards =
+    mealData.map(
+      meal=>`
+        <div class="calendar-card">
+          <div class="calendar-card-top">
+            <div class="calendar-card-icon">${meal.emoji}</div>
+            <div>
+              <div class="calendar-card-label">${meal.type}</div>
+              <div class="calendar-card-title">${meal.name}</div>
+              <div class="calendar-card-detail">
+                ${meal.calories} kcal
+              </div>
+            </div>
+          </div>
+        </div>
+      `
+    ).join("");
+
+  schedule.innerHTML =
+    shiftCard+
+    workoutCard+
+    `<div class="calendar-section-title">Meals</div>`+
+    mealCards;
+
+}
+
+
+function generateCalendarShifts(){
+
+  const startInput =
+    document.getElementById(
+      "shiftGeneratorStart"
+    );
+
+  const patternInput =
+    document.getElementById(
+      "shiftGeneratorPattern"
+    );
+
+  if(
+    !startInput ||
+    !startInput.value ||
+    !patternInput
+  ){
+
+    alert(
+      "Please choose a start date and rotation."
+    );
+
+    return;
+
+  }
+
+  const start =
+    new Date(
+      startInput.value+"T00:00:00"
+    );
+
+  if(
+    Number.isNaN(
+      start.getTime()
+    )
+  ){
+
+    alert(
+      "Please choose a valid start date."
+    );
+
+    return;
+
+  }
+
+  const patterns = {
+
+    "4day4rest":[
+      "day","day","day","day",
+      "rest","rest","rest","rest"
+    ],
+
+    "4night4rest":[
+      "night","night","night","night",
+      "rest","rest","rest","rest"
+    ],
+
+    "2day2night4rest":[
+      "day","day",
+      "night","night",
+      "rest","rest","rest","rest"
+    ],
+
+    "5day2rest":[
+      "day","day","day","day","day",
+      "rest","rest"
+    ]
+
+  };
+
+  const pattern =
+    patterns[
+      patternInput.value
+    ];
+
+  if(!pattern) return;
+
+  const nextSchedule = {
+    ...calendarShiftSchedule
+  };
+
+  /*
+   * Generate a full year around the chosen
+   * start date so the month calendar always
+   * has enough schedule data when navigating.
+   */
+
+  for(let i=0;i<366;i++){
+
+    const date =
+      new Date(start);
+
+    date.setDate(
+      start.getDate()+i
+    );
+
+    nextSchedule[
+      calendarDateKey(date)
+    ] =
+      pattern[
+        i%pattern.length
+      ];
+
+  }
+
+  calendarShiftSchedule =
+    nextSchedule;
+
+  localStorage.setItem(
+    "shiftfitCalendarShifts",
+    JSON.stringify(
+      calendarShiftSchedule
+    )
+  );
+
+  calendarViewDate =
+    new Date(
+      start.getFullYear(),
+      start.getMonth(),
+      1
+    );
+
+  calendarSelectedDate =
+    new Date(start);
+
+  renderCalendar();
+
+  showCalendarSuccess();
+
+}
+
+
+function clearCalendarShifts(){
+
+  calendarShiftSchedule={};
+
+  localStorage.removeItem(
+    "shiftfitCalendarShifts"
+  );
+
+  renderCalendar();
+
+}
+
+
+function showCalendarSuccess(){
+
+  let notice =
+    document.getElementById(
+      "shiftfitCalendarNotice"
+    );
+
+  if(!notice){
+
+    notice =
+      document.createElement("div");
+
+    notice.id =
+      "shiftfitCalendarNotice";
+
+    notice.innerHTML=`
+      <div class="shiftfit-plan-notice-title">
+        ⚡ Shifts generated
+      </div>
+      <div class="shiftfit-plan-notice-text">
+        Your shift rotation has been added to the calendar.
+      </div>
+    `;
+
+    document.body.appendChild(
+      notice
+    );
+
+  }
+
+  notice.classList.remove("show");
+
+  void notice.offsetWidth;
+
+  notice.classList.add("show");
+
+  clearTimeout(
+    window.shiftfitCalendarNoticeTimer
+  );
+
+  window.shiftfitCalendarNoticeTimer =
+    setTimeout(
+      function(){
+
+        notice.classList.remove(
+          "show"
+        );
+
+      },
+      2600
+    );
+
+}
+
+
 /* WORKOUT */
 
 .workout-stats{
@@ -2138,6 +2885,28 @@ button{
   }
 
 }
+
+#shiftfitCalendarNotice{
+  position:fixed;
+  left:20px;
+  right:20px;
+  bottom:92px;
+  z-index:9999;
+  padding:16px 18px;
+  border:1px solid rgba(139,92,246,.55);
+  border-radius:18px;
+  background:rgba(17,22,43,.97);
+  box-shadow:0 14px 40px rgba(0,0,0,.45);
+  backdrop-filter:blur(14px);
+  transform:translateY(18px);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .22s ease, transform .22s ease;
+}
+#shiftfitCalendarNotice.show{
+  opacity:1;
+  transform:translateY(0);
+}
 </style>
 <style id="shiftfit-plan-notice-style">
 #shiftfitPlanNotice{
@@ -3409,25 +4178,148 @@ button{
 <div class="calendar-header">
 
   <div class="shopping-kicker">
-    YOUR SHIFT WEEK
+    YOUR SHIFT CALENDAR
   </div>
 
   <h1>Calendar</h1>
 
   <p>
-    See your shifts, workouts and meals together so you know what's coming next.
+    Plan your shifts, training and meals across the month.
   </p>
 
 </div>
 
-<div
-  class="calendar-week"
-  id="calendarWeek"
-></div>
+<div class="calendar-month-bar">
+
+  <button
+    class="calendar-month-btn"
+    onclick="changeCalendarMonth(-1)"
+    aria-label="Previous month"
+  >
+    ‹
+  </button>
+
+  <div
+    id="calendarMonthTitle"
+    class="calendar-month-title"
+  >
+    Month
+  </div>
+
+  <button
+    class="calendar-month-btn"
+    onclick="changeCalendarMonth(1)"
+    aria-label="Next month"
+  >
+    ›
+  </button>
+
+</div>
+
+<div class="calendar-weekdays">
+  <div class="calendar-weekday">MON</div>
+  <div class="calendar-weekday">TUE</div>
+  <div class="calendar-weekday">WED</div>
+  <div class="calendar-weekday">THU</div>
+  <div class="calendar-weekday">FRI</div>
+  <div class="calendar-weekday">SAT</div>
+  <div class="calendar-weekday">SUN</div>
+</div>
 
 <div
-  class="calendar-section-title"
+  id="calendarMonthGrid"
+  class="calendar-month-grid"
+></div>
+
+<div class="calendar-legend">
+
+  <div class="calendar-legend-item">
+    <span class="calendar-legend-dot" style="background:#7c2d24"></span>
+    Day
+  </div>
+
+  <div class="calendar-legend-item">
+    <span class="calendar-legend-dot" style="background:#174b7e"></span>
+    Night
+  </div>
+
+  <div class="calendar-legend-item">
+    <span class="calendar-legend-dot" style="background:#20263a"></span>
+    Rest
+  </div>
+
+</div>
+
+<div class="calendar-generator">
+
+  <div class="calendar-generator-title">
+    ⚡ Generate Shifts
+  </div>
+
+  <div class="calendar-generator-text">
+    Choose a rotation and ShiftFit will fill the calendar from your start date.
+  </div>
+
+  <div class="calendar-generator-grid">
+
+    <div class="calendar-field">
+
+      <label>START DATE</label>
+
+      <input
+        id="shiftGeneratorStart"
+        type="date"
+      >
+
+    </div>
+
+    <div class="calendar-field">
+
+      <label>ROTATION</label>
+
+      <select id="shiftGeneratorPattern">
+
+        <option value="4day4rest">
+          4 Day / 4 Rest
+        </option>
+
+        <option value="4night4rest">
+          4 Night / 4 Rest
+        </option>
+
+        <option value="2day2night4rest">
+          2 Day / 2 Night / 4 Rest
+        </option>
+
+        <option value="5day2rest">
+          5 Day / 2 Rest
+        </option>
+
+      </select>
+
+    </div>
+
+  </div>
+
+  <button
+    class="calendar-generate-btn"
+    onclick="generateCalendarShifts()"
+  >
+    GENERATE SHIFT ROTATION
+  </button>
+
+  <button
+    class="calendar-clear-btn"
+    onclick="clearCalendarShifts()"
+  >
+    CLEAR GENERATED SHIFTS
+  </button>
+
+</div>
+
+<div
   id="calendarDayTitle"
+  class="calendar-section-title"
 >
   Today's Schedule
 </div>
