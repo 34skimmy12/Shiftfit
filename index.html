@@ -10641,7 +10641,7 @@ function renderWorkoutDay(){
                 <button
                   type="button"
                   class="workout-log-btn"
-                  onclick="openWorkoutSetModal(event,${index})"
+                  data-workout-log-exercise="${index}"
                 >
                   + LOG SET
                 </button>
@@ -10746,15 +10746,10 @@ function formatWorkoutLog(log){
 
 let workoutSetModalExercise = null;
 
-function openWorkoutSetModal(event,index){
-
-  if(event){
-    event.preventDefault();
-    event.stopPropagation();
-  }
+function openWorkoutSetModal(index){
 
   workoutSetModalExercise =
-    index;
+    Number(index);
 
   const workout =
     weeklyWorkouts[workoutDay] ||
@@ -10942,6 +10937,35 @@ function deleteWorkoutSet(event,exerciseIndex,setIndex){
   saveWorkoutLogs();
   renderWorkoutDay();
 }
+
+document.addEventListener(
+  "click",
+  function(event){
+
+    const button =
+      event.target.closest(
+        ".workout-log-btn[data-workout-log-exercise]"
+      );
+
+    if(!button){
+      return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+
+    const index =
+      Number(
+        button.dataset.workoutLogExercise
+      );
+
+    if(Number.isInteger(index)){
+      openWorkoutSetModal(index);
+    }
+
+  },
+  true
+);
 
 function showWorkoutLogNotice(title,text){
 
@@ -18450,7 +18474,7 @@ scheduleCalendarEventNotifications();
 
 
 <script id="shiftfit-workout-logging-init">
-/* ShiftFit v40 workout logging is initialized lazily by renderWorkoutDay(). */
+/* ShiftFit v41 workout logging button fix is initialized lazily by renderWorkoutDay(). */
 </script>
 
 </body>
