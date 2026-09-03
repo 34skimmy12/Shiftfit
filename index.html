@@ -2468,6 +2468,136 @@ button{
 }
 </style>
 
+
+<style>
+#calendarDayScreen{
+  padding-bottom:140px;
+}
+
+.calendar-day-header{
+  margin-bottom:28px;
+}
+
+.calendar-day-header h1{
+  margin:6px 0 8px;
+}
+
+.calendar-day-header p{
+  margin:0;
+}
+
+.calendar-day-section-title{
+  font-size:18px;
+  font-weight:900;
+  letter-spacing:.08em;
+  margin:28px 0 14px;
+  text-transform:uppercase;
+}
+
+.calendar-day-card{
+  background:var(--card,#11162b);
+  border:1px solid var(--border,#303a60);
+  border-radius:28px;
+  padding:22px;
+  margin-bottom:16px;
+  box-sizing:border-box;
+}
+
+.calendar-day-card-top{
+  display:flex;
+  gap:16px;
+  align-items:flex-start;
+}
+
+.calendar-day-card-icon{
+  width:58px;
+  height:58px;
+  min-width:58px;
+  border-radius:18px;
+  display:grid;
+  place-items:center;
+  background:#211d50;
+  font-size:30px;
+}
+
+.calendar-day-card-label{
+  color:#aab1c5;
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:.18em;
+  margin-bottom:6px;
+}
+
+.calendar-day-card-title{
+  color:#f4f5fb;
+  font-size:24px;
+  line-height:1.12;
+  font-weight:900;
+}
+
+.calendar-day-card-detail{
+  color:#aab1c5;
+  font-size:16px;
+  line-height:1.45;
+  margin-top:8px;
+}
+
+.calendar-day-meal{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:15px 0;
+  border-top:1px solid rgba(255,255,255,.08);
+}
+
+.calendar-day-meal:first-child{
+  border-top:0;
+  padding-top:0;
+}
+
+.calendar-day-meal:last-child{
+  padding-bottom:0;
+}
+
+.calendar-day-meal-icon{
+  width:48px;
+  height:48px;
+  min-width:48px;
+  border-radius:15px;
+  display:grid;
+  place-items:center;
+  background:#211d50;
+  font-size:25px;
+}
+
+.calendar-day-meal-label{
+  color:#aab1c5;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.16em;
+}
+
+.calendar-day-meal-name{
+  color:#f4f5fb;
+  font-size:18px;
+  font-weight:800;
+  margin-top:3px;
+}
+
+.calendar-day-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:20px;
+}
+
+@media(max-width:520px){
+  .calendar-day-actions{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+
 </head>
 
 <body>
@@ -3773,19 +3903,6 @@ button{
   </div>
 
 </div>
-
-<div
-  id="calendarDayTitle"
-  class="calendar-section-title"
->
-  Today's Schedule
-</div>
-
-<div
-  id="calendarSchedule"
-></div>
-
-
 <div class="calendar-generator">
 
   <div class="calendar-generator-title">
@@ -3853,6 +3970,31 @@ button{
 
 </div>
 
+
+</section>
+
+
+
+<!-- CALENDAR DAY DETAIL SCREEN -->
+
+<section id="calendarDayScreen" class="screen">
+
+  <button
+    class="back-btn"
+    onclick="showCalendar()"
+  >
+    ← Back to Calendar
+  </button>
+
+  <div class="calendar-day-header">
+    <div class="shopping-kicker">SHIFT DAY</div>
+    <h1 id="calendarDayScreenTitle">Fri 11</h1>
+    <p id="calendarDayScreenSubtitle">
+      Your shift, training and meals for this day.
+    </p>
+  </div>
+
+  <div id="calendarDayScreenContent"></div>
 
 </section>
 
@@ -5370,17 +5512,7 @@ function selectCalendarDate(date){
 
   renderCalendar();
 
-  const schedule =
-    document.getElementById("calendarSchedule");
-
-  if(schedule){
-    setTimeout(function(){
-      schedule.scrollIntoView({
-        behavior:"smooth",
-        block:"start"
-      });
-    },50);
-  }
+  showCalendarDay(calendarSelectedDate);
 
 }
 
@@ -5678,149 +5810,170 @@ function renderCalendar(){
 
   }
 
-  const selected =
-    new Date(
-      calendarSelectedDate
-    );
+}
+function showCalendarDay(date){
 
-  const selectedName =
-    selected.toLocaleDateString(
-      "en-GB",
-      {weekday:"long"}
-    );
+  const screen =
+    document.getElementById("calendarDayScreen");
+
+  const title =
+    document.getElementById("calendarDayScreenTitle");
+
+  const subtitle =
+    document.getElementById("calendarDayScreenSubtitle");
+
+  const content =
+    document.getElementById("calendarDayScreenContent");
+
+  if(!screen || !title || !content) return;
+
+  const selected =
+    new Date(date);
 
   const selectedShiftKey =
-    getShiftKeyForCalendarDate(
-      selected
-    );
+    getShiftKeyForCalendarDate(selected);
 
   const shift =
-    getShiftForCalendarDate(
-      selected
-    );
+    getShiftForCalendarDate(selected);
 
   const workout =
-    getWorkoutForShiftKey(
-      selectedShiftKey
+    getWorkoutForShiftKey(selectedShiftKey);
+
+  const dayName =
+    selected.toLocaleDateString(
+      "en-GB",
+      {weekday:"short"}
     );
 
-  const isToday =
-    selected.toDateString()===
-    today.toDateString();
+  const dayNumber =
+    selected.getDate();
+
+  const monthName =
+    selected.toLocaleDateString(
+      "en-GB",
+      {month:"short"}
+    );
 
   title.textContent =
-    isToday
-      ?"Today's Schedule"
-      :selectedName+"'s Schedule";
+    dayName+" "+dayNumber;
 
-  const dayIndex =
-    getCalendarDayIndex(
-      selected
+  subtitle.textContent =
+    selected.toLocaleDateString(
+      "en-GB",
+      {
+        weekday:"long",
+        day:"numeric",
+        month:"long",
+        year:"numeric"
+      }
     );
 
+  const dayIndex =
+    getCalendarDayIndex(selected);
+
   const meals =
-    weeklyMeals[dayIndex]||
+    weeklyMeals[dayIndex] ||
     weeklyMeals[0];
 
   const mealData = [
     {
       type:"BREAKFAST",
       name:mealOptions.breakfast[meals.breakfast].name,
-      emoji:mealOptions.breakfast[meals.breakfast].emoji,
-      calories:mealOptions.breakfast[meals.breakfast].calories
+      emoji:mealOptions.breakfast[meals.breakfast].emoji
     },
     {
       type:"LUNCH",
       name:mealOptions.lunch[meals.lunch].name,
-      emoji:mealOptions.lunch[meals.lunch].emoji,
-      calories:mealOptions.lunch[meals.lunch].calories
+      emoji:mealOptions.lunch[meals.lunch].emoji
     },
     {
       type:"DINNER",
       name:mealOptions.dinner[meals.dinner].name,
-      emoji:mealOptions.dinner[meals.dinner].emoji,
-      calories:mealOptions.dinner[meals.dinner].calories
+      emoji:mealOptions.dinner[meals.dinner].emoji
     }
   ];
 
-  const shiftCard = `
-    <div class="calendar-card">
-      <div class="calendar-card-top">
-        <div class="calendar-card-icon">🕐</div>
-        <div>
-          <div class="calendar-card-label">WORK SHIFT</div>
-          <div class="calendar-card-title">${shift.name}</div>
-          <div class="calendar-card-detail">
-            ${shift.time}
-          </div>
-        </div>
-      </div>
-    </div>
-  `;
+  const workoutTitle =
+    selectedShiftKey==="rest"
+      ?"Recovery Day"
+      :"Push Day";
 
-  const workoutCard = `
-    <div class="calendar-card">
-      <div class="calendar-card-top">
-        <div class="calendar-card-icon">🏋️</div>
-        <div>
-          <div class="calendar-card-label">TRAINING</div>
-          <div class="calendar-card-title">
-            ${selectedShiftKey==="rest"?"Recovery Day":"Push Day"}
-          </div>
-          <div class="calendar-card-detail">
-            ${workout.description}
-          </div>
-        </div>
-      </div>
+  const workoutButton =
+    selectedShiftKey==="rest"
+      ?`<button class="calendar-action-btn" onclick="showWorkout()">OPEN RECOVERY</button>`
+      :`<button class="calendar-action-btn primary" onclick="showWorkout()">OPEN WORKOUT</button>`;
 
-      <div class="calendar-time">
-        ${workout.time}
-      </div>
-
-      <div class="calendar-actions">
-
-        <button
-          class="calendar-action-btn primary"
-          onclick="showWorkout()"
-        >
-          OPEN WORKOUT
-        </button>
-
-        <button
-          class="calendar-action-btn"
-          onclick="showMeals()"
-        >
-          VIEW MEALS
-        </button>
-
-      </div>
-
-    </div>
-  `;
-
-  const mealCards =
+  const mealRows =
     mealData.map(
       meal=>`
-        <div class="calendar-card">
-          <div class="calendar-card-top">
-            <div class="calendar-card-icon">${meal.emoji}</div>
-            <div>
-              <div class="calendar-card-label">${meal.type}</div>
-              <div class="calendar-card-title">${meal.name}</div>
-              <div class="calendar-card-detail">
-                ${Number.isFinite(Number(meal.calories)) ? Number(meal.calories) + " kcal" : "Included in your meal plan"}
-              </div>
-            </div>
+        <div class="calendar-day-meal">
+          <div class="calendar-day-meal-icon">${meal.emoji}</div>
+          <div>
+            <div class="calendar-day-meal-label">${meal.type}</div>
+            <div class="calendar-day-meal-name">${meal.name}</div>
           </div>
         </div>
       `
     ).join("");
 
-  schedule.innerHTML =
-    shiftCard+
-    workoutCard+
-    `<div class="calendar-section-title">Meals</div>`+
-    mealCards;
+  content.innerHTML = `
+    <div class="calendar-day-section-title">Work Shift</div>
+
+    <div class="calendar-day-card">
+      <div class="calendar-day-card-top">
+        <div class="calendar-day-card-icon">🕐</div>
+        <div>
+          <div class="calendar-day-card-label">WORK SHIFT</div>
+          <div class="calendar-day-card-title">${shift.name}</div>
+          <div class="calendar-day-card-detail">${shift.time}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="calendar-day-section-title">Workout</div>
+
+    <div class="calendar-day-card">
+      <div class="calendar-day-card-top">
+        <div class="calendar-day-card-icon">🏋️</div>
+        <div>
+          <div class="calendar-day-card-label">TRAINING</div>
+          <div class="calendar-day-card-title">${workoutTitle}</div>
+          <div class="calendar-day-card-detail">
+            ${workout.description}
+          </div>
+        </div>
+      </div>
+
+      <div class="calendar-time">${workout.time}</div>
+
+      <div class="calendar-day-actions">
+        ${workoutButton}
+      </div>
+    </div>
+
+    <div class="calendar-day-section-title">Meals</div>
+
+    <div class="calendar-day-card">
+      ${mealRows}
+
+      <div class="calendar-day-actions">
+        <button
+          class="calendar-action-btn"
+          onclick="showMeals()"
+        >
+          VIEW MEAL PLAN
+        </button>
+      </div>
+    </div>
+  `;
+
+  hideAllScreens();
+
+  screen.classList.add("active");
+
+  setNav("calendar");
+
+  window.scrollTo(0,0);
 
 }
 
