@@ -1895,7 +1895,7 @@ button{
   transform:translateX(-50%);
   width:min(500px,100%);
   display:grid;
-  grid-template-columns:repeat(5,1fr);
+  grid-template-columns:repeat(7,1fr);
   background:rgba(5,6,18,.94);
   backdrop-filter:blur(22px);
   border-top:1px solid rgba(139,92,246,.15);
@@ -4291,6 +4291,229 @@ button{
 }
 </style>
 
+
+<style id="shiftfit-progress-v24">
+
+.progress-header{
+  margin:8px 0 16px;
+}
+
+.progress-kicker{
+  font-size:9px;
+  letter-spacing:2px;
+  color:#8f97ae;
+  font-weight:800;
+  margin-bottom:6px;
+}
+
+.progress-header h1{
+  margin:0;
+  font-size:27px;
+  line-height:1.1;
+}
+
+.progress-header p{
+  margin:8px 0 0;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.45;
+}
+
+.progress-hero-card,
+.progress-section-card,
+.progress-coming-card{
+  border:1px solid var(--border);
+  background:linear-gradient(
+    145deg,
+    rgba(20,26,52,.96),
+    rgba(12,16,34,.96)
+  );
+  border-radius:18px;
+  padding:15px;
+  margin-bottom:11px;
+}
+
+.progress-hero-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.progress-hero-label,
+.progress-card-kicker{
+  font-size:8px;
+  letter-spacing:1.6px;
+  color:#8f97ae;
+  font-weight:800;
+}
+
+.progress-goal{
+  margin-top:5px;
+  font-size:21px;
+  font-weight:800;
+}
+
+.progress-goal-icon{
+  width:44px;
+  height:44px;
+  border-radius:13px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(139,92,246,.13);
+  font-size:22px;
+}
+
+.progress-target-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:7px;
+  margin-top:14px;
+}
+
+.progress-target-grid > div{
+  min-width:0;
+  padding:9px 6px;
+  border-radius:11px;
+  background:rgba(255,255,255,.035);
+  text-align:center;
+}
+
+.progress-target-grid span{
+  display:block;
+  font-size:7px;
+  letter-spacing:.8px;
+  color:#8f97ae;
+}
+
+.progress-target-grid strong{
+  display:block;
+  margin-top:4px;
+  font-size:13px;
+}
+
+.progress-section-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.progress-section-head h2{
+  margin:4px 0 0;
+  font-size:17px;
+}
+
+.progress-percent{
+  font-size:15px;
+  font-weight:800;
+}
+
+.progress-bar{
+  width:100%;
+  height:8px;
+  border-radius:99px;
+  background:rgba(255,255,255,.07);
+  overflow:hidden;
+  margin:13px 0 12px;
+}
+
+.progress-bar > div{
+  width:0%;
+  height:100%;
+  border-radius:99px;
+  background:linear-gradient(90deg,#8b5cf6,#b084ff);
+  transition:width .25s ease;
+}
+
+.progress-stat-list{
+  display:flex;
+  flex-direction:column;
+  gap:1px;
+}
+
+.progress-stat-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:9px 0;
+  border-top:1px solid rgba(255,255,255,.05);
+  font-size:11px;
+  color:var(--muted);
+}
+
+.progress-stat-row strong{
+  color:var(--text);
+  font-size:12px;
+  white-space:nowrap;
+}
+
+.progress-coming-card{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:24px;
+}
+
+.progress-coming-icon{
+  width:40px;
+  height:40px;
+  min-width:40px;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(139,92,246,.1);
+  font-size:19px;
+}
+
+.progress-coming-card strong{
+  display:block;
+  font-size:12px;
+}
+
+.progress-coming-card p{
+  margin:4px 0 0;
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.4;
+}
+
+@media(max-width:380px){
+
+  .progress-target-grid{
+    gap:4px;
+  }
+
+  .progress-target-grid > div{
+    padding:8px 3px;
+  }
+
+  .progress-target-grid strong{
+    font-size:12px;
+  }
+
+  .bottom-nav{
+    padding-left:1px;
+    padding-right:1px;
+  }
+
+  .nav-item{
+    gap:3px;
+    padding:4px 0;
+    font-size:8px;
+  }
+
+  .nav-icon{
+    font-size:17px;
+  }
+
+}
+
+</style>
+
 </head>
 
 <body>
@@ -5638,6 +5861,115 @@ button{
 
 <!-- SHOPPING SCREEN -->
 
+
+<!-- PROGRESS -->
+
+<section id="progressScreen" class="screen">
+
+  <div class="progress-header">
+    <div class="progress-kicker">SHIFT FIT PROGRESS</div>
+    <h1>Your Progress</h1>
+    <p>See how your training and nutrition are moving you towards your goal.</p>
+  </div>
+
+  <section class="progress-hero-card">
+    <div class="progress-hero-top">
+      <div>
+        <div class="progress-hero-label">CURRENT GOAL</div>
+        <div class="progress-goal" id="progressGoal">Lose Weight</div>
+      </div>
+      <div class="progress-goal-icon" id="progressGoalIcon">🔥</div>
+    </div>
+
+    <div class="progress-target-grid">
+      <div>
+        <span>CALORIES</span>
+        <strong id="progressCaloriesTarget">0</strong>
+      </div>
+      <div>
+        <span>PROTEIN</span>
+        <strong id="progressProteinTarget">0g</strong>
+      </div>
+      <div>
+        <span>CARBS</span>
+        <strong id="progressCarbsTarget">0g</strong>
+      </div>
+      <div>
+        <span>FAT</span>
+        <strong id="progressFatTarget">0g</strong>
+      </div>
+    </div>
+  </section>
+
+  <section class="progress-section-card">
+
+    <div class="progress-section-head">
+      <div>
+        <div class="progress-card-kicker">TODAY</div>
+        <h2>Nutrition</h2>
+      </div>
+      <div class="progress-percent" id="progressNutritionPercent">0%</div>
+    </div>
+
+    <div class="progress-bar">
+      <div id="progressNutritionFill"></div>
+    </div>
+
+    <div class="progress-stat-list">
+      <div class="progress-stat-row">
+        <span>🔥 Calories eaten</span>
+        <strong id="progressCaloriesEaten">0 kcal</strong>
+      </div>
+      <div class="progress-stat-row">
+        <span>🥩 Protein eaten</span>
+        <strong id="progressProteinEaten">0g</strong>
+      </div>
+      <div class="progress-stat-row">
+        <span>💧 Water</span>
+        <strong id="progressWater">0 / 8</strong>
+      </div>
+    </div>
+
+  </section>
+
+  <section class="progress-section-card">
+
+    <div class="progress-section-head">
+      <div>
+        <div class="progress-card-kicker">TRAINING</div>
+        <h2>Workout Progress</h2>
+      </div>
+      <div class="progress-percent" id="progressWorkoutPercent">0%</div>
+    </div>
+
+    <div class="progress-bar">
+      <div id="progressWorkoutFill"></div>
+    </div>
+
+    <div class="progress-stat-list">
+      <div class="progress-stat-row">
+        <span>🏋️ Exercises completed</span>
+        <strong id="progressExercisesDone">0</strong>
+      </div>
+      <div class="progress-stat-row">
+        <span>📅 Workout days started</span>
+        <strong id="progressWorkoutDays">0 / 7</strong>
+      </div>
+    </div>
+
+  </section>
+
+  <section class="progress-coming-card">
+    <div class="progress-coming-icon">📊</div>
+    <div>
+      <strong>More progress tracking is coming</strong>
+      <p>Weight history, weekly trends and longer-term stats will be added here.</p>
+    </div>
+  </section>
+
+</section>
+
+
 <section id="shoppingScreen" class="screen">
 
 <button
@@ -5831,6 +6163,15 @@ button{
 >
   <span class="nav-icon">🛒</span>
   <span>Shopping</span>
+</button>
+
+<button
+  class="nav-item"
+  id="progressNav"
+  onclick="showProgress()"
+>
+  <span class="nav-icon">📈</span>
+  <span>Progress</span>
 </button>
 
 <button
@@ -7024,6 +7365,14 @@ function setNav(active){
 
   }
 
+  if(active==="progress"){
+
+    document
+      .getElementById("progressNav")
+      .classList.add("active");
+
+  }
+
 }
 
 
@@ -7140,6 +7489,23 @@ function showCalendar(){
   setNav("calendar");
 
   renderCalendar();
+
+  window.scrollTo(0,0);
+
+}
+
+
+function showProgress(){
+
+  hideAllScreens();
+
+  document
+    .getElementById("progressScreen")
+    .classList.add("active");
+
+  setNav("progress");
+
+  renderProgress();
 
   window.scrollTo(0,0);
 
@@ -12436,6 +12802,270 @@ function removeTodayFood(id){
   saveTodayTracker();
   renderTodayTracker();
 }
+
+
+function getProgressPlan(){
+
+  let plan = null;
+
+  try{
+    const saved =
+      localStorage.getItem("shiftfitPlan");
+
+    if(saved){
+      plan = JSON.parse(saved);
+    }
+  }catch(error){
+    plan = null;
+  }
+
+  return plan || {
+    calories:0,
+    protein:0,
+    carbs:0,
+    fat:0
+  };
+
+}
+
+
+function renderProgress(){
+
+  const plan = getProgressPlan();
+
+  const goalNames = {
+    lose:"Lose Weight",
+    maintain:"Maintain",
+    gain:"Build Muscle"
+  };
+
+  const goalIcons = {
+    lose:"🔥",
+    maintain:"⚡",
+    gain:"💪"
+  };
+
+  const goal =
+    plan.goal ||
+    selectedGoal ||
+    "lose";
+
+  const goalEl =
+    document.getElementById("progressGoal");
+
+  const goalIcon =
+    document.getElementById("progressGoalIcon");
+
+  if(goalEl){
+    goalEl.textContent =
+      goalNames[goal] || "Lose Weight";
+  }
+
+  if(goalIcon){
+    goalIcon.textContent =
+      goalIcons[goal] || "🔥";
+  }
+
+  const targets = {
+    calories:Number(plan.calories)||0,
+    protein:Number(plan.protein)||0,
+    carbs:Number(plan.carbs)||0,
+    fat:Number(plan.fat ?? plan.fats)||0
+  };
+
+  const targetEls = {
+    calories:document.getElementById("progressCaloriesTarget"),
+    protein:document.getElementById("progressProteinTarget"),
+    carbs:document.getElementById("progressCarbsTarget"),
+    fat:document.getElementById("progressFatTarget")
+  };
+
+  if(targetEls.calories){
+    targetEls.calories.textContent =
+      targets.calories
+        ? Math.round(targets.calories).toLocaleString()
+        : "0";
+  }
+
+  if(targetEls.protein){
+    targetEls.protein.textContent =
+      Math.round(targets.protein)+"g";
+  }
+
+  if(targetEls.carbs){
+    targetEls.carbs.textContent =
+      Math.round(targets.carbs)+"g";
+  }
+
+  if(targetEls.fat){
+    targetEls.fat.textContent =
+      Math.round(targets.fat)+"g";
+  }
+
+  resetTodayTrackerIfNeeded();
+
+  const eaten =
+    todayTrackerState.foods.reduce(
+      (sum,food)=>({
+        calories:sum.calories+(Number(food.calories)||0),
+        protein:sum.protein+(Number(food.protein)||0),
+        carbs:sum.carbs+(Number(food.carbs)||0),
+        fat:sum.fat+(Number(food.fat)||0)
+      }),
+      {calories:0,protein:0,carbs:0,fat:0}
+    );
+
+  const nutritionPercent =
+    targets.calories > 0
+      ? Math.min(
+          100,
+          Math.round(
+            eaten.calories /
+            targets.calories *
+            100
+          )
+        )
+      : 0;
+
+  const nutritionPercentEl =
+    document.getElementById(
+      "progressNutritionPercent"
+    );
+
+  const nutritionFill =
+    document.getElementById(
+      "progressNutritionFill"
+    );
+
+  if(nutritionPercentEl){
+    nutritionPercentEl.textContent =
+      nutritionPercent+"%";
+  }
+
+  if(nutritionFill){
+    nutritionFill.style.width =
+      nutritionPercent+"%";
+  }
+
+  const caloriesEaten =
+    document.getElementById(
+      "progressCaloriesEaten"
+    );
+
+  const proteinEaten =
+    document.getElementById(
+      "progressProteinEaten"
+    );
+
+  const water =
+    document.getElementById(
+      "progressWater"
+    );
+
+  if(caloriesEaten){
+    caloriesEaten.textContent =
+      Math.round(eaten.calories).toLocaleString()+
+      " kcal";
+  }
+
+  if(proteinEaten){
+    proteinEaten.textContent =
+      Math.round(eaten.protein)+"g";
+  }
+
+  if(water){
+    water.textContent =
+      todayTrackerState.water+" / 8";
+  }
+
+  let exercisesDone = 0;
+  let workoutDaysStarted = 0;
+  let workoutExercisesTotal = 0;
+
+  if(
+    typeof weeklyWorkouts !== "undefined" &&
+    Array.isArray(weeklyWorkouts)
+  ){
+
+    weeklyWorkouts.forEach((workout,index)=>{
+
+      const exercises =
+        Array.isArray(workout.exercises)
+          ? workout.exercises.length
+          : 0;
+
+      workoutExercisesTotal +=
+        exercises;
+
+      const completed =
+        Object.values(
+          workoutCompleted[index] || {}
+        ).filter(Boolean).length;
+
+      exercisesDone += completed;
+
+      if(completed > 0){
+        workoutDaysStarted++;
+      }
+
+    });
+
+  }
+
+  const workoutPercent =
+    workoutExercisesTotal > 0
+      ? Math.min(
+          100,
+          Math.round(
+            exercisesDone /
+            workoutExercisesTotal *
+            100
+          )
+        )
+      : 0;
+
+  const workoutPercentEl =
+    document.getElementById(
+      "progressWorkoutPercent"
+    );
+
+  const workoutFill =
+    document.getElementById(
+      "progressWorkoutFill"
+    );
+
+  if(workoutPercentEl){
+    workoutPercentEl.textContent =
+      workoutPercent+"%";
+  }
+
+  if(workoutFill){
+    workoutFill.style.width =
+      workoutPercent+"%";
+  }
+
+  const exercisesDoneEl =
+    document.getElementById(
+      "progressExercisesDone"
+    );
+
+  const workoutDaysEl =
+    document.getElementById(
+      "progressWorkoutDays"
+    );
+
+  if(exercisesDoneEl){
+    exercisesDoneEl.textContent =
+      exercisesDone;
+  }
+
+  if(workoutDaysEl){
+    workoutDaysEl.textContent =
+      workoutDaysStarted+" / 7";
+  }
+
+}
+
 
 function renderTodayTracker(){
   resetTodayTrackerIfNeeded();
