@@ -382,7 +382,29 @@ const existingRetailerPrices = {
  */
 
 const additionalProducts = [
+  [
+    "Protein Bar",
+    "1 pack",
+    1.25
+  ],
 
+  [
+    "Beans",
+    "400g",
+    0.90
+  ],
+
+  [
+    "Light Mayonnaise",
+    "500ml",
+    2.00
+  ],
+
+  [
+    "Tomato Sauce",
+    "500g",
+    1.50
+  ],
   /*
    * -------------------------------------------------------
    * PROTEIN
