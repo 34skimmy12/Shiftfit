@@ -5027,6 +5027,73 @@ button{
 
 </style>
 
+
+<style id="shiftfit-nutrition-days-v35">
+
+.nutrition-day-selector{
+  display:flex;
+  gap:6px;
+  overflow-x:auto;
+  padding:0 0 4px;
+  margin:0 0 12px;
+  scrollbar-width:none;
+}
+
+.nutrition-day-selector::-webkit-scrollbar{
+  display:none;
+}
+
+.nutrition-day-btn{
+  position:relative;
+  flex:0 0 45px;
+  width:45px;
+  min-width:45px;
+  height:49px;
+  padding:5px 2px;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:11px;
+  background:rgba(255,255,255,.035);
+  color:#8f97ae;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:2px;
+}
+
+.nutrition-day-btn span{
+  font-size:8px;
+  line-height:1;
+  font-weight:800;
+}
+
+.nutrition-day-btn strong{
+  color:var(--text);
+  font-size:13px;
+  line-height:1;
+}
+
+.nutrition-day-btn.active{
+  border-color:rgba(139,92,246,.75);
+  background:rgba(139,92,246,.14);
+  color:#c7adff;
+}
+
+.nutrition-day-btn.active strong{
+  color:#fff;
+}
+
+.nutrition-day-btn.today i{
+  width:4px;
+  height:4px;
+  border-radius:50%;
+  background:#8b5cf6;
+  display:block;
+  margin-top:1px;
+}
+
+</style>
+
 </head>
 
 <body>
@@ -6576,9 +6643,19 @@ button{
 
   <section class="progress-section-card">
 
+    <div
+      id="nutritionDaySelector"
+      class="nutrition-day-selector"
+    ></div>
+
     <div class="progress-section-head">
       <div>
-        <div class="progress-card-kicker">TODAY</div>
+        <div
+          class="progress-card-kicker"
+          id="nutritionSelectedDayLabel"
+        >
+          TODAY
+        </div>
         <h2>Nutrition</h2>
       </div>
       <div class="progress-percent" id="progressNutritionPercent">0%</div>
@@ -6861,6 +6938,8 @@ button{
 <script>
 
 let selectedGoal="lose";
+
+let progressNutritionDate=getLocalDateKey();
 
 let currentDay=0;
 
@@ -8300,6 +8379,9 @@ function showProgress(){
     .classList.add("active");
 
   setNav("progress");
+
+  progressNutritionDate =
+    getLocalDateKey();
 
   renderProgress();
   renderDailyStreak();
@@ -14706,7 +14788,149 @@ function getProgressPlan(){
 
 
 
+
+function getNutritionHistoryDates(){
+
+  const dates = [];
+  const today = new Date();
+
+  for(let i=6;i>=0;i--){
+
+    const date = new Date(today);
+
+    date.setHours(
+      12,0,0,0
+    );
+
+    date.setDate(
+      date.getDate()-i
+    );
+
+    dates.push(
+      getLocalDateKey(date)
+    );
+
+  }
+
+  return dates;
+
+}
+
+
+function selectNutritionProgressDay(dateKey){
+
+  if(
+    !getNutritionHistoryDates()
+      .includes(dateKey)
+  ){
+    return;
+  }
+
+  progressNutritionDate =
+    dateKey;
+
+  renderNutritionDaySelector();
+  renderProgress();
+
+}
+
+
+function renderNutritionDaySelector(){
+
+  const selector =
+    document.getElementById(
+      "nutritionDaySelector"
+    );
+
+  if(!selector) return;
+
+  const dates =
+    getNutritionHistoryDates();
+
+  if(
+    !dates.includes(
+      progressNutritionDate
+    )
+  ){
+    progressNutritionDate =
+      getLocalDateKey();
+  }
+
+  selector.innerHTML =
+    dates.map(
+      key=>{
+
+        const date =
+          new Date(
+            key+"T12:00:00"
+          );
+
+        const weekday =
+          date.toLocaleDateString(
+            undefined,
+            {weekday:"short"}
+          );
+
+        const dayNumber =
+          date.getDate();
+
+        const isSelected =
+          key===progressNutritionDate;
+
+        const isToday =
+          key===getLocalDateKey();
+
+        return `
+          <button
+            type="button"
+            class="nutrition-day-btn ${isSelected?"active":""} ${isToday?"today":""}"
+            onclick="selectNutritionProgressDay('${key}')"
+          >
+            <span>${weekday}</span>
+            <strong>${dayNumber}</strong>
+            ${isToday?'<i></i>':""}
+          </button>
+        `;
+
+      }
+    ).join("");
+
+  const label =
+    document.getElementById(
+      "nutritionSelectedDayLabel"
+    );
+
+  if(label){
+
+    const selectedDate =
+      new Date(
+        progressNutritionDate+"T12:00:00"
+      );
+
+    const isToday =
+      progressNutritionDate===
+      getLocalDateKey();
+
+    label.textContent =
+      isToday
+        ? "TODAY"
+        : selectedDate.toLocaleDateString(
+            undefined,
+            {
+              weekday:"short",
+              day:"numeric",
+              month:"short"
+            }
+          ).toUpperCase();
+
+  }
+
+}
+
+
 function renderProgress(){
+
+  renderNutritionDaySelector();
 
   renderWeightProgress();
 
@@ -14783,16 +15007,70 @@ function renderProgress(){
 
   resetTodayTrackerIfNeeded();
 
-  const eaten =
-    todayTrackerState.foods.reduce(
-      (sum,food)=>({
-        calories:sum.calories+(Number(food.calories)||0),
-        protein:sum.protein+(Number(food.protein)||0),
-        carbs:sum.carbs+(Number(food.carbs)||0),
-        fat:sum.fat+(Number(food.fat)||0)
-      }),
-      {calories:0,protein:0,carbs:0,fat:0}
-    );
+  recordTodayProgressSnapshot();
+
+  const selectedDate =
+    progressNutritionDate ||
+    getLocalDateKey();
+
+  let eaten = {
+    calories:0,
+    protein:0,
+    carbs:0,
+    fat:0
+  };
+
+  let selectedWater = 0;
+
+  if(selectedDate===getLocalDateKey()){
+
+    eaten =
+      todayTrackerState.foods.reduce(
+        (sum,food)=>({
+          calories:
+            sum.calories+
+            (Number(food.calories)||0),
+          protein:
+            sum.protein+
+            (Number(food.protein)||0),
+          carbs:
+            sum.carbs+
+            (Number(food.carbs)||0),
+          fat:
+            sum.fat+
+            (Number(food.fat)||0)
+        }),
+        {calories:0,protein:0,carbs:0,fat:0}
+      );
+
+    selectedWater =
+      Number(
+        todayTrackerState.water
+      )||0;
+
+  }else{
+
+    const history =
+      getProgressDailyHistory();
+
+    const dayData =
+      history[selectedDate] || {};
+
+    eaten = {
+      calories:
+        Number(dayData.calories)||0,
+      protein:
+        Number(dayData.protein)||0,
+      carbs:
+        Number(dayData.carbs)||0,
+      fat:
+        Number(dayData.fat)||0
+    };
+
+    selectedWater =
+      Number(dayData.water)||0;
+
+  }
 
   const nutritionPercent =
     targets.calories > 0
@@ -14874,7 +15152,7 @@ function renderProgress(){
 
   if(water){
     water.textContent =
-      todayTrackerState.water+" / 8";
+      selectedWater+" / 8";
   }
 
   let exercisesDone = 0;
