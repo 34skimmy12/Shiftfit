@@ -4886,67 +4886,130 @@ button{
 </style>
 
 
-<style id="shiftfit-progress-history-v33">
 
-.progress-history-list{
-  display:flex;
-  flex-direction:column;
-  gap:7px;
-  margin-top:12px;
+<style id="shiftfit-calendar-history-v34">
+
+.calendar-history-tab{
+  width:100%;
+  margin:10px 0;
+  min-height:40px;
+  border:1px solid rgba(139,92,246,.4);
+  border-radius:11px;
+  background:rgba(139,92,246,.08);
+  color:#c7adff;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.7px;
 }
 
-.progress-history-day{
-  border:1px solid rgba(255,255,255,.055);
-  border-radius:13px;
-  padding:9px;
+.calendar-history-panel{
+  display:none;
+  padding-bottom:24px;
+}
+
+.calendar-history-panel.active{
+  display:block;
+}
+
+.calendar-history-head{
+  display:flex;
+  flex-direction:column;
+  gap:11px;
+  margin-bottom:13px;
+}
+
+.calendar-history-back{
+  align-self:flex-start;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.035);
+  color:var(--muted);
+  border-radius:10px;
+  padding:8px 10px;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.6px;
+}
+
+.calendar-history-head h2{
+  margin:4px 0 0;
+  font-size:21px;
+}
+
+.calendar-history-head p{
+  margin:6px 0 0;
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.4;
+}
+
+.calendar-history-list{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.calendar-history-day{
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:15px;
+  padding:11px;
   background:rgba(255,255,255,.025);
 }
 
-.progress-history-day.today{
-  border-color:rgba(139,92,246,.38);
-  background:rgba(139,92,246,.06);
+.calendar-history-day.today{
+  border-color:rgba(139,92,246,.42);
+  background:rgba(139,92,246,.065);
 }
 
-.progress-history-date{
+.calendar-history-date{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  margin-bottom:8px;
+  gap:8px;
+  margin-bottom:9px;
 }
 
-.progress-history-date strong{
-  font-size:10px;
+.calendar-history-date strong{
+  display:block;
+  font-size:12px;
 }
 
-.progress-history-date span{
-  font-size:10px;
+.calendar-history-date span{
+  display:block;
+  margin-top:2px;
   color:#8f97ae;
-  font-weight:800;
+  font-size:9px;
 }
 
-.progress-history-metrics{
+.calendar-history-workout{
+  color:#c7adff;
+  font-size:8px;
+  font-weight:900;
+  white-space:nowrap;
+}
+
+.calendar-history-grid{
   display:grid;
-  grid-template-columns:repeat(7,1fr);
-  gap:3px;
+  grid-template-columns:repeat(6,1fr);
+  gap:4px;
 }
 
-.progress-history-metrics > div{
+.calendar-history-grid > div{
   min-width:0;
   text-align:center;
-  padding:5px 1px;
-  border-radius:8px;
+  padding:7px 2px;
+  border-radius:9px;
   background:rgba(0,0,0,.13);
 }
 
-.progress-history-metrics span{
+.calendar-history-grid span{
   display:block;
-  font-size:11px;
+  font-size:12px;
   line-height:1;
 }
 
-.progress-history-metrics strong{
+.calendar-history-grid strong{
   display:block;
-  margin-top:3px;
+  margin-top:4px;
   font-size:8px;
   line-height:1.05;
   white-space:nowrap;
@@ -4954,29 +5017,12 @@ button{
   text-overflow:ellipsis;
 }
 
-.progress-history-metrics small{
+.calendar-history-grid small{
   display:block;
   margin-top:2px;
   color:#8f97ae;
   font-size:5.5px;
   line-height:1;
-  text-transform:uppercase;
-}
-
-@media(max-width:380px){
-
-  .progress-history-metrics{
-    gap:2px;
-  }
-
-  .progress-history-metrics > div{
-    padding:5px 0;
-  }
-
-  .progress-history-metrics strong{
-    font-size:7.5px;
-  }
-
 }
 
 </style>
@@ -6048,6 +6094,15 @@ button{
 </button>
 
 <div class="calendar-header">
+<button
+  class="calendar-history-tab"
+  id="calendarHistoryTab"
+  onclick="showCalendarHistory()"
+>
+  📊 DAILY HISTORY
+</button>
+
+
 
   <div class="shopping-kicker">
     YOUR SHIFT CALENDAR
@@ -6243,6 +6298,34 @@ button{
 
 
 <!-- CALENDAR DAY DETAIL SCREEN -->
+
+
+<section
+  id="calendarHistoryPanel"
+  class="calendar-history-panel"
+>
+
+  <div class="calendar-history-head">
+    <button
+      class="calendar-history-back"
+      onclick="showCalendar()"
+    >
+      ← CALENDAR
+    </button>
+
+    <div>
+      <div class="progress-card-kicker">TRACKING</div>
+      <h2>Daily History</h2>
+      <p>See your nutrition, water, workouts and weight by day.</p>
+    </div>
+  </div>
+
+  <div
+    id="calendarHistoryList"
+    class="calendar-history-list"
+  ></div>
+
+</section>
 
 <section id="calendarDayScreen" class="screen">
 
@@ -6529,26 +6612,7 @@ button{
     </div>
 
   </section>
-
-
-
-  <section class="progress-section-card progress-history-card">
-
-    <div class="progress-section-head">
-      <div>
-        <div class="progress-card-kicker">LAST 7 DAYS</div>
-        <h2>Daily History</h2>
-      </div>
-    </div>
-
-    <div
-      id="progressHistoryList"
-      class="progress-history-list"
-    ></div>
-
-  </section>
-
-  <section class="progress-section-card">
+<section class="progress-section-card">
 
     <div class="progress-section-head">
       <div>
@@ -8086,9 +8150,132 @@ function showMeals(selectedDate){
 }
 
 
+
+function showCalendarHistory(){
+
+  hideAllScreens();
+
+  const panel =
+    document.getElementById(
+      "calendarHistoryPanel"
+    );
+
+  if(panel){
+    panel.classList.add("active");
+  }
+
+  setNav("calendar");
+
+  renderCalendarHistory();
+
+  window.scrollTo(0,0);
+
+}
+
+
+function renderCalendarHistory(){
+
+  recordTodayProgressSnapshot();
+
+  const history =
+    getProgressDailyHistory();
+
+  const list =
+    document.getElementById(
+      "calendarHistoryList"
+    );
+
+  if(!list) return;
+
+  const dates =
+    getLastSevenDates();
+
+  list.innerHTML =
+    dates.map(
+      key=>{
+
+        const data =
+          history[key] || {
+            calories:0,
+            protein:0,
+            carbs:0,
+            fat:0,
+            water:0,
+            workout:false,
+            weight:null
+          };
+
+        const date =
+          new Date(key+"T12:00:00");
+
+        const day =
+          date.toLocaleDateString(
+            undefined,
+            {weekday:"long"}
+          );
+
+        const shortDate =
+          date.toLocaleDateString(
+            undefined,
+            {
+              day:"numeric",
+              month:"short"
+            }
+          );
+
+        const isToday =
+          key===getLocalDateKey();
+
+        return `
+          <div class="calendar-history-day ${isToday?"today":""}">
+
+            <div class="calendar-history-date">
+              <div>
+                <strong>${day}</strong>
+                <span>${shortDate}${isToday?" · TODAY":""}</span>
+              </div>
+              <div class="calendar-history-workout">
+                ${data.workout?"🏋️ WORKOUT":"—"}
+              </div>
+            </div>
+
+            <div class="calendar-history-grid">
+
+              <div><span>🔥</span><strong>${data.calories||0}</strong><small>KCAL</small></div>
+              <div><span>🥩</span><strong>${data.protein||0}g</strong><small>PROTEIN</small></div>
+              <div><span>🍚</span><strong>${data.carbs||0}g</strong><small>CARBS</small></div>
+              <div><span>🥑</span><strong>${data.fat||0}g</strong><small>FAT</small></div>
+              <div><span>💧</span><strong>${data.water||0}/8</strong><small>WATER</small></div>
+              <div><span>⚖️</span><strong>${
+                data.weight!==null &&
+                Number.isFinite(Number(data.weight))
+                  ? Number(data.weight).toFixed(1)
+                  : "—"
+              }</strong><small>WEIGHT</small></div>
+
+            </div>
+
+          </div>
+        `;
+
+      }
+    ).join("");
+
+}
+
+
 function showCalendar(){
 
   hideAllScreens();
+
+  const historyPanel =
+    document.getElementById(
+      "calendarHistoryPanel"
+    );
+
+  if(historyPanel){
+    historyPanel.classList.remove("active");
+  }
 
   document
     .getElementById("calendarScreen")
