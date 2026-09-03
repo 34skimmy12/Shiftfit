@@ -4607,6 +4607,92 @@ button{
   white-space:nowrap;
 }
 
+/* v39 daily weight logging */
+.nutrition-weight-card{
+  margin-top:12px;
+  padding-top:11px;
+  border-top:1px solid rgba(255,255,255,.06);
+}
+
+.nutrition-weight-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.nutrition-weight-copy span{
+  display:block;
+  color:#8f97ae;
+  font-size:7px;
+  letter-spacing:1.1px;
+  font-weight:900;
+}
+
+.nutrition-weight-value{
+  display:flex;
+  align-items:baseline;
+  gap:4px;
+  margin-top:3px;
+}
+
+.nutrition-weight-value strong{
+  color:var(--text);
+  font-size:18px;
+  line-height:1;
+}
+
+.nutrition-weight-value em{
+  color:var(--muted);
+  font-size:10px;
+  font-style:normal;
+  font-weight:700;
+}
+
+.nutrition-weight-date{
+  margin-top:3px;
+  color:#6f7891;
+  font-size:8px;
+}
+
+.nutrition-weight-log-btn{
+  border:1px solid rgba(139,92,246,.58);
+  background:rgba(139,92,246,.12);
+  color:#c7adff;
+  border-radius:10px;
+  min-height:36px;
+  padding:0 11px;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.55px;
+  white-space:nowrap;
+}
+
+.nutrition-weight-log-btn:disabled{
+  opacity:.42;
+  cursor:not-allowed;
+}
+
+.nutrition-weight-note{
+  margin-top:7px;
+  color:#737c95;
+  font-size:8px;
+  line-height:1.35;
+}
+
+.nutrition-weight-entry-form{
+  display:none;
+  margin-top:9px;
+  padding:10px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:rgba(255,255,255,.025);
+}
+
+.nutrition-weight-entry-form.show{
+  display:block;
+}
+
 .weight-main-row{
   display:flex;
   align-items:center;
@@ -6886,12 +6972,6 @@ button{
         <div class="progress-card-kicker">BODY WEIGHT</div>
         <h2>Weight Progress</h2>
       </div>
-      <button
-        class="weight-log-btn"
-        onclick="toggleWeightEntry()"
-      >
-        + LOG WEIGHT
-      </button>
     </div>
 
     <div class="weight-main-row">
@@ -6992,44 +7072,6 @@ button{
 
     </div>
 
-    <div
-      id="weightEntryForm"
-      class="weight-entry-form"
-    >
-
-      <div class="weight-input-wrap">
-        <label for="weightEntryInput">Today's weight</label>
-        <div class="weight-input-row">
-          <input
-            id="weightEntryInput"
-            type="number"
-            inputmode="decimal"
-            step="0.1"
-            min="20"
-            max="400"
-            placeholder="e.g. 84.0"
-          >
-          <span>kg</span>
-        </div>
-      </div>
-
-      <div class="weight-entry-actions">
-        <button
-          class="weight-cancel-btn"
-          onclick="toggleWeightEntry(false)"
-        >
-          CANCEL
-        </button>
-        <button
-          class="weight-save-btn"
-          onclick="saveWeightEntry()"
-        >
-          SAVE WEIGHT
-        </button>
-      </div>
-
-    </div>
-
     <div class="weight-history" id="weightHistory"></div>
 
   </section>
@@ -7121,6 +7163,83 @@ button{
         <h2>Nutrition</h2>
       </div>
       <div class="progress-percent" id="progressNutritionPercent">0%</div>
+    </div>
+
+    <div class="nutrition-weight-card">
+
+      <div class="nutrition-weight-head">
+        <div class="nutrition-weight-copy">
+          <span>WEIGHT FOR THIS DAY</span>
+          <div class="nutrition-weight-value">
+            <strong id="nutritionSelectedWeight">—</strong>
+            <em>kg</em>
+          </div>
+          <div
+            class="nutrition-weight-date"
+            id="nutritionSelectedWeightDate"
+          >
+            —
+          </div>
+        </div>
+
+        <button
+          id="nutritionWeightLogBtn"
+          class="nutrition-weight-log-btn"
+          type="button"
+          onclick="toggleWeightEntry()"
+        >
+          + LOG WEIGHT
+        </button>
+      </div>
+
+      <div
+        id="nutritionWeightNote"
+        class="nutrition-weight-note"
+      ></div>
+
+      <div
+        id="weightEntryForm"
+        class="nutrition-weight-entry-form"
+      >
+
+        <div class="weight-input-wrap">
+          <label for="weightEntryInput" id="weightEntryLabel">
+            Weight for this day
+          </label>
+
+          <div class="weight-input-row">
+            <input
+              id="weightEntryInput"
+              type="number"
+              inputmode="decimal"
+              step="0.1"
+              min="20"
+              max="400"
+              placeholder="e.g. 84.0"
+            >
+            <span>kg</span>
+          </div>
+        </div>
+
+        <div class="weight-entry-actions">
+          <button
+            class="weight-cancel-btn"
+            type="button"
+            onclick="toggleWeightEntry(false)"
+          >
+            CANCEL
+          </button>
+          <button
+            class="weight-save-btn"
+            type="button"
+            onclick="saveWeightEntry()"
+          >
+            SAVE WEIGHT
+          </button>
+        </div>
+
+      </div>
+
     </div>
 
     <div class="progress-bar">
@@ -15049,6 +15168,19 @@ function toggleWeightEntry(force){
 
   if(!form) return;
 
+  const selectedDate =
+    progressNutritionDate ||
+    getLocalDateKey();
+
+  const today =
+    getLocalDateKey();
+
+  if(selectedDate>today){
+
+    return;
+
+  }
+
   const shouldShow =
     typeof force==="boolean"
       ? force
@@ -15066,24 +15198,53 @@ function toggleWeightEntry(force){
         "weightEntryInput"
       );
 
+    const label =
+      document.getElementById(
+        "weightEntryLabel"
+      );
+
+    const history =
+      getWeightHistory();
+
+    const existing =
+      history.find(
+        entry=>entry.date===selectedDate
+      );
+
+    const fallback =
+      history.length
+        ? history[history.length-1]
+        : null;
+
     if(input){
 
-      const history =
-        getWeightHistory();
-
-      if(history.length){
-
-        input.value =
-          Number(
-            history[history.length-1].weight
-          ).toFixed(1);
-
-      }
+      input.value =
+        existing
+          ? Number(existing.weight).toFixed(1)
+          : fallback
+            ? Number(fallback.weight).toFixed(1)
+            : "";
 
       setTimeout(
         ()=>input.focus(),
         80
       );
+
+    }
+
+    if(label){
+
+      const date =
+        new Date(
+          selectedDate+"T12:00:00"
+        );
+
+      label.textContent =
+        "Weight for "+
+        date.toLocaleDateString(
+          undefined,
+          {weekday:"short",day:"numeric",month:"short"}
+        );
 
     }
 
@@ -15117,19 +15278,29 @@ function saveWeightEntry(){
 
   }
 
-  const history =
-    getWeightHistory();
+  const selectedDate =
+    progressNutritionDate ||
+    getLocalDateKey();
 
   const today =
     getLocalDateKey();
 
+  if(selectedDate>today){
+
+    return;
+
+  }
+
+  const history =
+    getWeightHistory();
+
   const existingIndex =
     history.findIndex(
-      entry=>entry.date===today
+      entry=>entry.date===selectedDate
     );
 
   const entry = {
-    date:today,
+    date:selectedDate,
     weight:
       Math.round(weight*10)/10
   };
@@ -15161,6 +15332,8 @@ function saveWeightEntry(){
   renderDailyStreak();
 
   renderWeightTrend();
+
+  renderNutritionDayWeight();
 
 }
 
@@ -15854,11 +16027,99 @@ function renderNutritionDaySelector(){
 }
 
 
+function renderNutritionDayWeight(){
+
+  const valueEl =
+    document.getElementById(
+      "nutritionSelectedWeight"
+    );
+
+  const dateEl =
+    document.getElementById(
+      "nutritionSelectedWeightDate"
+    );
+
+  const button =
+    document.getElementById(
+      "nutritionWeightLogBtn"
+    );
+
+  const note =
+    document.getElementById(
+      "nutritionWeightNote"
+    );
+
+  if(!valueEl || !button) return;
+
+  const selectedDate =
+    progressNutritionDate ||
+    getLocalDateKey();
+
+  const today =
+    getLocalDateKey();
+
+  const history =
+    getWeightHistory();
+
+  const entry =
+    history.find(
+      item=>item.date===selectedDate
+    );
+
+  valueEl.textContent =
+    entry && Number.isFinite(Number(entry.weight))
+      ? Number(entry.weight).toFixed(1)
+      : "—";
+
+  if(dateEl){
+
+    const date =
+      new Date(
+        selectedDate+"T12:00:00"
+      );
+
+    dateEl.textContent =
+      date.toLocaleDateString(
+        undefined,
+        {weekday:"long",day:"numeric",month:"short"}
+      );
+
+  }
+
+  const isFuture =
+    selectedDate>today;
+
+  button.disabled =
+    isFuture;
+
+  button.textContent =
+    isFuture
+      ? "LOG ON THE DAY"
+      : entry
+        ? "+ EDIT WEIGHT"
+        : "+ LOG WEIGHT";
+
+  if(note){
+
+    note.textContent =
+      isFuture
+        ? "Weight logging becomes available when this day arrives."
+        : entry
+          ? "Your weigh-in is saved to this date."
+          : "Log the weight you recorded for this day.";
+
+  }
+
+}
+
+
 function renderProgress(){
 
   renderNutritionDaySelector();
 
   renderWeightProgress();
+
+  renderNutritionDayWeight();
 
   const plan = getProgressPlan();
 
