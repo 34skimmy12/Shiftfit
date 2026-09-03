@@ -12575,6 +12575,140 @@ function loadBarcodeLibrary(){
 
 }
 
+
+async function loadZXingBarcodeLibrary(){
+
+  if(window.ZXing){
+    return window.ZXing;
+  }
+
+  if(window.shiftfitZXingLoading){
+    return window.shiftfitZXingLoading;
+  }
+
+  window.shiftfitZXingLoading =
+    new Promise((resolve,reject)=>{
+
+      const script =
+        document.createElement("script");
+
+      script.src =
+        "https://unpkg.com/@zxing/library@latest";
+
+      script.async = true;
+
+      script.onload = ()=>{
+
+        if(window.ZXing){
+          resolve(window.ZXing);
+        }else{
+          reject(
+            new Error("ZXing loaded without API")
+          );
+        }
+
+      };
+
+      script.onerror = ()=>{
+        reject(
+          new Error("ZXing failed to load")
+        );
+      };
+
+      document.head.appendChild(script);
+
+    });
+
+  return window.shiftfitZXingLoading;
+
+}
+
+async function decodeWithZXingImage(file,variants){
+
+  const ZXing =
+    await loadZXingBarcodeLibrary();
+
+  if(!ZXing){
+    return "";
+  }
+
+  const reader =
+    new ZXing.BrowserMultiFormatReader();
+
+  const allImages =
+    [file].concat(
+      Array.isArray(variants)
+        ? variants.slice(1)
+        : []
+    );
+
+  for(let i=0;i<allImages.length;i++){
+
+    const item = allImages[i];
+
+    try{
+
+      const url =
+        URL.createObjectURL(item);
+
+      const image =
+        new Image();
+
+      image.decoding = "async";
+
+      await new Promise((resolve,reject)=>{
+
+        image.onload = resolve;
+        image.onerror = reject;
+        image.src = url;
+
+      });
+
+      let result = null;
+
+      if(typeof reader.decodeFromImage === "function"){
+
+        try{
+          result =
+            await reader.decodeFromImage(image);
+        }catch(error){}
+
+      }
+
+      if(!result &&
+         typeof reader.decodeFromImageElement === "function"){
+
+        try{
+          result =
+            await reader.decodeFromImageElement(image);
+        }catch(error){}
+
+      }
+
+      URL.revokeObjectURL(url);
+
+      if(result && result.text){
+
+        return String(result.text);
+
+      }
+
+    }catch(error){}
+
+  }
+
+  try{
+
+    if(typeof reader.reset === "function"){
+      reader.reset();
+    }
+
+  }catch(error){}
+
+  return "";
+
+}
+
 async function openBarcodeScanner(){
 
   const modal =
@@ -12736,6 +12870,36 @@ async function handleBarcodePhoto(file){
 
     }
 
+    /* Second decoder: direct ZXing image decoding.
+       This is deliberately separate from html5-qrcode because
+       iPhone image decoding can behave differently between the two
+       browser wrappers. */
+    if(!decodedText){
+
+      if(message){
+        message.textContent =
+          "Trying the second barcode reader…";
+      }
+
+      try{
+
+        decodedText =
+          await decodeWithZXingImage(
+            file,
+            variants
+          );
+
+      }catch(error){
+
+        console.error(
+          "ZXing image scan failed:",
+          error
+        );
+
+      }
+
+    }
+
     const value =
       decodedText.replace(/\D/g,"");
 
@@ -12754,7 +12918,7 @@ async function handleBarcodePhoto(file){
     if(message){
 
       message.textContent =
-        "I couldn't read that photo. Move closer, use good light, and make the barcode fill most of the picture. You can also crop the photo so only the barcode is visible.";
+        "Still couldn't read it. Try taking the photo closer with the barcode filling most of the frame, or use the manual barcode box.";
     }
 
   }catch(error){
