@@ -15254,10 +15254,38 @@ function getNutritionHistoryDates(){
 }
 
 
+function getNutritionSelectorDates(){
+
+  const dates = [];
+  const today = new Date();
+
+  for(let i=0;i<7;i++){
+
+    const date = new Date(today);
+
+    date.setHours(
+      12,0,0,0
+    );
+
+    date.setDate(
+      date.getDate()+i
+    );
+
+    dates.push(
+      getLocalDateKey(date)
+    );
+
+  }
+
+  return dates;
+
+}
+
+
 function selectNutritionProgressDay(dateKey){
 
   if(
-    !getNutritionHistoryDates()
+    !getNutritionSelectorDates()
       .includes(dateKey)
   ){
     return;
@@ -15282,7 +15310,7 @@ function renderNutritionDaySelector(){
   if(!selector) return;
 
   const dates =
-    getNutritionHistoryDates();
+    getNutritionSelectorDates();
 
   if(
     !dates.includes(
