@@ -2438,6 +2438,12 @@ button{
 }
 
 </style>
+<style>
+.meal-preference-row{display:flex;gap:10px;margin-top:10px}
+.meal-preference-btn{flex:1;min-height:42px;border:1px solid var(--border);border-radius:12px;background:rgba(17,22,43,.72);color:var(--muted);font-weight:800;letter-spacing:.04em;font-size:12px}
+.meal-preference-btn.active-like{border-color:#8f55ff;color:#fff;background:rgba(143,85,255,.18)}
+.meal-preference-btn.active-avoid{border-color:#ff5b7f;color:#fff;background:rgba(255,91,127,.14)}
+</style>
 <style id="shiftfit-plan-notice-style">
 #shiftfitPlanNotice{
   position:fixed;
@@ -6285,6 +6291,10 @@ button{
   >
     ↻ SWAP MEAL
   </button>
+  <div class="meal-preference-row">
+    <button id="breakfastLikeBtn" class="meal-preference-btn" onclick="setMealPreference('breakfast','like')">♡ LIKE</button>
+    <button id="breakfastAvoidBtn" class="meal-preference-btn" onclick="setMealPreference('breakfast','avoid')">✕ DON'T WANT</button>
+  </div>
 
 </div>
 
@@ -6361,6 +6371,10 @@ button{
   >
     ↻ SWAP MEAL
   </button>
+  <div class="meal-preference-row">
+    <button id="lunchLikeBtn" class="meal-preference-btn" onclick="setMealPreference('lunch','like')">♡ LIKE</button>
+    <button id="lunchAvoidBtn" class="meal-preference-btn" onclick="setMealPreference('lunch','avoid')">✕ DON'T WANT</button>
+  </div>
 
 </div>
 
@@ -6437,6 +6451,10 @@ button{
   >
     ↻ SWAP MEAL
   </button>
+  <div class="meal-preference-row">
+    <button id="dinnerLikeBtn" class="meal-preference-btn" onclick="setMealPreference('dinner','like')">♡ LIKE</button>
+    <button id="dinnerAvoidBtn" class="meal-preference-btn" onclick="setMealPreference('dinner','avoid')">✕ DON'T WANT</button>
+  </div>
 
 </div>
 
@@ -6513,6 +6531,10 @@ button{
   >
     ↻ SWAP MEAL
   </button>
+  <div class="meal-preference-row">
+    <button id="snackLikeBtn" class="meal-preference-btn" onclick="setMealPreference('snack','like')">♡ LIKE</button>
+    <button id="snackAvoidBtn" class="meal-preference-btn" onclick="setMealPreference('snack','avoid')">✕ DON'T WANT</button>
+  </div>
 
 </div>
 
@@ -11635,6 +11657,8 @@ function renderCurrentDay(){
 
   updateMiniShopping();
 
+  renderAllMealPreferenceButtons();
+
 }
 
 
@@ -12378,14 +12402,8 @@ function buildMixedMealWeek(){
         ? mealOptions[type].length
         : 0;
 
-    const shuffled=
-      shuffledIndexes(count);
-
     byType[type]=
-      shuffled.slice(
-        0,
-        Math.min(days,count)
-      );
+      preferenceAwareIndexes(type);
 
   });
 
@@ -12729,6 +12747,100 @@ function scaleMeals(plan){
   });
 
 }
+
+
+const MEAL_PREFERENCES_KEY="shiftfitMealPreferences";
+
+function loadMealPreferences(){
+  const empty={
+    breakfast:{like:[],avoid:[]},
+    lunch:{like:[],avoid:[]},
+    dinner:{like:[],avoid:[]},
+    snack:{like:[],avoid:[]}
+  };
+  const saved=localStorage.getItem(MEAL_PREFERENCES_KEY);
+  if(!saved) return empty;
+  try{
+    const parsed=JSON.parse(saved);
+    ["breakfast","lunch","dinner","snack"].forEach(type=>{
+      if(!parsed[type]) return;
+      if(Array.isArray(parsed[type].like)){
+        empty[type].like=parsed[type].like.map(Number).filter(Number.isInteger);
+      }
+      if(Array.isArray(parsed[type].avoid)){
+        empty[type].avoid=parsed[type].avoid.map(Number).filter(Number.isInteger);
+      }
+    });
+  }catch(error){
+    console.warn("Could not load meal preferences.");
+  }
+  return empty;
+}
+
+let mealPreferences=loadMealPreferences();
+
+function saveMealPreferences(){
+  localStorage.setItem(MEAL_PREFERENCES_KEY,JSON.stringify(mealPreferences));
+}
+
+function setMealPreference(type,preference){
+  const index=Number(weeklyMeals[currentDay]?.[type] ?? 0);
+  if(!Number.isInteger(index) || !mealPreferences[type]) return;
+
+  const bucket=mealPreferences[type];
+  bucket.like=bucket.like.filter(value=>value!==index);
+  bucket.avoid=bucket.avoid.filter(value=>value!==index);
+
+  if(preference==="like") bucket.like.push(index);
+  if(preference==="avoid") bucket.avoid.push(index);
+
+  saveMealPreferences();
+  renderMealPreferenceButtons(type);
+}
+
+function renderMealPreferenceButtons(type){
+  const index=Number(weeklyMeals[currentDay]?.[type] ?? 0);
+  const bucket=mealPreferences[type] || {like:[],avoid:[]};
+
+  const likeBtn=document.getElementById(type+"LikeBtn");
+  const avoidBtn=document.getElementById(type+"AvoidBtn");
+
+  if(likeBtn){
+    const liked=bucket.like.includes(index);
+    likeBtn.classList.toggle("active-like",liked);
+    likeBtn.textContent=liked ? "♥ LIKED" : "♡ LIKE";
+  }
+
+  if(avoidBtn){
+    const avoided=bucket.avoid.includes(index);
+    avoidBtn.classList.toggle("active-avoid",avoided);
+    avoidBtn.textContent=avoided ? "✕ AVOIDED" : "✕ DON'T WANT";
+  }
+}
+
+function renderAllMealPreferenceButtons(){
+  ["breakfast","lunch","dinner","snack"].forEach(renderMealPreferenceButtons);
+}
+
+function preferenceAwareIndexes(type){
+  const count=mealOptions[type]?.length || 0;
+  const all=shuffledIndexes(count);
+  const bucket=mealPreferences[type] || {like:[],avoid:[]};
+
+  const liked=all.filter(index=>bucket.like.includes(index));
+  const neutral=all.filter(index=>!bucket.like.includes(index) && !bucket.avoid.includes(index));
+  const avoided=all.filter(index=>bucket.avoid.includes(index));
+
+  /*
+   * Likes are placed first. Avoided meals are held back and only
+   * used if there are not enough other choices to fill the week.
+   */
+  let ordered=liked.concat(neutral);
+  if(ordered.length<7) ordered=ordered.concat(avoided);
+
+  return ordered.slice(0,Math.min(7,count));
+}
+
 
 function swapMeal(type){
 
