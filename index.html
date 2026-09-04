@@ -19865,6 +19865,240 @@ function deleteCalendarEvent(id){
   showCalendarDay(calendarSelectedDate);
 }
 </script>
+
+<script id="shiftfit-meal-shopping-sync">
+/*
+ * SHIFT FIT — MEAL PLAN → SHOPPING LIST SYNC
+ *
+ * The shopping list is now generated from the current 7-day meal plan.
+ * Quantities represent how many meal portions in the week use each item.
+ * Manual shopping items are preserved.
+ */
+
+const mealShoppingIngredients = {
+  breakfast: {
+    0: [["Oats",1],["Protein powder",1],["Greek yoghurt",1],["Mixed berries",1]],
+    1: [["Eggs",1],["Avocado",1],["Wholegrain bread",1]],
+    2: [["Oats",1],["Protein powder",1],["Bananas",1],["Greek yoghurt",1]],
+    3: [["Eggs",1],["Chicken breast",1],["Beans",1],["Salsa",1],["Wholemeal wraps",1]],
+    4: [["Greek yoghurt",1],["Oats",1],["Honey",1],["Mixed berries",1]],
+    5: [["Eggs",1],["Salmon",1],["Wholegrain bread",1]],
+    6: [["Wholegrain bread",1],["Peanut butter",1],["Bananas",1],["Greek yoghurt",1]],
+    7: [["Chicken breast",1],["Eggs",1],["Spinach",1],["Wholemeal wraps",1]]
+  },
+
+  lunch: {
+    0: [["Chicken breast",1],["Rice",1],["Mixed vegetables",1]],
+    1: [["Lean turkey mince",1],["Wholewheat pasta",1],["Tomato sauce",1]],
+    2: [["Chicken breast",1],["Wholemeal wraps",1],["Potatoes",1]],
+    3: [["Tuna",1],["Light mayonnaise",1],["Potatoes",1],["Lettuce",1]],
+    4: [["Lean beef mince",1],["Rice",1],["Beans",1],["Salsa",1],["Mixed vegetables",1]],
+    5: [["Chicken breast",1],["Lettuce",1],["Wholemeal wraps",1],["Light mayonnaise",1]],
+    6: [["Salmon",1],["Wholewheat pasta",1],["Spinach",1]],
+    7: [["Lean turkey mince",1],["Sweet potatoes",1],["Mixed vegetables",1]]
+  },
+
+  dinner: {
+    0: [["Lean beef mince",1],["Sweet potatoes",1],["Mixed vegetables",1]],
+    1: [["Chicken breast",1],["Rice",1],["Mixed vegetables",1]],
+    2: [["Salmon",1],["Rice",1],["Mixed vegetables",1]],
+    3: [["Lean turkey mince",1],["Kidney beans",1],["Rice",1],["Tomato sauce",1]],
+    4: [["Chicken breast",1],["Rice",1],["Mixed vegetables",1],["Salsa",1]],
+    5: [["Lean beef mince",1],["Potatoes",1],["Mixed vegetables",1]],
+    6: [["Chicken breast",1],["Peppers",1],["Onions",1],["Wholemeal wraps",1],["Salsa",1]],
+    7: [["Lean beef mince",1],["Wholewheat pasta",1],["Tomato sauce",1]]
+  },
+
+  snack: {
+    0: [["Greek yoghurt",1],["Mixed berries",1],["Mixed nuts",1]],
+    1: [["Protein powder",1],["Bananas",1],["Peanut butter",1]],
+    2: [["Cottage cheese",1],["Rice cakes",1],["Apples",1]],
+    3: [["Protein bar",1],["Apples",1]],
+    4: [["Lean turkey mince",1],["Rice cakes",1]],
+    5: [["Eggs",1],["Apples",1]],
+    6: [["Protein powder",1],["Mixed berries",1]],
+    7: [["Apples",1],["Peanut butter",1]]
+  }
+};
+
+
+function getMealShoppingKey(name){
+  return String(name || "").trim().toLowerCase();
+}
+
+
+function buildMealPlanShoppingItems(){
+  const totals = {};
+
+  ["breakfast","lunch","dinner","snack"].forEach(function(type){
+    weeklyMeals.forEach(function(day){
+      const index = Number(day && day[type]);
+
+      if(!Number.isFinite(index)) return;
+
+      const ingredients =
+        mealShoppingIngredients[type] &&
+        mealShoppingIngredients[type][index];
+
+      if(!ingredients) return;
+
+      ingredients.forEach(function(entry){
+        const name = entry[0];
+        const qty = Number(entry[1]) || 1;
+        const key = getMealShoppingKey(name);
+
+        if(!totals[key]){
+          totals[key] = {
+            name:name,
+            qty:0
+          };
+        }
+
+        totals[key].qty += qty;
+      });
+    });
+  });
+
+  return Object.keys(totals)
+    .map(function(key){
+      return {
+        name:totals[key].name,
+        qty:String(Math.max(1, Math.round(totals[key].qty))),
+        source:"meal"
+      };
+    })
+    .sort(function(a,b){
+      return a.name.localeCompare(b.name);
+    });
+}
+
+
+function syncMealPlanShoppingList(){
+  const generated = buildMealPlanShoppingItems();
+
+  if(!generated.length) return;
+
+  const generatedByKey = {};
+  generated.forEach(function(item){
+    generatedByKey[getMealShoppingKey(item.name)] = item;
+  });
+
+  const oldItems = Array.isArray(shoppingItems)
+    ? shoppingItems
+    : [];
+
+  /*
+   * Before the first sync, remove the old fixed default list.
+   * Any item the user added themselves is kept.
+   */
+  const firstSync =
+    localStorage.getItem("shiftfitShoppingPlanSynced") !== "1";
+
+  const manualItems = oldItems.filter(function(item){
+    if(!item || !item.name) return false;
+
+    const key = getMealShoppingKey(item.name);
+
+    if(firstSync){
+      return !defaultShoppingItems.some(function(defaultName){
+        return getMealShoppingKey(defaultName) === key;
+      });
+    }
+
+    return item.source === "manual";
+  });
+
+  shoppingItems = generated.map(function(item){
+    const old = oldItems.find(function(existing){
+      return existing &&
+        existing.source === "meal" &&
+        getMealShoppingKey(existing.name) ===
+          getMealShoppingKey(item.name);
+    });
+
+    return {
+      name:item.name,
+      qty:item.qty,
+      checked:old ? Boolean(old.checked) : false,
+      source:"meal"
+    };
+  });
+
+  manualItems.forEach(function(item){
+    shoppingItems.push({
+      name:String(item.name).trim(),
+      qty:String(Math.max(1, parseInt(item.qty,10) || 1)),
+      checked:Boolean(item.checked),
+      source:"manual"
+    });
+  });
+
+  saveShoppingItems();
+
+  localStorage.setItem(
+    "shiftfitShoppingPlanSynced",
+    "1"
+  );
+}
+
+
+/* Keep the list in sync whenever a meal is swapped. */
+const shiftFitOriginalSwapMeal = window.swapMeal;
+
+window.swapMeal = function(type){
+  shiftFitOriginalSwapMeal(type);
+  syncMealPlanShoppingList();
+  renderShoppingList();
+};
+
+
+/* Rebuild the list after a newly generated 7-day plan. */
+const shiftFitOriginalGenerateWeeklyMealPlan =
+  window.generateWeeklyMealPlan;
+
+window.generateWeeklyMealPlan = function(plan){
+  shiftFitOriginalGenerateWeeklyMealPlan(plan);
+  syncMealPlanShoppingList();
+};
+
+
+/* Mark manually-added shopping items as manual. */
+const shiftFitOriginalAddShoppingItem = window.addShoppingItem;
+
+window.addShoppingItem = function(){
+  const before = shoppingItems.length;
+
+  shiftFitOriginalAddShoppingItem();
+
+  if(shoppingItems.length > before){
+    shoppingItems[shoppingItems.length-1].source="manual";
+    saveShoppingItems();
+  }
+};
+
+
+/*
+ * Reset now returns to the current generated meal-plan basket rather
+ * than restoring the old fixed 20-item list.
+ */
+window.confirmResetShoppingList = function(){
+  syncMealPlanShoppingList();
+  renderShoppingList();
+  clearBasketResults();
+  closeResetShoppingConfirm();
+  showPlanSuccess();
+};
+
+
+/* First launch/migration: sync the saved 7-day plan once. */
+if(
+  Array.isArray(weeklyMeals) &&
+  weeklyMeals.length === 7
+){
+  syncMealPlanShoppingList();
+}
+</script>
+
 <script id="calendar-notification-init">
 window.shiftfitCalendarNotifyTimers=[];
 scheduleCalendarEventNotifications();
