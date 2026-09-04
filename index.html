@@ -8054,7 +8054,6 @@ button{
   <div class="ai-quick-title">QUICK ACTIONS</div>
   <div class="ai-quick-grid">
     <button class="ai-quick-btn" onclick="runAIQuickAction('meal')"><span>🍽️</span>Generate my meal plan</button>
-    <button class="ai-quick-btn" onclick="runAIQuickAction('lose')"><span>🔥</span>Set me up to lose weight</button>
     <button class="ai-quick-btn" onclick="runAIQuickAction('macros')"><span>🥩</span>Help me hit my macros</button>
     <button class="ai-quick-btn" onclick="runAIQuickAction('progress')"><span>📈</span>Analyse my progress</button>
   </div>
@@ -9666,7 +9665,7 @@ function aiBuildWeekPreview(){
     };
     return '<div class="ai-day-row"><div class="ai-day-name">'+names[i]+'</div><div class="ai-day-meals">'+meal("breakfast")+'<br>'+meal("lunch")+'<br>'+meal("dinner")+'<br>'+meal("snack")+'</div></div>';
   }).join("");
-  return '<div class="ai-plan-result"><h3>⚡ Your 7-Day Meal Plan</h3><p>Built from your current ShiftFit target and meal preferences.</p>'+rows+'<button class="ai-action-btn" onclick="showMeals()">VIEW FULL MEAL PLAN</button></div>';
+  return '<div class="ai-plan-result"><h3>⚡ Your 7-Day Meal Plan</h3><p>Built automatically from your ShiftFit target and meal preferences.</p>'+rows+'</div>';
 }
 
 function aiGenerateMealPlanForGoal(goal){
