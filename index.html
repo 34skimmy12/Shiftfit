@@ -20054,22 +20054,16 @@ function syncMealPlanShoppingList(){
     : [];
 
   /*
-   * Before the first sync, remove the old fixed default list.
-   * Any item the user added themselves is kept.
+   * Remove old generated/legacy shopping rows. Only explicitly manual items are kept.
    */
-  const firstSync =
-    localStorage.getItem("shiftfitShoppingPlanSynced") !== "1";
-
+  /*
+   * Only explicitly manual items are preserved.
+   * Legacy/default shopping rows from older versions are NOT treated
+   * as manual. This prevents stale items such as Apples surviving
+   * when the current seven-day meal plan does not contain them.
+   */
   const manualItems = oldItems.filter(function(item){
     if(!item || !item.name) return false;
-
-    const key = getMealShoppingKey(item.name);
-
-    if(firstSync){
-      return !defaultShoppingItems.some(function(defaultName){
-        return getMealShoppingKey(defaultName) === key;
-      });
-    }
 
     return item.source === "manual";
   });
