@@ -7798,7 +7798,7 @@ button{
     🛒 Your Weekly Basket
   </div>
 
-  <div class="shopping-plan-note">Showing your 15 main weekly essentials from the current 7-day meal plan.</div>
+  <div class="shopping-plan-note">Showing your main weekly essentials from the current 7-day meal plan.</div>
 <div id="shoppingList"></div>
 
 </div>
@@ -20008,22 +20008,11 @@ function buildMealPlanShoppingItems(){
     .map(function(key){
       return {
         name:totals[key].name,
-        qty:String(Math.max(1, Math.round(totals[key].qty))),
+        qty:"1",
         source:"meal"
       };
     })
     .sort(function(a,b){
-      /*
-       * Put the most-used ingredients first so the weekly shop
-       * feels useful rather than like a long recipe inventory.
-       */
-      const qtyA=Number(a.qty)||0;
-      const qtyB=Number(b.qty)||0;
-
-      if(qtyB!==qtyA){
-        return qtyB-qtyA;
-      }
-
       return a.name.localeCompare(b.name);
     })
     .slice(0,15);
