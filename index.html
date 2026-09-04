@@ -6296,7 +6296,15 @@ button{
 
 
 
-<section class="ai-card">
+<section
+  class="ai-card"
+  onclick="showAICoach()"
+  role="button"
+  tabindex="0"
+  onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();showAICoach()}"
+  aria-label="Open ShiftFit AI Coach"
+  style="cursor:pointer"
+>
 
   <div class="ai-bot">🤖</div>
 
@@ -8260,14 +8268,7 @@ button{
 </button>
 
 
-<button
-  class="nav-item"
-  id="aiCoachNav"
-  onclick="showAICoach()"
->
-  <span class="nav-icon">⚡</span>
-  <span>AI Coach</span>
-</button>
+
 
 <button
   class="nav-item"
