@@ -9680,7 +9680,7 @@ function aiGenerateMealPlanForGoal(goal){
   }
 
   /* Reuse the existing ShiftFit calculation engine and 7-day generator. */
-  generatePlan();
+  generatePlan(true);
   const plan=aiGetCurrentPlan();
   if(!plan) return {ok:false,message:"I couldn’t create the plan yet. Please check your profile details and try again."};
   updateAICoachStatus();
@@ -12808,7 +12808,7 @@ function showPlanSuccess(){
 }
 
 
-function generatePlan(){
+function generatePlan(stayOnCoach=false){
 
   const age=
     parseFloat(
@@ -13157,7 +13157,9 @@ function generatePlan(){
   showPlanSuccess();
 
 
-  showMeals();
+  if(!stayOnCoach){
+    showMeals();
+  }
 
 }
 
