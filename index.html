@@ -7850,7 +7850,6 @@ button{
 
 <div class="shopping-meal-sync-card">
   <div class="shopping-meal-sync-copy">
-    <div class="shopping-meal-sync-kicker">MEAL PLAN</div>
     <div class="shopping-meal-sync-title">Generate Meals</div>
     <div class="shopping-meal-sync-text">
       Sync your shopping list with your current 7-day meal plan.
@@ -7860,7 +7859,7 @@ button{
   <button
     type="button"
     class="shopping-meal-sync-btn"
-    onclick="generateMealsShoppingSync()"
+    onclick="window.generateMealsShoppingSync()"
   >
     ⚡ GENERATE MEALS
   </button>
@@ -20164,39 +20163,86 @@ if(
 </script>
 
 <script id="shiftfit-shopping-generate-meals">
-function generateMealsShoppingSync(){
-  if(
-    !Array.isArray(weeklyMeals) ||
-    weeklyMeals.length !== 7
-  ){
-    showPlanSuccess();
-    return;
-  }
+window.generateMealsShoppingSync = function(){
 
-  syncMealPlanShoppingList();
-  renderShoppingList();
+  try{
 
-  /*
-   * Give the user a clear confirmation without a browser popup.
-   */
-  const notice=document.createElement("div");
-  notice.className="shiftfit-plan-notice show";
-  notice.innerHTML=`
-    <div class="shiftfit-plan-notice-title">⚡ Shopping list synced</div>
-    <div class="shiftfit-plan-notice-text">
-      Your list now matches the current 7-day meal plan.
-    </div>
-  `;
+    if(
+      !Array.isArray(window.weeklyMeals) ||
+      window.weeklyMeals.length !== 7
+    ){
+      if(typeof showPlanSuccess === "function"){
+        showPlanSuccess();
+      }
+      return;
+    }
 
-  document.body.appendChild(notice);
+    /*
+     * This is intentionally user-triggered. It reads the CURRENT
+     * seven-day meal plan and rebuilds the shopping basket from it.
+     */
+    syncMealPlanShoppingList();
 
-  setTimeout(function(){
-    notice.classList.remove("show");
+    if(typeof renderShoppingList === "function"){
+      renderShoppingList();
+    }
+
+    const notice=document.createElement("div");
+    notice.className="shiftfit-plan-notice show";
+    notice.innerHTML=`
+      <div class="shiftfit-plan-notice-title">⚡ Shopping list synced</div>
+      <div class="shiftfit-plan-notice-text">
+        Your list now matches the current 7-day meal plan.
+      </div>
+    `;
+
+    document.body.appendChild(notice);
+
     setTimeout(function(){
-      notice.remove();
-    },350);
-  },2400);
-}
+      notice.classList.remove("show");
+
+      setTimeout(function(){
+        if(notice.parentNode){
+          notice.parentNode.removeChild(notice);
+        }
+      },350);
+
+    },2400);
+
+  }catch(error){
+
+    console.warn(
+      "Shopping meal sync failed.",
+      error
+    );
+
+    /*
+     * Never leave the button looking dead. Give the user feedback
+     * if a future data change causes an unexpected problem.
+     */
+    const notice=document.createElement("div");
+    notice.className="shiftfit-plan-notice show";
+    notice.innerHTML=`
+      <div class="shiftfit-plan-notice-title">⚠️ Couldn't sync yet</div>
+      <div class="shiftfit-plan-notice-text">
+        Generate your 7-day meal plan first, then try again.
+      </div>
+    `;
+
+    document.body.appendChild(notice);
+
+    setTimeout(function(){
+      notice.classList.remove("show");
+
+      setTimeout(function(){
+        if(notice.parentNode){
+          notice.parentNode.removeChild(notice);
+        }
+      },350);
+
+    },2600);
+  }
+};
 </script>
 
 <script id="calendar-notification-init">
@@ -20425,6 +20471,77 @@ scheduleCalendarEventNotifications();
 
 .shopping-meal-sync-btn:active{
   transform:scale(.985);
+}
+</style>
+
+
+<style id="shiftfit-v65-shopping-layout">
+.shopping-meal-sync-card{
+  margin:26px 0 14px;
+  padding:14px 15px;
+  border-radius:16px;
+}
+
+.shopping-meal-sync-copy{
+  margin-bottom:10px;
+}
+
+.shopping-meal-sync-title{
+  font-size:19px;
+  margin-bottom:3px;
+}
+
+.shopping-meal-sync-text{
+  font-size:11px;
+  line-height:1.35;
+}
+
+.shopping-meal-sync-btn{
+  padding:12px 13px;
+  border-radius:11px;
+  font-size:12px;
+}
+
+/* Smaller Best Basket card */
+.best-basket-card{
+  margin-top:10px;
+  padding:12px 13px;
+  border-radius:15px;
+}
+
+.best-basket-top{
+  gap:10px;
+}
+
+.best-basket-kicker{
+  font-size:9px;
+  letter-spacing:1.7px;
+  margin-bottom:2px;
+}
+
+.best-basket-title{
+  font-size:18px;
+  margin-bottom:3px;
+}
+
+.best-basket-desc{
+  font-size:10px;
+  line-height:1.35;
+}
+
+.best-basket-trophy{
+  width:38px;
+  height:38px;
+  min-width:38px;
+  border-radius:11px;
+  font-size:19px;
+}
+
+.basket-button{
+  margin-top:9px;
+  padding:10px;
+  border-radius:10px;
+  font-size:11px;
 }
 </style>
 
