@@ -6518,10 +6518,11 @@ button{
 
 <button
   class="generate-btn meal-generate-btn"
-  onclick="generatePlan()"
+  onclick="regenerateMealPlan()"
 >
-  ⚡ SAVE & GENERATE MY 7-DAY PLAN
+  ⚡ GENERATE MY 7-DAY MEAL PLAN
 </button>
+
 
 </section>
 
@@ -12026,7 +12027,6 @@ function generatePlan(){
   );
 
 
-  /* Rebuild the actual seven-day meal selections for the new plan. */
   generateWeeklyMealPlan(plan);
 
 
@@ -12215,7 +12215,6 @@ function getSelectedMealNutrition(type,index){
   };
 
 }
-
 
 
 /* =======================================================
@@ -12563,6 +12562,43 @@ function generateWeeklyMealPlan(plan){
   saveWeeklyMeals();
 
 }
+
+function regenerateMealPlan(){
+
+  const saved =
+    localStorage.getItem(
+      "shiftfitPlan"
+    );
+
+  if(!saved){
+
+    showSetup();
+    return;
+
+  }
+
+  try{
+
+    const plan = JSON.parse(saved);
+
+    generateWeeklyMealPlan(plan);
+
+    renderDays();
+    renderCurrentDay();
+
+    showPlanSuccess();
+
+  }catch(error){
+
+    console.warn(
+      "Could not regenerate meal plan.",
+      error
+    );
+
+  }
+
+}
+
 
 function scaleMeals(plan){
 
