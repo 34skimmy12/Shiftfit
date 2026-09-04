@@ -6518,15 +6518,6 @@ button{
 
 
 
-
-
-<button
-  class="generate-btn meal-generate-btn"
-  onclick="generatePlan()"
->
-  ⚡ SAVE & GENERATE MY 7-DAY PLAN
-</button>
-
 </section>
 
 
@@ -6913,7 +6904,12 @@ button{
 </section>
 
 
-
+<button
+  class="generate-btn"
+  onclick="generatePlan()"
+>
+  ⚡ SAVE & GENERATE MY PLAN
+</button>
 
 </section>
 
@@ -12032,7 +12028,10 @@ function generatePlan(){
   );
 
 
-  /* Rebuild the actual seven-day meal selections for the new plan. */
+  /*
+   * Rebuild the actual seven days whenever the user
+   * saves a new personalised plan.
+   */
   generateWeeklyMealPlan(plan);
 
 
@@ -12223,432 +12222,296 @@ function getSelectedMealNutrition(type,index){
 }
 
 
+
 /* =======================================================
- * SHIFT FIT — MIXED 7-DAY MEAL GENERATOR
+ * PERSONALised 7-DAY MEAL GENERATOR
  * =======================================================
- * Rules:
- * 1. Seven days are always generated.
- * 2. Each meal slot uses seven different choices where
- *    possible, so a breakfast/lunch/dinner/snack is not
- *    repeated on another day.
- * 3. The four meals on a single day are also deliberately
- *    mixed so we don't get "index 0" meals grouped together.
- * 4. The best mixed week is selected against the user's
- *    calorie and macro targets.
+ *
+ * SAVE & GENERATE MY PLAN now rebuilds the actual
+ * Monday-Sunday meal selections around the new target.
+ *
+ * The generator scores every combination of breakfast,
+ * lunch, dinner and snack against the user's calorie and
+ * macro targets, then chooses seven varied days.
+ *
+ * Meal swapping remains fully supported afterwards.
  */
 
-function mealWeekDistance(a,b){
+function mealComboScore(combo, plan){
 
-  let same=0;
-
-  ["breakfast","lunch","dinner","snack"].forEach(type=>{
-
-    if(
-      Number(a[type])===
-      Number(b[type])
-    ){
-      same++;
-    }
-
-  });
-
-  return same;
-
-}
-
-
-function scoreMealDay(indexes,plan){
-
-  const types=[
-    "breakfast",
-    "lunch",
-    "dinner",
-    "snack"
-  ];
-
-  const totals={
+  const totals = {
     calories:0,
     protein:0,
     carbs:0,
     fats:0
   };
 
-  types.forEach(type=>{
-
-    const nutrition=
-      getSelectedMealNutrition(
-        type,
-        indexes[type]
-      );
-
-    totals.calories +=
-      Number(nutrition.calories||0);
-
-    totals.protein +=
-      Number(nutrition.protein||0);
-
-    totals.carbs +=
-      Number(nutrition.carbs||0);
-
-    totals.fats +=
-      Number(nutrition.fats||0);
-
+  combo.forEach(item=>{
+    totals.calories += Number(item.nutrition.calories||0);
+    totals.protein += Number(item.nutrition.protein||0);
+    totals.carbs += Number(item.nutrition.carbs||0);
+    totals.fats += Number(item.nutrition.fats||0);
   });
 
-  const targetCalories=
-    Number(plan.calories||0);
+  const target = {
+    calories:Number(plan.calories||0),
+    protein:Number(plan.protein||0),
+    carbs:Number(plan.carbs||0),
+    fats:Number(plan.fats||0)
+  };
 
-  const targetProtein=
-    Number(plan.protein||0);
-
-  const targetCarbs=
-    Number(plan.carbs||0);
-
-  const targetFats=
-    Number(plan.fats||0);
-
-  const calorieError=
-    targetCalories>0
-      ? Math.abs(
-          totals.calories-
-          targetCalories
-        )/targetCalories
+  /*
+   * Calories and protein carry the most weight because they
+   * are the primary practical targets. Carbs/fats refine the
+   * match rather than dominating it.
+   */
+  const calorieError =
+    target.calories>0
+      ? Math.abs(totals.calories-target.calories)/target.calories
       : 0;
 
-  const proteinError=
-    targetProtein>0
-      ? Math.abs(
-          totals.protein-
-          targetProtein
-        )/targetProtein
+  const proteinError =
+    target.protein>0
+      ? Math.abs(totals.protein-target.protein)/target.protein
       : 0;
 
-  const carbsError=
-    targetCarbs>0
-      ? Math.abs(
-          totals.carbs-
-          targetCarbs
-        )/targetCarbs
+  const carbsError =
+    target.carbs>0
+      ? Math.abs(totals.carbs-target.carbs)/target.carbs
       : 0;
 
-  const fatsError=
-    targetFats>0
-      ? Math.abs(
-          totals.fats-
-          targetFats
-        )/targetFats
+  const fatsError =
+    target.fats>0
+      ? Math.abs(totals.fats-target.fats)/target.fats
       : 0;
 
-  let score=
-    calorieError*4+
-    proteinError*5+
-    carbsError*1.5+
+  let score =
+    calorieError*4 +
+    proteinError*4 +
+    carbsError*1.5 +
     fatsError*1.5;
 
+  /*
+   * Keep the generator aligned with the selected goal.
+   * Lose/gain plans favour protein slightly more; maintain
+   * favours a balanced macro match.
+   */
   if(plan.goal==="lose"){
-    score+=proteinError*2;
+    score += proteinError*1.5;
+  }else if(plan.goal==="gain"){
+    score += proteinError*1.25;
   }
 
-  if(plan.goal==="gain"){
-    score+=proteinError*1.5;
-  }
-
-  return score;
+  return {
+    score,
+    totals
+  };
 
 }
 
 
-function shuffledIndexes(length){
+function buildMealCombinations(){
 
-  const values=
-    Array.from(
-      {length},
-      (_,index)=>index
-    );
+  const combinations=[];
 
-  for(
-    let i=values.length-1;
-    i>0;
-    i--
-  ){
+  const breakfastOptions =
+    mealOptions.breakfast || [];
 
-    const j=
-      Math.floor(
-        Math.random()*(i+1)
-      );
+  const lunchOptions =
+    mealOptions.lunch || [];
 
-    [
-      values[i],
-      values[j]
-    ]=[
-      values[j],
-      values[i]
-    ];
+  const dinnerOptions =
+    mealOptions.dinner || [];
 
-  }
+  const snackOptions =
+    mealOptions.snack || [];
 
-  return values;
+  for(let b=0;b<breakfastOptions.length;b++){
 
-}
+    for(let l=0;l<lunchOptions.length;l++){
 
+      for(let d=0;d<dinnerOptions.length;d++){
 
-/*
- * Create one candidate week.
- *
- * Each meal type gets a seven-item permutation. We then
- * make sure the four selections on each day are not all
- * following the same position/index pattern.
- */
-function buildMixedMealWeek(){
+        for(let s=0;s<snackOptions.length;s++){
 
-  const days=7;
+          combinations.push({
+            indexes:{
+              breakfast:b,
+              lunch:l,
+              dinner:d,
+              snack:s
+            },
+            items:[
+              {
+                type:"breakfast",
+                nutrition:getSelectedMealNutrition("breakfast",b)
+              },
+              {
+                type:"lunch",
+                nutrition:getSelectedMealNutrition("lunch",l)
+              },
+              {
+                type:"dinner",
+                nutrition:getSelectedMealNutrition("dinner",d)
+              },
+              {
+                type:"snack",
+                nutrition:getSelectedMealNutrition("snack",s)
+              }
+            ]
+          });
 
-  const types=[
-    "breakfast",
-    "lunch",
-    "dinner",
-    "snack"
-  ];
-
-  const byType={};
-  const usedByDay=
-    Array.from(
-      {length:days},
-      ()=>[]
-    );
-
-  types.forEach(type=>{
-
-    const count=
-      mealOptions[type]?.length||0;
-
-    let selected=null;
-
-    /*
-     * Find a full seven-item permutation whose choices
-     * don't duplicate the meal indexes already used on the
-     * same day. This preserves seven unique choices for
-     * this meal category while making each day's four meal
-     * indexes visibly mixed.
-     */
-    for(
-      let attempt=0;
-      attempt<1000;
-      attempt++
-    ){
-
-      const candidate=
-        shuffledIndexes(count)
-          .slice(
-            0,
-            Math.min(days,count)
-          );
-
-      let valid=true;
-
-      for(
-        let day=0;
-        day<days;
-        day++
-      ){
-
-        const value=
-          candidate[day%candidate.length];
-
-        if(
-          usedByDay[day].includes(value)
-        ){
-          valid=false;
-          break;
         }
 
       }
 
-      if(valid){
-        selected=candidate;
-        break;
-      }
-
     }
-
-    /*
-     * Eight options are available for every current meal
-     * category, so the fallback should only be defensive.
-     */
-    if(!selected){
-
-      selected=
-        shuffledIndexes(count)
-          .slice(
-            0,
-            Math.min(days,count)
-          );
-
-    }
-
-    byType[type]=selected;
-
-    for(
-      let day=0;
-      day<days;
-      day++
-    ){
-
-      usedByDay[day].push(
-        selected[day%selected.length]
-      );
-
-    }
-
-  });
-
-  const week=[];
-
-  for(
-    let day=0;
-    day<days;
-    day++
-  ){
-
-    week.push({
-
-      breakfast:
-        byType.breakfast[day%byType.breakfast.length],
-
-      lunch:
-        byType.lunch[day%byType.lunch.length],
-
-      dinner:
-        byType.dinner[day%byType.dinner.length],
-
-      snack:
-        byType.snack[day%byType.snack.length]
-
-    });
 
   }
 
-  return week;
+  return combinations;
 
 }
 
 
 function generateWeeklyMealPlan(plan){
 
-  const days=7;
+  const combinations =
+    buildMealCombinations();
 
-  let bestWeek=null;
-  let bestScore=Infinity;
+  if(!combinations.length) return;
 
-  /*
-   * We deliberately create many independent mixed weeks
-   * and keep the one that balances nutrition with variety.
-   */
-  for(
-    let attempt=0;
-    attempt<250;
-    attempt++
-  ){
+  const scored =
+    combinations.map(combo=>{
 
-    const candidateWeek=
-      buildMixedMealWeek();
+      const result =
+        mealComboScore(combo,plan);
 
-    let score=0;
-
-    candidateWeek.forEach(day=>{
-
-      score+=
-        scoreMealDay(
-          day,
-          plan
-        );
+      return {
+        ...combo,
+        score:result.score,
+        totals:result.totals
+      };
 
     });
 
-    /*
-     * Strongly discourage two days from sharing two or
-     * more of the same meals. A complete duplicate is
-     * effectively impossible because every slot is unique,
-     * but this keeps the week genuinely mixed.
-     */
-    for(
-      let a=0;
-      a<candidateWeek.length;
-      a++
-    ){
+  scored.sort(
+    (a,b)=>a.score-b.score
+  );
 
-      for(
-        let b=a+1;
-        b<candidateWeek.length;
-        b++
-      ){
+  const selected=[];
+  const usedSignatures=new Set();
 
-        const same=
-          mealWeekDistance(
-            candidateWeek[a],
-            candidateWeek[b]
-          );
+  /*
+   * Pick seven strong combinations while penalising
+   * excessive repetition. We still allow a meal to appear
+   * more than once because eight options per meal type
+   * cannot guarantee seven completely unique choices in
+   * every category.
+   */
+  for(const candidate of scored){
 
-        if(same===1){
-          score+=0.10;
+    if(selected.length>=7) break;
+
+    const signature =
+      [
+        candidate.indexes.breakfast,
+        candidate.indexes.lunch,
+        candidate.indexes.dinner,
+        candidate.indexes.snack
+      ].join("-");
+
+    if(usedSignatures.has(signature)) continue;
+
+    let tooSimilar=false;
+
+    for(const previous of selected){
+
+      let sameCount=0;
+
+      ["breakfast","lunch","dinner","snack"].forEach(type=>{
+
+        if(
+          previous.indexes[type] ===
+          candidate.indexes[type]
+        ){
+          sameCount++;
         }
 
-        if(same===2){
-          score+=1.5;
-        }
+      });
 
-        if(same>=3){
-          score+=8;
-        }
-
+      /*
+       * Avoid filling the week with identical combinations.
+       * Two matching meal slots is acceptable, three or four
+       * makes the day feel repetitive.
+       */
+      if(sameCount>=3){
+        tooSimilar=true;
+        break;
       }
 
     }
 
-    /*
-     * Small random tie-breaker means pressing Generate
-     * again can create a fresh week rather than repeatedly
-     * returning the same optimum.
-     */
-    score+=
-      Math.random()*0.05;
+    if(tooSimilar) continue;
 
-    if(score<bestScore){
+    selected.push(candidate);
+    usedSignatures.add(signature);
 
-      bestScore=score;
-      bestWeek=candidateWeek;
+  }
+
+  /*
+   * In the unlikely event that the diversity rule left us
+   * short, fill the remaining days with the next best
+   * combinations.
+   */
+  if(selected.length<7){
+
+    for(const candidate of scored){
+
+      if(selected.length>=7) break;
+
+      const signature =
+        [
+          candidate.indexes.breakfast,
+          candidate.indexes.lunch,
+          candidate.indexes.dinner,
+          candidate.indexes.snack
+        ].join("-");
+
+      if(usedSignatures.has(signature)) continue;
+
+      selected.push(candidate);
+      usedSignatures.add(signature);
 
     }
 
   }
 
-  if(
-    !bestWeek||
-    bestWeek.length!==days
-  ){
-    return;
-  }
-
-  weeklyMeals=
-    bestWeek.map(day=>({
-
-      breakfast:
-        Number(day.breakfast),
-
-      lunch:
-        Number(day.lunch),
-
-      dinner:
-        Number(day.dinner),
-
-      snack:
-        Number(day.snack)
-
+  weeklyMeals =
+    selected.map(day=>({
+      breakfast:day.indexes.breakfast,
+      lunch:day.indexes.lunch,
+      dinner:day.indexes.dinner,
+      snack:day.indexes.snack
     }));
+
+  /*
+   * Always guarantee a complete Monday-Sunday array.
+   */
+  while(weeklyMeals.length<7){
+
+    weeklyMeals.push({
+      ...weeklyMeals[
+        weeklyMeals.length % Math.max(1,weeklyMeals.length)
+      ]
+    });
+
+  }
 
   saveWeeklyMeals();
 
 }
+
 
 function scaleMeals(plan){
 
