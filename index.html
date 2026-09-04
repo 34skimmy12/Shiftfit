@@ -13641,23 +13641,24 @@ function loadShoppingItems(){
 
   }
 
+  /*
+   * Shopping starts empty until the user deliberately presses
+   * GENERATE MEALS. This prevents an unrelated/default basket
+   * appearing before a weekly meal plan has been synced.
+   */
   if(
-    !Array.isArray(
-      shoppingItems
-    ) ||
-    !shoppingItems.length
+    localStorage.getItem("shiftfitShoppingPlanSynced") !== "1"
   ){
 
-    shoppingItems=
-      defaultShoppingItems.map(
-        name=>({
+    shoppingItems=[];
 
-          name:name,
-          qty:"1",
-          checked:false
+    saveShoppingItems();
 
-        })
-      );
+  }else if(
+    !Array.isArray(shoppingItems)
+  ){
+
+    shoppingItems=[];
 
     saveShoppingItems();
 
@@ -20145,21 +20146,23 @@ window.addShoppingItem = function(){
  * than restoring the old fixed 20-item list.
  */
 window.confirmResetShoppingList = function(){
-  syncMealPlanShoppingList();
+
+  shoppingItems=[];
+
+  localStorage.setItem(
+    "shiftfitShoppingPlanSynced",
+    "0"
+  );
+
+  saveShoppingItems();
   renderShoppingList();
   clearBasketResults();
   closeResetShoppingConfirm();
   showPlanSuccess();
+
 };
 
 
-/* First launch/migration: sync the saved 7-day plan once. */
-if(
-  Array.isArray(weeklyMeals) &&
-  weeklyMeals.length === 7
-){
-  syncMealPlanShoppingList();
-}
 </script>
 
 <script id="shiftfit-shopping-generate-meals">
@@ -20542,6 +20545,29 @@ scheduleCalendarEventNotifications();
   padding:10px;
   border-radius:10px;
   font-size:11px;
+}
+</style>
+
+
+<style id="shiftfit-v66-shopping-reset-style">
+.clear-shop-btn{
+  border:1px solid rgba(139,92,246,.65) !important;
+  color:#d6c2ff !important;
+  background:linear-gradient(
+    90deg,
+    rgba(135,56,244,.16),
+    rgba(85,48,216,.16)
+  ) !important;
+  box-shadow:none !important;
+}
+
+.clear-shop-btn:active{
+  transform:scale(.985);
+  background:linear-gradient(
+    90deg,
+    rgba(135,56,244,.28),
+    rgba(85,48,216,.28)
+  ) !important;
 }
 </style>
 
