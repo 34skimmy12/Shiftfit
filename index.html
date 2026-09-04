@@ -7350,7 +7350,14 @@ button{
 
 <section id="progressScreen" class="screen">
 
-  <div class="progress-header">
+  <button
+  class="back-btn progress-back-btn"
+  onclick="showHome()"
+>
+  ← Back to Home
+</button>
+
+<div class="progress-header">
     <div class="progress-kicker">SHIFT FIT PROGRESS</div>
     <h1>Your Progress</h1>
     <p>See how your training and nutrition are moving you towards your goal.</p>
@@ -7748,9 +7755,9 @@ button{
 
 <button
   class="back-btn"
-  onclick="showMeals()"
+  onclick="showHome()"
 >
-  ← Back to Meal Plan
+  ← Back to Home
 </button>
 
 <div class="shopping-header">
@@ -19970,4 +19977,51 @@ scheduleCalendarEventNotifications();
   background:transparent !important;
   pointer-events:none !important;
 }
+
+/* SHIFT FIT — COMPACT SHOPPING POLISH */
+.shopping-header{margin-bottom:14px}
+.shopping-header h1{font-size:34px;letter-spacing:-1.2px;margin:7px 0 6px}
+.shopping-header p{font-size:14px;line-height:1.4;max-width:520px}
+.shopping-summary{gap:9px;margin:14px 0}
+.shopping-stat{padding:12px 14px;border-radius:15px}
+.shopping-stat small{font-size:9px;letter-spacing:.7px}
+.shopping-stat strong{font-size:25px;margin-top:3px}
+
+.shopping-list-card{
+  border-radius:17px;
+  box-shadow:0 12px 30px rgba(0,0,0,.18);
+}
+.shopping-list-title{
+  padding:13px 15px;
+  font-size:14px;
+  letter-spacing:.2px;
+  background:rgba(139,92,246,.055);
+}
+.shop-row{
+  grid-template-columns:25px minmax(0,1fr) auto 24px;
+  gap:7px;
+  padding:9px 11px;
+  min-height:48px;
+}
+.shop-row:nth-child(even){background:rgba(255,255,255,.018)}
+.shop-check{width:20px;height:20px;border-radius:6px;font-size:11px}
+.shop-name{font-size:13px;line-height:1.2;font-weight:800}
+.shop-qty-wrap{gap:3px}
+.shop-qty-btn{width:25px;height:28px;border-radius:7px;font-size:15px}
+.shop-qty{width:40px;padding:6px 2px;border-radius:7px;font-size:11px}
+.delete-shop{width:24px;font-size:17px;line-height:1}
+
+.add-item-card{grid-template-columns:1fr 70px;gap:7px;margin-top:11px}
+.add-item-input{padding:11px;border-radius:10px;font-size:12px}
+.add-item-btn{border-radius:10px;font-size:12px}
+.clear-shop-btn{margin-top:10px;padding:10px;border-radius:10px;font-size:11px}
+
+.best-basket-card{margin-top:13px;padding:15px;border-radius:17px}
+.best-basket-title{font-size:19px}
+.best-basket-desc{font-size:11px}
+.best-basket-trophy{width:42px;height:42px;min-width:42px;border-radius:12px;font-size:22px}
+.basket-button{margin-top:12px;padding:11px;border-radius:11px;font-size:12px}
+
+.progress-back-btn{margin-bottom:4px}
+
 </style>
