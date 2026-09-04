@@ -2439,18 +2439,6 @@ button{
 
 
 <style>
-.progress-insights-open{
-  width:100%;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:16px;
-  text-align:left;
-  cursor:pointer;
-}
-.progress-insights-open h3{margin:4px 0 3px}
-.progress-insights-open p{margin:0;color:var(--muted)}
-.progress-insights-open span{white-space:nowrap;font-size:11px;font-weight:900;letter-spacing:.08em}
 .insight-progress-item{margin-top:20px}
 .insight-progress-top{display:flex;justify-content:space-between;gap:12px;margin-bottom:8px}
 .insight-progress-top span{color:var(--muted);font-size:13px;text-align:right}
@@ -2460,6 +2448,28 @@ button{
 .progress-insight-summary h3{margin:7px 0}
 .progress-insight-summary p{color:var(--muted);line-height:1.5;margin:0}
 </style>
+<style>
+.progress-insights-profile-card{
+  width:100%;
+  text-align:left;
+  cursor:pointer;
+  font:inherit;
+  color:inherit;
+}
+.progress-insights-profile-card .my-history-copy{
+  min-width:0;
+}
+.progress-insights-profile-card .my-history-copy h2{
+  margin:4px 0 0;
+}
+.progress-insights-profile-card .my-history-copy p{
+  margin:4px 0 0;
+}
+.progress-insights-view-btn{
+  flex-shrink:0;
+}
+</style>
+
 
 <style>
 .meal-preference-row{display:flex;gap:10px;margin-top:10px}
@@ -6629,6 +6639,23 @@ button{
 
 </section>
 
+<button
+  id="progressInsightsOpenBtn"
+  class="my-history-card progress-insights-profile-card"
+  onclick="showProgressInsights()"
+>
+  <div class="my-history-copy">
+    <div class="my-history-kicker">NEW</div>
+    <h2>Progress Insights</h2>
+    <p>See your weekly performance at a glance.</p>
+  </div>
+
+  <span class="my-history-btn progress-insights-view-btn">
+    VIEW INSIGHTS
+    <span>→</span>
+  </span>
+</button>
+
 <div class="setup-header">
 
   <div class="setup-kicker">
@@ -7711,17 +7738,6 @@ button{
       <p>Weight history, weekly trends and longer-term stats will be added here.</p>
     </div>
   </section>
-
-
-  <button id="progressInsightsOpenBtn" class="card progress-insights-open" onclick="showProgressInsights()">
-    <div>
-      <div class="eyebrow">NEW</div>
-      <h3>📈 Progress Insights</h3>
-      <p>See your weekly performance at a glance.</p>
-    </div>
-    <span>VIEW INSIGHTS →</span>
-  </button>
-
 </section>
 
 
