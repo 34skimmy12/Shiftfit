@@ -2449,6 +2449,12 @@ button{
 .progress-insight-summary p{color:var(--muted);line-height:1.5;margin:0}
 </style>
 <style>
+.meal-build-plan-btn{
+  margin-top:12px;
+  width:100%;
+}
+</style>
+<style>
 .progress-insights-profile-card{
   width:100%;
   text-align:left;
@@ -6236,7 +6242,7 @@ button{
 
   <button
     class="edit-plan-btn"
-    onclick="showSetup()"
+    onclick="showPlanBuilder()"
   >
     ⚙ EDIT MY PERSONAL PLAN
   </button>
@@ -6578,6 +6584,13 @@ button{
   ⚡ GENERATE MY 7-DAY MEAL PLAN
 </button>
 
+<button
+  class="edit-plan-btn meal-build-plan-btn"
+  onclick="showPlanBuilder()"
+>
+  ⚙ BUILD YOUR PLAN
+</button>
+
 
 </section>
 
@@ -6654,6 +6667,21 @@ button{
     VIEW INSIGHTS
     <span>→</span>
   </span>
+</button>
+
+
+</section>
+
+
+<!-- PLAN BUILDER -->
+
+<section id="planBuilderScreen" class="screen">
+
+<button
+  class="back-btn"
+  onclick="showSetup()"
+>
+  ← BACK TO MY PROFILE
 </button>
 
 <div class="setup-header">
@@ -6988,9 +7016,7 @@ button{
   ⚡ SAVE & GENERATE MY PLAN
 </button>
 
-
 </section>
-
 
 
 <!-- PROGRESS INSIGHTS -->
@@ -10031,17 +10057,24 @@ function showSetup(){
     .getElementById("setupScreen")
     .classList.add("active");
 
-  document
-    .querySelectorAll(
-      "#setupScreen > .my-history-hidden"
-    )
-    .forEach(
-      element=>{
-        element.classList.remove(
-          "my-history-hidden"
-        );
-      }
+  setNav("");
+
+  window.scrollTo(0,0);
+
+}
+
+function showPlanBuilder(){
+
+  hideAllScreens();
+
+  const screen =
+    document.getElementById(
+      "planBuilderScreen"
     );
+
+  if(screen){
+    screen.classList.add("active");
+  }
 
   setNav("");
 
