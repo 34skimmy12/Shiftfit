@@ -10090,6 +10090,20 @@ function showPlanBuilder(){
 
 function showShopping(){
 
+  /*
+   * Start the Shopping tab fresh every time it is opened.
+   * The user must deliberately press GENERATE MEALS to build
+   * the basket from the current 7-day meal plan.
+   */
+  shoppingItems=[];
+
+  localStorage.setItem(
+    "shiftfitShoppingPlanSynced",
+    "0"
+  );
+
+  saveShoppingItems();
+
   hideAllScreens();
 
   document
