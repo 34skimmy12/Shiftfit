@@ -7798,7 +7798,8 @@ button{
     🛒 Your Weekly Basket
   </div>
 
-  <div id="shoppingList"></div>
+  <div class="shopping-plan-note">Showing your 15 main weekly essentials from the current 7-day meal plan.</div>
+<div id="shoppingList"></div>
 
 </div>
 
@@ -14293,7 +14294,7 @@ function showResetShoppingConfirm(){
         </div>
 
         <div class="shiftfit-reset-text">
-          This will restore your default weekly shopping list.
+          This will rebuild your compact shopping list from your current 7-day meal plan.
         </div>
 
         <div class="shiftfit-reset-actions">
@@ -19880,8 +19881,8 @@ const mealShoppingIngredients = {
     0: [["Oats",1],["Protein powder",1],["Greek yoghurt",1],["Mixed berries",1]],
     1: [["Eggs",1],["Avocado",1],["Wholegrain bread",1]],
     2: [["Oats",1],["Protein powder",1],["Bananas",1],["Greek yoghurt",1]],
-    3: [["Eggs",1],["Chicken breast",1],["Beans",1],["Salsa",1],["Wholemeal wraps",1]],
-    4: [["Greek yoghurt",1],["Oats",1],["Honey",1],["Mixed berries",1]],
+    3: [["Eggs",1],["Chicken breast",1],["Wholemeal wraps",1]],
+    4: [["Greek yoghurt",1],["Oats",1],["Mixed berries",1]],
     5: [["Eggs",1],["Salmon",1],["Wholegrain bread",1]],
     6: [["Wholegrain bread",1],["Peanut butter",1],["Bananas",1],["Greek yoghurt",1]],
     7: [["Chicken breast",1],["Eggs",1],["Spinach",1],["Wholemeal wraps",1]]
@@ -19889,11 +19890,11 @@ const mealShoppingIngredients = {
 
   lunch: {
     0: [["Chicken breast",1],["Rice",1],["Mixed vegetables",1]],
-    1: [["Lean turkey mince",1],["Wholewheat pasta",1],["Tomato sauce",1]],
+    1: [["Lean turkey mince",1],["Wholewheat pasta",1]],
     2: [["Chicken breast",1],["Wholemeal wraps",1],["Potatoes",1]],
-    3: [["Tuna",1],["Light mayonnaise",1],["Potatoes",1],["Lettuce",1]],
-    4: [["Lean beef mince",1],["Rice",1],["Beans",1],["Salsa",1],["Mixed vegetables",1]],
-    5: [["Chicken breast",1],["Lettuce",1],["Wholemeal wraps",1],["Light mayonnaise",1]],
+    3: [["Tuna",1],["Potatoes",1],["Mixed vegetables",1]],
+    4: [["Lean beef mince",1],["Rice",1],["Mixed vegetables",1]],
+    5: [["Chicken breast",1],["Wholemeal wraps",1],["Spinach",1]],
     6: [["Salmon",1],["Wholewheat pasta",1],["Spinach",1]],
     7: [["Lean turkey mince",1],["Sweet potatoes",1],["Mixed vegetables",1]]
   },
@@ -19902,24 +19903,65 @@ const mealShoppingIngredients = {
     0: [["Lean beef mince",1],["Sweet potatoes",1],["Mixed vegetables",1]],
     1: [["Chicken breast",1],["Rice",1],["Mixed vegetables",1]],
     2: [["Salmon",1],["Rice",1],["Mixed vegetables",1]],
-    3: [["Lean turkey mince",1],["Kidney beans",1],["Rice",1],["Tomato sauce",1]],
-    4: [["Chicken breast",1],["Rice",1],["Mixed vegetables",1],["Salsa",1]],
+    3: [["Lean turkey mince",1],["Rice",1],["Mixed vegetables",1]],
+    4: [["Chicken breast",1],["Rice",1],["Mixed vegetables",1]],
     5: [["Lean beef mince",1],["Potatoes",1],["Mixed vegetables",1]],
-    6: [["Chicken breast",1],["Peppers",1],["Onions",1],["Wholemeal wraps",1],["Salsa",1]],
-    7: [["Lean beef mince",1],["Wholewheat pasta",1],["Tomato sauce",1]]
+    6: [["Chicken breast",1],["Wholemeal wraps",1],["Spinach",1]],
+    7: [["Lean beef mince",1],["Wholewheat pasta",1]]
   },
 
   snack: {
     0: [["Greek yoghurt",1],["Mixed berries",1],["Mixed nuts",1]],
     1: [["Protein powder",1],["Bananas",1],["Peanut butter",1]],
     2: [["Cottage cheese",1],["Rice cakes",1],["Apples",1]],
-    3: [["Protein bar",1],["Apples",1]],
+    3: [["Protein powder",1],["Apples",1]],
     4: [["Lean turkey mince",1],["Rice cakes",1]],
     5: [["Eggs",1],["Apples",1]],
     6: [["Protein powder",1],["Mixed berries",1]],
     7: [["Apples",1],["Peanut butter",1]]
   }
 };
+
+
+/*
+ * Keep the weekly shop focused on the main ingredients.
+ * These are the items a user is most likely to want to buy
+ * as a normal weekly supermarket shop.
+ */
+const compactShoppingEssentials = [
+  "Chicken breast",
+  "Lean beef mince",
+  "Lean turkey mince",
+  "Salmon",
+  "Tuna",
+  "Eggs",
+  "Greek yoghurt",
+  "Protein powder",
+  "Cottage cheese",
+  "Oats",
+  "Rice",
+  "Wholewheat pasta",
+  "Wholemeal wraps",
+  "Wholegrain bread",
+  "Potatoes",
+  "Sweet potatoes",
+  "Mixed vegetables",
+  "Spinach",
+  "Mixed berries",
+  "Bananas",
+  "Apples",
+  "Avocado",
+  "Peanut butter",
+  "Mixed nuts",
+  "Rice cakes"
+];
+
+const compactShoppingEssentialKeys =
+  new Set(
+    compactShoppingEssentials.map(
+      name=>String(name).trim().toLowerCase()
+    )
+  );
 
 
 function getMealShoppingKey(name){
@@ -19960,6 +20002,9 @@ function buildMealPlanShoppingItems(){
   });
 
   return Object.keys(totals)
+    .filter(function(key){
+      return compactShoppingEssentialKeys.has(key);
+    })
     .map(function(key){
       return {
         name:totals[key].name,
@@ -19968,8 +20013,20 @@ function buildMealPlanShoppingItems(){
       };
     })
     .sort(function(a,b){
+      /*
+       * Put the most-used ingredients first so the weekly shop
+       * feels useful rather than like a long recipe inventory.
+       */
+      const qtyA=Number(a.qty)||0;
+      const qtyB=Number(b.qty)||0;
+
+      if(qtyB!==qtyA){
+        return qtyB-qtyA;
+      }
+
       return a.name.localeCompare(b.name);
-    });
+    })
+    .slice(0,15);
 }
 
 
@@ -20197,6 +20254,18 @@ scheduleCalendarEventNotifications();
 
 </body>
 </html>
+<style id="shiftfit-compact-shopping-note">
+.shopping-plan-note{
+  margin:8px 0 12px;
+  padding:9px 11px;
+  border:1px solid rgba(139,92,246,.22);
+  border-radius:11px;
+  background:rgba(139,92,246,.045);
+  font-size:11px;
+  line-height:1.35;
+  color:#aab1c5;
+}
+</style>
 <style id="shiftfit-calendar-month-only">
 #calendarScreen .calendar-empty{
   display:block !important;
