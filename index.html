@@ -14312,7 +14312,7 @@ function showResetShoppingConfirm(){
         </div>
 
         <div class="shiftfit-reset-text">
-          This will rebuild your compact shopping list from your current 7-day meal plan.
+          This will clear your shopping list. You can rebuild it from your current 7-day meal plan at any time.
         </div>
 
         <div class="shiftfit-reset-actions">
@@ -20040,7 +20040,9 @@ function buildMealPlanShoppingItems(){
 function syncMealPlanShoppingList(){
   const generated = buildMealPlanShoppingItems();
 
-  if(!generated.length) return;
+  if(!generated.length){
+    return false;
+  }
 
   const generatedByKey = {};
   generated.forEach(function(item){
@@ -20103,6 +20105,8 @@ function syncMealPlanShoppingList(){
     "shiftfitShoppingPlanSynced",
     "1"
   );
+
+  return true;
 }
 
 
@@ -20112,17 +20116,6 @@ const shiftFitOriginalSwapMeal = window.swapMeal;
 window.swapMeal = function(type){
   shiftFitOriginalSwapMeal(type);
   renderShoppingList();
-};
-
-
-/* Rebuild the list after a newly generated 7-day plan (fallback wrapper). */
-const shiftFitOriginalGenerateWeeklyMealPlan =
-  window.generateWeeklyMealPlan;
-
-window.generateWeeklyMealPlan = function(plan){
-  shiftFitOriginalGenerateWeeklyMealPlan(plan);
-  syncMealPlanShoppingList();
-  saveShoppingItems();
 };
 
 
@@ -20171,8 +20164,8 @@ window.generateMealsShoppingSync = function(){
   try{
 
     if(
-      !Array.isArray(window.weeklyMeals) ||
-      window.weeklyMeals.length !== 7
+      !Array.isArray(weeklyMeals) ||
+      weeklyMeals.length !== 7
     ){
       if(typeof showPlanSuccess === "function"){
         showPlanSuccess();
@@ -20184,7 +20177,11 @@ window.generateMealsShoppingSync = function(){
      * This is intentionally user-triggered. It reads the CURRENT
      * seven-day meal plan and rebuilds the shopping basket from it.
      */
-    syncMealPlanShoppingList();
+    const synced = syncMealPlanShoppingList();
+
+    if(!synced){
+      throw new Error("No meal-plan ingredients were available.");
+    }
 
     if(typeof renderShoppingList === "function"){
       renderShoppingList();
