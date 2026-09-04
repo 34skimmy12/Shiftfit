@@ -7847,6 +7847,25 @@ button{
 
 <!-- BEST BASKET -->
 
+
+<div class="shopping-meal-sync-card">
+  <div class="shopping-meal-sync-copy">
+    <div class="shopping-meal-sync-kicker">MEAL PLAN</div>
+    <div class="shopping-meal-sync-title">Generate Meals</div>
+    <div class="shopping-meal-sync-text">
+      Sync your shopping list with your current 7-day meal plan.
+    </div>
+  </div>
+
+  <button
+    type="button"
+    class="shopping-meal-sync-btn"
+    onclick="generateMealsShoppingSync()"
+  >
+    ⚡ GENERATE MEALS
+  </button>
+</div>
+
 <section class="best-basket-card">
 
   <div class="best-basket-top">
@@ -12611,7 +12630,6 @@ function generatePlan(){
 
 
   generateWeeklyMealPlan(plan);
-
 
   saveShiftSettings();
 
@@ -20093,18 +20111,18 @@ const shiftFitOriginalSwapMeal = window.swapMeal;
 
 window.swapMeal = function(type){
   shiftFitOriginalSwapMeal(type);
-  syncMealPlanShoppingList();
   renderShoppingList();
 };
 
 
-/* Rebuild the list after a newly generated 7-day plan. */
+/* Rebuild the list after a newly generated 7-day plan (fallback wrapper). */
 const shiftFitOriginalGenerateWeeklyMealPlan =
   window.generateWeeklyMealPlan;
 
 window.generateWeeklyMealPlan = function(plan){
   shiftFitOriginalGenerateWeeklyMealPlan(plan);
   syncMealPlanShoppingList();
+  saveShoppingItems();
 };
 
 
@@ -20142,6 +20160,42 @@ if(
   weeklyMeals.length === 7
 ){
   syncMealPlanShoppingList();
+}
+</script>
+
+<script id="shiftfit-shopping-generate-meals">
+function generateMealsShoppingSync(){
+  if(
+    !Array.isArray(weeklyMeals) ||
+    weeklyMeals.length !== 7
+  ){
+    showPlanSuccess();
+    return;
+  }
+
+  syncMealPlanShoppingList();
+  renderShoppingList();
+
+  /*
+   * Give the user a clear confirmation without a browser popup.
+   */
+  const notice=document.createElement("div");
+  notice.className="shiftfit-plan-notice show";
+  notice.innerHTML=`
+    <div class="shiftfit-plan-notice-title">⚡ Shopping list synced</div>
+    <div class="shiftfit-plan-notice-text">
+      Your list now matches the current 7-day meal plan.
+    </div>
+  `;
+
+  document.body.appendChild(notice);
+
+  setTimeout(function(){
+    notice.classList.remove("show");
+    setTimeout(function(){
+      notice.remove();
+    },350);
+  },2400);
 }
 </script>
 
@@ -20315,5 +20369,63 @@ scheduleCalendarEventNotifications();
 .basket-button{margin-top:12px;padding:11px;border-radius:11px;font-size:12px}
 
 .progress-back-btn{margin-bottom:4px}
+
+
+<style id="shiftfit-shopping-generate-meals-style">
+.shopping-meal-sync-card{
+  margin:14px 0;
+  padding:16px;
+  border:1px solid rgba(139,92,246,.42);
+  border-radius:17px;
+  background:linear-gradient(
+    135deg,
+    rgba(139,92,246,.12),
+    rgba(20,24,48,.72)
+  );
+}
+
+.shopping-meal-sync-copy{
+  margin-bottom:12px;
+}
+
+.shopping-meal-sync-kicker{
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:2px;
+  color:#b995ff;
+  margin-bottom:4px;
+}
+
+.shopping-meal-sync-title{
+  font-size:21px;
+  font-weight:900;
+  color:#f4f5fb;
+  margin-bottom:4px;
+}
+
+.shopping-meal-sync-text{
+  font-size:12px;
+  line-height:1.4;
+  color:#aab1c5;
+}
+
+.shopping-meal-sync-btn{
+  width:100%;
+  border:0;
+  border-radius:12px;
+  padding:13px 14px;
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:.4px;
+  color:#fff;
+  background:linear-gradient(90deg,#8738f4,#5530d8);
+  box-shadow:0 8px 20px rgba(91,48,216,.25);
+  cursor:pointer;
+}
+
+.shopping-meal-sync-btn:active{
+  transform:scale(.985);
+}
+</style>
 
 </style>
