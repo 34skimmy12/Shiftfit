@@ -2437,7 +2437,30 @@ button{
   .exercise-video-frame{border-radius:12px}
 }
 
+
+<style>
+.progress-insights-open{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  text-align:left;
+  cursor:pointer;
+}
+.progress-insights-open h3{margin:4px 0 3px}
+.progress-insights-open p{margin:0;color:var(--muted)}
+.progress-insights-open span{white-space:nowrap;font-size:11px;font-weight:900;letter-spacing:.08em}
+.insight-progress-item{margin-top:20px}
+.insight-progress-top{display:flex;justify-content:space-between;gap:12px;margin-bottom:8px}
+.insight-progress-top span{color:var(--muted);font-size:13px;text-align:right}
+.insight-progress-track{height:10px;background:rgba(255,255,255,.08);border-radius:999px;overflow:hidden}
+.insight-progress-fill{height:100%;width:0%;background:var(--accent,#8f55ff);border-radius:999px;transition:width .35s ease}
+.insight-progress-percent{text-align:right;color:var(--muted);font-size:11px;margin-top:5px}
+.progress-insight-summary h3{margin:7px 0}
+.progress-insight-summary p{color:var(--muted);line-height:1.5;margin:0}
 </style>
+
 <style>
 .meal-preference-row{display:flex;gap:10px;margin-top:10px}
 .meal-preference-btn{flex:1;min-height:42px;border:1px solid var(--border);border-radius:12px;background:rgba(17,22,43,.72);color:var(--muted);font-weight:800;letter-spacing:.04em;font-size:12px}
@@ -6942,6 +6965,76 @@ button{
 </section>
 
 
+
+<!-- PROGRESS INSIGHTS -->
+<section id="progressInsightsScreen" class="screen">
+
+  <div class="section-head">
+    <div>
+      <div class="eyebrow">PROGRESS</div>
+      <h2>Progress Insights</h2>
+      <p>See how you're tracking this week.</p>
+    </div>
+  </div>
+
+  <div class="card progress-insights-card">
+
+    <div class="eyebrow">WEEKLY PROGRESS</div>
+
+    <div class="insight-progress-item">
+      <div class="insight-progress-top">
+        <strong>🔥 Calories</strong>
+        <span id="insightCaloriesText">0 / 0 kcal</span>
+      </div>
+      <div class="insight-progress-track">
+        <div id="insightCaloriesBar" class="insight-progress-fill"></div>
+      </div>
+      <div id="insightCaloriesPercent" class="insight-progress-percent">0%</div>
+    </div>
+
+    <div class="insight-progress-item">
+      <div class="insight-progress-top">
+        <strong>💪 Protein</strong>
+        <span id="insightProteinText">0 / 0g</span>
+      </div>
+      <div class="insight-progress-track">
+        <div id="insightProteinBar" class="insight-progress-fill"></div>
+      </div>
+      <div id="insightProteinPercent" class="insight-progress-percent">0%</div>
+    </div>
+
+    <div class="insight-progress-item">
+      <div class="insight-progress-top">
+        <strong>🏋️ Workouts</strong>
+        <span id="insightWorkoutText">0 / 0 completed</span>
+      </div>
+      <div class="insight-progress-track">
+        <div id="insightWorkoutBar" class="insight-progress-fill"></div>
+      </div>
+      <div id="insightWorkoutPercent" class="insight-progress-percent">0%</div>
+    </div>
+
+    <div class="insight-progress-item">
+      <div class="insight-progress-top">
+        <strong>🎯 Weight Goal</strong>
+        <span id="insightWeightText">0 / 0kg</span>
+      </div>
+      <div class="insight-progress-track">
+        <div id="insightWeightBar" class="insight-progress-fill"></div>
+      </div>
+      <div id="insightWeightPercent" class="insight-progress-percent">0%</div>
+    </div>
+
+  </div>
+
+  <div class="card progress-insight-summary">
+    <div class="eyebrow">SHIFT FIT INSIGHT</div>
+    <h3 id="progressInsightTitle">Keep going 💪</h3>
+    <p id="progressInsightBody">Your weekly progress will appear here as you log food, workouts and weight.</p>
+  </div>
+
+</section>
+
 <!-- CALENDAR -->
 
 <section id="calendarScreen" class="screen">
@@ -7618,6 +7711,16 @@ button{
       <p>Weight history, weekly trends and longer-term stats will be added here.</p>
     </div>
   </section>
+
+
+  <button id="progressInsightsOpenBtn" class="card progress-insights-open" onclick="showProgressInsights()">
+    <div>
+      <div class="eyebrow">NEW</div>
+      <h3>📈 Progress Insights</h3>
+      <p>See your weekly performance at a glance.</p>
+    </div>
+    <span>VIEW INSIGHTS →</span>
+  </button>
 
 </section>
 
@@ -9265,6 +9368,420 @@ function showCalendar(){
 
 
 
+
+function showProgressInsights(){
+
+  document.querySelectorAll(".screen").forEach(
+    screen=>screen.classList.remove("active")
+  );
+
+  const screen=
+    document.getElementById("progressInsightsScreen");
+
+  if(screen){
+    screen.classList.add("active");
+  }
+
+  updateProgressInsights();
+
+  window.scrollTo({
+    top:0,
+    behavior:"auto"
+  });
+
+}
+
+function percent(value,total){
+
+  if(!Number.isFinite(value) || !Number.isFinite(total) || total<=0){
+    return 0;
+  }
+
+  return Math.max(
+    0,
+    Math.min(
+      100,
+      Math.round((value/total)*100)
+    )
+  );
+
+}
+
+function setInsightProgress(barId,percentValue){
+
+  const bar=
+    document.getElementById(barId);
+
+  if(bar){
+    bar.style.width=
+      Math.max(0,Math.min(100,percentValue))+"%";
+  }
+
+}
+
+function updateProgressInsights(){
+
+  const plan=
+    JSON.parse(
+      localStorage.getItem("shiftfitPlan") || "null"
+    ) || {};
+
+  const calorieTarget=
+    Number(
+      plan.calories ||
+      plan.goalCalories ||
+      0
+    );
+
+  const proteinTarget=
+    Number(
+      plan.protein ||
+      plan.proteinTarget ||
+      0
+    );
+
+  let calorieLogged=0;
+  let proteinLogged=0;
+
+  /*
+   * Nutrition logs use the existing dated tracking data.
+   * We deliberately read only values that already exist,
+   * so the insight screen never invents progress.
+   */
+  const nutritionRaw=
+    localStorage.getItem("shiftfitNutritionHistory") ||
+    localStorage.getItem("shiftfitNutritionLogs");
+
+  if(nutritionRaw){
+
+    try{
+
+      const nutrition=
+        JSON.parse(nutritionRaw);
+
+      const entries=
+        Array.isArray(nutrition)
+          ? nutrition
+          : Object.values(nutrition || {});
+
+      entries.forEach(entry=>{
+
+        const date=
+          entry?.date ||
+          entry?.day ||
+          "";
+
+        const age=
+          date
+            ? Math.abs(
+                new Date().setHours(0,0,0,0) -
+                new Date(date).setHours(0,0,0,0)
+              )
+            : 0;
+
+        if(age<=6*86400000){
+
+          calorieLogged +=
+            Number(
+              entry.calories ||
+              entry.kcal ||
+              0
+            ) || 0;
+
+          proteinLogged +=
+            Number(
+              entry.protein ||
+              0
+            ) || 0;
+
+        }
+
+      });
+
+    }catch(error){
+
+      console.warn(
+        "Progress nutrition history could not be read."
+      );
+
+    }
+
+  }
+
+  /*
+   * Workout completion is based on the existing weekly workout
+   * completion state when available.
+   */
+  let workoutCompleted=0;
+  let workoutTarget=
+    Array.isArray(window.weeklyWorkouts)
+      ? Math.min(7,window.weeklyWorkouts.length)
+      : 0;
+
+  const workoutRaw=
+    localStorage.getItem("shiftfitWorkoutCompletion") ||
+    localStorage.getItem("shiftfitWorkoutLogs");
+
+  if(workoutRaw){
+
+    try{
+
+      const workoutData=
+        JSON.parse(workoutRaw);
+
+      if(Array.isArray(workoutData)){
+
+        workoutCompleted=
+          workoutData.filter(
+            item=>item?.completed===true ||
+                  item?.status==="completed"
+          ).length;
+
+      }else if(workoutData && typeof workoutData==="object"){
+
+        workoutCompleted=
+          Object.values(workoutData).filter(
+            item=>item===true ||
+                  item?.completed===true ||
+                  item?.status==="completed"
+          ).length;
+
+      }
+
+    }catch(error){
+
+      console.warn(
+        "Progress workout history could not be read."
+      );
+
+    }
+
+  }
+
+  workoutCompleted=
+    Math.max(
+      0,
+      Math.min(workoutCompleted,workoutTarget)
+    );
+
+  /*
+   * Weight-goal progress uses the existing target and actual
+   * weigh-ins. If the necessary values are missing, the bar
+   * remains at zero rather than inventing a result.
+   */
+  const weightHistoryRaw=
+    localStorage.getItem("shiftfitWeightHistory");
+
+  let startWeight=0;
+  let currentWeight=0;
+
+  if(weightHistoryRaw){
+
+    try{
+
+      const weightHistory=
+        JSON.parse(weightHistoryRaw);
+
+      const entries=
+        Array.isArray(weightHistory)
+          ? weightHistory
+          : Object.entries(weightHistory || {})
+              .map(([date,weight])=>({date,weight}));
+
+      const valid=
+        entries
+          .map(item=>({
+            date:item.date || "",
+            weight:Number(
+              item.weight ??
+              item.value ??
+              0
+            )
+          }))
+          .filter(
+            item=>item.weight>0 && item.date
+          )
+          .sort(
+            (a,b)=>
+              new Date(a.date)-new Date(b.date)
+          );
+
+      if(valid.length){
+
+        startWeight=
+          Number(valid[0].weight);
+
+        currentWeight=
+          Number(valid[valid.length-1].weight);
+
+      }
+
+    }catch(error){
+
+      console.warn(
+        "Weight history could not be read."
+      );
+
+    }
+
+  }
+
+  const targetWeight=
+    Number(
+      localStorage.getItem("shiftfitTargetWeight") ||
+      plan.targetWeight ||
+      0
+    );
+
+  let weightProgress=0;
+  let weightTotal=0;
+
+  if(
+    startWeight>0 &&
+    currentWeight>0 &&
+    targetWeight>0 &&
+    startWeight!==targetWeight
+  ){
+
+    weightTotal=
+      Math.abs(startWeight-targetWeight);
+
+    const moved=
+      Math.abs(startWeight-currentWeight);
+
+    weightProgress=
+      Math.min(
+        100,
+        Math.round(
+          (moved/weightTotal)*100
+        )
+      );
+
+  }
+
+  const caloriePercent=
+    percent(
+      calorieTarget>0
+        ? Math.min(calorieLogged,calorieTarget)
+        : 0,
+      calorieTarget
+    );
+
+  const proteinPercent=
+    percent(
+      proteinLogged,
+      proteinTarget
+    );
+
+  const workoutPercent=
+    percent(
+      workoutCompleted,
+      workoutTarget
+    );
+
+  document.getElementById("insightCaloriesText").textContent=
+    `${Math.round(calorieLogged).toLocaleString()} / ${Math.round(calorieTarget).toLocaleString()} kcal`;
+
+  document.getElementById("insightProteinText").textContent=
+    `${Math.round(proteinLogged)} / ${Math.round(proteinTarget)}g`;
+
+  document.getElementById("insightWorkoutText").textContent=
+    `${workoutCompleted} / ${workoutTarget} completed`;
+
+  document.getElementById("insightWeightText").textContent=
+    weightTotal>0
+      ? `${Math.min(
+          Math.abs(startWeight-currentWeight),
+          weightTotal
+        ).toFixed(1)} / ${weightTotal.toFixed(1)}kg`
+      : "0 / 0kg";
+
+  document.getElementById("insightCaloriesPercent").textContent=
+    caloriePercent+"%";
+
+  document.getElementById("insightProteinPercent").textContent=
+    proteinPercent+"%";
+
+  document.getElementById("insightWorkoutPercent").textContent=
+    workoutPercent+"%";
+
+  document.getElementById("insightWeightPercent").textContent=
+    weightProgress+"%";
+
+  setInsightProgress(
+    "insightCaloriesBar",
+    caloriePercent
+  );
+
+  setInsightProgress(
+    "insightProteinBar",
+    proteinPercent
+  );
+
+  setInsightProgress(
+    "insightWorkoutBar",
+    workoutPercent
+  );
+
+  setInsightProgress(
+    "insightWeightBar",
+    weightProgress
+  );
+
+  const scores=[
+    caloriePercent,
+    proteinPercent,
+    workoutPercent,
+    weightProgress
+  ];
+
+  const average=
+    Math.round(
+      scores.reduce(
+        (sum,value)=>sum+value,
+        0
+      ) / scores.length
+    );
+
+  const title=
+    document.getElementById(
+      "progressInsightTitle"
+    );
+
+  const body=
+    document.getElementById(
+      "progressInsightBody"
+    );
+
+  if(average>=80){
+
+    title.textContent=
+      "You're smashing it this week. 🔥";
+
+    body.textContent=
+      "Your logged progress is looking strong. Keep the consistency going.";
+
+  }else if(average>=50){
+
+    title.textContent=
+      "You're on your way. 💪";
+
+    body.textContent=
+      "You've made solid progress. Keep logging your food, workouts and weigh-ins.";
+
+  }else{
+
+    title.textContent=
+      "Let's build some momentum. 🚀";
+
+    body.textContent=
+      "Start logging your food, workouts and weight so ShiftFit can track your progress.";
+
+  }
+
+}
+
+
 function showProgress(){
 
   hideAllScreens();
@@ -9286,6 +9803,7 @@ function showProgress(){
 
   window.scrollTo(0,0);
 
+  updateProgressInsights();
 }
 
 
