@@ -11,8 +11,7 @@
   function applyPhoto(dataUrl){const src=dataUrl||getPhoto();document.querySelectorAll(".shiftfit-profile-photo, .avatar").forEach(function(el){if(src){el.style.backgroundImage='url("'+src+'")';el.classList.add("has-photo");if(el.classList.contains("shiftfit-profile-photo"))el.textContent="";}else{el.style.backgroundImage="";el.classList.remove("has-photo");if(el.classList.contains("shiftfit-profile-photo"))el.textContent="👤";}});}
   function compressImage(file){return new Promise(function(resolve,reject){const reader=new FileReader();reader.onerror=reject;reader.onload=function(){const img=new Image();img.onerror=reject;img.onload=function(){const max=512;const scale=Math.min(1,max/Math.max(img.width,img.height));const canvas=document.createElement("canvas");canvas.width=Math.max(1,Math.round(img.width*scale));canvas.height=Math.max(1,Math.round(img.height*scale));const ctx=canvas.getContext("2d");ctx.drawImage(img,0,0,canvas.width,canvas.height);resolve(canvas.toDataURL("image/jpeg",0.82));};img.src=reader.result;};reader.readAsDataURL(file);});}
   function choosePhoto(){const input=document.getElementById("shiftfit-profile-photo-input");if(input)input.click();}
-  function refreshData(){try{if(typeof window.shiftfitRenderProfileData==="function")window.shiftfitRenderProfileData();}catch(_){}}
-  function open(){const m=document.getElementById(MODAL);if(!m)return;m.classList.add("open");applyPhoto();refreshData();setTimeout(refreshData,120);}
+  function open(){const m=document.getElementById(MODAL);if(!m)return;m.classList.add("open");applyPhoto();try{if(typeof window.shiftfitRenderProfileData==="function")window.shiftfitRenderProfileData();}catch(_){}setTimeout(function(){try{if(typeof window.shiftfitRenderProfileData==="function")window.shiftfitRenderProfileData();}catch(_){}},50);}
 
   function route(label){
     const key=String(label||"").toLowerCase();
