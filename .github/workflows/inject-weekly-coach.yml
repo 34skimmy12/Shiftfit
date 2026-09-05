@@ -14,20 +14,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Inject weekly coach script
+      - name: Inject weekly coach and progress cleanup scripts
         run: |
           python - <<'PY'
           from pathlib import Path
           p = Path('index.html')
           text = p.read_text()
-          tag = '<script src="./weekly-coach.js"></script>'
-          if tag not in text:
-              marker = '<script src="./goal-journey.js"></script>'
-              if marker in text:
-                  text = text.replace(marker, marker + '\n' + tag, 1)
-              else:
-                  text = text.replace('</body>', tag + '\n</body>', 1)
-              p.write_text(text)
+          tags = [
+              '<script src="./weekly-coach.js"></script>',
+              '<script src="./remove-progress-placeholder.js"></script>',
+          ]
+          marker = '<script src="./goal-journey.js"></script>'
+          for tag in tags:
+              if tag not in text:
+                  if marker in text:
+                      text = text.replace(marker, marker + '\n' + tag, 1)
+                  else:
+                      text = text.replace('</body>', tag + '\n</body>', 1)
+          p.write_text(text)
           PY
 
       - name: Commit if changed
@@ -39,5 +43,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git commit -m "Wire weekly coach dashboard"
+          git commit -m "Remove progress placeholder"
           git push
