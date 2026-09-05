@@ -14,7 +14,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Inject progress, profile and data scripts
+      - name: Inject progress, profile, settings and data scripts
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -25,6 +25,7 @@ jobs:
               '<script src="./goal-journey.js"></script>',
               '<script src="./data-privacy.js"></script>',
               '<script src="./profile-entry.js"></script>',
+              '<script src="./settings-split.js"></script>',
           ]
           for tag in tags:
               if tag not in text:
@@ -42,5 +43,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git commit -m "Wire profile and data privacy"
+          git commit -m "Wire profile settings split"
           git push
