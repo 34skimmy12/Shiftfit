@@ -4,17 +4,66 @@
   const MODAL="shiftfit-settings-split-modal";
   function close(){const m=document.getElementById(MODAL);if(m)m.classList.remove("open");}
   function open(){const m=document.getElementById(MODAL);if(m)m.classList.add("open");}
+
+  function openDataPrivacy(){
+    close();
+    if(typeof window.shiftfitOpenDataPrivacy==="function")window.shiftfitOpenDataPrivacy();
+  }
+
   function styles(){if(document.getElementById("shiftfit-settings-split-style"))return;const s=document.createElement("style");s.id="shiftfit-settings-split-style";s.textContent=`
-    #${MODAL}{position:fixed;inset:0;z-index:99995;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.72)}
-    #${MODAL}.open{display:flex}#${MODAL} .sheet{width:min(500px,100%);max-height:88vh;overflow:auto;border:1px solid #303a60;border-bottom:0;border-radius:28px 28px 0 0;background:linear-gradient(145deg,#11172d,#090d1b);padding:22px 18px 34px}
-    #${MODAL} .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}#${MODAL} h2{margin:0;font-size:24px}#${MODAL} .close{width:40px;height:40px;border-radius:12px;border:1px solid #303a60;background:#11162b;color:#fff;font-size:22px}
-    #${MODAL} .group{margin-top:14px;padding:15px;border:1px solid #293253;border-radius:18px;background:rgba(255,255,255,.025)}#${MODAL} .group h3{margin:0 0 8px;font-size:12px;letter-spacing:1.5px;color:#c5b5ff}
-    #${MODAL} .item{width:100%;display:flex;align-items:center;gap:12px;padding:14px 0;border:0;border-top:1px solid rgba(255,255,255,.06);background:none;color:#fff;text-align:left;font-weight:850;font-size:14px}#${MODAL} .item:first-of-type{border-top:0}
-    #${MODAL} .item span{margin-left:auto;color:#8f98ad;font-size:12px;font-weight:700}#${MODAL} .item .arrow{color:#9d7cff;font-size:22px}#${MODAL} .note{color:#8f98ad;font-size:11px;line-height:1.5;margin-top:8px}
+    #${MODAL}{position:fixed;inset:0;z-index:99995;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.74);padding:0}
+    #${MODAL}.open{display:flex}
+    #${MODAL} .sheet{width:min(500px,100%);height:100dvh;max-height:100dvh;overflow:auto;border:0;border-radius:0;background:linear-gradient(180deg,#08091a 0%,#070b18 48%,#050711 100%);padding:24px 18px calc(110px + env(safe-area-inset-bottom));box-sizing:border-box}
+    #${MODAL} .top{display:grid;grid-template-columns:48px 1fr 48px;align-items:center;gap:8px;margin-bottom:18px}
+    #${MODAL} .back{width:48px;height:48px;border-radius:50%;border:1px solid #303a60;background:#14182b;color:#fff;font-size:30px;line-height:1}
+    #${MODAL} .logo{text-align:center;font-size:26px;font-weight:1000;font-style:italic;letter-spacing:-2px;transform:skew(-5deg)}
+    #${MODAL} .logo .bolt{color:#ff9d22;text-shadow:0 0 10px rgba(255,157,34,.55);margin-right:3px}.logo .shift{color:#f5f5f7}.logo .fit{color:#8656ff;text-shadow:0 0 12px rgba(132,76,255,.8)}
+    #${MODAL} .spacer{width:48px;height:48px}
+    #${MODAL} h1{margin:0 4px;font-size:34px;letter-spacing:-1px}#${MODAL} .subtitle{margin:4px 4px 18px;color:#aab1c5;font-size:15px}
+    #${MODAL} .group{margin-top:14px;padding:16px;border:1px solid #293253;border-radius:21px;background:linear-gradient(145deg,#11182d,#0b1020)}
+    #${MODAL} .group h3{margin:0 0 9px;font-size:14px;letter-spacing:1.5px;color:#c5b5ff}
+    #${MODAL} .item{width:100%;display:grid;grid-template-columns:46px minmax(0,1fr) 24px;align-items:center;gap:12px;padding:12px 0;border:0;border-top:1px solid rgba(255,255,255,.07);background:none;color:#fff;text-align:left}
+    #${MODAL} .item:first-of-type{border-top:0}
+    #${MODAL} .icon{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-size:23px;background:rgba(139,92,246,.16)}
+    #${MODAL} .item:nth-of-type(2) .icon{background:rgba(139,92,246,.18)}
+    #${MODAL} .item:nth-of-type(3) .icon{background:rgba(110,120,145,.18)}
+    #${MODAL} .item:nth-of-type(4) .icon{background:rgba(70,175,255,.15)}
+    #${MODAL} .item-title{display:block;font-size:16px;font-weight:900}.item-copy{display:block;margin-top:3px;color:#aab1c5;font-size:11px;line-height:1.35}.item-value{display:block;margin-top:3px;color:#6f7891;font-size:9px;font-weight:700}
+    #${MODAL} .arrow{color:#b39cff;font-size:28px;text-align:right}.note{margin-top:9px;color:#707991;font-size:10px;line-height:1.4}
+    @media(max-width:390px){#${MODAL} .sheet{padding-left:14px;padding-right:14px}#${MODAL} h1{font-size:31px}.item-title{font-size:15px}}
   `;document.head.appendChild(s);}
-  function modal(){if(document.getElementById(MODAL))return;const m=document.createElement("div");m.id=MODAL;m.innerHTML=`<div class="sheet" role="dialog" aria-label="Settings"><div class="top"><h2>Settings</h2><button class="close" aria-label="Close settings">×</button></div><div class="group"><h3>APP</h3><button class="item">🔔 Notifications<span>Coming soon</span></button><button class="item">🎨 Appearance<span>Default</span></button><button class="item">📱 App preferences<span class="arrow">›</span></button></div><div class="group"><h3>DATA & ACCOUNT</h3><button class="item" data-privacy>🔐 Data & Privacy<span class="arrow">›</span></button><button class="item">☁️ Account & Sync<span>Coming soon</span></button><div class="note">ShiftFit currently saves your data locally on this device. Cloud account sync will be added when accounts are introduced.</div></div><div class="group"><h3>ABOUT</h3><button class="item">ℹ️ About ShiftFit<span class="arrow">›</span></button></div></div>`;document.body.appendChild(m);m.querySelector(".close").onclick=close;m.onclick=e=>{if(e.target===m)close()};m.querySelector("[data-privacy]").onclick=()=>{if(window.shiftfitOpenDataPrivacy)window.shiftfitOpenDataPrivacy();};}
-  function bindProgressNav(){document.querySelectorAll("#shiftfit-profile-entry-modal [data-profile-nav]").forEach(function(btn){if(btn.dataset.shiftfitProgressBound==="1")return;btn.dataset.shiftfitProgressBound="1";btn.addEventListener("click",function(e){e.preventDefault();e.stopImmediatePropagation();const label=(btn.dataset.profileNav||"").toLowerCase();close();if(label==="history"){if(typeof window.hideAllScreens==="function")window.hideAllScreens();const setup=document.getElementById("setupScreen");if(setup)setup.classList.add("active");if(typeof window.setNav==="function")window.setNav("");if(typeof window.showMyHistory==="function")window.showMyHistory();return;}if(label==="progression"&&typeof window.showProgressInsights==="function"){window.showProgressInsights();}});});}
-  function bind(){document.querySelectorAll(".profile-btn").forEach(function(btn){if(btn.dataset.shiftfitSettingsBound==="1")return;btn.dataset.shiftfitSettingsBound="1";btn.addEventListener("click",function(e){e.preventDefault();e.stopImmediatePropagation();open();},true);});bindProgressNav();const card=document.getElementById("shiftfit-profile-entry-modal");if(card){const data=[...card.querySelectorAll("[data-privacy]")];data.forEach(function(x){x.closest(".profile-section")?.setAttribute("data-shiftfit-settings-only","1");});}document.querySelectorAll('[data-shiftfit-settings-only="1"]').forEach(function(x){x.style.display="none";});}
-  function boot(){styles();modal();bind();new MutationObserver(bind).observe(document.body,{subtree:true,childList:true});[300,800,1500,2500].forEach(t=>setTimeout(bind,t));}
+
+  function modal(){if(document.getElementById(MODAL))return;const m=document.createElement("div");m.id=MODAL;m.innerHTML=`
+    <div class="sheet" role="dialog" aria-label="Settings">
+      <div class="top"><button class="back" type="button" aria-label="Close settings">‹</button><div class="logo"><span class="bolt">⚡</span><span class="shift">SHIFT</span><span class="fit">FIT</span></div><div class="spacer"></div></div>
+      <h1>Settings</h1><div class="subtitle">Control your ShiftFit app, data and preferences.</div>
+
+      <div class="group"><h3>APP PREFERENCES</h3>
+        <button class="item" type="button"><span class="icon">🔔</span><span><span class="item-title">Notifications</span><span class="item-copy">Manage your reminders and alerts</span><span class="item-value">Coming soon</span></span><span class="arrow">›</span></button>
+        <button class="item" type="button"><span class="icon">🎨</span><span><span class="item-title">Appearance</span><span class="item-copy">Theme, colours and display options</span><span class="item-value">Default</span></span><span class="arrow">›</span></button>
+        <button class="item" type="button"><span class="icon">⚙️</span><span><span class="item-title">App settings</span><span class="item-copy">Units, preferences and more</span><span class="item-value">Coming soon</span></span><span class="arrow">›</span></button>
+      </div>
+
+      <div class="group"><h3>DATA & ACCOUNT</h3>
+        <button class="item" type="button" data-privacy><span class="icon">🛡️</span><span><span class="item-title">Data & Privacy</span><span class="item-copy">Manage your data and privacy settings</span></span><span class="arrow">›</span></button>
+        <button class="item" type="button"><span class="icon">☁️</span><span><span class="item-title">Account & Sync</span><span class="item-copy">Account and cloud synchronisation</span><span class="item-value">Coming soon</span></span><span class="arrow">›</span></button>
+        <div class="note">ShiftFit currently saves your data locally on this device. Cloud account sync will be added when accounts are introduced.</div>
+      </div>
+
+      <div class="group"><h3>SUPPORT & LEGAL</h3>
+        <button class="item" type="button"><span class="icon">❓</span><span><span class="item-title">Help & Support</span><span class="item-copy">Get help or contact us</span><span class="item-value">Coming soon</span></span><span class="arrow">›</span></button>
+        <button class="item" type="button"><span class="icon">ℹ️</span><span><span class="item-title">About ShiftFit</span><span class="item-copy">Version, terms and information</span></span><span class="arrow">›</span></button>
+        <button class="item" type="button"><span class="icon">📜</span><span><span class="item-title">Terms & Conditions</span><span class="item-copy">Read the rules for using ShiftFit</span><span class="item-value">Coming soon</span></span><span class="arrow">›</span></button>
+        <button class="item" type="button"><span class="icon">🔒</span><span><span class="item-title">Privacy Policy</span><span class="item-copy">How ShiftFit handles your information</span><span class="item-value">Coming soon</span></span><span class="arrow">›</span></button>
+      </div>
+    </div>`;
+    document.body.appendChild(m);
+    m.querySelector(".back").onclick=close;
+    m.onclick=e=>{if(e.target===m)close()};
+    m.querySelector("[data-privacy]").onclick=openDataPrivacy;
+  }
+
+  function bind(){document.querySelectorAll(".profile-btn").forEach(function(btn){if(btn.dataset.shiftfitSettingsBound==="1")return;btn.dataset.shiftfitSettingsBound="1";btn.addEventListener("click",function(e){e.preventDefault();e.stopImmediatePropagation();open();},true);});}
+  function boot(){styles();modal();bind();[300,800,1500,2500].forEach(t=>setTimeout(bind,t));}
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);else boot();
 })();
