@@ -12,3 +12,4 @@
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);else boot();
 })();
 (function(){if(document.getElementById("shiftfit-profile-data-loader"))return;var s=document.createElement("script");s.id="shiftfit-profile-data-loader";s.src="./profile-data.js?v=1";s.async=false;document.head.appendChild(s);})();
+(function(){if(document.getElementById("shiftfit-profile-navigation-loader"))return;var s=document.createElement("script");s.id="shiftfit-profile-navigation-loader";s.src="./profile-navigation-fix.js?v=1";s.async=false;document.head.appendChild(s);})();
