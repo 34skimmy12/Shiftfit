@@ -52,7 +52,6 @@ function cleanHistory(history) {
 function cleanState(state) {
   if (!state || typeof state !== "object") return {};
 
-  // Keep the model context useful without sending the browser's entire localStorage state.
   const safe = {
     plan: state.plan ?? null,
     weeklyMeals: Array.isArray(state.weeklyMeals) ? state.weeklyMeals.slice(0, 7) : [],
@@ -200,14 +199,16 @@ export default async function handler(req, res) {
 
     if (!response.ok) {
       console.error("ShiftFit Coach OpenAI error:", response.status, data);
+      const upstreamCode = cleanText(data?.error?.code, 80);
       return jsonResponse(res, 502, {
-        error: "The AI Coach is unavailable right now. Please try again in a moment."
+        error: `OpenAI request failed (${response.status}${upstreamCode ? `/${upstreamCode}` : ""}).`
       });
     }
 
-    const parsed = parseCoachJson(extractResponseText(data));
+    const rawText = extractResponseText(data);
+    const parsed = parseCoachJson(rawText);
     if (!parsed || typeof parsed.reply !== "string") {
-      console.error("ShiftFit Coach invalid model response:", extractResponseText(data));
+      console.error("ShiftFit Coach invalid model response:", rawText);
       return jsonResponse(res, 502, {
         error: "The Coach returned an invalid response. Please try again."
       });
