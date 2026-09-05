@@ -56,15 +56,11 @@
       if(Number(x.mealsLogged)>0) mealsLogged+=Math.max(0,Number(x.mealsLogged));
     });
 
-    // The current tracker is the authoritative meal log for today.
     if(tracker&&typeof tracker==="object"&&Array.isArray(tracker.foods)){
       const today= new Date().toISOString().slice(0,10);
       if(tracker.date===today) mealsLogged=Math.max(mealsLogged,tracker.foods.length);
     }
 
-    // Daily history may not yet have an explicit workout count, so fall back to
-    // completed workout days recorded by the existing streak/activity layer only
-    // when the daily history itself has no workout information at all.
     if(!entries.some(x=>x&&((x.workout===true||x.workout===1)||Number(x.exercisesDone)>0||Number(x.workouts)>0))){
       workouts=0;
     }
@@ -107,4 +103,85 @@
   window.shiftfitRenderProfileData=render;
   window.addEventListener("storage",render);
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",function(){render();setTimeout(render,500);setTimeout(render,1500);},{once:true});else{render();setTimeout(render,500);setTimeout(render,1500);}
+})();
+
+/* Goal-aware nutrition sync for the Profile Control Centre. */
+(function(){
+  "use strict";
+  const RULES={
+    lose:{proteinPerKg:2.0,fatPct:0.25},
+    weight_loss:{proteinPerKg:2.0,fatPct:0.25},
+    loss:{proteinPerKg:2.0,fatPct:0.25},
+    maintain:{proteinPerKg:1.6,fatPct:0.30},
+    maintenance:{proteinPerKg:1.6,fatPct:0.30},
+    build:{proteinPerKg:2.2,fatPct:0.25},
+    muscle:{proteinPerKg:2.2,fatPct:0.25},
+    gain:{proteinPerKg:2.2,fatPct:0.25}
+  };
+  function json(key,fallback){try{const r=localStorage.getItem(key);return r?JSON.parse(r):fallback;}catch(_){return fallback;}}
+  function n(v){const x=Number(v);return Number.isFinite(x)?x:null;}
+  function field(key){return document.querySelector('#shiftfit-profile-editor-modal [data-f="'+key+'"]');}
+  function weight(){
+    const p=json("shiftfitProfile",{}),pl=json("shiftfitPlan",{}),wh=json("shiftfitWeightHistory",[]);
+    const direct=n(p&&((p.weight!==undefined&&p.weight!="")?p.weight:p.currentWeight));
+    if(direct!==null&&direct>0)return direct;
+    const planWeight=n(pl&&((pl.weight!==undefined&&pl.weight!="")?pl.weight:pl.currentWeight));
+    if(planWeight!==null&&planWeight>0)return planWeight;
+    if(Array.isArray(wh)){
+      for(let i=wh.length-1;i>=0;i--){const w=n(wh[i]&&wh[i].weight);if(w!==null&&w>0)return w;}
+    }
+    return null;
+  }
+  function calculate(){
+    const gf=field("goal"),cf=field("calories"),pf=field("protein"),carbf=field("carbs"),ff=field("fat");
+    if(!gf||!cf||!pf||!carbf||!ff)return null;
+    const rule=RULES[String(gf.value||"").toLowerCase()]||RULES.maintain;
+    const calories=n(cf.value),kg=weight();
+    if(calories===null||calories<1000||kg===null)return null;
+    const protein=Math.max(40,Math.round(kg*rule.proteinPerKg));
+    const fat=Math.max(20,Math.round((calories*rule.fatPct)/9));
+    const carbs=Math.max(0,Math.round((calories-protein*4-fat*9)/4));
+    return {protein,carbs,fat,weight:kg,calories};
+  }
+  function markAuto(el){if(el){el.dataset.goalAuto="1";el.title="Auto-calculated from your goal, weight and calorie target";}}
+  function setValue(el,v){if(!el)return;el.value=String(v);markAuto(el);el.dispatchEvent(new Event("input",{bubbles:true}));}
+  function apply(){
+    const result=calculate();if(!result)return;
+    setValue(field("protein"),result.protein);
+    setValue(field("carbs"),result.carbs);
+    setValue(field("fat"),result.fat);
+    const note=document.querySelector("#shiftfit-profile-editor-modal .pcnote");
+    if(note&&!note.dataset.macroSync){
+      note.dataset.macroSync="1";
+      note.textContent="Goal-based starting targets: protein, carbs and fat are calculated from your current weight and calorie target. You can still fine-tune the numbers before saving.";
+    }
+  }
+  function mirrorPlan(){
+    const pf=field("protein"),cf=field("carbs"),ff=field("fat"),gf=field("goal"),calf=field("calories");
+    if(!pf||!cf||!ff)return;
+    const plan=json("shiftfitPlan",{}),p=json("shiftfitProfile",{});
+    const protein=n(pf.value),carbs=n(cf.value),fat=n(ff.value),calories=n(calf&&calf.value),goal=String(gf&&gf.value||p.goal||plan.goal||"");
+    if(protein!==null)plan.protein=plan.targetProtein=protein;
+    if(carbs!==null)plan.carbs=plan.targetCarbs=carbs;
+    if(fat!==null){plan.fat=plan.targetFat=fat;plan.fats=plan.targetFats=fat;plan.fatGrams=fat;}
+    if(calories!==null)plan.calories=plan.targetCalories=calories;
+    if(goal){plan.goal=plan.fitnessGoal=goal;}
+    try{localStorage.setItem("shiftfitPlan",JSON.stringify(plan));}catch(_){}
+    try{if(window.shiftfitStorage&&typeof window.shiftfitStorage.save==="function")window.shiftfitStorage.save("plan",plan);}catch(_){}
+  }
+  function bind(m){
+    if(!m||m.dataset.macroSyncBound==="1")return;
+    const gf=m.querySelector('[data-f="goal"]');if(!gf)return;
+    m.dataset.macroSyncBound="1";
+    gf.addEventListener("change",function(){apply();});
+    const cf=m.querySelector('[data-f="calories"]');if(cf)cf.addEventListener("input",function(){apply();});
+    const save=m.querySelector('[data-save]");
+    if(save)save.addEventListener("click",function(){setTimeout(mirrorPlan,120);},true);
+    apply();
+  }
+  function scan(){const m=document.getElementById("shiftfit-profile-editor-modal");if(m&&m.classList.contains("open"))bind(m);}
+  const observer=new MutationObserver(scan);
+  if(document.documentElement)observer.observe(document.documentElement,{subtree:true,childList:true,attributes:true,attributeFilter:["class"]});
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",scan);else scan();
+  window.addEventListener("storage",scan);
 })();
