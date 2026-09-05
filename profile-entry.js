@@ -13,6 +13,34 @@
   function compressImage(file){return new Promise(function(resolve,reject){const reader=new FileReader();reader.onerror=reject;reader.onload=function(){const img=new Image();img.onerror=reject;img.onload=function(){const max=512;const scale=Math.min(1,max/Math.max(img.width,img.height));const canvas=document.createElement("canvas");canvas.width=Math.max(1,Math.round(img.width*scale));canvas.height=Math.max(1,Math.round(img.height*scale));const ctx=canvas.getContext("2d");ctx.drawImage(img,0,0,canvas.width,canvas.height);resolve(canvas.toDataURL("image/jpeg",0.82));};img.src=reader.result;};reader.readAsDataURL(file);});}
   function choosePhoto(){const input=document.getElementById("shiftfit-profile-photo-input");if(input)input.click();}
   function open(){const m=document.getElementById(MODAL);if(!m)return;m.classList.add("open");applyPhoto();}
+
+  function findOption(label){
+    const wanted=String(label).trim().toLowerCase();
+    const candidates=document.querySelectorAll("button,a,[role='button'],.nav-item,.option-card,.menu-item,.settings-item");
+    for(const el of candidates){
+      if(el.closest("#"+MODAL)) continue;
+      if((el.textContent||"").trim().replace(/\s+/g," ").toLowerCase()===wanted) return el;
+    }
+    return null;
+  }
+
+  function openOption(label){
+    const target=findOption(label);
+    close();
+    if(target){target.click();return true;}
+    return false;
+  }
+
+  function relocateOptions(){
+    ["History","Progression"].forEach(function(label){
+      const target=findOption(label);
+      if(target && !target.dataset.shiftfitRelocated){
+        target.dataset.shiftfitRelocated="1";
+        target.style.display="none";
+      }
+    });
+  }
+
   function styles(){if(document.getElementById("shiftfit-profile-entry-style"))return;const s=document.createElement("style");s.id="shiftfit-profile-entry-style";s.textContent=`
       .shiftfit-profile-trigger{cursor:pointer;position:relative;}
       .shiftfit-profile-trigger:active{transform:scale(.99);}
@@ -37,17 +65,30 @@
       #${MODAL} .profile-action{width:100%;padding:13px;border-radius:13px;border:1px solid #303a60;background:#11162b;color:#fff;font-weight:900;text-align:left;}
       #${MODAL} .profile-action.primary{background:linear-gradient(135deg,#7c3aed,#5123c5);border-color:#7545d7;}
       #${MODAL} .profile-note{color:#8f98ad;font-size:11px;line-height:1.5;margin-top:10px;}
-      #${PANEL} #shiftfit-data-privacy-card{display:block!important;margin-top:14px;}
+      #${MODAL} .profile-nav-list{display:grid;gap:9px;}
+      #${MODAL} .profile-nav-btn{width:100%;display:flex;align-items:center;gap:12px;padding:14px;border-radius:13px;border:1px solid #303a60;background:#11162b;color:#fff;font-weight:900;text-align:left;font-size:14px;}
+      #${MODAL} .profile-nav-btn span{margin-left:auto;color:#9d7cff;font-size:22px;}
     `;document.head.appendChild(s);}
+
   function modal(){if(document.getElementById(MODAL))return;const m=document.createElement("div");m.id=MODAL;m.innerHTML=`
       <div class="profile-sheet" id="${PANEL}" role="dialog" aria-label="Profile">
         <div class="profile-top"><div class="profile-avatar-wrap"><div class="profile-avatar shiftfit-profile-photo">👤</div><button class="profile-camera" type="button" aria-label="Add profile picture" title="Add profile picture">📷</button></div>
           <div style="min-width:0;"><div class="profile-name">Andrew</div><div class="profile-sub">Level 1 · ShiftFit Member</div><div class="profile-photo-actions"><button class="profile-photo-action" type="button" data-photo>📸 Add / change photo</button><button class="profile-photo-action remove" type="button" data-remove-photo>Remove</button></div></div><button class="profile-close" aria-label="Close profile">×</button></div>
         <input id="shiftfit-profile-photo-input" type="file" accept="image/*" hidden>
+        <div class="profile-section"><h3>YOUR PROGRESS</h3><div class="profile-nav-list"><button class="profile-nav-btn" type="button" data-profile-nav="History">📖 History <span>›</span></button><button class="profile-nav-btn" type="button" data-profile-nav="Progression">📈 Progression <span>›</span></button></div></div>
         <div class="profile-section"><h3>MY SHIFT</h3><div class="profile-row"><strong>Shift schedule</strong><span>Manage in Build Your Plan</span></div><div class="profile-row"><strong>Goal & nutrition</strong><span>Personalised</span></div></div>
-        <div class="profile-section"><h3>ACCOUNT & DATA</h3><button class="profile-action primary" data-privacy>🔐 Data & Privacy</button><div class="profile-note">Your ShiftFit data is currently saved locally on this device. Cloud account sync will be added later.</div></div>
-      </div>`;document.body.appendChild(m);m.querySelector(".profile-close").onclick=close;m.addEventListener("click",function(e){if(e.target===m)close();});m.querySelector(".profile-camera").onclick=choosePhoto;m.querySelector("[data-photo]").onclick=choosePhoto;m.querySelector("[data-remove-photo]").onclick=removePhoto;m.querySelector("#shiftfit-profile-photo-input").addEventListener("change",async function(e){const file=e.target.files&&e.target.files[0];if(!file)return;try{const data=await compressImage(file);setPhoto(data);}catch(err){alert("We couldn't load that photo. Please try another image.");}e.target.value="";});m.querySelector("[data-privacy]").onclick=function(){if(window.shiftfitOpenDataPrivacy)window.shiftfitOpenDataPrivacy();else alert("Data & Privacy is still loading. Please try again in a moment.");};}
-  function bind(){document.querySelectorAll(".user-row").forEach(function(row){if(row.dataset.shiftfitProfileBound==="1")return;row.dataset.shiftfitProfileBound="1";row.classList.add("shiftfit-profile-trigger");row.setAttribute("role","button");row.setAttribute("tabindex","0");row.setAttribute("aria-label","Open Profile");row.addEventListener("click",open);row.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();open();}});});applyPhoto();}
+      </div>`;
+    document.body.appendChild(m);
+    m.querySelector(".profile-close").onclick=close;
+    m.addEventListener("click",function(e){if(e.target===m)close();});
+    m.querySelector(".profile-camera").onclick=choosePhoto;
+    m.querySelector("[data-photo]").onclick=choosePhoto;
+    m.querySelector("[data-remove-photo]").onclick=removePhoto;
+    m.querySelectorAll("[data-profile-nav]").forEach(function(btn){btn.onclick=function(){openOption(btn.dataset.profileNav);};});
+    m.querySelector("#shiftfit-profile-photo-input").addEventListener("change",async function(e){const file=e.target.files&&e.target.files[0];if(!file)return;try{const data=await compressImage(file);setPhoto(data);}catch(err){alert("We couldn't load that photo. Please try another image.");}e.target.value="";});
+  }
+
+  function bind(){document.querySelectorAll(".user-row").forEach(function(row){if(row.dataset.shiftfitProfileBound==="1")return;row.dataset.shiftfitProfileBound="1";row.classList.add("shiftfit-profile-trigger");row.setAttribute("role","button");row.setAttribute("tabindex","0");row.setAttribute("aria-label","Open Profile");row.addEventListener("click",open);row.addEventListener("keydown",function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();open();}});});applyPhoto();relocateOptions();}
   function boot(){styles();modal();bind();[800,1800].forEach(function(t){setTimeout(bind,t);});}
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);else boot();
 })();
