@@ -1,151 +1,226 @@
-/* ShiftFit target-aware meal-plan engine
- * Loaded after index.html so it replaces the old weekly generator without
- * disturbing the existing meal UI, swap flow, preferences or localStorage.
+/* ShiftFit Smart Meal Engine v3
+ * Target-aware 7-day generation with hard avoid rules, preference weighting,
+ * goal-aware macro priorities, diversity, shift-aware meal timing guidance,
+ * and target-aware smart swap helpers.
  */
 (function(){
   "use strict";
 
-  function safeNumber(value,fallback){
+  const TYPES=["breakfast","lunch","dinner","snack"];
+  const GOALS={lose:["lose","weight loss","fat loss"],maintain:["maintain","maintenance"],build:["build","muscle","gain"]};
+
+  function num(value,fallback){
     const n=Number(value);
     return Number.isFinite(n)?n:(fallback||0);
   }
 
   function nutrition(type,index){
-    if(typeof getSelectedMealNutrition==="function"){
-      return getSelectedMealNutrition(type,index)||{};
-    }
-    return (typeof mealNutritionProfiles!=="undefined" && mealNutritionProfiles[type]?.[index])||{};
+    if(typeof getSelectedMealNutrition==="function") return getSelectedMealNutrition(type,index)||{};
+    if(typeof mealNutritionProfiles!=="undefined" && mealNutritionProfiles[type]?.[index]) return mealNutritionProfiles[type][index];
+    return {};
+  }
+
+  function prefs(type){
+    if(typeof mealPreferences!=="undefined" && mealPreferences[type]) return mealPreferences[type];
+    return {like:[],avoid:[]};
+  }
+
+  function optionCount(type){
+    if(typeof mealOptions!=="undefined" && Array.isArray(mealOptions[type])) return mealOptions[type].length;
+    return 0;
+  }
+
+  function isAvoided(type,index){
+    const p=prefs(type);
+    return Array.isArray(p.avoid)&&p.avoid.includes(index);
   }
 
   function preferenceWeight(type,index){
-    const prefs=(typeof mealPreferences!=="undefined" && mealPreferences[type])||{like:[],avoid:[]};
-    if(Array.isArray(prefs.like)&&prefs.like.includes(index)) return 1.8;
-    if(Array.isArray(prefs.avoid)&&prefs.avoid.includes(index)) return 0.12;
+    const p=prefs(type);
+    if(isAvoided(type,index)) return 0;
+    if(Array.isArray(p.like)&&p.like.includes(index)) return 2.5;
     return 1;
   }
 
-  function scoreCandidate(day,plan,previousDays,usage){
-    const types=["breakfast","lunch","dinner","snack"];
+  function normaliseGoal(plan){
+    const raw=String((plan&&plan.goal)||((typeof selectedGoal!=="undefined")?selectedGoal:"")||"").toLowerCase();
+    if(GOALS.build.some(x=>raw.includes(x))) return "build";
+    if(GOALS.lose.some(x=>raw.includes(x))) return "lose";
+    return "maintain";
+  }
+
+  function shiftName(){
+    let value="";
+    try{
+      if(typeof selectedShift!=="undefined") value=selectedShift;
+    }catch(_){ }
+    if(!value){
+      try{ value=localStorage.getItem("shiftfitSelectedShift")||localStorage.getItem("selectedShift")||""; }catch(_){ }
+    }
+    return String(value||"").toLowerCase();
+  }
+
+  function timingProfile(){
+    const shift=shiftName();
+    if(shift.includes("night")) return {breakfast:0.7,lunch:1,dinner:1.05,snack:1.2,label:"Night shift"};
+    if(shift.includes("late")||shift.includes("evening")) return {breakfast:0.8,lunch:1,dinner:1.08,snack:1.12,label:"Late shift"};
+    if(shift.includes("early")) return {breakfast:1.18,lunch:1.05,dinner:0.92,snack:0.92,label:"Early shift"};
+    return {breakfast:1,lunch:1,dinner:1,snack:1,label:"Standard shift"};
+  }
+
+  function goalWeights(goal){
+    if(goal==="build") return {calories:6,protein:11,carbs:2,fats:1.5};
+    if(goal==="lose") return {calories:10,protein:10,carbs:1.5,fats:1.2};
+    return {calories:8,protein:9,carbs:2,fats:2};
+  }
+
+  function totalsFor(day){
     const totals={calories:0,protein:0,carbs:0,fats:0};
-
-    types.forEach(type=>{
+    TYPES.forEach(type=>{
       const n=nutrition(type,day[type]);
-      totals.calories+=safeNumber(n.calories);
-      totals.protein+=safeNumber(n.protein);
-      totals.carbs+=safeNumber(n.carbs);
-      totals.fats+=safeNumber(n.fats);
+      totals.calories+=num(n.calories);
+      totals.protein+=num(n.protein);
+      totals.carbs+=num(n.carbs);
+      totals.fats+=num(n.fats);
     });
+    return totals;
+  }
 
-    const tc=Math.max(1,safeNumber(plan.calories));
-    const tp=Math.max(1,safeNumber(plan.protein));
-    const tcarb=Math.max(1,safeNumber(plan.carbs));
-    const tfat=Math.max(1,safeNumber(plan.fats));
+  function scoreCandidate(day,plan,previousDays,usage,goal,timing){
+    const totals=totalsFor(day);
+    const tc=Math.max(1,num(plan.calories));
+    const tp=Math.max(1,num(plan.protein));
+    const tcarb=Math.max(1,num(plan.carbs));
+    const tfat=Math.max(1,num(plan.fats));
+    const w=goalWeights(goal);
 
     let score=
-      Math.abs(totals.calories-tc)/tc*7+
-      Math.abs(totals.protein-tp)/tp*8+
-      Math.abs(totals.carbs-tcarb)/tcarb*1.5+
-      Math.abs(totals.fats-tfat)/tfat*1.5;
+      Math.abs(totals.calories-tc)/tc*w.calories+
+      Math.abs(totals.protein-tp)/tp*w.protein+
+      Math.abs(totals.carbs-tcarb)/tcarb*w.carbs+
+      Math.abs(totals.fats-tfat)/tfat*w.fats;
 
     previousDays.forEach(previous=>{
-      types.forEach(type=>{
-        if(Number(previous[type])===Number(day[type])) score+=0.45;
+      TYPES.forEach(type=>{
+        if(Number(previous[type])===Number(day[type])) score+=0.65;
       });
     });
 
-    types.forEach(type=>{
-      const key=type+":"+day[type];
-      score+=safeNumber(usage[key],0)*0.16;
-      score-=Math.log(Math.max(1,preferenceWeight(type,day[type])))*0.35;
+    TYPES.forEach(type=>{
+      const idx=day[type];
+      const pref=preferenceWeight(type,idx);
+      if(pref===0) score+=1000;
+      score+=num(usage[type+":"+idx],0)*0.28;
+      score-=Math.log(Math.max(1,pref))*0.55;
+
+      /* Shift timing influences which meal choices are preferred without
+         forcing a nutritionally poor meal into the plan. */
+      const n=nutrition(type,idx);
+      const calories=num(n.calories);
+      const protein=num(n.protein);
+      if(timing[type]>1 && calories>0){
+        const density=protein/Math.max(1,calories);
+        score-=Math.min(0.5,density*timing[type]*0.18);
+      }
     });
 
-    score+=Math.random()*0.08;
+    score+=Math.random()*0.06;
     return score;
   }
 
-  function randomInt(max){
-    return Math.floor(Math.random()*Math.max(1,max));
-  }
-
-  function candidateIndexes(type){
-    const count=(typeof mealOptions!=="undefined" && Array.isArray(mealOptions[type]))?mealOptions[type].length:0;
+  function candidates(type){
+    const count=optionCount(type);
     if(!count) return [0];
-
     const result=[];
-    for(let i=0;i<count;i++) result.push(i);
-
+    for(let i=0;i<count;i++) if(!isAvoided(type,i)) result.push(i);
+    /* If a user avoided every available meal, preserve functionality rather
+       than producing an empty day. This is an explicit last-resort fallback. */
+    if(!result.length) for(let i=0;i<count;i++) result.push(i);
     result.sort((a,b)=>{
       const delta=preferenceWeight(type,b)-preferenceWeight(type,a);
-      return delta || Math.random()-.5;
+      return delta||Math.random()-.5;
     });
-
     return result;
   }
 
-  function buildTargetAwareWeek(plan){
-    const types=["breakfast","lunch","dinner","snack"];
+  function randomInt(max){ return Math.floor(Math.random()*Math.max(1,max)); }
+
+  function buildWeek(plan){
     const week=[];
     const usage={};
+    const goal=normaliseGoal(plan);
+    const timing=timingProfile();
 
     for(let dayIndex=0;dayIndex<7;dayIndex++){
       let best=null;
       let bestScore=Infinity;
 
-      for(let attempt=0;attempt<260;attempt++){
+      for(let attempt=0;attempt<360;attempt++){
         const candidate={};
-
-        types.forEach(type=>{
-          const choices=candidateIndexes(type);
-          const preferredPool=choices.slice(0,Math.min(7,choices.length));
-          const pool=preferredPool.length?preferredPool:choices;
+        TYPES.forEach(type=>{
+          const choices=candidates(type);
+          const pool=choices.slice(0,Math.min(10,choices.length));
           candidate[type]=pool[randomInt(pool.length)];
         });
 
-        if(new Set(types.map(type=>candidate[type])).size<3){
-          const type=types[randomInt(types.length)];
-          const choices=candidateIndexes(type);
-          if(choices.length>1) candidate[type]=choices[(choices.indexOf(candidate[type])+1)%choices.length];
-        }
-
-        const score=scoreCandidate(candidate,plan,week,usage);
-        if(score<bestScore){
-          bestScore=score;
-          best={...candidate};
-        }
+        const score=scoreCandidate(candidate,plan,week,usage,goal,timing);
+        if(score<bestScore){ bestScore=score; best={...candidate}; }
       }
 
       best=best||{breakfast:0,lunch:0,dinner:0,snack:0};
       week.push(best);
-      types.forEach(type=>{
+      TYPES.forEach(type=>{
         const key=type+":"+best[type];
         usage[key]=(usage[key]||0)+1;
       });
     }
-
     return week;
   }
 
-  window.shiftfitGenerateTargetAwareMealPlan=function(plan){
-    if(!plan || typeof mealOptions==="undefined" || !Array.isArray(mealOptions.breakfast)) return;
-
-    const generated=buildTargetAwareWeek(plan);
-    if(!Array.isArray(generated)||generated.length!==7) return;
-
-    /* Use the existing lexical weeklyMeals binding. This is the state that
-       renderCurrentDay(), swapMeal() and saveWeeklyMeals() already use. */
-    weeklyMeals=generated.map(day=>({
+  function persist(week){
+    weeklyMeals=week.map(day=>({
       breakfast:Number(day.breakfast)||0,
       lunch:Number(day.lunch)||0,
       dinner:Number(day.dinner)||0,
       snack:Number(day.snack)||0
     }));
-
     if(typeof saveWeeklyMeals==="function") saveWeeklyMeals();
+  }
+
+  window.shiftfitGenerateTargetAwareMealPlan=function(plan){
+    if(!plan || typeof mealOptions==="undefined" || !Array.isArray(mealOptions.breakfast)) return;
+    const generated=buildWeek(plan);
+    if(generated.length===7) persist(generated);
   };
 
   window.generateWeeklyMealPlan=function(plan){
     window.shiftfitGenerateTargetAwareMealPlan(plan);
   };
 
-  window.SHIFTFIT_MEAL_ENGINE_VERSION="v2-target-aware";
+  /* Exposed for the UI now and for the upcoming swap-button integration.
+     It always excludes hard-avoided meals and scores replacements against
+     the user's current targets instead of simply cycling to the next item. */
+  window.shiftfitGetSmartMealCandidates=function(type,currentIndex,plan,usedIndexes){
+    const choices=candidates(type).filter(i=>Number(i)!==Number(currentIndex));
+    const used=Array.isArray(usedIndexes)?usedIndexes.map(Number):[];
+    return choices.sort((a,b)=>{
+      const score=index=>{
+        const n=nutrition(type,index);
+        let s=0;
+        const target=num(plan&&plan.calories);
+        const ptarget=num(plan&&plan.protein);
+        const calories=num(n.calories);
+        const protein=num(n.protein);
+        if(target) s+=Math.abs(calories-target/4)/(target/4)*2;
+        if(ptarget) s+=Math.abs(protein-ptarget/4)/(ptarget/4)*3;
+        if(used.includes(index)) s+=2;
+        s-=Math.log(Math.max(1,preferenceWeight(type,index)))*0.6;
+        return s;
+      };
+      return score(a)-score(b);
+    });
+  };
+
+  window.SHIFTFIT_MEAL_ENGINE_VERSION="v3-smart-constraints";
+  window.SHIFTFIT_MEAL_TIMING_PROFILE=timingProfile();
 })();
