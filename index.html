@@ -6096,6 +6096,9 @@ button{
 .ai-coach-kicker{font-size:11px;font-weight:800;letter-spacing:1.6px;color:#a9b0ff;margin-bottom:8px}
 .ai-coach-title{font-size:30px;line-height:1.05;font-weight:900;margin:0 0 10px}
 .ai-coach-copy{color:#aab1c5;line-height:1.5;margin:0}
+
+.ai-live-pill{color:#72f3b5!important;border-color:rgba(53,223,141,.35)!important;background:rgba(53,223,141,.08)!important}
+.ai-thinking{opacity:.75;font-style:italic}
 .ai-coach-status{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
 .ai-coach-pill{padding:8px 11px;border:1px solid #303a60;border-radius:999px;background:#0b1023;color:#dce0ff;font-size:12px;font-weight:800}
 .ai-chat-card{border:1px solid #303a60;border-radius:22px;background:#0c1227;padding:14px;margin-bottom:14px;min-height:130px}
@@ -8035,7 +8038,7 @@ button{
     <div class="ai-coach-status">
       <div class="ai-coach-pill" id="aiGoalPill">🎯 Goal: Lose</div>
       <div class="ai-coach-pill" id="aiCaloriesPill">🔥 Target: — kcal</div>
-      <div class="ai-coach-pill">🧠 ShiftFit Coach</div>
+      <div class="ai-coach-pill">🧠 ShiftFit Coach</div><div class="ai-coach-pill ai-live-pill">● LIVE AI</div>
     </div>
   </div>
 
@@ -9598,12 +9601,11 @@ function showMeals(selectedDate){
 
 function showAICoach(){
   hideAllScreens();
-
   const screen=document.getElementById("aiCoachScreen");
   if(screen) screen.classList.add("active");
-
   setNav("aiCoach");
   updateAICoachStatus();
+  aiRestoreChat();
   window.scrollTo(0,0);
 }
 
@@ -9611,27 +9613,64 @@ function updateAICoachStatus(){
   const saved=localStorage.getItem("shiftfitPlan");
   let plan=null;
   try{ plan=saved ? JSON.parse(saved) : null; }catch(e){}
-
-  const goalText=plan && plan.goal ?
-    (plan.goal==="lose" ? "Lose" : plan.goal==="gain" ? "Build" : "Maintain") : "Not set";
+  const goalText=plan && plan.goal ? (plan.goal==="lose" ? "Lose" : plan.goal==="gain" ? "Build" : "Maintain") : "Not set";
   const goalPill=document.getElementById("aiGoalPill");
   const caloriesPill=document.getElementById("aiCaloriesPill");
   if(goalPill) goalPill.textContent="🎯 Goal: "+goalText;
   if(caloriesPill) caloriesPill.textContent="🔥 Target: "+(plan && plan.calories ? plan.calories.toLocaleString()+" kcal" : "— kcal");
 }
 
+function aiGetCoachState(){
+  let plan=null,weights=[],prefs={},shopping=[];
+  try{plan=JSON.parse(localStorage.getItem("shiftfitPlan")||"null");}catch(e){}
+  try{weights=JSON.parse(localStorage.getItem("shiftfitWeightHistory")||"[]");}catch(e){}
+  try{prefs=JSON.parse(localStorage.getItem("shiftfitMealPreferences")||"{}");}catch(e){}
+  try{shopping=JSON.parse(localStorage.getItem("shiftfitShoppingItems")||"[]");}catch(e){}
+  return {
+    plan,
+    weeklyMeals:Array.isArray(weeklyMeals)?weeklyMeals:[],
+    mealPreferences:prefs,
+    weightHistory:weights,
+    shoppingItems:shopping,
+    shift:typeof selectedShift!=="undefined"?selectedShift:null,
+    customShift:typeof customShiftStart!=="undefined"?{start:customShiftStart,end:customShiftEnd,overnight:customShiftOvernight}:null,
+    today:new Date().toISOString().slice(0,10)
+  };
+}
+
+function aiSaveChatMessage(text,isUser){
+  try{
+    const history=JSON.parse(localStorage.getItem("shiftfitAIChatHistory")||"[]");
+    history.push({text:String(text),isUser:!!isUser,at:new Date().toISOString()});
+    localStorage.setItem("shiftfitAIChatHistory",JSON.stringify(history.slice(-30)));
+  }catch(e){}
+}
+
 function aiAddMessage(text,isUser){
   const box=document.getElementById("aiChatMessages");
   if(!box) return;
   const row=document.createElement("div");
-  row.className="ai-message"+(isUser ? " ai-user-message" : "");
+  row.className="ai-message"+(isUser?" ai-user-message":"");
   row.innerHTML=isUser
     ? '<div class="ai-bubble ai-user-bubble"></div>'
     : '<div class="ai-avatar">⚡</div><div class="ai-bubble"></div>';
   const bubble=row.querySelector(".ai-bubble");
-  bubble.textContent=text;
+  bubble.textContent=String(text);
   box.appendChild(row);
   box.scrollTop=box.scrollHeight;
+  aiSaveChatMessage(text,isUser);
+}
+
+function aiRestoreChat(){
+  const box=document.getElementById("aiChatMessages");
+  if(!box) return;
+  const existing=box.querySelectorAll(".ai-message");
+  if(existing.length>1) return;
+  let history=[];
+  try{history=JSON.parse(localStorage.getItem("shiftfitAIChatHistory")||"[]");}catch(e){}
+  if(!Array.isArray(history)||!history.length) return;
+  box.innerHTML="";
+  history.slice(-12).forEach(m=>aiAddMessage(m.text,!!m.isUser));
 }
 
 function aiGetCurrentPlan(){
@@ -9640,28 +9679,13 @@ function aiGetCurrentPlan(){
   try{return JSON.parse(saved);}catch(e){return null;}
 }
 
-function aiEnsurePlan(){
-  const plan=aiGetCurrentPlan();
-  if(plan) return plan;
-
-  const age=document.getElementById("userAge")?.value;
-  const weight=document.getElementById("userWeight")?.value;
-  const height=document.getElementById("userHeight")?.value;
-  if(age && weight && height){
-    selectedGoal="lose";
-    generatePlan();
-    return aiGetCurrentPlan();
-  }
-  return null;
-}
-
 function aiBuildWeekPreview(){
-  if(!Array.isArray(weeklyMeals) || weeklyMeals.length!==7) return "";
+  if(!Array.isArray(weeklyMeals)||weeklyMeals.length!==7) return "";
   const names=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
   const rows=weeklyMeals.map(function(day,i){
     const meal=function(type){
-      const index=Number(day[type] ?? 0);
-      return mealOptions[type]?.[index]?.name || "Meal";
+      const index=Number(day[type]??0);
+      return mealOptions[type]?.[index]?.name||"Meal";
     };
     return '<div class="ai-day-row"><div class="ai-day-name">'+names[i]+'</div><div class="ai-day-meals">'+meal("breakfast")+'<br>'+meal("lunch")+'<br>'+meal("dinner")+'<br>'+meal("snack")+'</div></div>';
   }).join("");
@@ -9674,104 +9698,133 @@ function aiGenerateMealPlanForGoal(goal){
   const age=document.getElementById("userAge")?.value;
   const weight=document.getElementById("userWeight")?.value;
   const height=document.getElementById("userHeight")?.value;
-
-  if(!existing && (!age || !weight || !height)){
-    return {ok:false,message:"I need your age, weight and height before I can calculate your calorie target. Open Build Your Plan and add them first."};
-  }
-
-  /* Reuse the existing ShiftFit calculation engine and 7-day generator. */
-  generatePlan(true);
+  if(!existing&&(!age||!weight||!height)) return {ok:false,message:"I need your age, weight and height before I can calculate your calorie target. Open Build Your Plan and add them first."};
+  generatePlan(false);
   const plan=aiGetCurrentPlan();
   if(!plan) return {ok:false,message:"I couldn’t create the plan yet. Please check your profile details and try again."};
   updateAICoachStatus();
   return {ok:true,plan};
 }
 
-function runAIQuickAction(action){
-  if(action==="meal" || action==="lose"){
-    const result=aiGenerateMealPlanForGoal("lose");
-    aiAddMessage(action==="meal" ? "Generate my meal plan for this week." : "Set me up to lose weight.",true);
-    if(result.ok){
-      aiAddMessage("Done. I’ve generated a fresh 7-day fat-loss meal plan using your ShiftFit calorie target and saved it to your Meal Plan.",false);
-      document.getElementById("aiPlanResult").innerHTML=aiBuildWeekPreview();
-    }else{
-      aiAddMessage(result.message,false);
-    }
-    return;
-  }
-
-  if(action==="macros"){
-    const plan=aiGetCurrentPlan();
-    aiAddMessage("Help me hit my macros.",true);
-    aiAddMessage(plan ? "Your current daily target is "+plan.calories.toLocaleString()+" kcal, with "+plan.protein+"g protein, "+plan.carbs+"g carbs and "+plan.fats+"g fat. I can use those targets when adjusting your meals." : "Set up your ShiftFit plan first and I’ll use your calorie and macro targets here.",false);
-    return;
-  }
-
-  if(action==="progress"){
-    aiAddMessage("Analyse my progress.",true);
-    const weights=JSON.parse(localStorage.getItem("shiftfitWeightHistory")||"[]");
-    if(weights.length>=2){
-      const first=Number(weights[0].weight), last=Number(weights[weights.length-1].weight);
-      const change=(last-first).toFixed(1);
-      aiAddMessage("From your saved weight history, you’ve changed by "+change+" kg across the recorded entries. I’d use the trend rather than a single weigh-in when judging progress.",false);
-    }else{
-      aiAddMessage("I need at least two saved weight entries before I can analyse a weight trend. Keep logging your weight in Progress.",false);
-    }
-  }
+function aiSetBusy(busy){
+  const btn=document.querySelector(".ai-send-btn");
+  const input=document.getElementById("aiCoachInput");
+  if(btn){btn.disabled=busy;btn.textContent=busy?"THINKING…":"SEND";}
+  if(input) input.disabled=busy;
 }
 
-function sendAICoachMessage(){
-  const input=document.getElementById("aiCoachInput");
-  if(!input) return;
-  const text=input.value.trim();
-  if(!text) return;
-  input.value="";
-  aiAddMessage(text,true);
-
-  const lower=text.toLowerCase();
-  const asksMeal=lower.includes("meal plan") || lower.includes("mealplan") || lower.includes("generate my meals") || lower.includes("generate meals");
-  const asksLose=lower.includes("lose weight") || lower.includes("lose fat") || lower.includes("fat loss") || lower.includes("weight loss");
-
-  if(asksMeal && asksLose){
-    const result=aiGenerateMealPlanForGoal("lose");
-    if(result.ok){
-      aiAddMessage("Done. I’ve set your goal to fat loss, recalculated your ShiftFit target and generated a fresh 7-day meal plan. It’s saved automatically.",false);
-      document.getElementById("aiPlanResult").innerHTML=aiBuildWeekPreview();
-    }else{
-      aiAddMessage(result.message,false);
+function aiApplyCoachActions(actions){
+  if(!Array.isArray(actions)) return [];
+  const results=[];
+  actions.forEach(action=>{
+    if(!action||!action.type) return;
+    if(action.type==="generate_meal_plan"){
+      const goal=action.goal==="gain"?"gain":action.goal==="maintain"?"maintain":"lose";
+      const result=aiGenerateMealPlanForGoal(goal);
+      if(result.ok){results.push("7-day meal plan generated and saved");aiRenderPlanPreview();}else results.push(result.message);
+      return;
     }
-    return;
-  }
+    if(action.type==="set_goal"){
+      const goal=action.goal==="gain"?"gain":action.goal==="maintain"?"maintain":"lose";
+      selectedGoal=goal;
+      const result=aiGenerateMealPlanForGoal(goal);
+      if(result.ok){results.push("goal and nutrition target updated");aiRenderPlanPreview();}else results.push(result.message);
+      return;
+    }
+    if(action.type==="sync_shopping"){
+      if(typeof syncMealPlanShoppingList==="function"){
+        syncMealPlanShoppingList();
+        if(typeof renderShoppingList==="function") renderShoppingList();
+        results.push("shopping list synced from the current 7-day plan");
+      }
+      return;
+    }
+    if(action.type==="add_water"){
+      const amount=Math.max(1,Math.round(Number(action.amount)||1));
+      let current=Number(localStorage.getItem("shiftfitWaterToday")||0);
+      current=Math.min(99,current+amount);
+      localStorage.setItem("shiftfitWaterToday",String(current));
+      if(typeof updateHomeTodayTracking==="function") updateHomeTodayTracking();
+      results.push(amount+" water logged");
+      return;
+    }
+    if(action.type==="log_weight"){
+      const weight=Number(action.weight);
+      if(Number.isFinite(weight)&&weight>0){
+        let history=[];
+        try{history=JSON.parse(localStorage.getItem("shiftfitWeightHistory")||"[]");}catch(e){}
+        history.push({date:new Date().toISOString().slice(0,10),weight});
+        localStorage.setItem("shiftfitWeightHistory",JSON.stringify(history));
+        results.push(weight+" kg logged");
+      }
+      return;
+    }
+    if(action.type==="open_screen"){
+      const screen=String(action.screen||"");
+      const map={home:"showHome",meals:"showMeals",workouts:"showWorkout",calendar:"showCalendar",shopping:"showShopping",progress:"showProgress",profile:"showSetup"};
+      const fn=map[screen];
+      if(fn&&typeof window[fn]==="function"){window[fn]();results.push(screen+" opened");}
+    }
+  });
+  return results;
+}
 
-  if(asksMeal){
-    const result=aiGenerateMealPlanForGoal(aiGetCurrentPlan()?.goal || "lose");
-    if(result.ok){
-      aiAddMessage("Done. I’ve generated a fresh 7-day meal plan using your current ShiftFit goal and targets.",false);
-      document.getElementById("aiPlanResult").innerHTML=aiBuildWeekPreview();
-    }else aiAddMessage(result.message,false);
-    return;
-  }
+function aiRenderPlanPreview(){
+  const target=document.getElementById("aiPlanResult");
+  if(target) target.innerHTML=aiBuildWeekPreview();
+}
 
-  if(asksLose){
-    const result=aiGenerateMealPlanForGoal("lose");
-    if(result.ok){
-      aiAddMessage("Done. You’re now set up for fat loss and I’ve regenerated your 7-day meals around the new target.",false);
-      document.getElementById("aiPlanResult").innerHTML=aiBuildWeekPreview();
-    }else aiAddMessage(result.message,false);
-    return;
-  }
+async function askShiftFitAI(userText){
+  const history=[];
+  try{
+    const saved=JSON.parse(localStorage.getItem("shiftfitAIChatHistory")||"[]");
+    saved.slice(-12).forEach(m=>history.push({role:m.isUser?"user":"assistant",content:m.text}));
+  }catch(e){}
+  const response=await fetch("/api/coach",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({message:userText,history,state:aiGetCoachState()})
+  });
+  let data=null;
+  try{data=await response.json();}catch(e){throw new Error("The Coach returned an invalid response.");}
+  if(!response.ok) throw new Error(data?.error||"The AI Coach is unavailable right now.");
+  return data;
+}
 
-  if(lower.includes("macro") || lower.includes("protein")){
-    runAIQuickAction("macros");
-    return;
-  }
+async function sendAICoachMessage(textOverride){
+  const input=document.getElementById("aiCoachInput");
+  const text=String(textOverride||input?.value||"").trim();
+  if(!text) return;
+  if(input) input.value="";
+  aiAddMessage(text,true);
+  aiSetBusy(true);
+  const box=document.getElementById("aiChatMessages");
+  const thinking=document.createElement("div");
+  thinking.className="ai-message";
+  thinking.id="aiThinkingMessage";
+  thinking.innerHTML='<div class="ai-avatar">⚡</div><div class="ai-bubble ai-thinking">Thinking…</div>';
+  box?.appendChild(thinking);
+  if(box) box.scrollTop=box.scrollHeight;
+  try{
+    const data=await askShiftFitAI(text);
+    thinking.remove();
+    if(data.actions?.length) aiApplyCoachActions(data.actions);
+    aiAddMessage(data.reply||"I’m ready. What would you like to do?",false);
+    if(data.actions?.some(a=>a.type==="generate_meal_plan"||a.type==="set_goal")) aiRenderPlanPreview();
+    updateAICoachStatus();
+  }catch(error){
+    thinking.remove();
+    aiAddMessage("The AI Coach connection isn’t ready yet. Add OPENAI_API_KEY to your Vercel project and deploy the /api/coach function. Error: "+error.message,false);
+  }finally{aiSetBusy(false);}
+}
 
-  if(lower.includes("progress") || lower.includes("weight trend")){
-    runAIQuickAction("progress");
-    return;
-  }
-
-  aiAddMessage("I can already take action on your ShiftFit meal plan, calorie target, macros and progress. Try: “Generate my meal plan for this week to lose weight.”",false);
+function runAIQuickAction(action){
+  const prompts={
+    meal:"Generate my meal plan for this week to lose weight.",
+    macros:"Look at my current calories and macros and tell me exactly what I should do today to hit them.",
+    progress:"Analyse my progress and tell me what I should change next."
+  };
+  sendAICoachMessage(prompts[action]||"Help me with my ShiftFit plan.");
 }
 
 function showCalendarHistory(){
@@ -12808,7 +12861,7 @@ function showPlanSuccess(){
 }
 
 
-function generatePlan(stayOnCoach=false){
+function generatePlan(shouldNavigate=true){
 
   const age=
     parseFloat(
@@ -13157,9 +13210,7 @@ function generatePlan(stayOnCoach=false){
   showPlanSuccess();
 
 
-  if(!stayOnCoach){
-    showMeals();
-  }
+  showMeals();
 
 }
 
