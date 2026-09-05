@@ -27,7 +27,7 @@
     const src=dataUrl||getPhoto();
     document.querySelectorAll(".shiftfit-profile-photo").forEach(function(el){
       if(src){
-        el.style.backgroundImage="url(\\\""+src+"\\\")";
+        el.style.backgroundImage='url("'+src+'")';
         el.classList.add("has-photo");
         el.textContent="";
       }else{
