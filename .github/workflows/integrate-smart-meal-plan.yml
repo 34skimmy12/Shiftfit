@@ -1,0 +1,46 @@
+name: Integrate Smart Meal Plan
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  integrate-smart-meal-plan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Inject smart meal integrator
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text()
+          tag = '<script src="./meal-plan-integrator.js"></script>'
+          if tag not in s:
+              marker = '</body>'
+              if marker not in s:
+                  raise SystemExit('Could not find </body> in index.html')
+              s = s.replace(marker, tag + '\n' + marker, 1)
+              p.write_text(s)
+              print('Injected smart meal integrator')
+          else:
+              print('Smart meal integrator already present')
+          PY
+
+      - name: Commit index integration
+        run: |
+          if git diff --quiet; then
+            echo "No changes needed"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Wire smart meal engine into Build Your Plan"
+          git push
