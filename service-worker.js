@@ -1,4 +1,4 @@
-const CACHE='shiftfit-v16';
+const CACHE='shiftfit-v17';
 const ASSETS=['./','./index.html','./manifest.json','./meal-plan-engine.js'];
 const FOOD_OPTIONS=["Chicken breast","Lean beef mince","Lean turkey mince","Salmon","Tuna","Eggs","Greek yoghurt","Cottage cheese","Protein powder","Protein bar","Oats","Rice","Wholewheat pasta","Wholemeal wraps","Wholegrain bread","Rice cakes","Sweet potatoes","Potatoes","Beans","Kidney beans","Mixed vegetables","Spinach","Broccoli","Peppers","Onions","Tomatoes","Cucumber","Lettuce","Carrots","Mixed berries","Bananas","Apples","Blueberries","Strawberries","Avocado","Peanut butter","Almonds","Mixed nuts","Chia seeds","Honey","Olive oil","Light mayonnaise","Tomato sauce","Salsa"];
 const SHIFT_FIT_MEAL_ENGINE='<script src="./meal-plan-engine.js"></script>';
