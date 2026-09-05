@@ -1,0 +1,166 @@
+/* ShiftFit Personalise My Plan UI
+ * Adds the missing user-facing controls and hands saved targets to the
+ * target-aware meal engine without rewriting the large index.html file.
+ */
+(function(){
+  "use strict";
+
+  const STYLE_ID="shiftfit-personalizer-style";
+  const PANEL_ID="shiftfit-personalizer";
+
+  function esc(value){
+    return String(value??"").replace(/[&<>\"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+  }
+
+  function readPlan(){
+    try{return JSON.parse(localStorage.getItem("shiftfitPlan")||"null")||{};}catch(_){return {};}
+  }
+
+  function savePlan(plan){
+    localStorage.setItem("shiftfitPlan",JSON.stringify(plan));
+  }
+
+  function defaults(plan){
+    const goal=String(plan.goal||plan.goalType||"maintain").toLowerCase();
+    return {
+      goal:goal.includes("lose")?"lose":goal.includes("build")||goal.includes("muscle")?"build":"maintain",
+      calories:Number(plan.calories)||Number(plan.targetCalories)||2000,
+      protein:Number(plan.protein)||Number(plan.targetProtein)||150,
+      carbs:Number(plan.carbs)||Number(plan.targetCarbs)||200,
+      fats:Number(plan.fats)||Number(plan.targetFats)||65,
+      likes:Array.isArray(plan.foodLikes)?plan.foodLikes.join(", "):String(plan.foodLikes||""),
+      avoid:Array.isArray(plan.foodAvoid)?plan.foodAvoid.join(", "):String(plan.foodAvoid||""),
+      shift:String(plan.shiftPattern||plan.shift||localStorage.getItem("shiftfitSelectedShift")||"day").toLowerCase()
+    };
+  }
+
+  function addStyles(){
+    if(document.getElementById(STYLE_ID)) return;
+    const style=document.createElement("style");
+    style.id=STYLE_ID;
+    style.textContent=`
+      #${PANEL_ID}{position:fixed;inset:0;z-index:100;background:rgba(3,3,10,.82);backdrop-filter:blur(12px);display:none;overflow:auto;padding:20px 18px 110px}
+      #${PANEL_ID}.show{display:block}
+      .sf-personalizer-inner{width:min(500px,100%);margin:0 auto;padding-top:8px}
+      .sf-personalizer-card{padding:20px;border:1px solid #303a60;border-radius:22px;background:linear-gradient(145deg,#151b36,#0b1022);box-shadow:0 20px 60px rgba(0,0,0,.45)}
+      .sf-personalizer-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+      .sf-personalizer-title{font-size:27px;font-weight:950;letter-spacing:-.8px}
+      .sf-personalizer-sub{color:#aab1c5;font-size:12px;line-height:1.45;margin-top:4px}
+      .sf-close{width:40px;height:40px;border:1px solid #303a60;border-radius:12px;background:#0d1326;color:white;font-size:21px}
+      .sf-section{margin-top:18px;padding-top:17px;border-top:1px solid rgba(255,255,255,.08)}
+      .sf-label{display:block;color:#c9cde0;font-size:11px;font-weight:900;letter-spacing:1px;margin-bottom:10px}
+      .sf-goals{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+      .sf-goal{min-height:76px;border:1px solid #303a60;border-radius:14px;background:#0d1326;color:#aab1c5;font-weight:850;font-size:11px}
+      .sf-goal.active{border-color:#936bff;background:linear-gradient(145deg,#382070,#17143a);color:white}
+      .sf-goal b{display:block;font-size:22px;margin-bottom:5px}
+      .sf-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+      .sf-input{width:100%;padding:13px;border:1px solid #374164;border-radius:12px;background:#0a0f20;color:white;font-size:16px;font-weight:800;outline:none}
+      .sf-input:focus{border-color:#8b5cf6;box-shadow:0 0 0 3px rgba(139,92,246,.12)}
+      .sf-help{color:#7f879b;font-size:10px;line-height:1.45;margin-top:8px}
+      .sf-shifts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+      .sf-shift{padding:12px;border:1px solid #303a60;border-radius:13px;background:#0d1326;color:#aab1c5;text-align:left;font-weight:850;font-size:11px}
+      .sf-shift.active{border-color:#936bff;background:#271650;color:white}
+      .sf-shift strong{display:block;font-size:13px;margin-bottom:3px}
+      .sf-generate{width:100%;margin-top:20px;padding:17px;border:0;border-radius:15px;color:white;font-size:14px;font-weight:950;background:linear-gradient(135deg,#8b3cff,#5123c5);box-shadow:0 8px 25px rgba(109,40,217,.28)}
+      .sf-status{display:none;margin-top:10px;padding:10px;border-radius:10px;font-size:11px;text-align:center}
+      .sf-status.show{display:block;background:rgba(53,223,141,.08);color:#72eeb1}
+      @media(max-width:380px){.sf-goals{grid-template-columns:1fr}.sf-grid{grid-template-columns:1fr 1fr}}
+    `;
+    document.head.appendChild(style);
+  }
+
+  function render(){
+    if(document.getElementById(PANEL_ID)) return;
+    addStyles();
+    const d=defaults(readPlan());
+    const panel=document.createElement("div");
+    panel.id=PANEL_ID;
+    panel.innerHTML=`<div class="sf-personalizer-inner"><div class="sf-personalizer-card">
+      <div class="sf-personalizer-top"><div><div class="sf-personalizer-title">Personalise My Plan</div><div class="sf-personalizer-sub">Set your targets and ShiftFit will rebuild all 7 days around them.</div></div><button class="sf-close" type="button" aria-label="Close">×</button></div>
+      <div class="sf-section" style="margin-top:0;padding-top:0;border-top:0"><label class="sf-label">YOUR GOAL</label><div class="sf-goals">
+        <button class="sf-goal ${d.goal==='lose'?'active':''}" data-goal="lose"><b>🔻</b>Lose Weight</button>
+        <button class="sf-goal ${d.goal==='maintain'?'active':''}" data-goal="maintain"><b>⚖️</b>Maintain</button>
+        <button class="sf-goal ${d.goal==='build'?'active':''}" data-goal="build"><b>💪</b>Build Muscle</button>
+      </div></div>
+      <div class="sf-section"><label class="sf-label">DAILY TARGETS</label><div class="sf-grid">
+        <div><label class="sf-help">Calories</label><input id="sfCalories" class="sf-input" type="number" min="1000" max="6000" step="10" value="${esc(d.calories)}"></div>
+        <div><label class="sf-help">Protein (g)</label><input id="sfProtein" class="sf-input" type="number" min="40" max="400" step="1" value="${esc(d.protein)}"></div>
+        <div><label class="sf-help">Carbs (g)</label><input id="sfCarbs" class="sf-input" type="number" min="40" max="700" step="1" value="${esc(d.carbs)}"></div>
+        <div><label class="sf-help">Fats (g)</label><input id="sfFats" class="sf-input" type="number" min="20" max="250" step="1" value="${esc(d.fats)}"></div>
+      </div><div class="sf-help">These are the targets the 7-day meal engine will prioritise.</div></div>
+      <div class="sf-section"><label class="sf-label">FOOD PREFERENCES</label>
+        <input id="sfLikes" class="sf-input" type="text" value="${esc(d.likes)}" placeholder="Foods you like, separated by commas">
+        <div style="height:9px"></div><input id="sfAvoid" class="sf-input" type="text" value="${esc(d.avoid)}" placeholder="Foods to avoid, separated by commas">
+        <div class="sf-help">Avoid foods are treated as exclusions when possible. Likes receive priority.</div>
+      </div>
+      <div class="sf-section"><label class="sf-label">SHIFT PATTERN</label><div class="sf-shifts">
+        <button class="sf-shift ${d.shift.includes('early')?'active':''}" data-shift="early"><strong>🌅 Early</strong>Early start</button>
+        <button class="sf-shift ${d.shift==='day'?'active':''}" data-shift="day"><strong>☀️ Day</strong>Standard day</button>
+        <button class="sf-shift ${d.shift.includes('late')||d.shift.includes('evening')?'active':''}" data-shift="late"><strong>🌇 Late</strong>Late/evening</button>
+        <button class="sf-shift ${d.shift.includes('night')?'active':''}" data-shift="night"><strong>🌙 Night</strong>Overnight</button>
+      </div></div>
+      <button id="sfGenerate" class="sf-generate" type="button">SAVE &amp; GENERATE MY PLAN</button><div id="sfStatus" class="sf-status"></div>
+    </div></div>`;
+    document.body.appendChild(panel);
+
+    panel.querySelector(".sf-close").onclick=()=>panel.classList.remove("show");
+    panel.addEventListener("click",e=>{if(e.target===panel) panel.classList.remove("show")});
+    panel.querySelectorAll("[data-goal]").forEach(btn=>btn.onclick=()=>{panel.querySelectorAll("[data-goal]").forEach(b=>b.classList.remove("active"));btn.classList.add("active")});
+    panel.querySelectorAll("[data-shift]").forEach(btn=>btn.onclick=()=>{panel.querySelectorAll("[data-shift]").forEach(b=>b.classList.remove("active"));btn.classList.add("active")});
+    panel.querySelector("#sfGenerate").onclick=generate;
+  }
+
+  function generate(){
+    const panel=document.getElementById(PANEL_ID);
+    const goal=panel.querySelector("[data-goal].active")?.dataset.goal||"maintain";
+    const shift=panel.querySelector("[data-shift].active")?.dataset.shift||"day";
+    const number=id=>Math.max(0,Number(panel.querySelector(id)?.value)||0);
+    const plan=readPlan();
+    plan.goal=goal;
+    plan.calories=number("#sfCalories");
+    plan.protein=number("#sfProtein");
+    plan.carbs=number("#sfCarbs");
+    plan.fats=number("#sfFats");
+    plan.foodLikes=panel.querySelector("#sfLikes").value.split(",").map(x=>x.trim()).filter(Boolean);
+    plan.foodAvoid=panel.querySelector("#sfAvoid").value.split(",").map(x=>x.trim()).filter(Boolean);
+    plan.shiftPattern=shift;
+    plan.targetCalories=plan.calories;
+    plan.targetProtein=plan.protein;
+    plan.targetCarbs=plan.carbs;
+    plan.targetFats=plan.fats;
+    savePlan(plan);
+    localStorage.setItem("shiftfitSelectedShift",shift);
+    const status=panel.querySelector("#sfStatus");
+    status.textContent="Building your 7-day plan…";status.classList.add("show");
+    try{
+      if(typeof window.shiftfitGenerateTargetAwareMealPlan==="function") window.shiftfitGenerateTargetAwareMealPlan(plan);
+      setTimeout(()=>location.reload(),250);
+    }catch(err){
+      status.textContent="Could not generate the plan. Please try again.";
+      console.error("ShiftFit personalizer",err);
+    }
+  }
+
+  function addEntryButton(){
+    if(document.getElementById("sfOpenPersonalizer")) return;
+    const headers=document.querySelectorAll(".meal-header");
+    const header=headers[0];
+    if(!header) return;
+    const btn=document.createElement("button");
+    btn.id="sfOpenPersonalizer";btn.className="edit-plan-btn";btn.type="button";
+    btn.textContent="⚙️ Personalise My Plan";
+    btn.onclick=()=>{render();document.getElementById(PANEL_ID).classList.add("show")};
+    header.appendChild(btn);
+  }
+
+  function boot(){
+    render();
+    addEntryButton();
+    const observer=new MutationObserver(addEntryButton);
+    observer.observe(document.body,{childList:true,subtree:true});
+    setTimeout(addEntryButton,300);
+  }
+
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",boot,{once:true});
+  else boot();
+})();
