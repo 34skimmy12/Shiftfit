@@ -26,5 +26,7 @@
     button.addEventListener("click",function(event){event.preventDefault();event.stopPropagation();regenerateFromSavedTargets();});
     document.body.insertBefore(button,document.body.firstChild);
   }
-  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",installBridge,{once:true});else installBridge();
+  function loadTheme(){if(document.getElementById("shiftfit-theme-loader"))return;var s=document.createElement("script");s.id="shiftfit-theme-loader";s.src="./shiftfit-theme.js?v=1";s.async=false;document.head.appendChild(s);}
+  function boot(){installBridge();loadTheme();}
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot,{once:true});else boot();
 })();
