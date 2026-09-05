@@ -14,7 +14,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Inject weekly coach, progress cleanup and persistence scripts
+      - name: Inject weekly coach, progress cleanup, persistence and data privacy scripts
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -24,6 +24,7 @@ jobs:
               '<script src="./weekly-coach.js"></script>',
               '<script src="./remove-progress-placeholder.js"></script>',
               '<script src="./shiftfit-storage.js"></script>',
+              '<script src="./data-privacy.js"></script>',
           ]
           marker = '<script src="./goal-journey.js"></script>'
           for tag in tags:
@@ -44,5 +45,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add index.html
-          git commit -m "Inject persistence layer"
+          git commit -m "Add Data and Privacy controls"
           git push
