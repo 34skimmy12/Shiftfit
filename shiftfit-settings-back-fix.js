@@ -1,4 +1,4 @@
-/* ShiftFit Settings — reliable back-button bridge. */
+/* ShiftFit Settings — reliable back-button bridge v2. */
 (function(){
   "use strict";
   if(window.__shiftFitSettingsBackFixLoaded)return;
@@ -10,6 +10,12 @@
     if(!modal||!modal.classList.contains("open"))return;
     e.preventDefault();
     e.stopImmediatePropagation();
-    if(typeof target.onclick==="function")target.onclick.call(target,e);
+    const title=modal.querySelector(".backrow h1");
+    const name=title?title.textContent.trim():"";
+    if(name&&name!=="Settings"&&typeof window.shiftfitSettings?.open==="function"){
+      window.shiftfitSettings.open();
+      return;
+    }
+    modal.classList.remove("open");
   },true);
 })();
