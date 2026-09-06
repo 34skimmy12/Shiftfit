@@ -22,6 +22,7 @@
     loadScript("shiftfit-notifications-loader","./shiftfit-notifications.js?v=1");
     loadScript("shiftfit-app-settings-loader","./shiftfit-app-settings.js?v=1");
     loadScript("shiftfit-settings-back-fix-loader","./shiftfit-settings-back-fix.js?v=1");
+    loadScript("shiftfit-account-settings-loader","./shiftfit-account-settings.js?v=1");
     setTimeout(removePlaceholder,500);
     setTimeout(removePlaceholder,1500);
     setTimeout(removePlaceholder,3000);
