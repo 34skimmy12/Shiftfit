@@ -1,4 +1,4 @@
-/* ShiftFit Profile Plan Regeneration Bridge v3.2 — signup visual only; no legacy navigation interception */
+/* ShiftFit Profile Plan Regeneration Bridge v3.3 — dedicated signup tab */
 (function(){
   "use strict";
   function readPlan(){try{const raw=localStorage.getItem("shiftfitPlan");return raw?JSON.parse(raw):null;}catch(_){return null;}}
@@ -20,15 +20,44 @@
     if(window.__shiftFitAccountBackFixInstalled)return;window.__shiftFitAccountBackFixInstalled=true;
     document.addEventListener("click",function(event){const button=event.target&&event.target.closest?event.target.closest("#shiftfit-settings-split-modal .sheet .back[data-shiftfit-account-back]"):null;if(!button)return;event.preventDefault();event.stopImmediatePropagation();const modal=document.getElementById("shiftfit-settings-split-modal");if(modal)modal.classList.remove("open");},true);
   }
-  function installSignupVisual(){
-    if(window.__shiftFitSignupVisualInstalled)return;window.__shiftFitSignupVisualInstalled=true;
-    function apply(){const header=document.querySelector(".home-header");if(!header)return;const b=header.querySelector(".menu-btn");if(!b)return;b.classList.add("signup-entry");b.removeAttribute("data-page");b.removeAttribute("href");b.setAttribute("type","button");b.innerHTML="<span style=\"font-size:14px;font-weight:950;letter-spacing:.5px\">SIGN UP</span>";}
-    apply();new MutationObserver(apply).observe(document.body,{childList:true,subtree:true});
+  function installSignupTab(){
+    if(window.__shiftFitSignupTabInstalled)return;window.__shiftFitSignupTabInstalled=true;
+    function apply(){
+      const header=document.querySelector(".home-header");
+      if(!header)return;
+      let tab=header.querySelector(".shiftfit-signup-tab");
+      const menu=header.querySelector(".menu-btn");
+      if(!menu)return;
+      if(!tab){
+        tab=document.createElement("button");
+        tab.type="button";
+        tab.className="shiftfit-signup-tab";
+        tab.setAttribute("aria-label","Sign up");
+        tab.innerHTML="<span>SIGN UP</span>";
+        menu.parentNode.insertBefore(tab,menu);
+      }
+      menu.classList.remove("signup-entry");
+      menu.innerHTML="<span class=\"menu-icon\">☰</span>";
+    }
+    apply();
+    new MutationObserver(apply).observe(document.body,{childList:true,subtree:true});
+  }
+  function signupStyles(){
+    if(document.getElementById("shiftfit-signup-tab-style"))return;
+    const s=document.createElement("style");s.id="shiftfit-signup-tab-style";s.textContent=".home-header .shiftfit-signup-tab{min-width:76px;height:34px;padding:0 12px;margin-right:4px;border:1px solid rgba(139,92,246,.7);border-radius:10px;background:linear-gradient(135deg,#24154f,#17112f);color:#fff;font-size:11px;font-weight:950;letter-spacing:.6px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(0,0,0,.22)}.home-header .shiftfit-signup-tab:active{transform:scale(.97)}";document.head.appendChild(s);
+  }
+  function bindSignupTab(){
+    document.addEventListener("click",function(event){
+      const tab=event.target&&event.target.closest?event.target.closest(".home-header .shiftfit-signup-tab"):null;
+      if(!tab)return;
+      event.preventDefault();event.stopImmediatePropagation();
+      if(window.shiftfitDirectSignup&&typeof window.shiftfitDirectSignup.open==="function")window.shiftfitDirectSignup.open();
+    },true);
   }
   function loadTheme(){if(document.getElementById("shiftfit-theme-loader"))return;var s=document.createElement("script");s.id="shiftfit-theme-loader";s.src="./shiftfit-theme.js?v=6";s.async=false;document.head.appendChild(s);}
   function loadAuth(){if(document.getElementById("shiftfit-auth-loader"))return;var s=document.createElement("script");s.id="shiftfit-auth-loader";s.src="./shiftfit-auth.js?v=6";s.async=false;document.head.appendChild(s);}
   function loadCloudSync(){if(document.getElementById("shiftfit-cloud-sync-loader"))return;var s=document.createElement("script");s.id="shiftfit-cloud-sync-loader";s.src="./shiftfit-cloud-sync.js?v=2";s.async=false;document.head.appendChild(s);}
   function loadAccountSyncUi(){if(document.getElementById("shiftfit-account-sync-ui-loader"))return;var s=document.createElement("script");s.id="shiftfit-account-sync-ui-loader";s.src="./shiftfit-account-sync-ui.js?v=1";s.async=false;document.head.appendChild(s);}
-  function boot(){installBridge();installAccountBackFix();installSignupVisual();loadTheme();loadAuth();loadCloudSync();loadAccountSyncUi();}
+  function boot(){installBridge();installAccountBackFix();signupStyles();installSignupTab();bindSignupTab();loadTheme();loadAuth();loadCloudSync();loadAccountSyncUi();}
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot,{once:true});else boot();
 })();
