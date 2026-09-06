@@ -1,4 +1,4 @@
-/* ShiftFit Profile Plan Regeneration Bridge v1 */
+/* ShiftFit Profile Plan Regeneration Bridge v2 */
 (function(){
   "use strict";
   function readPlan(){try{const raw=localStorage.getItem("shiftfitPlan");return raw?JSON.parse(raw):null;}catch(_){return null;}}
@@ -53,35 +53,40 @@
     accountLink.style.cssText="position:fixed;left:-9999px;top:-9999px;width:1px;height:1px;opacity:0;pointer-events:none;";
     document.body.appendChild(accountLink);
     accountLink.click();
-    setTimeout(function(){var signup=document.getElementById("shiftfit-show-signup");if(signup)signup.click();accountLink.remove();},120);
+    setTimeout(function(){var signup=document.getElementById("shiftfit-show-signup");if(signup)signup.click();accountLink.remove();},150);
   }
   function installSignupEntry(){
     if(window.__shiftFitSignupEntryInstalled)return;
     window.__shiftFitSignupEntryInstalled=true;
     var style=document.createElement("style");
     style.id="shiftfit-signup-entry-style";
-    style.textContent=".home-header{position:relative}.home-header .logo{position:absolute;left:50%;transform:translateX(-50%) skew(-5deg);white-space:nowrap}.home-header .signup-entry{width:auto;min-width:76px;height:38px;padding:0 12px;border:1px solid rgba(139,92,246,.75);border-radius:12px;background:rgba(36,22,78,.72);color:#f5f3ff;font-size:10px;font-weight:950;letter-spacing:.6px;box-shadow:0 0 14px rgba(109,40,217,.22)}.home-header .signup-entry:active{transform:scale(.97)}";
+    style.textContent=".home-header{position:relative}.home-header .logo{position:absolute;left:50%;transform:translateX(-50%) skew(-5deg);white-space:nowrap}.home-header .signup-entry{width:auto;min-width:76px;height:38px;padding:0 12px;border:1px solid rgba(139,92,246,.75);border-radius:12px;background:rgba(36,22,78,.72);color:#f5f3ff;font-size:10px;font-weight:950;letter-spacing:.6px;box-shadow:0 0 14px rgba(109,40,217,.22);display:flex;align-items:center;justify-content:center}.home-header .signup-entry:active{transform:scale(.97)}";
     document.head.appendChild(style);
     function apply(){
       var header=document.querySelector(".home-header");
-      if(!header)return false;
+      if(!header)return;
       var menu=header.querySelector(".menu-btn");
-      if(!menu){
-        var existing=header.querySelector(".signup-entry");
-        if(existing)return true;
-        return false;
+      if(menu){
+        menu.className="signup-entry";
+        menu.removeAttribute("aria-label");
+        menu.innerHTML="<span>SIGN UP</span>";
+        menu.type="button";
+        if(menu.dataset.shiftfitSignupBound!=="1"){
+          menu.dataset.shiftfitSignupBound="1";
+          menu.addEventListener("click",function(event){event.preventDefault();event.stopPropagation();openSignup();});
+        }
+        return;
       }
-      menu.className="signup-entry";
-      menu.removeAttribute("aria-label");
-      menu.innerHTML="<span>SIGN UP</span>";
-      menu.type="button";
-      menu.addEventListener("click",function(event){event.preventDefault();event.stopPropagation();openSignup();});
-      return true;
+      var existing=header.querySelector(".signup-entry");
+      if(existing&&existing.dataset.shiftfitSignupBound!=="1"){
+        existing.dataset.shiftfitSignupBound="1";
+        existing.addEventListener("click",function(event){event.preventDefault();event.stopPropagation();openSignup();});
+      }
     }
-    if(!apply()){
-      var observer=new MutationObserver(function(){if(apply())observer.disconnect();});
-      observer.observe(document.body,{childList:true,subtree:true});
-      setTimeout(function(){observer.disconnect();apply();},5000);
+    apply();
+    if(!window.__shiftFitSignupObserver){
+      window.__shiftFitSignupObserver=new MutationObserver(function(){apply();});
+      window.__shiftFitSignupObserver.observe(document.body,{childList:true,subtree:true});
     }
   }
   function loadTheme(){if(document.getElementById("shiftfit-theme-loader"))return;var s=document.createElement("script");s.id="shiftfit-theme-loader";s.src="./shiftfit-theme.js?v=6";s.async=false;document.head.appendChild(s);}
