@@ -1,4 +1,4 @@
-/* ShiftFit: remove the unused progress placeholder card and boot safe UI bridges. */
+/* ShiftFit: remove the unused progress placeholder card and boot stable UI bridges. */
 (function(){
   "use strict";
   function removePlaceholder(){
@@ -17,9 +17,8 @@
   }
   function boot(){
     removePlaceholder();
-    loadScript("shiftfit-profile-plan-bridge-loader","./profile-plan-regeneration-bridge.js?v=6");
+    loadScript("shiftfit-profile-plan-bridge-loader","./profile-plan-regeneration-bridge.js?v=7");
     loadScript("shiftfit-avatar-sync-loader","./shiftfit-avatar-sync.js?v=1");
-    loadScript("shiftfit-direct-signup-loader","./shiftfit-signup-direct.js?v=2");
     setTimeout(removePlaceholder,500);
     setTimeout(removePlaceholder,1500);
     setTimeout(removePlaceholder,3000);
