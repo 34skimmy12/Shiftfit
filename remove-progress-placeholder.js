@@ -1,4 +1,4 @@
-/* ShiftFit: remove the unused progress placeholder card and boot the header bridge. */
+/* ShiftFit: remove the unused progress placeholder card and boot stable UI bridges. */
 (function(){
   "use strict";
   function removePlaceholder(){
@@ -10,17 +10,15 @@
       if(text.includes("more progress tracking is coming") || text.includes("more progression coming"))el.remove();
     });
   }
-  function loadHeaderBridge(){
-    if(document.getElementById("shiftfit-profile-plan-bridge-loader"))return;
+  function loadScript(id,src){
+    if(document.getElementById(id))return;
     const script=document.createElement("script");
-    script.id="shiftfit-profile-plan-bridge-loader";
-    script.src="./profile-plan-regeneration-bridge.js?v=5";
-    script.async=false;
-    document.head.appendChild(script);
+    script.id=id;script.src=src;script.async=false;document.head.appendChild(script);
   }
   function boot(){
     removePlaceholder();
-    loadHeaderBridge();
+    loadScript("shiftfit-profile-plan-bridge-loader","./profile-plan-regeneration-bridge.js?v=5");
+    loadScript("shiftfit-avatar-sync-loader","./shiftfit-avatar-sync.js?v=1");
     setTimeout(removePlaceholder,500);
     setTimeout(removePlaceholder,1500);
     setTimeout(removePlaceholder,3000);
