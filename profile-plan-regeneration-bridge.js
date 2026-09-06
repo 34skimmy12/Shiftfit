@@ -1,4 +1,4 @@
-/* ShiftFit Profile Plan Regeneration Bridge v3.1 */
+/* ShiftFit Profile Plan Regeneration Bridge v3.2 */
 (function(){
   "use strict";
   function readPlan(){try{const raw=localStorage.getItem("shiftfitPlan");return raw?JSON.parse(raw):null;}catch(_){return null;}}
@@ -39,12 +39,19 @@
     },true);
   }
   function openSignup(){
-    var auth=window.shiftfitAuth;
-    if(auth&&typeof auth.openSignup==="function"){auth.openSignup();return;}
-    var profile=document.querySelector(".profile-btn");
-    if(profile)profile.click();
-    setTimeout(function(){var account=document.querySelector('#shiftfit-settings-split-modal [data-page="account"]');if(account)account.click();},200);
-    setTimeout(function(){var signup=document.getElementById("shiftfit-show-signup");if(signup)signup.click();},500);
+    var tries=0;
+    function attempt(){
+      var auth=window.shiftfitAuth;
+      if(auth&&typeof auth.openSignup==="function"){auth.openSignup();return;}
+      tries++;
+      if(tries<8){setTimeout(attempt,100);return;}
+      var modal=document.getElementById("shiftfit-settings-split-modal");
+      if(modal)modal.classList.add("open");
+      var account=document.querySelector('#shiftfit-settings-split-modal [data-page="account"]');
+      if(account)account.click();
+      setTimeout(function(){var signup=document.getElementById("shiftfit-show-signup");if(signup)signup.click();},250);
+    }
+    attempt();
   }
   function installSignupEntry(){
     var style=document.getElementById("shiftfit-signup-entry-style");
