@@ -21,7 +21,7 @@ input,select,textarea{background:#171717!important;color:var(--sf-text)!importan
 .workout-day,.meal-kicker,.setup-kicker,.shopping-kicker,.accent,.highlight,.brand-accent,.cyan,.text-cyan{color:var(--sf-cyan)!important}
 .progress-fill,.progress-bar,.meter-fill{background:linear-gradient(90deg,var(--sf-blue),var(--sf-cyan))!important}.avatar{border-color:var(--sf-cyan)!important;box-shadow:0 0 12px rgba(99,215,241,.25)!important}hr,.divider{border-color:#2b2b2b!important}.brand,.logo-text,.wordmark{font-family:Arial,Helvetica,sans-serif!important;font-weight:800!important}
 
-/* FINAL PROGRESS SCREEN OVERRIDES — this screen is also styled by dynamically injected legacy CSS. */
+/* Progress screen — defeat legacy inline purple surfaces. */
 #progressScreen{color:var(--sf-text)!important;background:transparent!important}
 #progressScreen .card,#progressScreen .panel,#progressScreen section,#progressScreen article,#progressScreen .stat-card,#progressScreen .progress-card,#progressScreen .goal-card,#progressScreen .weight-card,#progressScreen .progress-summary,#progressScreen .progress-goal,#progressScreen .progress-weight,#progressScreen .progress-insight,#progressScreen .progress-metric{background:#181818!important;border-color:#303030!important;color:var(--sf-text)!important}
 #progressScreen [style*="background"],#progressScreen [style*="background-color"]{background:#181818!important;background-image:none!important}
@@ -34,7 +34,26 @@ input,select,textarea{background:#171717!important;color:var(--sf-text)!importan
 #progressScreen .sfa-action{background:rgba(99,215,241,.08)!important;border-color:rgba(99,215,241,.25)!important;color:#c9f4ff!important}
 #progressScreen .sfa-action strong{color:#fff!important}
 
-/* The cloud-sync script intentionally creates this transient toast; keep background sync silent in the app UI. */
+/* Personalisation and smart-preference overlays — keep the new brand consistent. */
+#shiftfit-personalizer{background:rgba(3,3,3,.86)!important}
+#shiftfit-personalizer .sf-personalizer-card{background:linear-gradient(145deg,#202020,#111111)!important;border-color:#303030!important;box-shadow:0 20px 60px rgba(0,0,0,.55)!important}
+#shiftfit-personalizer .sf-personalizer-sub,#shiftfit-personalizer .sf-help{color:#a7adb5!important}
+#shiftfit-personalizer .sf-close{background:#181818!important;border-color:#383838!important;color:#fff!important}
+#shiftfit-personalizer .sf-section{border-color:#2b2b2b!important}
+#shiftfit-personalizer .sf-label{color:#d9dde3!important}
+#shiftfit-personalizer .sf-goal,#shiftfit-personalizer .sf-shift{background:#181818!important;border-color:#383838!important;color:#a7adb5!important}
+#shiftfit-personalizer .sf-goal.active,#shiftfit-personalizer .sf-shift.active{border-color:var(--sf-cyan)!important;background:rgba(99,215,241,.10)!important;color:#fff!important}
+#shiftfit-personalizer .sf-input{background:#121212!important;border-color:#383838!important;color:#fff!important}
+#shiftfit-personalizer .sf-input:focus{border-color:var(--sf-cyan)!important;box-shadow:0 0 0 3px rgba(99,215,241,.12)!important}
+#shiftfit-personalizer .sf-generate{background:linear-gradient(135deg,var(--sf-cyan),var(--sf-blue))!important;color:#061016!important;box-shadow:0 8px 25px rgba(46,142,209,.20)!important}
+#shiftfit-personalizer .sf-status{background:rgba(53,223,141,.08)!important;color:#72eeb1!important}
+#shiftfit-smart-preferences{background:linear-gradient(145deg,#202020,#111111)!important;border-color:#303030!important}
+#shiftfit-smart-preferences .sfsp-sub,#shiftfit-smart-preferences .sfsp-help{color:#a7adb5!important}
+#shiftfit-smart-preferences label{color:#d9dde3!important}
+#shiftfit-smart-preferences input{background:#121212!important;border-color:#383838!important;color:#fff!important}
+#shiftfit-smart-preferences input:focus{border-color:var(--sf-cyan)!important;box-shadow:0 0 0 3px rgba(99,215,241,.12)!important}
+
+/* Keep all transient sync confirmations silent. */
 .toast{display:none!important}
 
 @media(max-width:600px){h1{font-size:clamp(30px,9vw,44px)!important}h2{font-size:clamp(24px,7vw,34px)!important}}
