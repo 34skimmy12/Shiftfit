@@ -24,7 +24,7 @@
     loadScript("shiftfit-settings-back-fix-loader","./shiftfit-settings-back-fix.js?v=1");
     loadScript("shiftfit-account-settings-loader","./shiftfit-account-settings.js?v=1");
     loadScript("shiftfit-data-privacy-loader","./shiftfit-data-privacy.js?v=1");
-    loadScript("shiftfit-support-ai-loader","./shiftfit-support-ai.js?v=1");
+    loadScript("shiftfit-support-ai-loader","./shiftfit-support-ai.js?v=2");
     loadScript("shiftfit-gmail-support-loader","./shiftfit-gmail-support.js?v=1");
     loadScript("shiftfit-settings-compact-loader","./shiftfit-settings-compact.js?v=3");
     setTimeout(removePlaceholder,500);
