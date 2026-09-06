@@ -18,11 +18,13 @@
   function loadCSS(id,href){
     if(document.getElementById(id))return;
     const link=document.createElement("link");
-    link.id=id;link.rel="stylesheet";link.href=href;document.head.appendChild(link);
+    link.id=id;link.rel="stylesheet";link.href=href;
+    /* Put the brand stylesheet after the app's large inline stylesheet stack. */
+    (document.body||document.head).appendChild(link);
   }
   function boot(){
     removePlaceholder();
-    loadCSS("shiftfit-brand-theme","./shiftfit-brand-theme.css?v=1");
+    loadCSS("shiftfit-brand-theme","./shiftfit-brand-theme.css?v=2");
     loadScript("shiftfit-profile-control-center-loader","./profile-control-center.js?v=1");
     loadScript("shiftfit-profile-plan-bridge-loader","./profile-plan-regeneration-bridge.js?v=5");
     loadScript("shiftfit-avatar-sync-loader","./shiftfit-avatar-sync.js?v=1");
