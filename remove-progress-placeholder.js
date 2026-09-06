@@ -14,7 +14,7 @@
     if(document.getElementById("shiftfit-profile-plan-bridge-loader"))return;
     const script=document.createElement("script");
     script.id="shiftfit-profile-plan-bridge-loader";
-    script.src="./profile-plan-regeneration-bridge.js?v=6";
+    script.src="./profile-plan-regeneration-bridge.js?v=5";
     script.async=false;
     document.head.appendChild(script);
   }
