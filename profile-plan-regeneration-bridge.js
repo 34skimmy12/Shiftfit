@@ -1,4 +1,4 @@
-/* ShiftFit Profile Plan Regeneration Bridge v3 */
+/* ShiftFit Profile Plan Regeneration Bridge v4 */
 (function(){
   "use strict";
   function readPlan(){try{const raw=localStorage.getItem("shiftfitPlan");return raw?JSON.parse(raw):null;}catch(_){return null;}}
@@ -49,11 +49,11 @@
     setTimeout(function(){
       var account=document.querySelector('#shiftfit-settings-split-modal [data-page="account"]');
       if(account)account.click();
-    },200);
+    },250);
     setTimeout(function(){
       var signup=document.getElementById("shiftfit-show-signup");
       if(signup)signup.click();
-    },500);
+    },700);
   }
   function installSignupEntry(){
     var style=document.getElementById("shiftfit-signup-entry-style");
@@ -70,23 +70,34 @@
       if(menu){
         menu.className="signup-entry";
         menu.removeAttribute("aria-label");
+        menu.removeAttribute("data-page");
+        menu.removeAttribute("href");
         menu.innerHTML="<span>SIGN UP</span>";
         menu.type="button";
-        if(menu.dataset.shiftfitSignupBound!=="1"){
-          menu.dataset.shiftfitSignupBound="1";
-          menu.addEventListener("click",function(event){event.preventDefault();event.stopPropagation();openSignup();});
-        }
+        menu.dataset.shiftfitSignupBound="1";
       }
       var existing=header.querySelector(".signup-entry");
-      if(existing&&existing.dataset.shiftfitSignupBound!=="1"){
+      if(existing){
+        existing.removeAttribute("data-page");
+        existing.removeAttribute("href");
+        existing.type="button";
         existing.dataset.shiftfitSignupBound="1";
-        existing.addEventListener("click",function(event){event.preventDefault();event.stopPropagation();openSignup();});
       }
     }
     apply();
     if(!window.__shiftFitSignupObserver){
       window.__shiftFitSignupObserver=new MutationObserver(function(){apply();});
       window.__shiftFitSignupObserver.observe(document.body,{childList:true,subtree:true});
+    }
+    if(!window.__shiftFitSignupClickFix){
+      window.__shiftFitSignupClickFix=true;
+      document.addEventListener("click",function(event){
+        var button=event.target&&event.target.closest?event.target.closest(".home-header .signup-entry"):null;
+        if(!button)return;
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        openSignup();
+      },true);
     }
   }
   function loadTheme(){if(document.getElementById("shiftfit-theme-loader"))return;var s=document.createElement("script");s.id="shiftfit-theme-loader";s.src="./shiftfit-theme.js?v=6";s.async=false;document.head.appendChild(s);}
