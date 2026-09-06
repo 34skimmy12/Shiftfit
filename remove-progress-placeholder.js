@@ -24,7 +24,7 @@
   }
   function boot(){
     removePlaceholder();
-    loadCSS("shiftfit-brand-theme","./shiftfit-brand-theme.css?v=2");
+    loadCSS("shiftfit-brand-theme","./shiftfit-brand-theme.css?v=3");
     loadScript("shiftfit-profile-control-center-loader","./profile-control-center.js?v=1");
     loadScript("shiftfit-profile-plan-bridge-loader","./profile-plan-regeneration-bridge.js?v=5");
     loadScript("shiftfit-avatar-sync-loader","./shiftfit-avatar-sync.js?v=1");
@@ -36,6 +36,7 @@
     loadScript("shiftfit-support-ai-loader","./shiftfit-support-ai.js?v=2");
     loadScript("shiftfit-gmail-support-loader","./shiftfit-gmail-support.js?v=1");
     loadScript("shiftfit-settings-compact-loader","./shiftfit-settings-compact.js?v=3");
+    loadScript("shiftfit-activity-tracker-loader","./shiftfit-activity-tracker.js?v=1");
     setTimeout(removePlaceholder,500);
     setTimeout(removePlaceholder,1500);
     setTimeout(removePlaceholder,3000);
