@@ -1,0 +1,15 @@
+/* ShiftFit final visual pass — loaded last so no legacy purple can win. */
+:root{--purple:#63d7f1!important;--purple2:#2e8ed1!important;--purple-light:#63d7f1!important}
+body{background:radial-gradient(ellipse at 50% -18%,rgba(99,215,241,.10),transparent 42%),radial-gradient(ellipse at 110% 30%,rgba(46,142,209,.08),transparent 34%),linear-gradient(180deg,#151515 0%,#111111 58%,#0b0b0b 100%)!important}
+.logo-bolt,.logo-fit{color:#63d7f1!important;text-shadow:0 0 12px rgba(99,215,241,.55)!important}.logo-shift{color:#f5f5f7!important}
+.card,.panel,.tile,.option-card,.settings-card,.profile-sheet,.modal,.modal-content,.bottom-sheet,.sheet,.stat-card,.meal-card,.workout-card,.progress-card,.today-plan,.exercise-card,.workout-stat,.action-card,.ai-card{background:#181818!important;border-color:#303030!important;color:#f7f8fa!important}
+button.primary,.primary,.primary-btn,.cta-button,.save-btn,.action-button,.finish-button.ready,button[data-primary="true"]{background:linear-gradient(135deg,#63d7f1,#2e8ed1)!important;color:#061016!important;border-color:transparent!important}
+button.secondary,.secondary,.secondary-btn{background:#202020!important;color:#f7f8fa!important;border-color:#3a3a3a!important}
+input,select,textarea{background:#121212!important;color:#fff!important;border-color:#383838!important}input:focus,select:focus,textarea:focus{border-color:#63d7f1!important;box-shadow:0 0 0 3px rgba(99,215,241,.12)!important}
+.progress-fill,.progress-bar,.meter-fill,.sfa-fill{background:linear-gradient(90deg,#2e8ed1,#63d7f1)!important}
+.bottom-nav,.nav-bar,.tab-bar{background:rgba(7,12,15,.97)!important;border-color:#26363b!important}.bottom-nav .active,.nav-bar .active,.tab-bar .active{color:#63d7f1!important}
+[style*="#6d28d9"],[style*="#8b5cf6"],[style*="#a78bfa"],[style*="#7c3aed"],[style*="#4f46e5"],[style*="#854cff"],[style*="#8656ff"],[style*="rgb(109, 40, 217)"],[style*="rgb(139, 92, 246)"],[style*="rgb(167, 139, 250)"]{background:linear-gradient(135deg,#63d7f1,#2e8ed1)!important;color:#061016!important;border-color:transparent!important}
+[style*="color:#6d28d9"],[style*="color:#8b5cf6"],[style*="color:#a78bfa"],[style*="color:#7c3aed"],[style*="color:#854cff"],[style*="color:#8656ff"],[style*="color:rgb(109, 40, 217)"],[style*="color:rgb(139, 92, 246)"]{color:#63d7f1!important}
+.toast{display:none!important}
+#sf-activity-module{display:none!important}
+.sf-step-button{display:flex!important}
