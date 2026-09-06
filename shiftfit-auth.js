@@ -27,5 +27,6 @@
   function toast(text){var old=document.querySelector(".toast");if(old)old.remove();var t=document.createElement("div");t.className="toast";t.textContent=text;document.body.appendChild(t);setTimeout(function(){t.remove();},2400);}
   window.shiftfitAuth={ready:ready,getClient:getClient,getSession:session,signInWithPassword:signInWithPassword,signUp:signUp,resetPassword:resetPassword,signOut:signOut,deleteAccount:deleteAccount,localSnapshot:localSnapshot,renderAccount:renderAccount,openSignup:openSignup};
   document.addEventListener("click",function(e){var button=e.target&&e.target.closest?e.target.closest('[data-page="account"]'):null;if(!button)return;e.preventDefault();e.stopImmediatePropagation();var m=document.getElementById("shiftfit-settings-split-modal");if(m)m.classList.add("open");renderAccount();},true);
+  document.addEventListener("click",function(e){var button=e.target&&e.target.closest?e.target.closest(".home-header .signup-entry, .home-header .menu-btn"):null;if(!button)return;e.preventDefault();e.stopImmediatePropagation();openSignup();},true);
   window.addEventListener("shiftfitAuthChanged",function(){if(document.getElementById("shiftfit-account-state"))paintAccount();});
 })();
