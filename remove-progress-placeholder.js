@@ -17,8 +17,7 @@
   }
   function loadCSS(id,href){
     if(document.getElementById(id))return;
-    const link=document.createElement("link");
-    link.id=id;link.rel="stylesheet";link.href=href;
+    const link=document.createElement("link");link.id=id;link.rel="stylesheet";link.href=href;
     (document.body||document.head).appendChild(link);
   }
   function boot(){
@@ -37,9 +36,8 @@
     loadScript("shiftfit-gmail-support-loader","./shiftfit-gmail-support.js?v=1");
     loadScript("shiftfit-settings-compact-loader","./shiftfit-settings-compact.js?v=3");
     loadScript("shiftfit-activity-tracker-loader","./shiftfit-activity-tracker.js?v=1");
-    setTimeout(removePlaceholder,500);
-    setTimeout(removePlaceholder,1500);
-    setTimeout(removePlaceholder,3000);
+    loadCSS("shiftfit-final-pass","./shiftfit-final-pass.css?v=1");
+    setTimeout(removePlaceholder,500);setTimeout(removePlaceholder,1500);setTimeout(removePlaceholder,3000);
   }
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot,{once:true});else boot();
   window.shiftfitRemoveProgressPlaceholder=removePlaceholder;
