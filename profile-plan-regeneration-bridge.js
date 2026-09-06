@@ -26,9 +26,22 @@
     button.addEventListener("click",function(event){event.preventDefault();event.stopPropagation();regenerateFromSavedTargets();});
     document.body.insertBefore(button,document.body.firstChild);
   }
+  function installAccountBackFix(){
+    document.addEventListener("click",function(event){
+      const button=event.target&&event.target.closest?event.target.closest("#shiftfit-settings-split-modal .sheet .back"):null;
+      if(!button)return;
+      const sheet=button.closest(".sheet");
+      const heading=sheet&&sheet.querySelector(".backrow h1");
+      if(!heading||heading.textContent.trim()!=="Account & Sync")return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const modal=document.getElementById("shiftfit-settings-split-modal");
+      if(modal)modal.classList.remove("open");
+    },true);
+  }
   function loadTheme(){if(document.getElementById("shiftfit-theme-loader"))return;var s=document.createElement("script");s.id="shiftfit-theme-loader";s.src="./shiftfit-theme.js?v=6";s.async=false;document.head.appendChild(s);}
   function loadAuth(){if(document.getElementById("shiftfit-auth-loader"))return;var s=document.createElement("script");s.id="shiftfit-auth-loader";s.src="./shiftfit-auth.js?v=2";s.async=false;document.head.appendChild(s);}
   function loadCloudSync(){if(document.getElementById("shiftfit-cloud-sync-loader"))return;var s=document.createElement("script");s.id="shiftfit-cloud-sync-loader";s.src="./shiftfit-cloud-sync.js?v=1";s.async=false;document.head.appendChild(s);}
-  function boot(){installBridge();loadTheme();loadAuth();loadCloudSync();}
+  function boot(){installBridge();installAccountBackFix();loadTheme();loadAuth();loadCloudSync();}
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot,{once:true});else boot();
 })();
