@@ -109,9 +109,29 @@
   }
 
   function renderAccount(){accountShell();paintAccount();}
+
+  function openSignup(){
+    var profile=document.querySelector(".profile-btn");
+    if(profile){profile.click();}
+    var tries=0;
+    function enterAccount(){
+      tries++;
+      var modal=document.getElementById("shiftfit-settings-split-modal");
+      if(!modal){if(tries<20)setTimeout(enterAccount,100);return;}
+      modal.classList.add("open");
+      var account=modal.querySelector('[data-page="account"]');
+      if(account){account.click();}
+      setTimeout(function(){
+        var signup=document.getElementById("shiftfit-show-signup");
+        if(signup)signup.click();
+      },250);
+    }
+    enterAccount();
+  }
+
   function toast(text){var old=document.querySelector(".toast");if(old)old.remove();var t=document.createElement("div");t.className="toast";t.textContent=text;document.body.appendChild(t);setTimeout(function(){t.remove();},2400);}
 
-  window.shiftfitAuth={ready:ready,getClient:getClient,getSession:session,signInWithPassword:signInWithPassword,signUp:signUp,resetPassword:resetPassword,signOut:signOut,deleteAccount:deleteAccount,localSnapshot:localSnapshot,renderAccount:renderAccount};
+  window.shiftfitAuth={ready:ready,getClient:getClient,getSession:session,signInWithPassword:signInWithPassword,signUp:signUp,resetPassword:resetPassword,signOut:signOut,deleteAccount:deleteAccount,localSnapshot:localSnapshot,renderAccount:renderAccount,openSignup:openSignup};
 
   document.addEventListener("click",function(e){
     var button=e.target&&e.target.closest?e.target.closest('[data-page="account"]'):null;
