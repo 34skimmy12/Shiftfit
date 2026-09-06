@@ -17,7 +17,7 @@
   }
   function boot(){
     removePlaceholder();
-    loadScript("shiftfit-profile-plan-bridge-loader","./profile-plan-regeneration-bridge.js?v=5");
+    loadScript("shiftfit-profile-plan-bridge-loader","./profile-plan-regeneration-bridge.js?v=6");
     loadScript("shiftfit-avatar-sync-loader","./shiftfit-avatar-sync.js?v=1");
     loadScript("shiftfit-direct-signup-loader","./shiftfit-signup-direct.js?v=1");
     setTimeout(removePlaceholder,500);
