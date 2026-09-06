@@ -1,0 +1,95 @@
+/* ShiftFit brand theme — inspired by the current ShiftFit landing-page look. */
+:root{
+  --sf-bg:#111111;
+  --sf-bg-deep:#0b0b0b;
+  --sf-card:#181818;
+  --sf-card-2:#202020;
+  --sf-border:#303030;
+  --sf-text:#f7f8fa;
+  --sf-muted:#a7adb5;
+  --sf-cyan:#63d7f1;
+  --sf-cyan-2:#35bce4;
+  --sf-blue:#2e8ed1;
+  --sf-green:#35df8d;
+  --sf-red:#ff5f73;
+}
+
+html,body{
+  background:var(--sf-bg-deep)!important;
+  color:var(--sf-text)!important;
+  font-family:Arial,Helvetica,sans-serif!important;
+}
+
+body{
+  background:
+    radial-gradient(ellipse at 50% -18%,rgba(99,215,241,.10),transparent 42%),
+    radial-gradient(ellipse at 110% 30%,rgba(46,142,209,.08),transparent 34%),
+    linear-gradient(180deg,#151515 0%,#111111 58%,#0b0b0b 100%)!important;
+}
+
+button,input,select,textarea{font-family:Arial,Helvetica,sans-serif!important}
+
+h1,h2,h3,h4,h5,h6,
+.title,.screen-title,.section-title,.hero-title{
+  font-family:Arial,Helvetica,sans-serif!important;
+  color:var(--sf-text)!important;
+  letter-spacing:-.02em;
+}
+
+h1,h2,h3,.screen-title,.section-title{font-weight:800!important}
+
+p,.subtitle,.muted,.helper,.description{color:var(--sf-muted)}
+
+a{color:var(--sf-cyan)}
+
+/* Bring the core UI surfaces onto the same dark, clean visual system. */
+.card,.panel,.tile,.option-card,.settings-card,.profile-sheet,
+.modal,.modal-content,.bottom-sheet,.sheet,.stat-card,
+.meal-card,.workout-card,.progress-card{
+  background:linear-gradient(180deg,rgba(32,32,32,.98),rgba(22,22,22,.98))!important;
+  border-color:var(--sf-border)!important;
+  color:var(--sf-text)!important;
+}
+
+button,.btn,.primary-btn,.cta-button,[role="button"]{
+  border-radius:12px;
+}
+
+button.primary,.primary,.primary-btn,.cta-button,.save-btn,
+button[data-primary="true"]{
+  background:linear-gradient(135deg,var(--sf-cyan),var(--sf-blue))!important;
+  color:#061016!important;
+  border-color:transparent!important;
+  font-weight:800!important;
+}
+
+button.secondary,.secondary,.secondary-btn{
+  background:#202020!important;
+  color:var(--sf-text)!important;
+  border-color:#3a3a3a!important;
+}
+
+input,select,textarea{
+  background:#171717!important;
+  color:var(--sf-text)!important;
+  border-color:#383838!important;
+}
+
+input:focus,select:focus,textarea:focus{
+  border-color:var(--sf-cyan)!important;
+  box-shadow:0 0 0 3px rgba(99,215,241,.12)!important;
+}
+
+.progress-bar,.progress-fill,.meter-fill{background:linear-gradient(90deg,var(--sf-blue),var(--sf-cyan))!important}
+
+.accent,.highlight,.brand-accent,.cyan,.text-cyan{color:var(--sf-cyan)!important}
+
+hr,.divider{border-color:#2b2b2b!important}
+
+/* Brand-like headings: compact, bold, high contrast with cyan emphasis. */
+.brand,.logo-text,.wordmark{font-family:Arial,Helvetica,sans-serif!important;font-weight:800!important}
+
+@media(max-width:600px){
+  h1{font-size:clamp(30px,9vw,44px)!important}
+  h2{font-size:clamp(24px,7vw,34px)!important}
+}
