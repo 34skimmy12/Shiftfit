@@ -15,8 +15,14 @@
     const script=document.createElement("script");
     script.id=id;script.src=src;script.async=false;document.head.appendChild(script);
   }
+  function loadCSS(id,href){
+    if(document.getElementById(id))return;
+    const link=document.createElement("link");
+    link.id=id;link.rel="stylesheet";link.href=href;document.head.appendChild(link);
+  }
   function boot(){
     removePlaceholder();
+    loadCSS("shiftfit-brand-theme","./shiftfit-brand-theme.css?v=1");
     loadScript("shiftfit-profile-control-center-loader","./profile-control-center.js?v=1");
     loadScript("shiftfit-profile-plan-bridge-loader","./profile-plan-regeneration-bridge.js?v=5");
     loadScript("shiftfit-avatar-sync-loader","./shiftfit-avatar-sync.js?v=1");
