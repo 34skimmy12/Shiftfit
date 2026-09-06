@@ -43,11 +43,16 @@
     return data;
   }
 
+  function closeAccountToSettings(){
+    var m=document.getElementById("shiftfit-settings-split-modal");
+    if(m)m.classList.remove("open");
+  }
+
   function accountShell(){
     var m=document.getElementById("shiftfit-settings-split-modal");if(!m)return null;
     var sheet=m.querySelector(".sheet");if(!sheet)return null;
-    sheet.innerHTML='<div class="top"><button class="back" type="button" aria-label="Back">‹</button><div class="logo"><span class="bolt">⚡</span><span>SHIFT</span><span class="fit">FIT</span></div><div></div></div><div class="backrow"><h1>Account & Sync</h1></div><div class="subtitle">Create your permanent ShiftFit account and keep your data secure.</div><div id="shiftfit-account-state"></div>';
-    sheet.querySelector(".back").onclick=function(){if(window.__shiftFitSettingsHome)window.__shiftFitSettingsHome();};
+    sheet.innerHTML='<div class="top"><button class="back" type="button" data-shiftfit-account-back aria-label="Back">‹</button><div class="logo"><span class="bolt">⚡</span><span>SHIFT</span><span class="fit">FIT</span></div><div></div></div><div class="backrow"><h1>Account & Sync</h1></div><div class="subtitle">Create your permanent ShiftFit account and keep your data secure.</div><div id="shiftfit-account-state"></div>';
+    sheet.querySelector(".back").onclick=function(event){event.preventDefault();event.stopPropagation();closeAccountToSettings();};
     return sheet;
   }
 
@@ -82,7 +87,7 @@
   }
 
   function renderSignup(box){
-    box.innerHTML='<div class="group"><h3>CREATE ACCOUNT</h3><label class="note" for="shiftfit-signup-name">Name</label><input id="shiftfit-signup-name" type="text" autocomplete="name" placeholder="Your name" style="width:100%;margin-top:6px"><label class="note" for="shiftfit-signup-email" style="display:block;margin-top:14px">Email</label><input id="shiftfit-signup-email" type="email" autocomplete="email" placeholder="you@example.com" style="width:100%;margin-top:6px"><label class="note" for="shiftfit-signup-password" style="display:block;margin-top:14px">Password</label><input id="shiftfit-signup-password" type="password" autocomplete="new-password" placeholder="At least 8 characters" style="width:100%;margin-top:6px"><button class="save" id="shiftfit-signup" type="button">Create my ShiftFit account</button><button class="secondary" id="shiftfit-back-login" type="button">Back to sign in</button><div id="shiftfit-auth-message"></div></div>';
+    box.innerHTML='<div class="group"><h3>CREATE ACCOUNT</h3><label class="note" for="shiftfit-signup-name">Name</label><input id="shiftfit-signup-name" type="text" autocomplete="name" placeholder="Your name" style="width:100%;margin-top:6px"><label class="note" for="shiftfit-signup-email">Email</label><input id="shiftfit-signup-email" type="email" autocomplete="email" placeholder="you@example.com" style="width:100%;margin-top:6px"><label class="note" for="shiftfit-signup-password" style="display:block;margin-top:14px">Password</label><input id="shiftfit-signup-password" type="password" autocomplete="new-password" placeholder="At least 8 characters" style="width:100%;margin-top:6px"><button class="save" id="shiftfit-signup" type="button">Create my ShiftFit account</button><button class="secondary" id="shiftfit-back-login" type="button">Back to sign in</button><div id="shiftfit-auth-message"></div></div>';
     document.getElementById("shiftfit-signup").onclick=async function(){
       var name=document.getElementById("shiftfit-signup-name").value.trim();var email=document.getElementById("shiftfit-signup-email").value.trim();var password=document.getElementById("shiftfit-signup-password").value;
       if(!email||!password){renderMessage(document.getElementById("shiftfit-auth-message"),"Enter an email and password.","error");return;}
