@@ -12,7 +12,8 @@
   function writeJSON(key,value){try{localStorage.setItem(key,JSON.stringify(value));}catch(_){} }
   function esc(value){return String(value??"").replace(/[&<>\"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));}
   function getPlan(){return readJSON("shiftfitPlan",{})||{};}
-  function getShift(){
+  function getShift(plan){
+    if(plan&&plan.shiftPattern)return String(plan.shiftPattern).toLowerCase();
     try{if(typeof selectedShift!=="undefined" && selectedShift)return String(selectedShift).toLowerCase();}catch(_){}
     return String(localStorage.getItem("shiftfitSelectedShift")||"day").toLowerCase();
   }
@@ -28,11 +29,11 @@
     return plan;
   }
   function capturePreferences(plan){
-    const likes=(document.getElementById("sfSmartLikes")?.value||"").split(",").map(x=>x.trim()).filter(Boolean);
-    const avoid=(document.getElementById("sfSmartAvoid")?.value||"").split(",").map(x=>x.trim()).filter(Boolean);
-    plan.foodLikes=likes;
-    plan.foodAvoid=avoid;
-    plan.shiftPattern=getShift();
+    const likesEl=document.getElementById("sfSmartLikes");
+    const avoidEl=document.getElementById("sfSmartAvoid");
+    if(likesEl)plan.foodLikes=likesEl.value.split(",").map(x=>x.trim()).filter(Boolean);
+    if(avoidEl)plan.foodAvoid=avoidEl.value.split(",").map(x=>x.trim()).filter(Boolean);
+    plan.shiftPattern=getShift(plan);
     return plan;
   }
   function addStyles(){
@@ -75,7 +76,7 @@
 
   function generate(plan){
     plan=ensureTargets(plan||getPlan());
-    plan.shiftPattern=getShift();
+    plan.shiftPattern=getShift(plan);
     writeJSON("shiftfitPlan",plan);
     if(typeof window.shiftfitGenerateTargetAwareMealPlan!=="function"){
       console.error("ShiftFit smart meal engine is not loaded");
