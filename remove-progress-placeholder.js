@@ -1,4 +1,4 @@
-/* ShiftFit: remove unused progress placeholder and boot the final approved UI. */
+/* ShiftFit: boot the approved Home reference and feature modules in deterministic order. */
 (function(){
   "use strict";
   function removePlaceholder(){const host=document.getElementById("progressScreen");if(!host)return;host.querySelectorAll(".progress-coming-card,button,a,section,article,div").forEach(el=>{const text=(el.textContent||"").replace(/\s+/g," ").trim().toLowerCase();if(text.includes("more progress tracking is coming")||text.includes("more progression coming"))el.remove()})}
@@ -9,7 +9,7 @@
     loadCSS("shiftfit-brand-theme","./shiftfit-brand-theme.css?v=6");
     loadCSS("shiftfit-nav-polish","./shiftfit-nav-polish.css?v=1");
     loadScript("shiftfit-home-polish-loader","./shiftfit-home-polish.js?v=2");
-    loadScript("shiftfit-final-ui-loader","./shiftfit-final-ui.js?v=2");
+    loadScript("shiftfit-final-ui-loader","./shiftfit-final-ui.js?v=3");
     loadScript("shiftfit-screenshot-cleanup-loader","./shiftfit-screenshot-cleanup.js?v=1");
     loadScript("shiftfit-profile-control-center-loader","./profile-control-center.js?v=1");
     loadScript("shiftfit-profile-plan-bridge-loader","./profile-plan-regeneration-bridge.js?v=5");
