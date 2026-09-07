@@ -1,58 +1,60 @@
-/* ShiftFit Final UI — approved black/cyan dashboard layout. */
+/* ShiftFit Final UI — screenshot-matched black/cyan dashboard pass. */
 (function(){
   "use strict";
-  if(window.__shiftfitFinalUI)return;
-  window.__shiftfitFinalUI=true;
+  if(window.__shiftfitFinalUIv2)return;
+  window.__shiftfitFinalUIv2=true;
 
   const css=`
   :root{
-    --sf-cyan:#63d7f1!important;--sf-blue:#2e8ed1!important;--sf-bg:#071012!important;--sf-card:#101719!important;--sf-card2:#0c1315!important;--sf-line:#145866!important;--sf-muted:#a7adb5!important;
+    --sf-cyan:#00d9ff!important;--sf-cyan-soft:#63d7f1!important;--sf-bg:#001014!important;--sf-card:#03181d!important;--sf-card2:#062229!important;--sf-line:#007d91!important;--sf-muted:#b7c6cc!important;
   }
-  html,body{background:#061012!important;color:#f7f8fa!important}
-  body{background:radial-gradient(ellipse at 50% -15%,rgba(99,215,241,.08),transparent 45%),linear-gradient(180deg,#0a1113 0%,#071012 48%,#05090a 100%)!important}
-  body::before{background:linear-gradient(rgba(99,215,241,.012) 1px,transparent 1px),linear-gradient(90deg,rgba(99,215,241,.012) 1px,transparent 1px)!important}
-  .app{max-width:500px!important;padding:18px 18px 112px!important}
-  .home-header{margin-bottom:20px!important}
-  .logo{font-size:29px!important;font-weight:1000!important}
-  .logo-bolt,.logo-fit{color:#63d7f1!important;text-shadow:0 0 12px rgba(99,215,241,.55)!important}.logo-shift{color:#f7f8fa!important}
-  .avatar{border-color:#63d7f1!important;box-shadow:0 0 15px rgba(99,215,241,.28)!important}
-  .user-row{margin:5px 2px 20px!important}
-  .user-name{font-size:24px!important}.user-level{font-size:14px!important}
-  .today-plan,.meal-summary,.progress-card,.action-card,.ai-card,.exercise-card,.workout-stat,.stat-card,.meal-card,.workout-card{background:#101719!important;border-color:#145866!important;box-shadow:none!important}
-  .today-plan{border-radius:22px!important;padding:20px!important}
-  .shift-badge{background:transparent!important;border:1px solid #63d7f1!important;color:#63d7f1!important;border-radius:14px!important;padding:9px 16px!important}
-  .plan-heading{font-size:22px!important}.shift-time-row{color:#b9c5ca!important}
-  .plan-stats{border-top-color:#173238!important}.plan-stat{border-right-color:#173238!important}.plan-stat-label{color:#a7adb5!important}.plan-stat-value{font-size:21px!important}
-  .sf-track-day{margin-top:18px;padding:20px;border:1px solid #145866;border-radius:22px;background:linear-gradient(145deg,#101a1d,#0b1113)}
-  .sf-track-kicker{color:#63d7f1;font-size:12px;font-weight:950;letter-spacing:3px}.sf-track-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.sf-track-title{font-size:27px;font-weight:900;margin-top:5px}.sf-water-pill{display:flex;align-items:center;gap:7px;border:1px solid #12556a;background:#0b2028;border-radius:18px;padding:10px 13px;color:#c8f5ff;font-weight:900;white-space:nowrap}.sf-water-pill button{border:0;background:#63d7f1;color:#061016;width:30px;height:30px;border-radius:50%;font-size:22px;font-weight:900}.sf-macro-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:17px}.sf-macro{padding:13px 6px;border-radius:16px;background:#0d2024;text-align:center}.sf-macro b{display:block;color:#63d7f1;font-size:11px;letter-spacing:1px}.sf-macro strong{display:block;font-size:18px;margin-top:7px}.sf-macro small{display:block;color:#a7adb5;margin-top:3px;font-size:10px}.sf-nutrition{display:flex;justify-content:space-between;margin-top:18px;color:#bfc9cd;font-size:13px;font-weight:800}.sf-nutrition-bar{height:9px;border-radius:20px;background:#10252a;overflow:hidden;margin-top:8px}.sf-nutrition-bar span{display:block;height:100%;width:0;background:linear-gradient(90deg,#2e8ed1,#63d7f1)}
-  .sf-home-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}.sf-home-action{height:66px;border:1px solid #145866!important;border-radius:17px;background:#0c1719!important;color:#f7f8fa!important;display:flex;align-items:center;gap:12px;padding:0 15px;font-weight:800}.sf-home-action .ico{font-size:25px;color:#63d7f1}.sf-home-action .plus{margin-left:auto;color:#63d7f1;font-size:26px;font-weight:400}
-  .sf-quick-stats{margin-top:18px;padding:18px;border:1px solid #145866;border-radius:22px;background:#0c1416}.sf-quick-head{display:flex;justify-content:space-between;align-items:center}.sf-quick-head h3{margin:0;font-size:22px}.sf-view-all{border:0;background:transparent;color:#63d7f1;font-weight:800}.sf-stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:15px}.sf-mini-stat{padding:12px 5px;border-radius:15px;background:#0b2227;text-align:center}.sf-mini-stat .ico{font-size:22px}.sf-mini-stat strong{display:block;font-size:17px;margin-top:5px}.sf-mini-stat small{display:block;color:#b2bdc1;font-size:10px;margin-top:3px}.sf-connect-row{display:flex;align-items:center;gap:11px;margin-top:12px;padding:12px;border:1px solid #173a42;border-radius:15px;background:#0a1b1f}.sf-connect-copy{flex:1}.sf-connect-copy b{display:block}.sf-connect-copy small{color:#a7adb5}.sf-connect-btn{border:1px solid #63d7f1!important;background:transparent!important;color:#63d7f1!important;border-radius:12px;padding:9px 13px;font-weight:900}
-  .action-grid{display:none!important}.ai-card{display:none!important}
-  .bottom-nav,.nav-bar,.tab-bar{background:rgba(5,12,14,.98)!important;border-top:1px solid #173238!important;box-shadow:none!important}.bottom-nav .active,.nav-bar .active,.tab-bar .active{color:#63d7f1!important}.bottom-nav button,.nav-bar button,.tab-bar button{color:#a7adb5!important}.bottom-nav .active,.nav-bar .active,.tab-bar .active{color:#63d7f1!important}
-  .bottom-nav svg,.nav-bar svg,.tab-bar svg{filter:none!important}
-  button.primary,.primary,.primary-btn,.action-button,.save-btn,.finish-button.ready{background:linear-gradient(135deg,#63d7f1,#2e8ed1)!important;color:#061016!important;border-color:transparent!important}.action-button{display:none!important}
-  .workout-day,.meal-kicker,.setup-kicker,.shopping-kicker,.accent,.highlight,.brand-accent{color:#63d7f1!important}
-  [style*="#6d28d9"],[style*="#8b5cf6"],[style*="#a78bfa"],[style*="#7c3aed"],[style*="#4f46e5"],[style*="#854cff"],[style*="#8656ff"],[style*="rgba(109,40,217"],[style*="rgba(139,92,246"]{background:#101719!important;color:#63d7f1!important;border-color:#145866!important}
-  [style*="purple"],[style*="violet"],[style*="rgb(109, 40, 217)"],[style*="rgb(139, 92, 246)"]{color:#63d7f1!important;border-color:#145866!important}
-  @media(max-width:600px){.sf-macro-grid{gap:7px}.sf-macro{padding:11px 3px}.sf-track-title{font-size:25px}.sf-stat-grid{gap:6px}.sf-mini-stat{padding:11px 3px}.sf-mini-stat strong{font-size:15px}.sf-home-action{height:62px}}
+  html,body{background:#000!important;color:#f7f9fa!important}
+  body{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;background:radial-gradient(circle at 50% 12%,#04252a 0,#001014 38%,#00080a 100%)!important}
+  .app{max-width:710px!important;padding:25px 29px 112px!important}
+  .home-header{height:142px!important;margin-bottom:4px!important}
+  .logo{font-size:32px!important;letter-spacing:-1.6px!important}
+  .logo-bolt,.logo-fit{color:#00d9ff!important;text-shadow:0 0 15px rgba(0,217,255,.55)!important}.logo-shift{color:#f7f9fa!important}
+  .avatar{width:102px!important;height:102px!important;border:3px solid #00d9ff!important;box-shadow:0 0 16px rgba(0,217,255,.28)!important}
+  .user-row{gap:21px!important;margin:4px 2px 28px!important}.user-name{font-size:34px!important}.user-level{font-size:18px!important}
+  .today-plan{padding:25px 28px 20px!important;border-radius:21px!important;border:1.7px solid #008096!important;background:linear-gradient(145deg,#03171b,#021216)!important;box-shadow:inset 0 0 30px rgba(0,217,255,.02)!important}
+  .plan-heading{font-size:29px!important}.shift-badge{background:transparent!important;border:2px solid #00d9ff!important;border-radius:16px!important;color:#00d9ff!important;padding:14px 25px!important;font-size:18px!important}.shift-time-row{margin-top:21px!important;font-size:19px!important;color:#d6e0e3!important}.plan-stats{margin-top:20px!important;padding-top:15px!important;border-top:1px solid #1c444a!important}.plan-stat{padding:0!important;border-right:1px solid #12434a!important}.plan-stat-label{font-size:16px!important;color:#c3d0d5!important}.plan-stat-value{font-size:29px!important}.stat-icon{font-size:32px!important}
+  .sf-track-day{margin-top:20px;padding:20px 27px 16px;border:1.7px solid #008096;border-radius:21px;background:linear-gradient(145deg,#03171b,#021216);box-shadow:inset 0 0 30px rgba(0,217,255,.02)}
+  .sf-track-kicker{color:#00d9ff;font-size:16px;font-weight:800;letter-spacing:2.4px}.sf-track-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.sf-track-title{font-size:31px;font-weight:800;margin-top:4px}.sf-water-pill{height:52px;display:flex;align-items:center;gap:7px;border:1.7px solid #007e94;background:#062b33;border-radius:19px;padding-left:15px;color:#e7f2f4;font-weight:800;font-size:17px}.sf-water-pill button{width:45px;height:45px;border:0;border-radius:50%;background:#00d9ff;color:#001014;font-size:31px;font-weight:400;margin-right:2px}
+  .sf-macro-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:20px}.sf-macro{min-height:84px;border-radius:14px;background:linear-gradient(#082c34,#062229);display:flex;flex-direction:column;align-items:center;justify-content:center}.sf-macro b{font-size:14px;color:#00d9ff;font-weight:700;letter-spacing:.6px}.sf-macro strong{font-size:25px;margin-top:7px}.sf-macro small{font-size:13px;color:#bdcbd0;margin-top:5px}.sf-nutrition{display:flex;justify-content:space-between;margin:22px 0 10px;font-size:16px}.sf-nutrition-bar{height:11px;border-radius:10px;background:#063038;overflow:hidden}.sf-nutrition-bar span{display:block;height:100%;width:0;background:#00d9ff}
+  .sf-home-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:0}.sf-home-action{height:68px;border:1.7px solid #007e94!important;border-radius:16px;background:#02161b!important;color:#f7f9fa!important;display:flex;align-items:center;padding:0 23px;font-weight:700;font-size:16px}.sf-home-action .ico{font-size:28px;color:#00d9ff;margin-right:18px}.sf-home-action .plus{margin-left:auto;color:#00d9ff;font-size:30px;font-weight:400}
+  .sf-quick-stats{margin-top:0;padding:18px 27px 17px;border:1.7px solid #008096;border-radius:21px;background:linear-gradient(145deg,#03171b,#021216)}.sf-quick-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.sf-quick-head h3{margin:0;font-size:29px}.sf-view-all{border:0;background:transparent;color:#00d9ff;font-size:16px;font-weight:700}.sf-stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.sf-mini-stat{height:111px;border-radius:14px;background:linear-gradient(#082c34,#062229);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}.sf-mini-stat .ico{font-size:29px}.sf-mini-stat strong{font-size:23px;margin-top:8px}.sf-mini-stat small{font-size:14px;color:#d0dade;margin-top:5px}.sf-connect-row{height:68px;margin-top:13px;border-radius:14px;background:linear-gradient(90deg,#06272e,#07313a);display:flex;align-items:center;padding:0 12px;gap:12px}.sf-connect-row>.ico{font-size:28px;color:#00d9ff}.sf-connect-copy{display:flex;flex-direction:column;min-width:0;flex:1}.sf-connect-copy b{font-size:16px}.sf-connect-copy small{font-size:13px;color:#c4d1d5;margin-top:5px;white-space:nowrap}.sf-connect-btn{height:49px;border:1.8px solid #00d9ff!important;border-radius:13px;background:transparent!important;color:#00d9ff!important;padding:0 17px;font-weight:800;white-space:nowrap}
+  .sf-home-enhancements{display:flex;flex-direction:column;gap:18px}.action-grid{display:none!important}.ai-card{display:none!important}
+  .bottom-nav,.nav-bar,.tab-bar{background:rgba(0,12,15,.98)!important;border-top:1px solid #12353a!important;box-shadow:none!important}.bottom-nav button,.nav-bar button,.tab-bar button{color:#b8c4c8!important}.bottom-nav .active,.nav-bar .active,.tab-bar .active{color:#00d9ff!important}
+  .primary,.primary-btn,.save-btn,.finish-button.ready{background:linear-gradient(135deg,#00d9ff,#2e8ed1)!important;color:#001014!important}
+  .workout-day,.meal-kicker,.setup-kicker,.shopping-kicker,.accent,.highlight,.brand-accent{color:#00d9ff!important}
+  @media(max-width:600px){
+    .app{padding:14px 18px 100px!important}.home-header{height:110px!important}.logo{font-size:25px!important}.user-row{gap:12px!important;margin-bottom:20px!important}.avatar{width:76px!important;height:76px!important}.user-name{font-size:27px!important}.user-level{font-size:14px!important}
+    .today-plan{padding:20px 18px!important}.plan-heading{font-size:25px!important}.shift-badge{padding:11px 14px!important;font-size:14px!important}.shift-time-row{font-size:16px!important;margin-top:15px!important}.plan-stat-label{font-size:13px!important}.plan-stat-value{font-size:22px!important}.stat-icon{font-size:27px!important}
+    .sf-track-day{padding:18px!important}.sf-track-kicker{font-size:13px}.sf-track-title{font-size:25px}.sf-water-pill{height:50px;font-size:15px;padding-left:12px}.sf-water-pill button{width:42px;height:42px;font-size:27px}.sf-macro-grid{gap:7px}.sf-macro{min-height:76px}.sf-macro b{font-size:11px}.sf-macro strong{font-size:19px}.sf-macro small{font-size:11px}.sf-nutrition{font-size:14px}
+    .sf-home-action{height:62px;padding:0 13px;font-size:14px}.sf-home-action .ico{font-size:23px;margin-right:10px}.sf-home-action .plus{font-size:28px}
+    .sf-quick-stats{padding:18px!important}.sf-quick-head h3{font-size:25px}.sf-stat-grid{gap:7px}.sf-mini-stat{height:95px}.sf-mini-stat .ico{font-size:24px}.sf-mini-stat strong{font-size:18px}.sf-mini-stat small{font-size:11px}.sf-connect-copy b{font-size:14px}.sf-connect-copy small{font-size:10px}.sf-connect-btn{height:43px;padding:0 10px;font-size:12px}
+  }
+  @media(max-width:420px){.sf-macro-grid,.sf-stat-grid{grid-template-columns:repeat(2,1fr)}.sf-track-head{align-items:flex-start}.sf-water-pill{margin-top:2px}.sf-connect-row{height:auto;min-height:68px}.sf-connect-copy small{white-space:normal}}
   `;
-  const style=document.createElement("style");style.id="shiftfit-final-ui-css";style.textContent=css;document.head.appendChild(style);
+  const style=document.createElement("style");style.id="shiftfit-final-ui-css-v2";style.textContent=css;document.head.appendChild(style);
 
   function home(){return document.querySelector("#homeScreen")||document.querySelector(".screen.active")||document.body}
-  function textNode(t){return [...home().querySelectorAll("h1,h2,h3,h4,.section-title,.title")].find(e=>(e.textContent||"").toLowerCase().includes(t))}
-  function steps(){return window.shiftfitActivity&&typeof window.shiftfitActivity.getSteps==="function"?window.shiftfitActivity.getSteps():Number(localStorage.getItem("shiftfit_steps_v1")&&JSON.parse(localStorage.getItem("shiftfit_steps_v1")).steps||0)}
-  function invoke(label){
-    const all=[...home().querySelectorAll("button,[role=button],a")];const hit=all.find(b=>(b.textContent||"").replace(/\s+/g," ").trim().toLowerCase().includes(label));if(hit)hit.click();else if(label.includes("steps")&&window.shiftfitActivity)window.shiftfitActivity.open();
-  }
+  function heading(text){return [...home().querySelectorAll("h1,h2,h3,h4,.section-title,.title,.plan-heading")].find(e=>(e.textContent||"").toLowerCase().includes(text))}
+  function steps(){try{if(window.shiftfitActivity&&typeof window.shiftfitActivity.getSteps==="function")return Number(window.shiftfitActivity.getSteps())||0;const raw=localStorage.getItem("shiftfit_steps_v1");return raw?Number(JSON.parse(raw).steps)||0:0}catch(e){return 0}}
+  function invoke(label){const all=[...home().querySelectorAll("button,[role=button],a")];const hit=all.find(b=>(b.textContent||"").replace(/\s+/g," ").trim().toLowerCase().includes(label));if(hit)hit.click()}
   function inject(){
-    const h=home(); if(!h||document.getElementById("sf-track-day"))return;
-    const plan=textNode("today's plan"); if(!plan)return;
-    const card=plan.closest(".today-plan,.card,.panel,section,article,div"); if(!card)return;
-    const wrap=document.createElement("div");wrap.id="sf-home-enhancements";
+    const h=home();if(!h||document.getElementById("sf-home-enhancements"))return;
+    const plan=heading("today's plan");if(!plan)return;
+    const card=plan.closest(".today-plan,.card,.panel,section,article");if(!card)return;
+    const wrap=document.createElement("div");wrap.id="sf-home-enhancements";wrap.className="sf-home-enhancements";
     wrap.innerHTML=`
-      <section class="sf-track-day" id="sf-track-day"><div class="sf-track-head"><div><div class="sf-track-kicker">TODAY'S PLAN</div><div class="sf-track-title">Track your day</div></div><div class="sf-water-pill">💧 <span id="sf-water-count">0 / 8</span><button type="button" id="sf-water-add">+</button></div></div><div class="sf-macro-grid"><div class="sf-macro"><b>CALORIES</b><strong>2,973</strong><small>remaining</small></div><div class="sf-macro"><b>PROTEIN</b><strong>184g</strong><small>remaining</small></div><div class="sf-macro"><b>CARBS</b><strong>373g</strong><small>remaining</small></div><div class="sf-macro"><b>FAT</b><strong>83g</strong><small>remaining</small></div></div><div class="sf-nutrition"><span>Today's nutrition</span><strong>0%</strong></div><div class="sf-nutrition-bar"><span></span></div></section>
-      <div class="sf-home-actions"><button class="sf-home-action" data-go="meal"><span class="ico">🍽️</span><span>Log Meal</span><span class="plus">+</span></button><button class="sf-home-action" data-go="workout"><span class="ico">🏋️</span><span>Log Workout</span><span class="plus">+</span></button><button class="sf-home-action" data-go="steps"><span class="ico">👟</span><span>Log Steps</span><span class="plus">+</span></button><button class="sf-home-action" data-go="water"><span class="ico">💧</span><span>Log Water</span><span class="plus">+</span></button></div>
-      <section class="sf-quick-stats"><div class="sf-quick-head"><h3>Quick Stats</h3><button class="sf-view-all" type="button">View All ›</button></div><div class="sf-stat-grid"><div class="sf-mini-stat"><span class="ico">👟</span><strong id="sf-q-steps">0</strong><small>Steps</small></div><div class="sf-mini-stat"><span class="ico">↔️</span><strong id="sf-q-distance">0.0 km</strong><small>Distance</small></div><div class="sf-mini-stat"><span class="ico">⏱️</span><strong id="sf-q-active">0 min</strong><small>Active Time</small></div><div class="sf-mini-stat"><span class="ico">🔥</span><strong id="sf-q-cal">0</strong><small>Active Calories</small></div></div><div class="sf-connect-row"><span class="ico">⌚</span><div class="sf-connect-copy"><b>Connect & Sync</b><small>Strava, Garmin, Apple Health & more</small></div><button class="sf-connect-btn" type="button" id="sf-connect-open">🔗 CONNECT</button></div></section>`;
+      <section class="sf-track-day" id="sf-track-day">
+        <div class="sf-track-head"><div><div class="sf-track-kicker">TODAY'S PLAN</div><div class="sf-track-title">Track your day</div></div><div class="sf-water-pill">💧 <span id="sf-water-count">0 / 8</span><button type="button" id="sf-water-add">+</button></div></div>
+        <div class="sf-macro-grid"><div class="sf-macro"><b>CALORIES</b><strong>2,973</strong><small>remaining</small></div><div class="sf-macro"><b>PROTEIN</b><strong>184g</strong><small>remaining</small></div><div class="sf-macro"><b>CARBS</b><strong>373g</strong><small>remaining</small></div><div class="sf-macro"><b>FAT</b><strong>83g</strong><small>remaining</small></div></div>
+        <div class="sf-nutrition"><span>Today's nutrition</span><b>0%</b></div><div class="sf-nutrition-bar"><span></span></div>
+      </section>
+      <div class="sf-home-actions"><button class="sf-home-action" data-go="meal"><span class="ico">🍴</span><span>Log Meal</span><span class="plus">+</span></button><button class="sf-home-action" data-go="workout"><span class="ico">♎</span><span>Log Workout</span><span class="plus">+</span></button><button class="sf-home-action" data-go="steps"><span class="ico">👟</span><span>Log Steps</span><span class="plus">+</span></button><button class="sf-home-action" data-go="water"><span class="ico">💧</span><span>Log Water</span><span class="plus">+</span></button></div>
+      <section class="sf-quick-stats"><div class="sf-quick-head"><h3>Quick Stats</h3><button class="sf-view-all" type="button">View All ›</button></div><div class="sf-stat-grid"><div class="sf-mini-stat"><span class="ico">👟</span><strong id="sf-q-steps">0</strong><small>Steps</small></div><div class="sf-mini-stat"><span class="ico">↔️</span><strong id="sf-q-distance">0.0 km</strong><small>Distance</small></div><div class="sf-mini-stat"><span class="ico">⏱️</span><strong id="sf-q-active">0 min</strong><small>Active Time</small></div><div class="sf-mini-stat"><span class="ico">🔥</span><strong id="sf-q-cal">0</strong><small>Active Calories</small></div></div><div class="sf-connect-row"><span class="ico">⌚</span><div class="sf-connect-copy"><b>Connect &amp; Sync</b><small>Strava, Garmin, Apple Health &amp; more</small></div><button class="sf-connect-btn" type="button" id="sf-connect-open">🔗 CONNECT</button></div></section>`;
     card.parentNode.insertBefore(wrap,card.nextSibling);
     wrap.querySelector('[data-go="meal"]').onclick=()=>invoke("meal");
     wrap.querySelector('[data-go="workout"]').onclick=()=>invoke("workout");
@@ -64,6 +66,6 @@
     update();
   }
   function update(){const s=steps();const a=document.getElementById("sf-q-steps");if(a)a.textContent=s.toLocaleString();const d=document.getElementById("sf-q-distance");if(d)d.textContent=(s*.00072).toFixed(1)+" km";const t=document.getElementById("sf-q-active");if(t)t.textContent=Math.round(s/105)+" min";const c=document.getElementById("sf-q-cal");if(c)c.textContent=Math.round(s*.04)}
-  function boot(){inject();setTimeout(inject,500);setTimeout(inject,1500);setInterval(update,1000)}
+  function boot(){inject();setTimeout(inject,400);setTimeout(inject,1000);setTimeout(inject,1800);setInterval(update,1000)}
   if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot,{once:true});else boot();
 })();
