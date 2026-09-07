@@ -8,7 +8,7 @@
     removePlaceholder();
     loadCSS("shiftfit-brand-theme","./shiftfit-brand-theme.css?v=5");
     loadScript("shiftfit-home-polish-loader","./shiftfit-home-polish.js?v=2");
-    loadScript("shiftfit-final-ui-loader","./shiftfit-final-ui.js?v=1");
+    loadScript("shiftfit-final-ui-loader","./shiftfit-final-ui.js?v=2");
     loadScript("shiftfit-profile-control-center-loader","./profile-control-center.js?v=1");
     loadScript("shiftfit-profile-plan-bridge-loader","./profile-plan-regeneration-bridge.js?v=5");
     loadScript("shiftfit-avatar-sync-loader","./shiftfit-avatar-sync.js?v=1");
