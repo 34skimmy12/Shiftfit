@@ -6,7 +6,7 @@
   function loadCSS(id,href){if(document.getElementById(id))return;const l=document.createElement("link");l.id=id;l.rel="stylesheet";l.href=href;(document.body||document.head).appendChild(l)}
   function boot(){
     removePlaceholder();
-    loadCSS("shiftfit-brand-theme","./shiftfit-brand-theme.css?v=5");
+    loadCSS("shiftfit-brand-theme","./shiftfit-brand-theme.css?v=6");
     loadScript("shiftfit-home-polish-loader","./shiftfit-home-polish.js?v=2");
     loadScript("shiftfit-final-ui-loader","./shiftfit-final-ui.js?v=2");
     loadScript("shiftfit-screenshot-cleanup-loader","./shiftfit-screenshot-cleanup.js?v=1");
