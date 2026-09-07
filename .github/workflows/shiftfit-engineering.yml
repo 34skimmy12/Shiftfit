@@ -1,0 +1,64 @@
+name: ShiftFit Engineering Checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate-javascript:
+    name: Validate JavaScript syntax
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Check JavaScript files
+        shell: bash
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          files=( *.js )
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "No root JavaScript files found."
+            exit 0
+          fi
+          for file in "${files[@]}"; do
+            echo "Checking $file"
+            node --check "$file"
+          done
+
+  verify-structure:
+    name: Verify core ShiftFit files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify required files
+        shell: bash
+        run: |
+          set -euo pipefail
+          required=(
+            "index.html"
+            "manifest.json"
+            "service-worker.js"
+            "vercel.json"
+            "shiftfit-brand-theme.css"
+            "shiftfit-final-ui.js"
+            "shiftfit-screenshot-cleanup.js"
+            "remove-progress-placeholder.js"
+          )
+          for file in "${required[@]}"; do
+            test -f "$file"
+            echo "Found $file"
+          done
