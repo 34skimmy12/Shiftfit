@@ -1,0 +1,61 @@
+/* ShiftFit navigation polish — target the app's real .nav-item/.nav-icon DOM. */
+.bottom-nav{
+  height:54px!important;
+  min-height:54px!important;
+  padding:3px 4px!important;
+  gap:0!important;
+  grid-template-columns:repeat(6,minmax(0,1fr))!important;
+  background:rgba(4,10,12,.98)!important;
+  border-top:1px solid #18343a!important;
+  box-shadow:0 -5px 18px rgba(0,0,0,.22)!important;
+  backdrop-filter:blur(16px)!important;
+}
+.bottom-nav .nav-item{
+  min-width:0!important;
+  width:100%!important;
+  height:48px!important;
+  min-height:0!important;
+  margin:0!important;
+  padding:3px 2px!important;
+  border:0!important;
+  border-radius:9px!important;
+  background:transparent!important;
+  color:#71888e!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:1px!important;
+  font-size:8px!important;
+  line-height:1!important;
+  font-weight:650!important;
+  box-shadow:none!important;
+  white-space:nowrap!important;
+}
+.bottom-nav .nav-icon{
+  width:16px!important;
+  height:16px!important;
+  margin:0 0 2px!important;
+  font-size:16px!important;
+  line-height:16px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+.bottom-nav .nav-item.active{
+  color:#00d9ff!important;
+  background:rgba(0,217,255,.055)!important;
+}
+.bottom-nav .nav-item.active .nav-icon{
+  color:#00d9ff!important;
+}
+@media(max-width:600px){
+  .bottom-nav{height:52px!important;min-height:52px!important;padding:2px 3px!important}
+  .bottom-nav .nav-item{height:46px!important;font-size:7.5px!important}
+  .bottom-nav .nav-icon{width:15px!important;height:15px!important;font-size:15px!important;line-height:15px!important}
+}
+@media(max-width:420px){
+  .bottom-nav{height:50px!important;min-height:50px!important}
+  .bottom-nav .nav-item{height:44px!important;font-size:7px!important}
+  .bottom-nav .nav-icon{width:14px!important;height:14px!important;font-size:14px!important;line-height:14px!important}
+}
